@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/MUGHERPROJECT/!svn/ver/1/src/java/entity/Transfer
+END
+TransferEntity.java
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/MUGHERPROJECT/!svn/ver/1/src/java/entity/Transfer/TransferEntity.java
+END
+ApprovedTransfer.java
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/MUGHERPROJECT/!svn/ver/1/src/java/entity/Transfer/ApprovedTransfer.java
+END
+TransfereeEntity.java
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/MUGHERPROJECT/!svn/ver/1/src/java/entity/Transfer/TransfereeEntity.java
+END

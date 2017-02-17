@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/MUGHERPROJECT/!svn/ver/1/src/java/entity/OverTime
+END
+OverTimeWorkerEntity.java
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/MUGHERPROJECT/!svn/ver/1/src/java/entity/OverTime/OverTimeWorkerEntity.java
+END
+OverTimeEntity.java
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/MUGHERPROJECT/!svn/ver/1/src/java/entity/OverTime/OverTimeEntity.java
+END
+ApprovedOverTimeEntity.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/MUGHERPROJECT/!svn/ver/1/src/java/entity/OverTime/ApprovedOverTimeEntity.java
+END

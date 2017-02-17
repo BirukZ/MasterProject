@@ -1,0 +1,89 @@
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/MUGHERPROJECT/!svn/ver/3334/src/java/manager/employeeManager
+END
+EmployeeAddressManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/MUGHERPROJECT/!svn/ver/1/src/java/manager/employeeManager/EmployeeAddressManager.java
+END
+EmployeeModel.java
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/MUGHERPROJECT/!svn/ver/1/src/java/manager/employeeManager/EmployeeModel.java
+END
+EmployeeFamilyModel.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/MUGHERPROJECT/!svn/ver/1/src/java/manager/employeeManager/EmployeeFamilyModel.java
+END
+EmployeeWillManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/MUGHERPROJECT/!svn/ver/2653/src/java/manager/employeeManager/EmployeeWillManager.java
+END
+EmployeeLanguageModel.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/MUGHERPROJECT/!svn/ver/1/src/java/manager/employeeManager/EmployeeLanguageModel.java
+END
+EducationManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/MUGHERPROJECT/!svn/ver/1/src/java/manager/employeeManager/EducationManager.java
+END
+ReportManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/MUGHERPROJECT/!svn/ver/435/src/java/manager/employeeManager/ReportManager.java
+END
+EmployeeTrainingManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/MUGHERPROJECT/!svn/ver/2686/src/java/manager/employeeManager/EmployeeTrainingManager.java
+END
+EmployeeManage.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/MUGHERPROJECT/!svn/ver/3334/src/java/manager/employeeManager/EmployeeManage.java
+END
+ContractEmployeeManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/MUGHERPROJECT/!svn/ver/1546/src/java/manager/employeeManager/ContractEmployeeManager.java
+END
+EmployeeManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/MUGHERPROJECT/!svn/ver/1/src/java/manager/employeeManager/EmployeeManager.java
+END
+EmployeeFileManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/MUGHERPROJECT/!svn/ver/2653/src/java/manager/employeeManager/EmployeeFileManager.java
+END
+EmployeeChartManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/MUGHERPROJECT/!svn/ver/2814/src/java/manager/employeeManager/EmployeeChartManager.java
+END
+LanguageManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/MUGHERPROJECT/!svn/ver/1/src/java/manager/employeeManager/LanguageManager.java
+END

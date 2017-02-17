@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+    Document   : HEADER2
+    Created on : Mar 8, 2010, 1:00:47 AM
+    Author     : DPClone
+-->
+<div style="height: 196px; position: absolute; width: 1024px; -rave-layout: grid; background:transparent;" xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html" xmlns:ice="http://www.icesoft.com/icefaces/component">
+    <f:subview id="Header">
+        <f:loadBundle basename="Localization.HRLocalization" var="msgs"/>
+        <f:loadBundle basename="Localization.HR_Localization_Header" var="msgAdmin"/>
+        <div class="masthead" style="width: 100%">
+            <div class="utility" style="color: rgb(51, 51, 51); font-family: Cambria; font-size: 13px; font-weight: bold; left: 420px; top: 8px; position: absolute; text-align: right; width: 600px">
+                <ice:commandLink actionListener="#{Header.amharic_processAction}" id="amharic" immediate="true"
+                    style="background-image: url(./resources/images/et.gif); background-position: 100% 50%; background-repeat: no-repeat; color: rgb(51, 51, 51); font-weight: bold; position: relative; width: 59px" value="#{msgs.HAm}"/>
+                <ice:commandLink actionListener="#{Header.english_processAction}" id="english" immediate="true"
+                    style="background-image: url(/resources/images/en.gif); background-repeat: no-repeat; height: 20px;position: relative; width: 52px;color:#333333" value="#{msgs.HEn}"/>
+                <br/>
+                <ice:outputText binding="#{Header.lblLoginUser}" id="lblLoginUser" style="color:#333333"/> |
+                <ice:commandLink
+                    action="#{Header.lnkSignOut_action}" binding="#{Header.lnkSignOut}" id="lnkSignOut" immediate="true" style="color:#333333"
+                    value="#{msgs.HLogIn}"/> |
+                <ice:commandLink binding="#{Header.lnkHelp}" id="lnkHelp" immediate="true" style="color:#333333" value="#{msgs.HHelp}"/>
+            </div>
+        </div>
+        <div class="horizontal_menu" style="width:1024px">
+            <ul class="dropdown dropdown-linear " id="nav">
+                <li style="list-style: none;background:none">
+                    <ice:commandLink action="#{Header.lnkHome_action}" id="lnkHome" immediate="true"
+                        style="font-weight:bold;font-family:Cambria;font-size:14px;border:none" value="#{msgAdmin.Home}"/>
+
+                </li>
+                <li style="list-style: none;background:none">
+                    <span class="dir">
+                        <h:outputLabel id="lblOrg" value="#{msgAdmin.Organization}"/>
+                    </span>
+                    <ul>
+                        <li class="LinkColor" style="width:200px">
+                            <ice:commandLink action="#{Header.cmdOrganizationStructure_action}" binding="#{Header.cmdOrganizationStructure}"
+                                id="cmdOrganizationStructure" immediate="true"
+                                style="color:#074869;font-weight:bold;font-family:Cambria;font-size:14px;width:150px" value="#{msgAdmin.OrganizationStructure}"/>
+                        </li>
+                        <li class="LinkColor" style="width:200px">
+                            <ice:commandLink action="#{Header.cmdJobType_action}" id="cmdJobType" immediate="true"
+                                style="color:#074869;font-weight:bold;font-family:Cambria;font-size:14px;width:150px" value="#{msgAdmin.JobRegistration}"/>
+                        </li>
+                        <li class="LinkColor" style="width:200px">
+                            <ice:commandLink immediate="true" style="color:#074869;font-weight:bold;font-family:Cambria;font-size:14px;width:150px" value="#{msgAdmin.JobAssognment}"/>
+                        </li>
+                    </ul>
+                </li>
+                <li style="list-style: none;background:none">
+                    <span class="dir">
+                        <h:outputLabel id="lblEmp" value="#{msgAdmin.Employee}"/>
+                    </span>
+                    <ul>
+                        <li class="LinkColor" style="width:200px">
+                            <ice:commandLink action="#{Header.cmdEmployee_Profile_action}" binding="#{Header.cmdEmployee_Profile}" id="cmdEmployee_Profile"
+                                immediate="true" style="color:#074869;font-weight:bold;font-family:Cambria;font-size:14px;width:150px" value="#{msgAdmin.EmployeeProfile}"/>
+                        </li>
+                        <li>
+                            <ice:commandLink action="#{Header.lnkPromotion_action}" id="lnkPromotion" immediate="true"
+                                style="color:#074869;font-weight:bold;font-family:Cambria;font-size:14px;width:150px" value="#{msgAdmin.Promotion}"/>
+                        </li>
+                        <li>
+                            <ice:commandLink action="#{Header.lnkTransferRequest_action}" id="lnkTransfer" immediate="true"
+                                style="color:#074869;font-weight:bold;font-family:Cambria;font-size:14px;width:150px" value="#{msgAdmin.Transfer}"/>
+                        </li>
+                        <li>
+                            <ice:commandLink id="lnkEvaluation" immediate="true"
+                                style="color:#074869;font-weight:bold;font-family:Cambria;font-size:14px;width:150px" value="#{msgAdmin.Evaluation}"/>
+                        </li>
+                        <li>
+                            <ice:commandLink id="lnkRegistration" immediate="true"
+                                style="color:#074869;font-weight:bold;font-family:Cambria;font-size:14px;width:150px" value="#{msgAdmin.Registration}"/>
+                        </li>
+                    </ul>
+                </li>
+                <li style="list-style: none;background:none">
+                    <span class="dir">
+                        <h:outputLabel id="lblRec" value="#{msgAdmin.Recruitment}"/>
+                    </span>
+                    <ul>
+                        <li class="LinkColor" style="width:200px">
+                            <ice:commandLink action="#{Header.cmdRecruitmentRequest_action}" id="cmdRecruitmentRequest"
+                                style="color:#074869;font-weight:bold;font-family:Cambria;font-size:14px;width:150px" value="#{msgAdmin.RecruitmentRequest}"/>
+                        </li>
+                        <li style="margin-left:30px">
+                            <ice:commandLink action="#{Header.recruitmentRequestList_action}" id="recruitmentRequestList"
+                                style="color:#074869;font-weight:bold;font-family:Cambria;font-size:14px;width:180px" value="#{msgAdmin.ApprovedRecruitmentList}"/>
+                        </li>
+                        <li style="margin-left:100px">
+                            <ice:commandLink action="#{Header.cmdMaintainAdvertisement_action}" id="cmdMaintainAdvertisement"
+                                style="color:#074869;font-weight:bold;font-family:Cambria;font-size:14px;width:180px" value="#{msgAdmin.MaintainAdvertisement}"/>
+                        </li>
+                        <li style="margin-left:100px">
+                            <ice:commandLink action="#{Header.cmdCandidatesPage_action}" id="cmdCandidatesPage"
+                                style="color:#074869;font-weight:bold;font-family:Cambria;font-size:14px;width:150px" value="#{msgAdmin.Candidates}"/>
+                        </li>
+                        <li style="margin-left:80px">
+                            <ice:commandLink action="#{Header.cmdFilterCandidates_action}" id="cmdFilterCandidates"
+                                style="color:#074869;font-weight:bold;font-family:Cambria;font-size:14px;width:150px" value="#{msgAdmin.FilterCandidates}"/>
+                        </li>
+                    </ul>
+                </li>
+                <li style="list-style: none;background:none">
+                    <span class="dir">
+                        <h:outputLabel id="lblTer" value="#{msgAdmin.Termination}"/>
+                    </span>
+                    <ul>
+                        <li class="LinkColor" style="width:200px">
+                            <ice:commandLink action="#{Header.lnkTerminationRequest_action}" id="lnkTerminationRequest" immediate="true"
+                                style="color:#074869;font-weight:bold;font-family:Cambria;font-size:14px;width:150px" value="#{msgAdmin.TerminationRequest}"/>
+                        </li>
+                        <li style="margin-left:30px">
+                            <ice:commandLink action="#{Header.lnkTerminationApproval_action}" id="lnkTerminationApproval" immediate="true"
+                                style="color:#074869;font-weight:bold;font-family:Cambria;font-size:14px;width:150px" value="#{msgAdmin.TerminationApproval}"/>
+                        </li>
+                        <li style="margin-left:100px">
+                            <ice:commandLink action="#{Header.lnkTerminationClearance_action}" id="lnkTerminationClearance" immediate="true"
+                                style="color:#074869;font-weight:bold;font-family:Cambria;font-size:14px;width:150px" value="#{msgAdmin.Clearance}"/>
+                        </li>
+                    </ul>
+                </li>
+                <li style="list-style: none;background:none">
+                    <span class="dir">
+                        <h:outputLabel id="lblHRR" value="#{msgAdmin.Routines}"/>
+                    </span>
+                    <ul>
+                        <li class="LinkColor" style="width:200px">
+                            <ice:commandLink action="#{Header.lnkEmployeeAttendance_action}" id="lnkEmployeeAttendance" immediate="true"
+                                style="color:#074869;font-weight:bold;font-family:Cambria;font-size:14px;width:150px" value="#{msgAdmin.Attendance}"/>
+                        </li>
+                        <li style="margin-left:30px">
+                            <ice:commandLink action="#{Header.lnkSalaryDelegationRequestAndApprove_action}" id="lnkSalaryDelegationRequestAndApprove"
+                                immediate="true" style="color:#074869;font-weight:bold;font-family:Cambria;font-size:14px;width:150px" value="#{msgAdmin.SalaryDelegation}"/>
+                        </li>
+                        <li style="margin-left:100px">
+                            <ice:commandLink action="#{Header.lnkLeaveRequest_action}" id="lnkLeaveRequest"
+                                style="color:#074869;font-weight:bold;font-family:Cambria;font-size:14px;width:150px" value="#{msgs.LeaveRequest}"/>
+                        </li>
+                        <li style="margin-left:100px">
+                            <ice:commandLink action="#{Header.lnkLeaveApprove_action}" id="lnkLeaveApprove"
+                                style="color:#074869;font-weight:bold;font-family:Cambria;font-size:14px;width:150px" value="#{msgs.LeaveApprove}"/>
+                        </li>
+                    </ul>
+                </li>
+                <li style="list-style: none;background:none">
+                    <span class="dir">
+                        <h:outputLabel id="lblTra" value="#{msgAdmin.Training}"/>
+                    </span>
+                    <ul>
+                        <li class="LinkColor" style="width:200px">
+                            <ice:commandLink action="#{Header.lnkTrainingRequest_action}" id="lnkTrainingRequest" immediate="true"
+                                style="color:#074869;font-weight:bold;font-family:Cambria;font-size:14px;width:150px" value="#{msgAdmin.TrainingRequest}"/>
+                        </li>
+                        <li style="margin-left:30px">
+                            <ice:commandLink action="#{Header.lnkTrainingApproval_action}" id="lnkTrainingApproval" immediate="true"
+                                style="color:#074869;font-weight:bold;font-family:Cambria;font-size:14px;width:150px" value="#{msgAdmin.TrainingApproval}"/>
+                        </li>
+                        <li style="margin-left:100px">
+                            <ice:commandLink action="#{Header.lnkTrainner_action}" id="lnkTrainner" immediate="true"
+                                style="color:#074869;font-weight:bold;font-family:Cambria;font-size:14px;width:150px" value="#{msgAdmin.Trainner}"/>
+                        </li>
+                    </ul>
+                </li>
+                <li style="list-style: none;background:none">
+                    <span class="dir">
+                        <h:outputLabel id="lblReports" value="#{msgAdmin.Reports}"/>
+                    </span>
+                    <ul></ul>
+                </li>
+                <li style="list-style: none;background:none">
+                    <ice:commandLink action="#{Header.lnkAdmin_action}" id="lnkAdmin" immediate="true"
+                        style="font-weight:bold;font-family:Cambria;font-size:14px;width:80px" value="#{msgAdmin.Admin}"/>
+                </li>
+            </ul>
+        </div>
+    </f:subview>
+</div>

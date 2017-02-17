@@ -1,0 +1,20 @@
+# To change this template, choose Tools | Templates
+# and open the template in the editor.
+#Login Page#
+Header=                            \u130D\u1263
+UserName=\u1270\u1320\u1243\u121A \u1235\u121D  :
+Password=\u121B\u1208\u134A\u12EB \u1243\u120D :
+Language=\u124B\u1295\u124B :
+LogIn=\u130D\u1263
+Home=\u1264\u1275
+Am=\u12A0\u121B
+En=|\u12A2\u1295
+Help=\u12F5\u130B\u134D
+ChangePassword=\u121B\u1208\u134A\u12EB \u1243\u120D \u1240\u12ED\u122D  |
+Forgot=\u121B\u1208\u134A\u12EB \u1243\u120D \u1228\u1233\u1205 ?
+Footer=\u12E8\u1230\u12CD \u1200\u1265\u1275 \u120D\u121B\u1275 \u12A0\u1218\u122B\u122D \u1232\u1235\u1270\u121D
+
+errorPasswoed=\u12E8\u1270\u1233\u1233\u1270 \u12ED\u1208\u134D \u1243\u120D !
+errorUserName=\u12E8\u1270\u1233\u1233\u1270 \u1270\u1320\u1243\u121A \u1235\u121D !;
+
+#End Of Login Page#

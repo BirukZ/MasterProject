@@ -1,0 +1,952 @@
+/*
+ * Page1.java
+ *
+ * Created on Feb 26, 2010, 7:48:31 AM
+ * Copyright Mekete VS BravoZulu
+ */
+package fphrms.Discipline;
+
+import com.icesoft.faces.component.ext.HtmlDataTable;
+import com.icesoft.faces.component.ext.HtmlInputText;
+import com.icesoft.faces.component.ext.HtmlInputTextarea;
+import com.icesoft.faces.component.ext.HtmlOutputLabel;
+import com.icesoft.faces.component.ext.HtmlPanelGroup;
+import com.icesoft.faces.component.ext.HtmlSelectOneMenu;
+import com.icesoft.faces.component.ext.RowSelectorEvent;
+import com.icesoft.faces.component.jsfcl.data.DefaultSelectedData;
+import com.icesoft.faces.component.jsfcl.data.DefaultSelectionItems;
+import com.icesoft.faces.component.panelpopup.PanelPopup;
+import com.sun.rave.faces.data.DefaultSelectItemsArray;
+import fphrms.*;
+import com.icesoft.faces.component.jsfcl.data.BorderLayoutBean;
+import com.icesoft.faces.component.panellayout.PanelLayout;
+import com.icesoft.faces.context.effects.JavascriptContext;
+import com.sun.rave.web.ui.appbase.AbstractPageBean;
+import com.sun.webui.jsf.model.Option;
+import java.util.ArrayList;
+import javax.faces.FacesException;
+import javax.faces.context.FacesContext;
+import javax.faces.event.ValueChangeEvent;
+import manager.disciplineManager.DisciplinePenaltyRegistrationManager;
+import manager.disciplineManager.DisciplineRegistrationManager;
+import manager.disciplineManager.DisciplineRegistrationManager.DisciplineTypeModel;
+import manager.disciplineManager.PenaltyRegistrationManager;
+
+/**
+ * <p>Page bean that corresponds to a similarly named JSP page.  This
+ * class contains component definitions (and initialization code) for
+ * all components that you have defined on this page, as well as
+ * lifecycle methods and event handlers where you may add behavior
+ * to respond to incoming events.</p>
+ */
+public class DisciplineTypesRegistrationPage extends AbstractPageBean {
+
+    // <editor-fold defaultstate="collapsed" desc="Local Variables">
+    private int __placeholder;
+
+    /**
+     * <p>Automatically managed component initialization.  <strong>WARNING:</strong>
+     * This method is automatically generated, so any user-specified code inserted
+     * here is subject to being replaced.</p>
+     */
+    private void _init() throws Exception {
+    }
+    private BorderLayoutBean panelBorder1Bean = new BorderLayoutBean();
+
+    public BorderLayoutBean getPanelBorder1Bean() {
+        return panelBorder1Bean;
+    }
+
+    public void setPanelBorder1Bean(BorderLayoutBean blb) {
+        this.panelBorder1Bean = blb;
+    }
+    private DefaultSelectedData selectOneMenu1Bean = new DefaultSelectedData();
+
+    public DefaultSelectedData getSelectOneMenu1Bean() {
+        return selectOneMenu1Bean;
+    }
+
+    public void setSelectOneMenu1Bean(DefaultSelectedData dsd) {
+        this.selectOneMenu1Bean = dsd;
+    }
+
+    public DefaultSelectedData getSelectedDataOfDeciderType() {
+        return selectedDataOfDeciderType;
+    }
+
+    public void setSelectedDataOfDeciderType(DefaultSelectedData selectedDataOfDeciderType) {
+        this.selectedDataOfDeciderType = selectedDataOfDeciderType;
+    }
+
+    public DefaultSelectedData getSelectedDataOfDisciplineType() {
+        return selectedDataOfDisciplineType;
+    }
+
+    public void setSelectedDataOfDisciplineType(DefaultSelectedData selectedDataOfDisciplineType) {
+        this.selectedDataOfDisciplineType = selectedDataOfDisciplineType;
+    }
+
+    public ArrayList<Option> getPenaltyTypesListOption() {
+        return penaltyTypesListOption;
+    }
+
+    public void setPenaltyTypesListOption(ArrayList<Option> penaltyTypesListOption) {
+        this.penaltyTypesListOption = penaltyTypesListOption;
+    }
+
+    public DefaultSelectedData getSelectedDataOfPenality() {
+        return selectedDataOfPenality;
+    }
+
+    public void setSelectedDataOfPenality(DefaultSelectedData selectedDataOfPenality) {
+        this.selectedDataOfPenality = selectedDataOfPenality;
+    }
+
+    public DefaultSelectedData getSelectedDataOfRepition() {
+        return selectedDataOfRepition;
+    }
+
+    public void setSelectedDataOfRepition(DefaultSelectedData selectedDataOfRepition) {
+        this.selectedDataOfRepition = selectedDataOfRepition;
+    }
+    private DefaultSelectionItems selectOneMenu1DefaultItems1 = new DefaultSelectionItems();
+
+    public DefaultSelectionItems getSelectOneMenu1DefaultItems1() {
+        return selectOneMenu1DefaultItems1;
+    }
+
+    public void setSelectOneMenu1DefaultItems1(DefaultSelectionItems dsi) {
+        this.selectOneMenu1DefaultItems1 = dsi;
+    }
+    private DefaultSelectItemsArray selectOneMenu1DefaultItems2 = new DefaultSelectItemsArray();
+
+    public DefaultSelectItemsArray getSelectOneMenu1DefaultItems2() {
+        return selectOneMenu1DefaultItems2;
+    }
+
+    public void setSelectOneMenu1DefaultItems2(DefaultSelectItemsArray dsia) {
+        this.selectOneMenu1DefaultItems2 = dsia;
+    }
+    private HtmlInputText txtPopupDescplineId = new HtmlInputText();
+
+    public HtmlInputText getTxtPopupDescplineId() {
+        return txtPopupDescplineId;
+    }
+
+    public void setTxtPopupDescplineId(HtmlInputText hit) {
+        this.txtPopupDescplineId = hit;
+    }
+    private HtmlInputText txtPopupDesciplineName = new HtmlInputText();
+
+    public HtmlInputText getTxtPopupDesciplineName() {
+        return txtPopupDesciplineName;
+    }
+
+    public void setTxtPopupDesciplineName(HtmlInputText hit) {
+        this.txtPopupDesciplineName = hit;
+    }
+    private HtmlOutputLabel lblSuccessOrErrorMessage = new HtmlOutputLabel();
+    private HtmlOutputLabel lblSuccessOrErrorMessageDiscipline = new HtmlOutputLabel();
+    private PanelLayout pnlMessageBody = new PanelLayout();
+    private HtmlPanelGroup panelGroupMessage = new HtmlPanelGroup();
+    private PanelPopup pnlPopupSuccessOrFailure = new PanelPopup();
+
+    public HtmlOutputLabel getLblSuccessOrErrorMessageDiscipline() {
+        return lblSuccessOrErrorMessageDiscipline;
+    }
+
+    public HtmlOutputLabel getLblSuccessOrErrorMessage() {
+        return lblSuccessOrErrorMessage;
+    }
+
+    public void setLblSuccessOrErrorMessage(HtmlOutputLabel lblSuccessOrErrorMessage) {
+        this.lblSuccessOrErrorMessage = lblSuccessOrErrorMessage;
+    }
+
+    public void setLblSuccessOrErrorMessageDiscipline(HtmlOutputLabel lblSuccessOrErrorMessageDiscipline) {
+        this.lblSuccessOrErrorMessageDiscipline = lblSuccessOrErrorMessageDiscipline;
+    }
+
+    public HtmlPanelGroup getPanelGroupMessage() {
+        return panelGroupMessage;
+    }
+
+    public void setPanelGroupMessage(HtmlPanelGroup panelGroupMessage) {
+        this.panelGroupMessage = panelGroupMessage;
+    }
+
+    public PanelLayout getPnlMessageBody() {
+        return pnlMessageBody;
+    }
+
+    public void setPnlMessageBody(PanelLayout pnlMessageBody) {
+        this.pnlMessageBody = pnlMessageBody;
+    }
+
+    public PanelPopup getPnlPopupSuccessOrFailure() {
+        return pnlPopupSuccessOrFailure;
+    }
+
+    public void setPnlPopupSuccessOrFailure(PanelPopup pnlPopupSuccessOrFailure) {
+        this.pnlPopupSuccessOrFailure = pnlPopupSuccessOrFailure;
+    }
+    private HtmlInputTextarea txtaPopupDescription = new HtmlInputTextarea();
+
+    public HtmlInputTextarea getTxtaPopupDescription() {
+        return txtaPopupDescription;
+    }
+
+    public void setTxtaPopupDescription(HtmlInputTextarea hit) {
+        this.txtaPopupDescription = hit;
+    }
+    private HtmlInputText txtPopupPhaseoutTime = new HtmlInputText();
+
+    public HtmlInputText getTxtPopupPhaseoutTime() {
+        return txtPopupPhaseoutTime;
+    }
+
+    public void setTxtPopupPhaseoutTime(HtmlInputText hit) {
+        this.txtPopupPhaseoutTime = hit;
+    }
+    private HtmlInputText txtPopupDesciplineCode = new HtmlInputText();
+
+    public HtmlInputText getTxtPopupDesciplineCode() {
+        return txtPopupDesciplineCode;
+    }
+
+    public void setTxtPopupDesciplineCode(HtmlInputText hit) {
+        this.txtPopupDesciplineCode = hit;
+    }
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
+
+    public int getSelectedPenaltyTypeRow() {
+        return selectedPenaltyTypeRow;
+    }
+
+    public void setSelectedPenaltyTypeRow(int selectedPenaltyTypeRow) {
+        this.selectedPenaltyTypeRow = selectedPenaltyTypeRow;
+    }
+    private DefaultSelectedData defaultSelectedData1 = new DefaultSelectedData();
+
+    public DefaultSelectedData getDefaultSelectedData1() {
+        return defaultSelectedData1;
+    }
+
+    public void setDefaultSelectedData1(DefaultSelectedData dsd) {
+        this.defaultSelectedData1 = dsd;
+    }
+    private DefaultSelectedData defaultSelectedDataDisciplineCategoryDataTable = new DefaultSelectedData();
+
+    public DefaultSelectedData getDefaultSelectedDataDisciplineCategoryDataTable() {
+        return defaultSelectedDataDisciplineCategoryDataTable;
+    }
+
+    public void setDefaultSelectedDataDisciplineCategoryDataTable(DefaultSelectedData defaultSelectedDataDisciplineCategoryDataTable) {
+        this.defaultSelectedDataDisciplineCategoryDataTable = defaultSelectedDataDisciplineCategoryDataTable;
+    }
+
+    public int getNumberOfPenalisedDays() {
+        return numberOfPenalisedDays;
+    }
+
+    public void setNumberOfPenalisedDays(int numberOfPenalisedDays) {
+        this.numberOfPenalisedDays = numberOfPenalisedDays;
+    }
+
+    public int getSelectedRowDisciplinePenalty() {
+        return selectedRowDisciplinePenalty;
+    }
+
+    public void setSelectedRowDisciplinePenalty(int selectedRowDisciplinePenalty) {
+        this.selectedRowDisciplinePenalty = selectedRowDisciplinePenalty;
+    }
+    private DefaultSelectedData defaultSelectedDataDisciplineCategory = new DefaultSelectedData();
+
+    public DefaultSelectedData getDefaultSelectedDataDisciplineCategory() {
+        return defaultSelectedDataDisciplineCategory;
+    }
+
+    public void setDefaultSelectedDataDisciplineCategory(DefaultSelectedData defaultSelectedDataDisciplineCategory) {
+        this.defaultSelectedDataDisciplineCategory = defaultSelectedDataDisciplineCategory;
+    }
+    private HtmlSelectOneMenu drlDisciplineCategory = new HtmlSelectOneMenu();
+
+    public HtmlSelectOneMenu getDrlDisciplineCategory() {
+        return drlDisciplineCategory;
+    }
+
+    public void setDrlDisciplineCategory(HtmlSelectOneMenu hsom) {
+        this.drlDisciplineCategory = hsom;
+    }
+
+    public String btnClosePopupSuccessOrFailure_action() {
+        pnlPopupSuccessOrFailure.setRendered(false);
+        return null;
+    }
+    private DefaultSelectedData selectBooleanCheckbox1Bean = new DefaultSelectedData();
+
+    public DefaultSelectedData getSelectBooleanCheckbox1Bean() {
+        return selectBooleanCheckbox1Bean;
+    }
+
+    public void setSelectBooleanCheckbox1Bean(DefaultSelectedData dsd) {
+        this.selectBooleanCheckbox1Bean = dsd;
+    }
+    private DefaultSelectedData defaultSelectedData2 = new DefaultSelectedData();
+
+    public DefaultSelectedData getDefaultSelectedData2() {
+        return defaultSelectedData2;
+    }
+
+    public void setDefaultSelectedData2(DefaultSelectedData dsd) {
+        this.defaultSelectedData2 = dsd;
+    }
+    private DefaultSelectionItems selectOneMenu1DefaultItems = new DefaultSelectionItems();
+
+    public DefaultSelectionItems getSelectOneMenu1DefaultItems() {
+        return selectOneMenu1DefaultItems;
+    }
+
+    public void setSelectOneMenu1DefaultItems(DefaultSelectionItems dsi) {
+        this.selectOneMenu1DefaultItems = dsi;
+    }
+    private HtmlSelectOneMenu drlSubCatagory = new HtmlSelectOneMenu();
+
+    public HtmlSelectOneMenu getDrlSubCatagory() {
+        return drlSubCatagory;
+    }
+
+    public void setDrlSubCatagory(HtmlSelectOneMenu hsom) {
+        this.drlSubCatagory = hsom;
+    }
+    private DefaultSelectedData selectOneRadio1Bean = new DefaultSelectedData();
+
+    public DefaultSelectedData getSelectOneRadio1Bean() {
+        return selectOneRadio1Bean;
+    }
+
+    public void setSelectOneRadio1Bean(DefaultSelectedData dsd) {
+        this.selectOneRadio1Bean = dsd;
+    }
+    private DefaultSelectionItems selectOneRadio1DefaultItems = new DefaultSelectionItems();
+
+    public DefaultSelectionItems getSelectOneRadio1DefaultItems() {
+        return selectOneRadio1DefaultItems;
+    }
+
+    public void setSelectOneRadio1DefaultItems(DefaultSelectionItems dsi) {
+        this.selectOneRadio1DefaultItems = dsi;
+    }
+    private HtmlDataTable dataTableDisciplineTypeForManagement = new HtmlDataTable();
+
+    public HtmlDataTable getDataTableDisciplineTypeForManagement() {
+        return dataTableDisciplineTypeForManagement;
+    }
+
+    public void setDataTableDisciplineTypeForManagement(HtmlDataTable hdt) {
+        this.dataTableDisciplineTypeForManagement = hdt;
+    }
+    private HtmlDataTable dataTableDisciplineType = new HtmlDataTable();
+
+    public HtmlDataTable getDataTableDisciplineType() {
+        return dataTableDisciplineType;
+    }
+
+    public void setDataTableDisciplineType(HtmlDataTable hdt) {
+        this.dataTableDisciplineType = hdt;
+    }
+
+    // </editor-fold>
+    /**
+     * <p>Construct a new Page bean instance.</p>
+     */
+    public DisciplineTypesRegistrationPage() {
+    }
+
+    /**
+     * <p>Callback method that is called whenever a page is navigated to,
+     * either directly via a URL, or indirectly via page navigation.
+     * Customize this method to acquire resources that will be needed
+     * for event handlers and lifecycle methods, whether or not this
+     * page is performing post back processing.</p>
+     *
+     * <p>Note that, if the current request is a postback, the property
+     * values of the components do <strong>not</strong> represent any
+     * values submitted with this request.  Instead, they represent the
+     * property values that were saved for this view when it was rendered.</p>
+     */
+    public void init() {
+        // Perform initializations inherited from our superclass
+        super.init();
+        // Perform application initialization that must complete
+        // *before* managed components are initialized
+        // TODO - add your own initialiation code here
+
+        // <editor-fold defaultstate="collapsed" desc="Managed Component Initialization">
+        // Initialize automatically managed components
+        // *Note* - this logic should NOT be modified
+        try {
+            _init();
+        } catch (Exception e) {
+            log("Page1 Initialization Failure", e);
+            throw e instanceof FacesException ? (FacesException) e : new FacesException(e);
+        }
+
+    // </editor-fold>
+    // Perform application initialization that must complete
+    // *after* managed components are initialized
+    // TODO - add your own initialization code here
+    }
+
+    /**
+     * <p>Callback method that is called after the component tree has been
+     * restored, but before any event processing takes place.  This method
+     * will <strong>only</strong> be called on a postback request that
+     * is processing a form submit.  Customize this method to allocate
+     * resources that will be required in your event handlers.</p>
+     */
+    public void preprocess() {
+    }
+
+    /**
+     * <p>Callback method that is called just before rendering takes place.
+     * This method will <strong>only</strong> be called for the page that
+     * will actually be rendered (and not, for example, on a page that
+     * handled a postback and then navigated to a different page).  Customize
+     * this method to allocate resources that will be required for rendering
+     * this page.</p>
+     */
+    public void prerender() {
+    }
+
+    /**
+     * <p>Callback method that is called after rendering is completed for
+     * this request, if <code>init()</code> was called (regardless of whether
+     * or not this was the page that was actually rendered).  Customize this
+     * method to release resources acquired in the <code>init()</code>,
+     * <code>preprocess()</code>, or <code>prerender()</code> methods (or
+     * acquired during execution of an event handler).</p>
+     */
+    public void destroy() {
+    }
+
+    /**
+     * <p>Return a reference to the scoped data bean.</p>
+     *
+     * @return reference to the scoped data bean
+     */
+    protected ApplicationBean1 getApplicationBean1() {
+        return (ApplicationBean1) getBean("ApplicationBean1");
+    }
+
+    /**
+     * <p>Return a reference to the scoped data bean.</p>
+     *
+     * @return reference to the scoped data bean
+     */
+    protected RequestBean1 getRequestBean1() {
+        return (RequestBean1) getBean("RequestBean1");
+    }
+
+    /**
+     * <p>Return a reference to the scoped data bean.</p>
+     *
+     * @return reference to the scoped data bean
+     */
+    protected SessionBean1 getSessionBean1() {
+        return (SessionBean1) getBean("SessionBean1");
+    }
+    /////////////////////////////////////////////////////////////////////////////////////////
+    DisciplineRegistrationManager disciplineRegistrationManager = new DisciplineRegistrationManager();
+    PenaltyRegistrationManager penaltyRegistrationManager = new PenaltyRegistrationManager();
+    DisciplinePenaltyRegistrationManager disciplinePenaltyRegistrationManager = new DisciplinePenaltyRegistrationManager();
+    ArrayList<Option> disciplineTypes = disciplineRegistrationManager.getAllDesciplineTypesOption();//new ArrayList<Option>();//
+    ArrayList<Option> repititionTypes = disciplinePenaltyRegistrationManager.getPossibleRepitions();// new ArrayList<Option>();
+    ArrayList<Option> deciderTypes = penaltyRegistrationManager.getDeciderTypes();
+    ArrayList<Option> penaltyTypesListOption = penaltyRegistrationManager.getAllPenaltyTypesOption();//
+    ArrayList<Option> disciplineCategoryOption = disciplineRegistrationManager.getDisciplineCategories();//
+    ArrayList<Option> disciplineSubCategoryOption = disciplineRegistrationManager.getDisciplineSubCategories();//
+    public String EMPLOYEE = PenaltyRegistrationManager.EMPLOYEE;
+    public String MANAGER = PenaltyRegistrationManager.MANAGER;
+    String selectionCondition;
+    //============================================================================
+    ArrayList<DisciplineTypeModel> disciplineTypesList = disciplineRegistrationManager.getAllDesciplineTypes();
+    ArrayList<DisciplineTypeModel> disciplineTypesListForManager = disciplineRegistrationManager.getAllDesciplineTypesForManger();
+    private DefaultSelectedData selectedDataOfDeciderType = new DefaultSelectedData();
+    private DefaultSelectedData selectedDataOfDisciplineType = new DefaultSelectedData();
+    private DefaultSelectedData selectedDataOfRepition = new DefaultSelectedData();
+    private DefaultSelectedData selectedDataOfPenality = new DefaultSelectedData();
+    int counter = 0;
+    int numberOfPenalisedDays;
+
+    public String btnAddDisciplineType_action() {
+        disciplineTypesList = disciplineRegistrationManager.getAllDesciplineTypes();
+        // pnlPopupInsertDisciplineType.setRendered(true);
+        return null;
+    }
+
+    private void clearPopupDisciplineTypeTextComponenents() {
+        txtPopupDesciplineName.setValue(null);
+        txtPopupDesciplineCode.setValue(null);
+        txtaPopupDescription.setValue(null);
+    }
+
+    public String btnReset_action() {
+        clearPopupDisciplineTypeTextComponenents();
+        disciplineTypesList = disciplineRegistrationManager.getAllDesciplineTypes();
+        return null;
+    }
+
+//<editor-fold defaultstate="collapsed" desc ="All Getters and Setters">
+    public int get__placeholder() {
+        return __placeholder;
+    }
+
+    public void set__placeholder(int __placeholder) {
+        this.__placeholder = __placeholder;
+    }
+
+    public ArrayList<Option> getDisciplineSubCategoryOption() {
+        return disciplineSubCategoryOption;
+    }
+
+    public String getSelectionCondition() {
+        return selectionCondition;
+    }
+
+    public void setSelectionCondition(String selectionCondition) {
+        this.selectionCondition = selectionCondition;
+    }
+
+    public void setDisciplineSubCategoryOption(ArrayList<Option> disciplineSubCategoryOption) {
+        this.disciplineSubCategoryOption = disciplineSubCategoryOption;
+    }
+
+    public ArrayList<DisciplineTypeModel> getDisciplineTypesListForManager() {
+        return disciplineTypesListForManager;
+    }
+
+    public void setDisciplineTypesListForManager(ArrayList<DisciplineTypeModel> disciplineTypesListForManager) {
+        this.disciplineTypesListForManager = disciplineTypesListForManager;
+    }
+
+    public ArrayList<Option> getDisciplineTypes() {
+        return disciplineTypes;
+    }
+
+    public void setDisciplineTypes(ArrayList<Option> disciplineTypes) {
+        this.disciplineTypes = disciplineTypes;
+    }
+
+    public ArrayList<Option> getRepititionTypes() {
+        return repititionTypes;
+    }
+
+    public void setRepititionTypes(ArrayList<Option> repititionTypes) {
+        this.repititionTypes = repititionTypes;
+    }
+
+    public ArrayList<Option> getDeciderTypes() {
+        return deciderTypes;
+    }
+
+    public void setDeciderTypes(ArrayList<Option> deciderTypes) {
+        this.deciderTypes = deciderTypes;
+    }
+
+    public String getEMPLOYEE() {
+        return EMPLOYEE;
+    }
+
+    public void setEMPLOYEE(String EMPLOYEE) {
+        this.EMPLOYEE = EMPLOYEE;
+    }
+
+    public String getMANAGER() {
+        return MANAGER;
+    }
+
+    public void setMANAGER(String MANAGER) {
+        this.MANAGER = MANAGER;
+    }
+
+    public int getPenaltyTypeId() {
+        return penaltyTypeId;
+    }
+
+    public void setPenaltyTypeId(int penaltyTypeId) {
+        this.penaltyTypeId = penaltyTypeId;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public int getCounter() {
+        return counter;
+    }
+
+    public void setCounter(int counter) {
+        this.counter = counter;
+    }
+
+    public DisciplineRegistrationManager getDisciplineRegistrationManager() {
+        return disciplineRegistrationManager;
+    }
+
+    public void setDisciplineRegistrationManager(DisciplineRegistrationManager disciplineRegistrationManager) {
+        this.disciplineRegistrationManager = disciplineRegistrationManager;
+    }
+
+    public ArrayList<Option> getDisciplineCategoryOption() {
+        return disciplineCategoryOption;
+    }
+
+    public void setDisciplineCategoryOption(ArrayList<Option> disciplineCategoryOption) {
+        this.disciplineCategoryOption = disciplineCategoryOption;
+    }
+
+    public ArrayList<DisciplineTypeModel> getDisciplineTypesList() {
+        return disciplineTypesList;
+    }
+
+    public void setDisciplineTypesList(ArrayList<DisciplineTypeModel> disciplineTypesList) {
+        this.disciplineTypesList = disciplineTypesList;
+    }
+
+    public String btnSave_action() {
+        if(selectionCondition.equalsIgnoreCase("Employee"))
+          {
+           if (disciplineTypesList != null && disciplineTypesList.size() > 0) {
+            if (disciplineRegistrationManager.saveDisciplineTypes(disciplineTypesList)) {
+                showSuccessOrFailureMessage(true, "   SAVING OKAY");
+            } else {
+                showSuccessOrFailureMessage(true, "    ERROR OCCURED");
+            }
+        }
+        }
+        else if(selectionCondition.equalsIgnoreCase("Manager"))
+        
+        {
+           
+         if (disciplineTypesListForManager != null && disciplineTypesListForManager.size() > 0) {
+            if (disciplineRegistrationManager.saveDisciplineTypesForManager(disciplineTypesListForManager)) {
+                showSuccessOrFailureMessage(true, "   SAVING OKAY");
+            } else {
+                showSuccessOrFailureMessage(true, "    ERROR OCCURED");
+            }
+        }
+        }
+
+        return null;
+    }
+
+    private boolean validateDisciplineType() {
+        if (txtaPopupDescription.getValue() == null || txtPopupDesciplineName.getValue() == null ||
+                txtaPopupDescription.getValue().toString().equals("") || txtPopupDesciplineName.getValue().toString().equals("") ||
+                drlDisciplineCategory.getValue().toString().equals("-1")) {
+            return false;
+        } else {
+            try {
+                int phaseoutTime = 0;
+                if (txtPopupPhaseoutTime.getValue() == null || txtPopupPhaseoutTime.getValue().toString().equals("")) {
+                    return false;
+                } else if (drlDisciplineCategory.getValue() == null || drlDisciplineCategory.getValue().toString().equals("-1")) {
+                    //  showPenaltyMessageAbovePopup(false, "DISCIPLINE TYPE REQUIRED ");
+                    return false;
+                } else {
+                    phaseoutTime = Integer.parseInt(txtPopupPhaseoutTime.getValue().toString().trim());
+                }
+            } catch (NumberFormatException nfe) {
+                //   showPenaltyMessageAbovePopup(false, "INVALID MONTH : " + txtPopupPhaseoutTime.getValue().toString());
+                return false;
+            }
+            description = txtaPopupDescription.getValue().toString();
+            disciplineName = txtPopupDesciplineName.getValue().toString();
+            for (DisciplineTypeModel checkAvailable : disciplineTypesList) {
+                if (checkAvailable.getDisciplineName().equals(disciplineName) || checkAvailable.getDescription().equals(description)) {
+                    showSuccessOrFailureMessage(false, "PENALTY ALREADY EXISTS.\n CHECK CODE AND/OR NAME OF PENALTY");
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public String btnPopupAddToTable_action() {
+        if(selectionCondition.equalsIgnoreCase("Employee")){
+        if (validateDisciplineType()) {
+            disciplineName = txtPopupDesciplineName.getValue().toString();
+            disciplineTypeCode = txtPopupDesciplineCode.getValue().toString();
+            description = txtaPopupDescription.getValue().toString();
+            phaseoutPeriod = txtPopupPhaseoutTime.getValue().toString();
+            String disciplineCatagory = drlDisciplineCategory.getValue().toString();
+            disciplineSubCatagory=drlSubCatagory.getValue().toString();
+            status = "New";
+            counter = disciplineTypesList.size();
+            disciplineTypesList.add(0, new DisciplineTypeModel(counter, disciplineName, disciplineTypeCode, description, phaseoutPeriod, status, disciplineCatagory,disciplineSubCatagory, false));
+
+        }
+        }
+        else if(selectionCondition.equalsIgnoreCase("Manager")){
+            disciplineName = txtPopupDesciplineName.getValue().toString();
+            disciplineTypeCode = txtPopupDesciplineCode.getValue().toString();
+            description = txtaPopupDescription.getValue().toString();
+            phaseoutPeriod = txtPopupPhaseoutTime.getValue().toString();
+            String disciplineCatagory = drlDisciplineCategory.getValue().toString();
+            disciplineSubCatagory=drlSubCatagory.getValue().toString();
+            status = "New";
+            counter = disciplineTypesList.size();
+            disciplineTypesListForManager.add(0, new DisciplineTypeModel(counter, disciplineName, disciplineTypeCode, description, phaseoutPeriod, status, disciplineCatagory,disciplineSubCatagory, false));
+        }
+        return null;
+    }
+
+    public String btnClosePopupSaveDiscipline_action() {
+        clearPopupDisciplineTypeTextComponenents();
+        // pnlPopupInsertDisciplineType.setRendered(false);
+        return null;
+    }
+
+    public void drlDeciderType_processValueChange(ValueChangeEvent vce) {
+    }
+
+       public void showSuccessOrFailureMessage(boolean success, String messageToDisplay) {
+        lblSuccessOrErrorMessage.setStyle(success ? "color: green; font-size: 12px; font-weight: bold;text-align: center; vertical-align: middle" : "color: red; font-size: 12px; font-weight: bold;text-align: center; vertical-align: middle");
+        lblSuccessOrErrorMessage.setValue(messageToDisplay);
+        pnlPopupSuccessOrFailure.setRendered(true);
+        String val = "message";
+        String fadeTime = (success ? "3000" : "8000");
+        String javaScriptText = "$j(document).ready(function(){ $j('." + val + "').show();" +
+                " $j('." + val + "').fadeOut(" + fadeTime + ");" + "});";
+        JavascriptContext.addJavascriptCall(FacesContext.getCurrentInstance(), javaScriptText);
+    }
+
+    public String btnColsePopupSuccessOrFailure_action() {
+        pnlPopupSuccessOrFailure.setRendered(false);//return null means stay on the same page
+        return null;
+    }
+
+    public String lnkDisciplineRequest_action() {
+        return "DisciplineIssue";
+    }
+
+    public String lnkCommitteeMembers_action() {
+        return "CommitteeMembers";
+    }
+
+    public String lnkDisciplinePenalty_action() {
+        return "DisciplinePenalty";
+    }
+
+    public String lnkCommittee_action() {
+        return "Committeee";
+    }
+
+    public String lnkDisciplineApprove_action() {
+        return "DisciplineApprove";
+    }
+
+    public void txtaPenalty_processValueChange(ValueChangeEvent vce) {
+    }
+
+     /////////////////////////////////////////////////////////////////////////////////
+    int selectedDisciplineTypeRow = -1;
+    int selectedDisciplineTypeManagerRow = -1;
+
+    int selectedPenaltyTypeRow = -1;
+
+    public String lnkPopupForColumnDelete_action() {
+        if (selectedDisciplineTypeRow != -1) {
+            if (disciplineTypesList.get(selectedDisciplineTypeRow).getStatus().equalsIgnoreCase("New")) {//new
+                disciplineTypesList.remove(selectedDisciplineTypeRow);
+            } else {//if it is inserted now remove it
+                disciplineTypesList.get(selectedDisciplineTypeRow).setStatus("Deleted");
+            }
+            selectedDisciplineTypeRow = -1;
+        }
+        return null;
+    }
+    //==========================================ForManager=====================================
+     public String lnkPopupForColumnDeleteForManager_action() {
+        if (selectedDisciplineTypeManagerRow != -1) {
+            if (disciplineTypesListForManager.get(selectedDisciplineTypeManagerRow).getStatus().equalsIgnoreCase("New")) {//new
+                disciplineTypesListForManager.remove(selectedDisciplineTypeManagerRow);
+            } else {//if it is inserted now remove it
+                disciplineTypesListForManager.get(selectedDisciplineTypeManagerRow).setStatus("Deleted");
+            }
+            selectedDisciplineTypeManagerRow = -1;
+        }
+        return null;
+    }
+
+    //=======================================================================================
+    public void rowSelectorDisciplineType_processMyEvent(RowSelectorEvent rse) {
+        if (selectedDisciplineTypeRow != rse.getRow()) {//when new row selected
+            selectedDisciplineTypeRow = rse.getRow();
+        } else {//keep it selected
+            disciplineTypesList.get(selectedDisciplineTypeRow).setSelected(true);
+        }
+    }
+    //=========================================================================================
+    //=====================================================ForManagerTable=====================
+     public void rowSelectorDisciplineTypeManager_processMyEvent(RowSelectorEvent rse) {
+        if (selectedDisciplineTypeManagerRow != rse.getRow()) {//when new row selected
+            selectedDisciplineTypeManagerRow = rse.getRow();
+        } else {//keep it selected
+            disciplineTypesListForManager.get(selectedDisciplineTypeManagerRow).setSelected(true);
+        }
+    }
+    //=========================================================================================
+    int selectedRowDisciplinePenalty = -1;
+
+    public void rowSelectorDisciplinePenalty_processMyEvent(RowSelectorEvent rse) {
+        selectedRowDisciplinePenalty = rse.getRow();
+    }
+    //=========================================================================================
+    DisciplineTypeModel tempDisciplineType = new DisciplineTypeModel();
+    String disciplineTypeCode = tempDisciplineType.getDisciplineTypeCode();
+    String disciplineName = tempDisciplineType.getDisciplineName();
+    String description = tempDisciplineType.getDescription();
+    String phaseoutPeriod = tempDisciplineType.getPhaseoutPeriod();
+    String disciplineSubCatagory;
+    int disciplineTypeId;
+    int penaltyTypeId;
+    String status;
+    String penalty;
+    boolean selected;
+    int repitition;
+    //=======================================================================================
+
+    public String btnPopupForColumnEdit_action() {
+        if (selectedDisciplineTypeRow != -1) {
+            disciplineTypesList.get(selectedDisciplineTypeRow).setSelected(false);
+            if (!disciplineTypesList.get(selectedDisciplineTypeRow).getStatus().equalsIgnoreCase("New")) {
+                disciplineTypesList.get(selectedDisciplineTypeRow).setStatus("Edited");
+            }
+            selectedDisciplineTypeRow = -1;
+        }
+        return null;
+    }
+    //==============================================================================
+     public String btnPopupForColumnEditForManager_action() {
+        if (selectedDisciplineTypeManagerRow != -1) {
+            disciplineTypesListForManager.get(selectedDisciplineTypeManagerRow).setSelected(false);
+            if (!disciplineTypesListForManager.get(selectedDisciplineTypeManagerRow).getStatus().equalsIgnoreCase("New")) {
+                disciplineTypesListForManager.get(selectedDisciplineTypeManagerRow).setStatus("Edited");
+            }
+            selectedDisciplineTypeManagerRow = -1;
+        }
+        return null;
+    }
+    //==============================================================================
+
+    public int getSelectedDisciplineTypeRow() {
+        return selectedDisciplineTypeRow;
+    }
+
+    public void setSelectedDisciplineTypeRow(int selectedDisciplineTypeRow) {
+        this.selectedDisciplineTypeRow = selectedDisciplineTypeRow;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+
+
+    public String getDisciplineName() {
+        return disciplineName;
+    }
+
+    public void setDisciplineName(String disciplineName) {
+        this.disciplineName = disciplineName;
+    }
+
+    public String getDisciplineTypeCode() {
+        return disciplineTypeCode;
+    }
+
+    public void setDisciplineTypeCode(String disciplineTypeCode) {
+        this.disciplineTypeCode = disciplineTypeCode;
+    }
+
+    public int getDisciplineTypeId() {
+        return disciplineTypeId;
+    }
+
+    public void setDisciplineTypeId(int disciplineTypeId) {
+        this.disciplineTypeId = disciplineTypeId;
+    }
+
+    public String getPenalty() {
+        return penalty;
+    }
+
+    public void setPenalty(String penalty) {
+        this.penalty = penalty;
+    }
+
+    public String getPhaseoutPeriod() {
+        return phaseoutPeriod;
+    }
+
+    public void setPhaseoutPeriod(String phaseoutPeriod) {
+        this.phaseoutPeriod = phaseoutPeriod;
+    }
+
+    public int getRepitition() {
+        return repitition;
+    }
+
+    public void setRepitition(int repitition) {
+        this.repitition = repitition;
+    }
+
+    public DisciplineTypeModel getTempDisciplineType() {
+        return tempDisciplineType;
+    }
+
+    public void setTempDisciplineType(DisciplineTypeModel tempDisciplineType) {
+        this.tempDisciplineType = tempDisciplineType;
+    }
+
+    public String lnkPenaltyType_action() {
+        return "PenaltyTypes";
+    }
+
+    public void selectOneRadio1_processValueChange(ValueChangeEvent vce) {
+         if(vce.getNewValue().toString().equals(EMPLOYEE)){
+         dataTableDisciplineType.setRendered(true);
+         dataTableDisciplineTypeForManagement.setRendered(false);
+         selectionCondition="Employee";
+        }else if(vce.getNewValue().toString().equals(MANAGER)){
+       // dataTablePenalty.setRendered(false);
+         dataTableDisciplineTypeForManagement.setRendered(true);
+         dataTableDisciplineType.setRendered(false);
+         selectionCondition="Manager";
+    }
+    }
+
+    public void drlDisciplineCategory_processValueChange(ValueChangeEvent vce) {
+    }
+
+   
+
+    ////////////////////////////////////////////////////////////////////////////////////////
+}

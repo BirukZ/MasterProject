@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/MUGHERPROJECT/!svn/ver/1982/src/java/connectionProvider
+END
+CacheConnection.java
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/MUGHERPROJECT/!svn/ver/1/src/java/connectionProvider/CacheConnection.java
+END
+Database.java
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/MUGHERPROJECT/!svn/ver/1/src/java/connectionProvider/Database.java
+END
+CachedConnection.java
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/MUGHERPROJECT/!svn/ver/1/src/java/connectionProvider/CachedConnection.java
+END
+ConnectionManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/MUGHERPROJECT/!svn/ver/3331/src/java/connectionProvider/ConnectionManager.java
+END
+OracleConnectionPoolDataSource.java
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/MUGHERPROJECT/!svn/ver/3172/src/java/connectionProvider/OracleConnectionPoolDataSource.java
+END

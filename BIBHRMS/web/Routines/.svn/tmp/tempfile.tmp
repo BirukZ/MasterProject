@@ -1,0 +1,238 @@
+<<<<<<< .mine
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+    Document   : Page1
+    Created on : Jul 2, 2012, 11:46:16 AM
+    Author     : Up
+-->
+<jsp:root version="2.1" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:webuijsf="http://www.sun.com/webui/webuijsf">
+    <jsp:directive.page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"/>
+    <f:view>
+        <webuijsf:page id="page1">
+            <webuijsf:html id="html1">
+                <webuijsf:head id="head1">
+                    <webuijsf:link id="link1" url="/resources/stylesheet.css"/>
+                    <script src="jquery.js" type="text/javascript"></script>
+                    <title>HRMS Reports</title>
+                    <link href="DataTables-1.9.2/media/css/demo_page.css" rel="stylesheet" type="text/css"/>
+                    <link href="DataTables-1.9.2/media/css/demo_table.css" rel="stylesheet" type="text/css"/>
+                    <link href="DataTables-1.9.2/media/css/demo_table_jui.css" rel="stylesheet" type="text/css"/>
+                    <link href="DataTables-1.9.2/media/css/jquery.dataTables.css" media="all" rel="stylesheet" type="text/css"/>
+                    <script src="DataTables-1.9.2/media/js/jquery.js" type="text/javascript"></script>
+                    <script src="DataTables-1.9.2/media/js/jquery.dataTables.min.js" type="text/javascript"></script>
+                    <script type="text/javascript">
+                        $(document).ready(function () {
+                            $("#tblEmpsForInc").dataTable();
+                        });
+                    </script>
+                </webuijsf:head>
+                <webuijsf:body id="body1" style="-rave-layout: grid">
+                    <webuijsf:form id="form1"/>
+                    <h1>HRMS Reports!</h1>
+                    <div id="demo_jui">
+                        <table class="display" id="tblEmpsForInc">
+                            <thead>
+                                <tr>
+                                    <th>Company name</th>
+                                    <th>Address</th>
+                                    <th>Town</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Tele</td>
+                                    <td>Addis Ababa</td>
+                                    <td>Addis</td>
+                                </tr>
+                                <tr>
+                                    <td>INSA</td>
+                                    <td>Addis Ababa</td>
+                                    <td>Addis</td>
+                                </tr>
+                                <tr>
+                                    <td>EEPCO</td>
+                                    <td>Addis Ababa</td>
+                                    <td>Addis</td>
+                                </tr>
+                                <tr>
+                                    <td>Tele</td>
+                                    <td>Addis Ababa</td>
+                                    <td>Addis</td>
+                                </tr>
+                                <tr>
+                                    <td>INSA</td>
+                                    <td>Addis Ababa</td>
+                                    <td>Addis</td>
+                                </tr>
+                                <tr>
+                                    <td>Mugher</td>
+                                    <td>MugherC</td>
+                                    <td>Oromia</td>
+                                </tr>
+                                <tr>
+                                    <td>INSA</td>
+                                    <td>Addis Ababa</td>
+                                    <td>Addis</td>
+                                </tr>
+                                <tr>
+                                    <td>INSA</td>
+                                    <td>Addis Ababa</td>
+                                    <td>Addis</td>
+                                </tr>
+                                <tr>
+                                    <td>INSA</td>
+                                    <td>Addis Ababa</td>
+                                    <td>Addis</td>
+                                </tr>
+                                <tr>
+                                    <td>INSA</td>
+                                    <td>Addis Ababa</td>
+                                    <td>Addis</td>
+                                </tr>
+                                <tr>
+                                    <td>INSA</td>
+                                    <td>Addis Ababa</td>
+                                    <td>Addis</td>
+                                </tr>
+                                <tr>
+                                    <td>INSA</td>
+                                    <td>Addis Ababa</td>
+                                    <td>Addis</td>
+                                </tr>
+                                <tr>
+                                    <td>INSA</td>
+                                    <td>Addis Ababa</td>
+                                    <td>Addis</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </webuijsf:body>
+            </webuijsf:html>
+        </webuijsf:page>
+    </f:view>
+    <webuijsf:form id="form1"/>
+    <webuijsf:form id="form1"/>
+    <webuijsf:form id="form1"/>
+    <webuijsf:form id="form1"/>
+    <webuijsf:form id="form1"/>
+    <webuijsf:form id="form1"/>
+</jsp:root>
+=======
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+    Document   : Page1
+    Created on : Jul 2, 2012, 11:46:16 AM
+    Author     : Up
+-->
+<jsp:root version="2.1" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:webuijsf="http://www.sun.com/webui/webuijsf">
+    <jsp:directive.page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"/>
+    <f:view>
+        <webuijsf:page id="page1">
+            <webuijsf:html id="html1">
+                <webuijsf:head id="head1">
+                    <webuijsf:link id="link1" url="/resources/stylesheet.css"/>
+                    <script src="jquery.js" type="text/javascript"></script>
+                    <title>HRMS Reports</title>
+                    <link href="DataTables-1.9.2/media/css/demo_page.css" rel="stylesheet" type="text/css"/>
+                    <link href="DataTables-1.9.2/media/css/demo_table.css" rel="stylesheet" type="text/css"/>
+                    <link href="DataTables-1.9.2/media/css/demo_table_jui.css" rel="stylesheet" type="text/css"/>
+                    <link href="DataTables-1.9.2/media/css/jquery.dataTables.css" media="all" rel="stylesheet" type="text/css"/>
+                    <script src="DataTables-1.9.2/media/js/jquery.js" type="text/javascript"></script>
+                    <script src="DataTables-1.9.2/media/js/jquery.dataTables.min.js" type="text/javascript"></script>
+                    <script type="text/javascript">
+                        $(document).ready(function () {
+                            $("#tblEmpsForInc").dataTable();
+                        });
+                    </script>
+                </webuijsf:head>
+                <webuijsf:body id="body1" style="-rave-layout: grid">
+                    <webuijsf:form id="form1"/>
+                    <h1>HRMS Reports!</h1>
+                    <div id="demo_jui">
+                        <table class="display" id="tblEmpsForInc">
+                            <thead>
+                                <tr>
+                                    <th>Company name</th>
+                                    <th>Address</th>
+                                    <th>Town</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Tele</td>
+                                    <td>Addis Ababa</td>
+                                    <td>Addis</td>
+                                </tr>
+                                <tr>
+                                    <td>INSA</td>
+                                    <td>Addis Ababa</td>
+                                    <td>Addis</td>
+                                </tr>
+                                <tr>
+                                    <td>EEPCO</td>
+                                    <td>Addis Ababa</td>
+                                    <td>Addis</td>
+                                </tr>
+                                <tr>
+                                    <td>Tele</td>
+                                    <td>Addis Ababa</td>
+                                    <td>Addis</td>
+                                </tr>
+                                <tr>
+                                    <td>INSA</td>
+                                    <td>Addis Ababa</td>
+                                    <td>Addis</td>
+                                </tr>
+                                <tr>
+                                    <td>Mugher</td>
+                                    <td>MugherC</td>
+                                    <td>Oromia</td>
+                                </tr>
+                                <tr>
+                                    <td>INSA</td>
+                                    <td>Addis Ababa</td>
+                                    <td>Addis</td>
+                                </tr>
+                                <tr>
+                                    <td>INSA</td>
+                                    <td>Addis Ababa</td>
+                                    <td>Addis</td>
+                                </tr>
+                                <tr>
+                                    <td>INSA</td>
+                                    <td>Addis Ababa</td>
+                                    <td>Addis</td>
+                                </tr>
+                                <tr>
+                                    <td>INSA</td>
+                                    <td>Addis Ababa</td>
+                                    <td>Addis</td>
+                                </tr>
+                                <tr>
+                                    <td>INSA</td>
+                                    <td>Addis Ababa</td>
+                                    <td>Addis</td>
+                                </tr>
+                                <tr>
+                                    <td>INSA</td>
+                                    <td>Addis Ababa</td>
+                                    <td>Addis</td>
+                                </tr>
+                                <tr>
+                                    <td>INSA</td>
+                                    <td>Addis Ababa</td>
+                                    <td>Addis</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </webuijsf:body>
+            </webuijsf:html>
+        </webuijsf:page>
+    </f:view>
+    <webuijsf:form id="form1"/>
+    <webuijsf:form id="form1"/>
+    <webuijsf:form id="form1"/>
+</jsp:root>
+>>>>>>> .r1376

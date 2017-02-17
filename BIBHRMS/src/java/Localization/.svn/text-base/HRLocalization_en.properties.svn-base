@@ -1,0 +1,203 @@
+# To change this template, choose Tools | Templates
+# and open the template in the editor.
+
+
+# To change this template, choose Tools | Templates
+# and open the template in the editor.
+
+#Header#
+HLanguage=Language :
+HLogIn=Log Out
+HLogOut=Log Out
+HAm=AM
+HEn= | EN
+HHelp=Help
+HAccountSetting=Account Setting |
+#End Of Header#
+#Profile#
+HYourAccoutProfile=Your Account Profile
+HYourUserName=Your User Name :
+HYourPassword=Your Password :
+HGranted=You have been granted the following roles :
+HEdit=Edit
+HSave=Save
+HCancel=Cancel
+#End Of Profile#
+#EditRole#
+EditRole=Edit Role
+CurrentRole=Current Role :
+AssignRole=Click here to manege user assignment for this Role
+PermissionCatagory=Permission Catagory :
+SelectPage=Select Page :
+Permissions=Permissions :
+AddPermission=Add Permission
+RemovePermission=Remove Permission
+DeleteCurrentRole=Delete Current Role
+#End EditRole#
+#RoleAssignments#
+RoleAssignments=Role Assignments
+info=All user indication should be in the form of a vaild User Name.
+AssignUserRole=Assign User to Role
+RemoveRole=Remove User from Role
+#End Of RoleAssignments#
+#Evaluation Session#
+CreateSession=Create New Session
+SessionReferenceNo=Session Reference No :
+SessionStatus=Session Status
+StartDate=Start Date :
+EndDate=End Date :
+SessionDescription=Description :
+CreateddBy=Created By :
+ApprovedBy=Approved By :
+#End Of Evaluation Session#
+#Left Menu#
+MenuHeader=Quick Menus
+#End of Left Menu#
+
+
+
+
+
+#START Emergencey
+Relation= Relation Type:
+RelationMName=Middel Name
+RelationLName=Last Name
+RelationS=Gender:
+RelationJ=Job
+#END Emergencey
+#Start Command
+cmdSave=Save
+cmdEdit=Edit
+cmdUpdate=Update
+cmdReset=Reset
+cmdDelete=Delete
+cmdAdd=Add
+#End Command
+#Start Tab Title
+lblEmergency=Emergency
+lblExperience=Experience
+lblLanguage=Language
+lblEducation=Education
+lblAppearance=Appearance
+lblAddress=Address
+lblFamily=Family
+lblPersonal=Personal
+#End Tab Title
+
+
+#Start Personal
+Title=Title:
+ID=ID:
+FirstName=First Name:
+MidelName=Middel Name:
+LastName=Last Name:
+Sex=Gender:
+Zerf=Zerf
+DateOfBirth:Date Of Birth:
+MaritalStatus=Marital Status
+Nationality=Nationality
+Nation=Nation
+HireDate=Hire Date
+RetirementNO=Pension Number
+Department=Department
+JobCode=Profession
+RankId=Rank Id
+PayGrade=Pay Grade
+Salary=Salary
+Female=Female
+Male=Male
+Heir=Heir:
+RecType=Military
+RecType1=Civil
+#End Personal
+#Start Experiance
+Institution=Institution
+StartDate=Start Date
+EndDate=End Date
+Reason=Reason For Termination
+Remark=Remark
+#End Experiance
+#Starat Language
+LanguageName=Language Name:
+Listening=Listening
+Speaking=Speaking
+Reading=Reading
+Writing=Writing
+#End Language
+#Start Education
+Leve=Level Of Education
+TypeOfEducation=Type Of Education
+Award=Award
+CompletionDate=Completion Date
+Result=Result
+LevelOfEducation=Level Of Education
+#End Education
+#Start Appearance
+Height=Height
+Weight=Weight
+BloodGroup=Blood Group
+EyeColor=Eye Color
+Chest=Chest
+FingerPrint=Finger Print
+#End Appearance
+#Start Address
+AddressType=Address Type:
+Region=Region:
+Zone=Zone /Sub City:
+HouseNumber=House Number:
+Woreda=Woreda /Sub City:
+Kabele=Kabele
+TelephoneHome=Telephone Home:
+Mobilenumber=Mobile number
+Email=Email
+TelephoneOffice=Telephone Office
+POBox=P.O.Box
+Contacts=Contacts
+Location=Location
+#End Address
+#Start
+Requester=Requester
+RequiredJobType=Required Job Type
+MinQualification=Min Qualification
+MinExperience=Min Experience
+MinResponsibilities=Min Responsibilities
+AdditionalSkill=Additional Skill
+NumberRequiredEmployee=Number Required Employee
+employmentType=Employment Type
+#End
+
+#LeaveRequest
+LeaveRequest=LeaveRequest
+#LeaveApprove
+LeaveApprove=LeaveApprove
+#Save
+Save=Save
+#Update
+Update=Update
+#New
+New=New
+#Religion
+Religion=Religion
+Permanent=Permanent
+Contract=Contract
+Normal=Normal
+Shift=Shift
+TinNumber=Tin Number
+IsAlive=Is Alive
+Employee=Employee
+ZoneCity=Zone/City
+Scale=Scale
+Category=Category
+InstitutionName=Institution Name
+TrainingCourseName=Training/Course Name
+Duration=Duration
+SponsoredBy=Sponsored By
+Governmental=Governmental
+Private=Private
+TerminationReason=Termination Reason
+RelationinMugherProfession=Relation in Mugher Profession
+ValidforLeave=Valid for Leave
+Rank=Rank
+FileType=File Type
+FileName=File Name
+FilePath=File Path

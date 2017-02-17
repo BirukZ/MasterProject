@@ -1,0 +1,326 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package manager.leaveManager;
+
+import com.sun.webui.jsf.model.Option;
+import entity.leaveEntity.LeaveApproveEntity;
+import entity.leaveEntity.LeaveRequestEntity;
+import java.sql.ResultSet;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
+import manager.authorizationManager.AuthorizationManager;
+import manager.authorizationManager.AuthorizationManager.RequestHistoryModel;
+import manager.employeeManager.EmployeeManage;
+import manager.globalUseManager.ErrorLogWriter;
+import manager.userManagement.SiteSecurityManager;
+
+/**
+ *
+ * @author user
+ */
+public class LeaveApproveManager {
+
+    public static final String LEAVE_DECISION_APPROVE = SiteSecurityManager.Permission_Approve;
+    public static final String LEAVE_DECISION_FORWARD = SiteSecurityManager.Permission_Forward;
+    public static final String LEAVE_DECISION_RESUBMIT = SiteSecurityManager.Permission_Resubmit;
+    public static final String LEAVE_DECISION_REJECT = SiteSecurityManager.Permission_Reject;
+    public static final String LEAVE_DECISION_NONE = "-1";
+    LeaveRequestEntity leaveRequestEntity = new LeaveRequestEntity();
+    LeaveApproveEntity leaveApproveEntity = new LeaveApproveEntity();
+    LeaveDecisionModel leaveDecisionModel = new LeaveDecisionModel();
+    EmployeeManage employeeManager = new EmployeeManage();
+    public static final String PROCESS_LEAVE = AuthorizationManager.PROCESS_LEAVE;//"1"
+    public static final String FINAL_STATE_LEAVE = AuthorizationManager.readFinalState(PROCESS_LEAVE);
+    public static final String INITIAL_STATE_LEAVE = AuthorizationManager.readInitialState(PROCESS_LEAVE);
+    String userName = "";
+    String loggedInEmployeeId;
+
+    public String getLoggedInEmployeeId() {
+        return loggedInEmployeeId;
+    }
+
+    public void setLoggedInEmployeeId(String loggedInEmployeeId) {
+        this.loggedInEmployeeId = loggedInEmployeeId;
+    }
+
+    /**
+     * returns all decision made on a request
+     * basically intended to show history of a request on a datatable
+     * @param requestId the id of the request
+     */
+    public ArrayList<RequestHistoryModel> getRequestHistory(int requestId) {
+        try {
+            ResultSet _rs = leaveApproveEntity.selectProcessedLeaveRequest(requestId);
+            ArrayList<RequestHistoryModel> requestHistoryList = new ArrayList<RequestHistoryModel>();
+            int counter = 0;
+
+            while (_rs.next()) {
+                counter++;
+                String deciderEmployeeId = _rs.getString("PROCESSED_BY");
+                String recorderEmployeeId = _rs.getString("RECORDED_BY_ID");
+                String deciderFullName = _rs.getString("FIRST_NAME") + " " + _rs.getString("MIDDLE_NAME") + " " + _rs.getString("LAST_NAME");
+                if (!deciderEmployeeId.equals(recorderEmployeeId)) {//
+                    deciderFullName = deciderFullName + " (Rec. by " + recorderEmployeeId + ")";
+                }
+
+                String timeStamp = _rs.getString("TIME_STAMP").substring(0, 9);
+                String commentGiven = _rs.getString("COMMENT_GIVEN") == null ? "" : _rs.getString("COMMENT_GIVEN");
+                String givenDecision = _rs.getString("PERMISSION_NAME");
+                requestHistoryList.add(new RequestHistoryModel(counter, deciderEmployeeId, deciderFullName, givenDecision, timeStamp, commentGiven));
+            }
+            return requestHistoryList;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return null;
+        }
+
+    }
+
+    public boolean saveleaveDecision(
+            ArrayList<HashMap> listOfDestionMaked,
+            String decision,
+            String currentState,
+            String commentGiven) {
+        String nextState = AuthorizationManager.readNextState(currentState, PROCESS_LEAVE, decision);
+        String recorededDateAndTime = new Timestamp((new Date()).getTime()).toString();
+        try {
+            //  leaveDecisionModel = new LeaveDecisionModel(requestId, processedBy, decision, nextState, commentGiven, userName, recorededDateAndTime);
+            if (leaveApproveEntity.insertLeaveDecision(
+                    listOfDestionMaked,
+                    decision,
+                    nextState,
+                    commentGiven,
+                    loggedInEmployeeId,
+                    recorededDateAndTime)) {//if successful
+                return true;
+            } else {
+                return false;
+            }
+
+
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return false;
+        }
+    }
+
+    public ArrayList<Option> getAvailableDecisionsToMake(String processState) {
+        ArrayList<Option> decisionLists = new ArrayList<Option>();
+        HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+        decisionLists = new SiteSecurityManager().getAvailableDecisions(request.getRequestURI(), userName, processState);
+        return decisionLists;
+    }
+
+    public String getLeaveType(String leaveRequestId) {
+        return leaveApproveEntity.getLeaveType(leaveRequestId);
+    }
+
+    public ArrayList<Option> getRequestsToBeProcessed(String bossId) {
+        ArrayList<Option> pendingRequests = new ArrayList<Option>();
+        try {
+            ResultSet _rs = leaveApproveEntity.selectApprovableRequest(userName,bossId);
+            while (_rs.next()) {
+                pendingRequests.add(new Option(_rs.getString("EMP_ID") + "--" +
+                        _rs.getString("STATUS") + "--" +
+                        _rs.getString("REQUESTED_DATE") + "--" +
+                        _rs.getString("LEAVE_ID"),
+                        _rs.getString("EMP_ID") + " ON " +
+                        _rs.getString("REQUESTED_DATE")));
+            }
+            _rs.close();
+            return pendingRequests;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return null;
+        }
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public static class LeaveDecisionModel {
+
+        private int leaveProcessedId;//@Column(name = "OVER_TIME_PROCESS_PROCESSED_ID")
+        private int leaveRequestId; //@Column(name = "OVER_TIME_REQUEST_ID")
+        private String processedBy;//@Column(name = "PROCEESED_BY")
+        String decision;
+        private String nextState;//   @Column(name = "NEXT_STATE")
+        private String commentGiven;// @Column(name = "COMMENT_GIVEN")
+        private String recordedBy;//  @Column(name = "RECORDED_BY")//  String userName;
+        private String recorededDateAndTime;//  @Column(name = "TIME_STAMP")
+
+        public LeaveDecisionModel() {
+        }
+
+        public LeaveDecisionModel(int overTimeRequestId, String processedBy,
+                String decision, String nextState, String commentGiven,
+                String recordedBy, String recorededDateAndTime) {
+            this.leaveRequestId = overTimeRequestId;
+            this.processedBy = processedBy;
+            this.decision = decision;
+            this.nextState = nextState;
+            this.commentGiven = commentGiven;
+            this.recordedBy = recordedBy;
+            this.recorededDateAndTime = recorededDateAndTime;
+        }
+
+        public String getCommentGiven() {
+            return commentGiven;
+        }
+
+        public void setCommentGiven(String commentGiven) {
+            this.commentGiven = commentGiven;
+        }
+
+        public String getDecision() {
+            return decision;
+        }
+
+        public void setDecision(String decision) {
+            this.decision = decision;
+        }
+
+        public String getNextState() {
+            return nextState;
+        }
+
+        public void setNextState(String nextState) {
+            this.nextState = nextState;
+        }
+
+        public int getLeaveProcessedId() {
+            return leaveProcessedId;
+        }
+
+        public void setLeaveProcessedId(int leaveProcessedId) {
+            this.leaveProcessedId = leaveProcessedId;
+        }
+
+        public int getLeaveRequestId() {
+            return leaveRequestId;
+        }
+
+        public void setLeaveRequestId(int leaveRequestId) {
+            this.leaveRequestId = leaveRequestId;
+        }
+
+        public String getProcessedBy() {
+            return processedBy;
+        }
+
+        public void setProcessedBy(String processedBy) {
+            this.processedBy = processedBy;
+        }
+
+        public String getRecordedBy() {
+            return recordedBy;
+        }
+
+        public void setRecordedBy(String recordedBy) {
+            this.recordedBy = recordedBy;
+        }
+
+        public String getRecorededDateAndTime() {
+            return recorededDateAndTime;
+        }
+
+        public void setRecorededDateAndTime(String recorededDateAndTime) {
+            this.recorededDateAndTime = recorededDateAndTime;
+        }
+    }
+
+    public ArrayList<HashMap> readEmployeeLeaveRequest(String employeeId,
+            String reserveLeaveStatus,
+            String requesedDate) {
+        try {
+            return leaveApproveEntity.readEmployeeLeaveRequest(employeeId,
+                    reserveLeaveStatus,
+                    requesedDate);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
+    public boolean updateEmployeeAnualLeave(String leaveId) {
+        try {
+            boolean saveStatus = false;
+            ArrayList<HashMap> listOfRegisterLeave = this.listOfEmployeeRegisterLeave(leaveId);
+
+            int i = 0;
+            boolean firstTime = true;
+            for (HashMap hm : listOfRegisterLeave) {
+                String[] useLeaveId = hm.get("LEAVEIDES").toString().split("--");
+                String[] leaveUsedFrom = hm.get("FROMLEAVE").toString().split("--");
+                if (firstTime) {
+                    i = useLeaveId.length - 1;
+                    firstTime = false;
+                }
+
+               
+                if (leaveUsedFrom[i].equals("anualLeave")) {
+                    if (leaveRequestEntity.updateLeaveBank(useLeaveId[i],
+                            Float.parseFloat(hm.get("PHYSICAL_YEAR").toString()))) {
+                        saveStatus = true;
+                    } else {
+                        saveStatus = false;
+                    }
+                } else {
+                    return false;
+                }
+                i--;
+            }
+
+            if (saveStatus) {
+                if (this.updateAnnualLeaveRequest(leaveId)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+
+
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return false;
+        }
+    }
+
+    public ArrayList<HashMap> listOfEmployeeRegisterLeave(String leaveId) {
+        return leaveRequestEntity.getEmployeeRegisterLeave(leaveId);
+    }
+
+    public boolean updateLeaveBank(String leave, float usedLeave) {
+        return leaveRequestEntity.updateLeaveBank(leave, usedLeave);
+    }
+
+    public boolean updateAnnualLeaveRequest(String leaveRequestId) {
+        try {
+            return leaveRequestEntity.updateAnnualLeaveRequest(leaveRequestId);
+        } catch (Exception ex) {
+            ErrorLogWriter.writeError(ex);
+            ex.printStackTrace();
+            return false;
+        }
+    }
+
+  
+}

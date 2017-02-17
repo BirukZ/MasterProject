@@ -1,0 +1,245 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package manager.globalUseManager;
+
+import java.sql.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
+/**
+ *
+ * @author mekete
+ */
+public class DateConverter {
+
+    /** Creates a new instance of DateConverter */
+    public DateConverter() {
+        init();
+    }
+
+    public static String fromGCToEC(String date) {  // date is in 'yyyy-mm-dd' format
+        if (date != null) {
+            init();
+            Date givenDate, refDate;
+            //DateFormat format = new SimpleDateFormat("yyyy-mm-dd");
+            givenDate = Date.valueOf(date);
+            refDate = Date.valueOf(String.valueOf(gRefYear) + "-" + String.valueOf(gRefMonth) + "-" + String.valueOf(gRefDate));
+            // s.println("givenDate = " + givenDate + "  refDate = " + refDate);
+            long dateDiff = givenDate.getTime() - refDate.getTime();
+
+            int inDays = (int) (dateDiff / (1000 * 60 * 60 * 24));
+            //   s.println(inDays);
+            moveYearsOnEC(inDays);
+            //  s.println(remainingDays);
+            moveMonthsOnEC(remainingDays);
+            //   s.println(remainingDays);
+            moveDaysOnEC(remainingDays);
+            String _eMonth = eMonth < 10 ? "0" + String.valueOf(eMonth) : String.valueOf(eMonth);
+            String _eDate = eDate < 10 ? "0" + String.valueOf(eDate) : String.valueOf(eDate);
+
+            eEquDate = String.valueOf(eYear) + "-" + _eMonth + "-" + _eDate;
+            return eEquDate;
+        } else {
+            return null;
+        }
+    }
+
+    public static String fromECToGC(String date) {
+        if (date != null) {
+            init();
+            //java.util.Date dd = new java.util.Date();
+            Date refDate = Date.valueOf("2006-09-11");
+            //Date tempDate = Date.valueOf("2006-09-11");
+            long inMilis = refDate.getTime();
+            long upto = getDateDifference("1999-1-1", date);
+            upto = upto * (1000 * 60 * 60 * 24);
+            //s.println("inMilis : " + inMilis + " upto : " + upto);
+            inMilis += upto;
+            Date tempDate = new Date(inMilis);
+            DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            gEquDate = format.format(tempDate);
+            return gEquDate;
+        } else {
+            return null;
+        }
+    }
+
+    private static int getDateDifference(String date1, String date2) {
+        int diffInDays = 0, year1, month1, dates1, year2, month2, dates2;
+        year1 = Integer.parseInt(date1.substring(0, 4));
+        year2 = Integer.parseInt(date2.substring(0, 4));
+        month1 = Integer.parseInt(date1.substring(date1.indexOf('-') + 1, date1.lastIndexOf('-')));
+        month2 = Integer.parseInt(date2.substring(date2.indexOf('-') + 1, date2.lastIndexOf('-')));
+        dates1 = Integer.parseInt(date1.substring(date1.lastIndexOf('-') + 1));
+        dates2 = Integer.parseInt(date2.substring(date2.lastIndexOf('-') + 1));
+        //   s.println("diffInDays : " + diffInDays + "dates1 dates2 : " + dates1 + " " + dates2);
+        if (year1 < year2) {
+            diffInDays = 1;
+            //    s.println("diffInDays (y1 < y2) : " + diffInDays);
+            diffInDays += ((year2 - year1) * 365) + ((year2 - year1) / 4);
+        //   s.println("diffInDays : " + diffInDays);
+        } else if (year1 > year2) {
+            // s.println("diffInDays (y1 > y2) : " + diffInDays);
+            diffInDays = ((year2 - year1) * 365) + ((year2 - year1) / 4);
+        //  s.println("diffInDays : " + diffInDays);
+        }
+        if (month1 != month2) {
+            diffInDays += Math.abs(((month1 - month2)) * 30);
+        }
+        // s.println("diffInDays after M : " + diffInDays);
+        if (dates1 != dates2) {
+            diffInDays += Math.abs(dates1 - dates2);
+        }
+        //  s.println("diffInDays after D : " + diffInDays);
+        //diffInDays = ((year1 - year2) * 365 ) + ((month1 - month2) * 30) + ((dates1 - dates2));
+        return diffInDays;
+    }
+
+    private static int moveYearsOnEC(int days) {
+        int years = 0, yearFlag = 1;
+        if (days >= 366) { // year 1999 is a leap year
+            days = days - 366; // eliminate 1999
+            years++;
+            // s.println("years after eliminate 1999 : " + years);
+
+            int leapYears = (days / 365) / 4;
+            remainingDays = (days % 365) - leapYears;   //((days / 365) / 4);
+            // s.println("remainingDays : " + remainingDays);
+
+            years += (days - leapYears) / 365;
+            eYear = eRefYear + years;
+        } else if (days < 0) {   // for the past
+            //yearFlag = -1;
+            days = days * -1;   // eleminate the negative
+            // s.println("days : " + days);
+            int leapYear = days / (365 * 4);
+            // s.println("leapYear : " + leapYear);
+            remainingDays = (days - leapYear) % 365; // - leapYear;
+            // s.println("remainingDays : " + remainingDays);
+            years = ((days - leapYear) / 365) + 1;  // to start from the previous year
+            if (remainingDays == 0) {
+                years--;    // on date;
+            } else {
+                if ((eYear % 4) == 3) {
+                    remainingDays = 366 - remainingDays;
+                } else {
+                    remainingDays = 365 - remainingDays;
+                }
+            }
+            // s.println("Years : " + years);
+            eYear = eRefYear - years;
+        } else {
+            eYear = eRefYear;
+            remainingDays = days;
+        }
+        return eYear;
+    }
+
+    private static int moveMonthsOnEC(int days) {  // after calculating for years so days < 366
+        int months = 0;
+        months = days / 30;
+        remainingDays = days % 30;
+        eMonth = eRefMonth + months;
+        return eMonth;
+    }
+
+    private static int moveDaysOnEC(int days) {    // after calculating for months so days < 30
+        eDate = eRefDate + days;
+        return eDate;
+    }
+
+    private static int moveYearsOnGC(int days) {
+        int years = 0;
+        if (days >= 366) { // year 1999 is a leap year
+            remainingDays = (days % 365) - ((days / 365) / 4);
+            years += (days / 365);
+            if (remainingDays < 0) {
+                years--;
+                remainingDays += 365;   // if not leap year
+            }
+            gYear = gRefYear + years;
+        } else if (days < 0) {
+        }
+
+        return gYear;
+    }
+
+    private static int moveMonthsOnGC(int days) { // after calculating for years so days < 366
+        int months = 0;
+        for (int i = 0; i < 12; i++) {
+            if ((i == 0 || i == 2 || i == 7 || i == 9) && (int) (days / 30) > 0) {
+                days -= 30;
+            } else if ((i == 1 || i == 3 || i == 4 || i == 6 || i == 8 || i == 10 || i == 11) && (int) (days / 31) > 0) {
+                days -= 31;
+            } else if (i == 1) {
+                if (gYear % 4 == 0 && (int) (days / 29) > 0) { // leap year
+                    days -= 29;
+                } else if ((int) (days / 28) > 0) {
+                    days -= 28;
+                }
+            }
+        }
+
+        remainingDays = days;
+
+        gMonth = gRefMonth + months;
+        return gMonth;
+    }
+
+    private static int moveDaysOnGC(int days) { // after calculating for months so days < 31
+        gDate = gRefDate + days;
+        return gDate;
+    }
+
+    private static void init() {
+        eRefYear = 1999;
+        eRefMonth = 1;
+        eRefDate = 1;
+        gRefYear = 2006;
+        gRefMonth = 9;
+        gRefDate = 11;
+        remainingDays = 0;
+        eYear = 0;
+        eMonth = 0;
+        eDate = 0;
+        gYear = 0;
+        gMonth = 0;
+        gDate = 0;
+        String eEquDate = null;
+        String gEquDate = null;
+
+    }
+
+    public static void main(String ar[]) {
+        int i = 0;
+      //  s.println("-------------" + "--------------" + StringDateManipulation.toDayInEc());
+        int calculation = StringDateManipulation.compareDateDifference("1956-06-13", StringDateManipulation.toDayInEc());
+        double calc = (double) calculation;
+        for (int j = StringDateManipulation.getYear("1956-06-13"); j < StringDateManipulation.getYear(StringDateManipulation.toDayInEc()); j++) {
+            if ((j % 4 == 0)) {
+                i = i + 1;
+            }
+        }
+        double k = (double) i;
+        double diff = 365;//.0+k;
+    //    s.println(calc / diff);
+    }
+
+    public static boolean Test(double expected, double actual) {
+        boolean result = expected == actual;
+       // s.println("Expected: " + expected + ", Actual: " + actual);
+        if (!result) {
+        //    s.println("Expected: " + expected + ", Actual: " + actual);
+        }
+
+        return result;
+    }
+    static int eYear,  eMonth,  eDate,  gYear,  gMonth,  gDate;
+    static int remainingDays;
+    static int eRefYear = 1999,  eRefMonth = 1,  eRefDate = 1,  gRefYear = 2006,  gRefMonth = 9,  gRefDate = 11;
+    static String eEquDate,  gEquDate;
+}
+

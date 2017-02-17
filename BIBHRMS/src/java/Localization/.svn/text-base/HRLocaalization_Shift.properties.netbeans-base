@@ -1,0 +1,17 @@
+# To change this template, choose Tools | Templates
+# and open the template in the editor.
+
+empId=Employee ID
+Date=Date
+StartTime=Start Time
+EndTime=End Time
+Address=Address
+shiftName=Shift Name
+RegisteredDate=Registered Date
+FullName=Full Name
+StartedDate=Started Date
+Add=Add
+Save=Save
+Update=Update
+Reset=Reset
+Delete=Delete

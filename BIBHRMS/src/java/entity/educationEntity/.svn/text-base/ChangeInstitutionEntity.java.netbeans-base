@@ -1,0 +1,471 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package entity.educationEntity;
+
+import connectionProvider.ConnectionManager;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import manager.educationManager.EducationApproveManager;
+import manager.educationManager.EducationRequestModel;
+import manager.educationManager.changeInstitutionRequestModel;
+import oracle.jdbc.rowset.OracleCachedRowSet;
+import manager.educationManager.changeInstituApproveManager;
+
+/**
+ *
+ * @author mekete
+ */
+public class ChangeInstitutionEntity extends ConnectionManager {
+
+    Connection _con = null;
+    PreparedStatement _ps = null;
+    ResultSet _rs = null;
+
+    public void releaseResources() throws SQLException {
+        if (_rs != null) {
+            _rs.close();
+            _rs = null;
+        }
+        if (_ps != null) {
+            _ps.close();
+            _ps = null;
+        }
+        if (_con != null) {
+            _con.close();
+            closePooledConnections(_con);
+        }
+    }
+
+    /**
+     * Inserts PowereducationRequestModel attribute to the database.<br>
+     * The constructor with full argument, must be called before this method
+     */
+    public int insertEducationRequest(changeInstitutionRequestModel changeInsModel) throws SQLException {
+        String _insertQuery = "INSERT INTO HR_CHANGE_INST_REQUEST " +
+                " (REQUESTER_ID," +
+                " EDUCATION_PROGRAM_NAME,EDUCATION_LEVEL_CATEGORY,EDUCATION_SHIFT_CATEGORY," +
+                " START_DATE,APPLIED_DATE,DURATION_IN_YEAR,REASON_DESCRIPTION," +
+                " INSTITUTION_NAME," +
+                " COST_PER_CREDIT_HOUR,NUMBER_OF_CREDIT_HOURS,TOTAL_ADMIN_COSTS," +
+                " DOCUMENT_REFERENCE_NUMBER,REQUEST_STATUS,TIME_STAMP,USER_NAME,EDU_REQ_ID,INSTITUTION_ACCREDITED,ETHIOPIAN_INSTITUTION,INSTITUTION_ADDRESS,END_DATE)" +
+                " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ";
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_insertQuery);
+            _ps.setString(1, changeInsModel.getRequesterId());
+            _ps.setString(2, changeInsModel.getEducationProgramNamenew());
+            _ps.setString(3, changeInsModel.getEducationLevelCategoryNew());
+            _ps.setString(4, changeInsModel.getEducationShiftCategoryNew());
+            _ps.setString(5, changeInsModel.getStartDateNew());
+            _ps.setString(6, changeInsModel.getAppliedDateNew());
+            _ps.setDouble(7, changeInsModel.getDurationInYearNew());
+            _ps.setString(8, changeInsModel.getReasonDescriptionNew());
+            _ps.setString(9, changeInsModel.getInstitutionNamenew());
+            _ps.setDouble(10, changeInsModel.getCostPerCreditHourNew());
+            _ps.setInt(11, changeInsModel.getNumberOfCreditHoursNew());
+            _ps.setDouble(12, changeInsModel.getTotalAdminstrationCostsNew());
+            _ps.setString(13, changeInsModel.getDocumentReferenceNumberNew());
+            _ps.setString(14, changeInsModel.getRequestStatus());
+            _ps.setString(15, changeInsModel.getTimeStamp());
+            _ps.setString(16, changeInsModel.getUserName());
+            _ps.setInt(17, changeInsModel.getEducationRequestId());
+            _ps.setString(18, changeInsModel.getInstitutionAccreditednew());
+            _ps.setString(19, changeInsModel.getEthiopianInstitutionnew());
+            _ps.setString(20, changeInsModel.getInstitutionAddressNew());
+            _ps.setString(21, changeInsModel.getEndDate());
+            return _ps.executeUpdate();
+        } finally {
+            releaseResources();
+        }
+    }
+
+    /**
+     * Inserts PowereducationRequestModel attribute to the database.<br>
+     * The constructor with full argument, must be called before this method
+     */
+    public int updateEducationRequest(changeInstitutionRequestModel changeInsModel) throws SQLException {
+        String _updateQuery = "UPDATE HR_EDUCATION_REQUEST " +
+                " SET " +
+                "  EDUCATION_PROGRAM_NAME = ?,EDUCATION_LEVEL_CATEGORY = ?,EDUCATION_SHIFT_CATEGORY = ?," +
+                " START_DATE = ?, APPLIED_DATE = ?,DURATION_IN_YEAR = ?,REASON_DESCRIPTION = ?," +
+                " INSTITUTION_NAME = ?,INSTITUTION_ACCREDITED = ?,ETHIOPIAN_INSTITUTION = ?,INSTITUTION_ADDRESS = ?," +
+                " COST_PER_CREDIT_HOUR = ?,NUMBER_OF_CREDIT_HOURS = ?,TOTAL_ADMIN_COSTS = ?," +
+                " DOCUMENT_REFERENCE_NUMBER = ?,TIME_STAMP = ?,USER_NAME =?,REQUEST_STATUS=? " +
+                " WHERE REQUESTER_ID = ? and EDUCATION_REQUEST_ID = ?";
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_updateQuery);
+
+            //   _ps.setString(1, changeInsModel.getEducationTypeCategoryNew());
+            _ps.setString(1, changeInsModel.getEducationProgramNamenew());
+            _ps.setString(2, changeInsModel.getEducationLevelCategoryNew());
+            _ps.setString(3, changeInsModel.getEducationShiftCategoryNew());
+            _ps.setString(4, changeInsModel.getStartDateNew());
+            _ps.setString(5, changeInsModel.getAppliedDateNew());
+            _ps.setDouble(6, changeInsModel.getDurationInYearNew());
+            _ps.setString(7, changeInsModel.getReasonDescriptionNew());
+            _ps.setString(8, changeInsModel.getInstitutionNamenew());
+            _ps.setString(9, changeInsModel.getInstitutionAccreditednew());
+            _ps.setString(10, changeInsModel.getEthiopianInstitutionnew());
+            _ps.setString(11, changeInsModel.getInstitutionAddressNew());
+            _ps.setDouble(12, changeInsModel.getCostPerCreditHourNew());
+            _ps.setInt(13, changeInsModel.getNumberOfCreditHoursNew());
+            _ps.setDouble(14, changeInsModel.getTotalAdminstrationCostsNew());
+            _ps.setString(15, changeInsModel.getDocumentReferenceNumberNew());
+            _ps.setString(16, changeInsModel.getTimeStamp());
+            _ps.setString(17, changeInsModel.getUserName());
+            _ps.setString(18, changeInsModel.getRequestStatus());
+            _ps.setString(19, changeInsModel.getRequesterId());
+            _ps.setInt(20, changeInsModel.getEducationRequestId());
+
+            return _ps.executeUpdate();
+        } finally {
+            releaseResources();
+        }
+    }
+
+    public int updateEducationStatus(EducationRequestModel educationRequestModel) throws SQLException {
+        String _updateQuery = "UPDATE HR_EDUCATION_REQUEST " +
+                "SET EDUCATIONAL_STATUS     =?, " +
+                "  DATE_UPDATE_EDU_STATUS   =? " +
+                "WHERE EDUCATION_REQUEST_ID = ? " +
+                "AND REQUESTER_ID           =?";
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_updateQuery);
+            _ps.setString(1, educationRequestModel.getEducatinalStatus());
+            _ps.setString(2, educationRequestModel.getDateOfStatusUpdate());
+            _ps.setInt(3, educationRequestModel.getEducationRequestId());
+            _ps.setString(4, educationRequestModel.getRequesterId());
+            return _ps.executeUpdate();
+        } finally {
+            releaseResources();
+        }
+    }
+
+    /**
+     * Inserts PowereducationRequestModel attribute to the database.<br>
+     * The constructor with full argument, must be called before this method
+     */
+    public int deleteEducationRequest(int changeInstId) throws SQLException {
+        String _deleteQuery = "DELETE HR_CHANGE_INST_REQUEST " +
+                " WHERE  CHANGEINS_REQU_ID = ?";
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_deleteQuery);
+            _ps.setInt(1, changeInstId);
+            return _ps.executeUpdate();
+        } finally {
+            releaseResources();
+        }
+    }
+
+    public ResultSet selectEducationRequest(int requestId) throws SQLException {
+        String _selectQuery = " SELECT * FROM HR_CHANGE_INST_REQUEST " +
+                " WHERE CHANGEINS_REQU_ID = ?";
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_selectQuery);
+            _ps.setInt(1, requestId);
+            _rs = _ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(_rs);
+            return (ResultSet) ocrs;
+        } finally {
+            releaseResources();
+        }
+    }
+//==========================================================================================================
+
+    public ResultSet selectEducationChangeInsRequest(String requesterId) throws SQLException {
+        String _selectQuery = " SELECT * FROM HR_EDUCATION_REQUEST " +
+                " WHERE request_status not like " + EducationApproveManager.INITIAL_STATE_EDUCATION +
+                "and REQUESTER_ID = '"+ requesterId +"'";
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_selectQuery);
+           // _ps.setString(1, requesterId);
+            _rs = _ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(_rs);
+            return (ResultSet) ocrs;
+        } finally {
+            releaseResources();
+        }
+    }
+    //=========================================================
+
+    public ResultSet selectPendingEducationRequests(String userName) throws SQLException {
+        String _selectQuery = "SELECT * " + "FROM HR_CHANGE_INST_REQUEST " + "WHERE REQUEST_STATUS LIKE " + changeInstituApproveManager.INITIAL_STATE_CHANGEINS +
+                "AND (USER_NAME   ='" + userName + "' " +
+                "OR REQUESTER_ID IN " + "  (SELECT EMPLOYEE_ID FROM MUGHER.TBL_USERS WHERE USER_NAME='" + userName + "' " +
+                "  ) ) " + "ORDER BY CHANGEINS_REQU_ID DESC";
+
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_selectQuery);
+            _rs = _ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(_rs);
+            return (ResultSet) ocrs;
+        } finally {
+            releaseResources();
+        }
+    }
+
+    public ResultSet selectNameOfInstitution(String requesterID) throws SQLException {
+        String _selectQuery = "SELECT INSTITUTION_NAME,EDUCATION_REQUEST_ID " +
+                "FROM HR_EDUCATION_REQUEST where REQUESTER_ID= ? ";
+
+
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_selectQuery);
+            _ps.setString(1, requesterID);
+            _rs = _ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(_rs);
+            return (ResultSet) ocrs;
+        } finally {
+            releaseResources();
+        }
+    }
+
+    public ResultSet selectEducationalStatus() throws SQLException {
+        String _selectQuery = "SELECT EDUCATIONAL_STATUS FROM HR_LU_EDUCATIONAL_STATUS";
+
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_selectQuery);
+            _rs = _ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(_rs);
+            return (ResultSet) ocrs;
+        } finally {
+            releaseResources();
+        }
+    }
+
+    public ResultSet selectProgramName(String requesterID) throws SQLException {
+        String _selectQuery = "SELECT EDUCATION_PROGRAM_NAME FROM HR_EDUCATION_REQUEST where REQUESTER_ID ='" + requesterID + "'";
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_selectQuery);
+            _rs = _ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(_rs);
+            return (ResultSet) ocrs;
+        } finally {
+            releaseResources();
+        }
+    }
+
+//    public ResultSet selectProgramCAtagory(String requsterId) throws SQLException {
+//        String _selectQuery = "SELECT EDUCATION_TYPE_CATEGORY " +
+//                "FROM HR_EDUCATION_REQUEST where REQUESTER_ID= '" + requsterId + "'";
+//
+//        try {
+//            _con = getConnection();
+//            _ps = _con.prepareStatement(_selectQuery);
+//            _rs = _ps.executeQuery();
+//            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+//            ocrs.populate(_rs);
+//            return (ResultSet) ocrs;
+//        } finally {
+//            releaseResources();
+//        }
+//    }
+    public ResultSet selectEduShift(String requsterId) throws SQLException {
+        String _selectQuery = "SELECT EDUCATION_SHIFT_CATEGORY " +
+                "FROM HR_EDUCATION_REQUEST where REQUESTER_ID= '" + requsterId + "'";
+
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_selectQuery);
+            _rs = _ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(_rs);
+            return (ResultSet) ocrs;
+        } finally {
+            releaseResources();
+        }
+    }
+
+    public ResultSet selectEducationLevel(String requesterID) throws SQLException {
+        String _selectQuery = "SELECT EDUCATION_LEVEL_CATEGORY " +
+                "FROM HR_EDUCATION_REQUEST where REQUESTER_ID= '" + requesterID + "'";
+
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_selectQuery);
+            _rs = _ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(_rs);
+            return (ResultSet) ocrs;
+        } finally {
+            releaseResources();
+        }
+    }
+
+    public ResultSet selectInstitutionAdress(String institId) throws SQLException {
+        String _selectQuery = "SELECT CONTACT_PERSON,PHONE_NUMBER,EMAIL_ADDRESS,FAX_NUMBER " +
+                "FROM HR_EDUC_INSTITUTION where INSTITUTION_NAME='" + institId + "'";
+
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_selectQuery);
+            _rs = _ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(_rs);
+            return (ResultSet) ocrs;
+        } finally {
+            releaseResources();
+        }
+    }
+
+    public ResultSet selectTypeOFAccredated(String institId) throws SQLException {
+        String _selectQuery = "SELECT ACCREDITED_OR_NOT,LOCATION_CATEGORY " +
+                "FROM HR_EDUC_INSTITUTION where INSTITUTION_NAME='" + institId + "'";
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_selectQuery);
+            _rs = _ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(_rs);
+            return (ResultSet) ocrs;
+        } finally {
+            releaseResources();
+        }
+    }
+
+    public ResultSet selectEducationRequestHistory(String userName) throws SQLException {
+        String _selectQuery = "SELECT * " +
+                "FROM HR_CHANGE_INST_REQUEST " +
+                "WHERE REQUEST_STATUS NOT LIKE  " + changeInstituApproveManager.INITIAL_STATE_CHANGEINS +
+                "AND (USER_NAME   ='" + userName + "' " +
+                "OR REQUESTER_ID IN " +
+                "  (SELECT EMPLOYEE_ID FROM MUGHER.TBL_USERS WHERE USER_NAME='" + userName + "' " +
+                "  ) ) " +
+                "ORDER BY CHANGEINS_REQU_ID DESC";
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_selectQuery);
+//            _ps.setString(1, userName);
+//            _ps.setString(2, userName);
+            _rs = _ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(_rs);
+            return (ResultSet) ocrs;
+        } finally {
+            releaseResources();
+        }
+    }
+
+    /**
+     * returns ResultSet object of processed leave requests with their current status<br>
+     * Basically intended to show the history of a  given leave request.
+     * @param  the status of the request
+     * @throws  SQLException*/
+    public ResultSet selectProcessedSalaryDelegationRequest(int requestId) throws SQLException {
+        String _selectQuery = "SELECT REQUEST_ID, " +
+                "  mugher.TBL_USERS.EMPLOYEE_ID AS RECORDED_BY_ID, " +
+                "  PROCESSED_BY , " +
+                "  RECORDED_BY, " +
+                //   "  NEXT_STATE AS DECISION, " +
+                "  DECISION, " +
+                "  TIME_STAMP, " +
+                "  COMMENT_GIVEN, " +
+                "  FIRST_NAME, " +
+                "  MIDDLE_NAME, " +
+                "  LAST_NAME , " +
+                "  PERMISSION_NAME " +
+                "FROM HR_EDUCATION_PROCESSED , " +
+                "  HR_EMPLOYEE_INFO , " +
+                "  mugher.TBL_PERMISSION , " +
+                "  mugher.TBL_USERS " +
+                "WHERE REQUEST_ID              =" + requestId +
+                "AND HR_EMPLOYEE_INFO.EMP_ID   =PROCESSED_BY " +
+                "AND mugher.TBL_USERS.user_name=RECORDED_BY " +
+                "AND mugher.TBL_PERMISSION.CODE=DECISION " +
+                "ORDER BY TIME_STAMP";
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_selectQuery);
+            _rs = _ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(_rs);
+            return (ResultSet) ocrs;
+        } finally {
+            releaseResources();
+        }
+    }
+
+    public int updateChangeInst(changeInstitutionRequestModel changeInsModel) throws SQLException {
+        String _updateQuery = "UPDATE HR_CHANGE_INST_REQUEST " +
+                " SET " +
+                " EDUCATION_PROGRAM_NAME = ?,EDUCATION_LEVEL_CATEGORY = ?,EDUCATION_SHIFT_CATEGORY = ?," +
+                " START_DATE = ?, APPLIED_DATE = ?,DURATION_IN_YEAR = ?,REASON_DESCRIPTION = ?," +
+                " INSTITUTION_NAME = ?,INSTITUTION_ACCREDITED = ?,ETHIOPIAN_INSTITUTION = ?,INSTITUTION_ADDRESS = ?," +
+                " COST_PER_CREDIT_HOUR = ?,NUMBER_OF_CREDIT_HOURS = ?,TOTAL_ADMIN_COSTS = ?," +
+                " DOCUMENT_REFERENCE_NUMBER = ?,TIME_STAMP = ?,USER_NAME =?,END_DATE=? " +
+                " WHERE CHANGEINS_REQU_ID = ? and EDU_REQ_ID = ?  ";
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_updateQuery);
+            // _ps.setString(1, changeInsModel.getEducationTypeCategoryNew());
+            _ps.setString(1, changeInsModel.getEducationProgramName());
+            _ps.setString(2, changeInsModel.getEducationLevelCategory());
+            _ps.setString(3, changeInsModel.getEducationShiftCategory());
+            _ps.setString(4, changeInsModel.getStartDate());
+            _ps.setString(5, changeInsModel.getAppliedDate());
+            _ps.setDouble(6, changeInsModel.getDurationInYear());
+            _ps.setString(7, changeInsModel.getReasonDescription());
+            _ps.setString(8, changeInsModel.getInstitutionName());
+            _ps.setString(9, changeInsModel.getInstitutionAccredited());
+            _ps.setString(10, changeInsModel.getEthiopianInstitution());
+            _ps.setString(11, changeInsModel.getInstitutionAddress());
+            _ps.setDouble(12, changeInsModel.getCostPerCreditHour());
+            _ps.setInt(13, changeInsModel.getNumberOfCreditHours());
+            _ps.setDouble(14, changeInsModel.getTotalAdminstrationCosts());
+            _ps.setString(15, changeInsModel.getDocumentReferenceNumber());
+            _ps.setString(16, changeInsModel.getTimeStamp());
+            _ps.setString(17, changeInsModel.getUserName());
+            _ps.setString(18, changeInsModel.getEndDate());
+            _ps.setInt(19, changeInsModel.getChangeInstId());
+            _ps.setInt(20, changeInsModel.getEducationRequestId());
+            
+            return _ps.executeUpdate();
+        } finally {
+            releaseResources();
+        }
+    }
+
+    public ResultSet selectEducationTypeByCategory(int deptId) throws SQLException {
+        String _selectQuery = "SELECT DISTINCT lev.description " +
+                "FROM hr_employee_info info " +
+                "INNER JOIN hr_lu_job_type jobs " +
+                "ON info.job_code = jobs.job_code " +
+                "RIGHT JOIN hr_lu_jobtype_eductype ty " +
+                "ON jobs.job_code=ty.jobtype_id " +
+                "JOIN hr_lu_educ_type lev " +
+                "ON ty.eductype_id        =lev.educ_type_code " +
+                "WHERE info.department_id ='" + deptId + "' " +
+                "ORDER BY lev.description DESC";
+
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_selectQuery);
+            System.out.println(_selectQuery);
+            _rs = _ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(_rs);
+            return (ResultSet) ocrs;
+        } finally {
+            releaseResources();
+        }
+    }
+}

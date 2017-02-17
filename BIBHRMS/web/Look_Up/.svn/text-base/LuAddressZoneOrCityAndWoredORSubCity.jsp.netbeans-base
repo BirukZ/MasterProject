@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Document   : Page1
+    Created on : Feb 26, 2010, 7:48:31 AM
+    Author     : DavePro
+-->
+<jsp:root version="2.0" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:ice="http://www.icesoft.com/icefaces/component" xmlns:jsp="http://java.sun.com/JSP/Page">
+    <jsp:directive.page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"/>
+    <f:view>
+        <f:loadBundle basename="Localization.HRLocalization" var="msgs"/>
+        <html id="outputHtml1">
+            <head id="outputHead1">
+                <title></title>
+            </head>
+            <body id="outputBody1" style="-rave-layout: grid">
+                <ice:outputStyle href="../resources/stylesheet.css" id="outputStyle1"/>
+                <ice:outputStyle href="../xmlhttp/css/rime/rime.css"/>
+                <ice:form id="form1">
+                    <ice:panelBorder height="480" id="whole_page" renderCenter="#{Page1.panelBorder1Bean.renderCenter}"
+                        renderEast="#{Page1.panelBorder1Bean.renderEast}" renderNorth="#{Page1.panelBorder1Bean.renderNorth}"
+                        renderSouth="#{Page1.panelBorder1Bean.renderSouth}" renderWest="#{Page1.panelBorder1Bean.renderWest}"
+                        style="top: 0px; position: relative" styleClass="whole_page" width="1024">
+                        <f:facet name="north">
+                            <ice:panelGroup dragListener="#{Page1.panelBorder1north_processMyEvent}" id="page_header" style="height: 117px">
+                                <!-- Begin Header -->
+                                <ice:panelLayout id="header" layout="flow" style="height: 129px; left: 0px; position: relative; width: 100%; -rave-layout: grid"
+                                    styleClass="header" visible="true">
+                                    <jsp:directive.include file="/Header.jspf"/>
+                                </ice:panelLayout>
+                                <!-- End Header -->
+                            </ice:panelGroup>
+                        </f:facet>
+                        <f:facet name="west">
+                            <ice:panelGroup id="menu_left" style=" height:100%;">
+                                <ice:panelLayout id="left_menu1" layout="flow"
+                                    style="height: 525px; left: 0px; position: relative; width: 100%; -rave-layout: grid" styleClass="left_menu">
+                                    <ice:panelLayout id="list_menu2" style="height: 523px; left: -4px; position: absolute; width: 213px" styleClass="list_menu">
+                                        <ice:panelCollapsible binding="#{Page1.panelCollapsible2}" id="panelCollapsible2" toggleOnClick="true">
+                                            <f:facet name="header">
+                                                <ice:panelGroup id="panelGroup2" styleClass="">
+                                                    <ice:outputText id="lblCommonTask" value="Common Task "/>
+                                                </ice:panelGroup>
+                                            </f:facet>
+                                            <ice:panelGrid id="panelGrid1">
+                                                <ice:panelGroup id="lyRegionAndZoneOrCity" style="text-align: left; width: 160px" styleClass="iceDatTblColHdr">
+                                                    <ice:commandLink action="#{Look_Up$LuAddressZoneOrCityAndWoredORSubCity.cmdRegionAndZoneOrCity_action}"
+                                                        id="cmdRegionAndZoneOrCity" style="color: rgb(48, 102, 130); font-weight: bold" value="Region And Zone/City"/>
+                                                </ice:panelGroup>
+                                                <br/>
+                                                <ice:panelGroup id="lyEmployeeProfile" style="text-align: left; width: 160px" styleClass="iceDatTblColHdr">
+                                                    <ice:commandLink action="#{Look_Up$LuAddressZoneOrCityAndWoredORSubCity.cmdEmployeeProfile_action}"
+                                                        id="cmdEmployeeProfile" style="color: rgb(48, 102, 130); font-weight: bold" value="Woreda/SubCity"/>
+                                                </ice:panelGroup>
+                                                <br/>
+                                                <ice:panelGroup id="lyKebelle" style="text-align: left; width: 160px" styleClass="iceDatTblColHdr">
+                                                    <ice:commandLink action="#{Look_Up$LuAddressZoneOrCityAndWoredORSubCity.cmdKebelle_action}" id="cmdKebelle"
+                                                        style="color: rgb(48, 102, 130); font-weight: bold" value="Kebelle"/>
+                                                </ice:panelGroup>
+                                                <br/>
+                                                <ice:panelGroup id="lyRankId" style="text-align: left; width: 160px" styleClass="iceDatTblColHdr">
+                                                    <ice:commandLink action="#{Look_Up$LuAddressZoneOrCityAndWoredORSubCity.cmdRank_action}" id="cmdRank"
+                                                        style="color: rgb(48, 102, 130); font-weight: bold" value="Rank And PayGrad"/>
+                                                </ice:panelGroup>
+                                                <br/>
+                                                <br/>
+                                                <br/>
+                                                <br/>
+                                                <br/>
+                                                <br/>
+                                                <br/>
+                                                <br/>
+                                                <br/>
+                                                <br/>
+                                                <br/>
+                                                <br/>
+                                                <br/>
+                                                <br/>
+                                                <br/>
+                                                <br/>
+                                                <br/>
+                                                <br/>
+                                                <br/>
+                                                <br/>
+                                                <br/>
+                                                <br/>
+                                            </ice:panelGrid>
+                                        </ice:panelCollapsible>
+                                    </ice:panelLayout>
+                                </ice:panelLayout>
+                            </ice:panelGroup>
+                        </f:facet>
+                        <f:facet name="center">
+                            <ice:panelGroup dragListener="#{Look_Up$LuAddressRegionAndZoneOrCity.page_display_processMyEvent}" id="page_display" style="height: 540px">
+                                <ice:panelLayout id="container" layout="flow"
+                                    style="height: 522px; left: 0px; position: relative; width: 100%; -rave-layout: grid" styleClass="page_display">
+                                    <fieldset class="filedset_css" style="height: 503px;">
+                                        <legend class="legend_css">
+                                            <ice:outputLabel value="Woreda OR SubCity "/>
+                                        </legend>
+                                        <ice:panelLayout id="pnProfile" style="height: 470px; left: 0px; top: -20px; position: absolute; width: 100%">
+                                            <ice:panelLayout id="panelLayout1" style="height: 470px; left: 5px; top: 0px; position: absolute; width: 770px" styleClass="collabsable_bg">
+                                                <ice:selectOneMenu binding="#{Look_Up$LuAddressZoneOrCityAndWoredORSubCity.drlRegion}" id="drlRegion"
+                                                    partialSubmit="true"
+                                                    style="color: rgb(54, 76, 94); font-family: 'Lucida Sans'; font-size: 11px; font-style: normal; font-weight: lighter; left: 140px; top: 41px; position: absolute; width: 100px"
+                                                    value="#{Look_Up$LuAddressZoneOrCityAndWoredORSubCity.selectOneMenu1Bean.selectedObject}" valueChangeListener="#{Look_Up$LuAddressZoneOrCityAndWoredORSubCity.drlRegion_processValueChange}">
+                                                    <f:selectItems id="selectOneMenu1selectItems" value="#{Look_Up$LuAddressZoneOrCityAndWoredORSubCity.regionOpt}"/>
+                                                </ice:selectOneMenu>
+                                                <ice:outputText id="lblRegion" style="font-size: 10px; left: 38px; top: 47px; position: absolute" value="Region"/>
+                                                <ice:outputText id="outputText1" style="font-size: 10px; left: 414px; top: 47px; position: absolute" value="Zone/City Name"/>
+                                                <ice:selectOneMenu binding="#{Look_Up$LuAddressZoneOrCityAndWoredORSubCity.drlZoneCity}" id="drlZoneCity"
+                                                    partialSubmit="true"
+                                                    style="font-family: 'Lucida Sans'; font-size: 11px; font-style: normal; font-weight: lighter; left: 513px; top: 41px; position: absolute; width: 190px"
+                                                    value="#{Look_Up$LuAddressZoneOrCityAndWoredORSubCity.selectOneMenu2Bean.selectedObject}" valueChangeListener="#{Look_Up$LuAddressZoneOrCityAndWoredORSubCity.drlZoneCity_processValueChange}">
+                                                    <f:selectItems id="selectOneMenu2selectItems" value="#{Look_Up$LuAddressZoneOrCityAndWoredORSubCity.optZoneCityType}"/>
+                                                </ice:selectOneMenu>
+                                                <ice:panelLayout id="panelLayout2" style="border-top: solid orange 1px; height: 400px; left: 0px; top: 96px; position: absolute; width: 100%">
+                                                    <ice:outputText id="lblWoredaOrSubCityId" style="font-size: 10px; left: 38px; top: 20px; position: absolute" value="Woreda/SubCity Id"/>
+                                                    <ice:outputText id="outputText5" style="font-size: 10px; left: 414px; top: 20px; position: absolute" value="Woreda/SubCity Name"/>
+                                                    <ice:outputText id="lblDescription" style="font-size: 10px; left: 38px; top: 78px; position: absolute" value="Description"/>
+                                                    <ice:inputText binding="#{Look_Up$LuAddressZoneOrCityAndWoredORSubCity.txtWoredaId}" id="txtWoredaId"
+                                                        required="true" style="color: rgb(54, 76, 94); font-family: 'Lucida Sans'; font-size: 11px; font-style: normal; font-weight: lighter; left: 140px; top: 14px; position: absolute; width: 145px"/>
+                                                    <ice:inputText binding="#{Look_Up$LuAddressZoneOrCityAndWoredORSubCity.txtWoredaName}" id="txtWoredaName" style="font-family: 'Lucida Sans'; font-size: 11px; font-style: normal; font-weight: lighter; left: 522px; top: 14px; position: absolute; width: 180px"/>
+                                                    <ice:inputTextarea binding="#{Look_Up$LuAddressZoneOrCityAndWoredORSubCity.txtDescription}"
+                                                        id="txtDescription" style="font-family: 'Lucida Sans'; font-size: 11px; font-style: normal; font-weight: lighter; height: 68px; left: 140px; top: 59px; position: absolute; width: 566px"/>
+                                                    <ice:panelLayout id="panelLayout16" style="border: 1px solid rgb(204, 204, 204); height: 125px; margin-left: 15px; left: 10px; top: 170px; overflow: auto; position: absolute; width: 732px">
+                                                        <ice:dataTable binding="#{Look_Up$LuAddressZoneOrCityAndWoredORSubCity.tblWoreda}" id="tblWoreda"
+                                                            style="left: 60px; top: 5px; position: absolute; width: 600px"
+                                                            value="#{SessionBean1.woredaOrSubCityList}" var="currentRow">
+                                                            <ice:column id="column1" style="width: 50px">
+                                                                <ice:outputText id="outputText7" value="#{currentRow['id']}"/>
+                                                                <f:facet name="header">
+                                                                    <ice:outputText id="outputText8" value="ID"/>
+                                                                </f:facet>
+                                                            </ice:column>
+                                                            <ice:column id="column2" style="width: 100px">
+                                                                <ice:outputText id="outputText9" value="#{currentRow['name']}"/>
+                                                                <f:facet name="header">
+                                                                    <ice:outputText id="outputText10" value="Woreda/SubCity Name"/>
+                                                                </f:facet>
+                                                            </ice:column>
+                                                            <ice:column id="column3" style="width: 200px">
+                                                                <ice:outputText id="outputText11" value="#{currentRow['description']}"/>
+                                                                <f:facet name="header">
+                                                                    <ice:outputText id="outputText12" value="Description"/>
+                                                                </f:facet>
+                                                            </ice:column>
+                                                            <ice:column id="colEdit" style="width: 70px">
+                                                                <ice:commandLink action="#{Look_Up$LuAddressZoneOrCityAndWoredORSubCity.linkEdit_action}"
+                                                                    binding="#{Look_Up$LuAddressZoneOrCityAndWoredORSubCity.linkEdit}" id="linkEdit"
+                                                                    style="color: #34599c;margin-left: 12px" value="Edit"/>
+                                                                <ice:commandLink action="#{Look_Up$LuAddressZoneOrCityAndWoredORSubCity.linkDelete_action}"
+                                                                    id="linkDelete" style="color: rgb(52, 89, 156); margin-left: 10px" value="Delete"/>
+                                                                <f:facet name="header">
+                                                                    <ice:outputText id="lblEdit" value="Edit/Delete"/>
+                                                                </f:facet>
+                                                            </ice:column>
+                                                        </ice:dataTable>
+                                                    </ice:panelLayout>
+                                                    <ice:panelLayout id="panelLayout3" style="top: 310px; position: absolute">
+                                                        <ice:commandButton action="#{Look_Up$LuAddressZoneOrCityAndWoredORSubCity.btnSave_action}"
+                                                            binding="#{Look_Up$LuAddressZoneOrCityAndWoredORSubCity.btnSave}" id="btnSave"
+                                                            style="margin-left: 120px; width: 80px" value="New"/>
+                                                        <ice:commandButton action="#{Look_Up$LuAddressZoneOrCityAndWoredORSubCity.btnUpdate_action}"
+                                                            binding="#{Look_Up$LuAddressZoneOrCityAndWoredORSubCity.btnUpdate}" id="btnUpdate"
+                                                            style="margin-left: 50px; width: 80px" value="Edit"/>
+                                                        <ice:commandButton action="#{Look_Up$LuAddressZoneOrCityAndWoredORSubCity.btnReset_action}"
+                                                            binding="#{Look_Up$LuAddressZoneOrCityAndWoredORSubCity.btnReset}" id="btnReset"
+                                                            style="margin-left: 50px; width: 80px" value="Reset"/>
+                                                        <ice:commandButton action="#{Look_Up$LuAddressZoneOrCityAndWoredORSubCity.btnDelete_action}"
+                                                            binding="#{Look_Up$LuAddressZoneOrCityAndWoredORSubCity.btnDelete}" id="btnDelete"
+                                                            style="margin-left: 50px; width: 80px" value="Delete"/>
+                                                    </ice:panelLayout>
+                                                    <ice:commandButton action="#{Look_Up$LuAddressZoneOrCityAndWoredORSubCity.btnAdd_action}"
+                                                        binding="#{Look_Up$LuAddressZoneOrCityAndWoredORSubCity.btnAdd}" id="btnAdd"
+                                                        style="left: 320px; top: 130px; position: absolute; width: 100px" value="Add"/>
+                                                    <ice:message errorClass="errorMessage" fatalClass="fatalMessage" for="txtWoredaId" id="message1"
+                                                        infoClass="infoMessage" style="font-size: 10px; left: 190px; top: 38px; position: absolute" warnClass="warnMessage"/>
+                                                    <ice:message errorClass="errorMessage" fatalClass="fatalMessage" for="txtWoredaName" id="message2"
+                                                        infoClass="infoMessage" style="font-size: 10px; left: 580px; top: 38px; position: absolute" warnClass="warnMessage"/>
+                                                </ice:panelLayout>
+                                                <ice:outputText binding="#{Look_Up$LuAddressZoneOrCityAndWoredORSubCity.lblErrorMassageRegion}"
+                                                    id="lblErrorMassageRegion" rendered="false"
+                                                    style="color: red; font-size: 10px; left: 185px; top: 70px; position: absolute; width: 50px" value="outputText"/>
+                                                <ice:outputText binding="#{Look_Up$LuAddressZoneOrCityAndWoredORSubCity.lblErrormessageForZone}"
+                                                    id="lblErrormessageForZone" rendered="false"
+                                                    style="color: red; font-size: 10px; left: 580px; top: 70px; position: absolute" value="outputText"/>
+                                            </ice:panelLayout>
+                                        </ice:panelLayout>
+                                    </fieldset>
+                                </ice:panelLayout>
+                            </ice:panelGroup>
+                        </f:facet>
+                        <f:facet name="south">
+                            <ice:panelGroup id="page_footer" style=" text-align: center;">
+                                <ice:panelLayout id="footer" layout="flow" style="height: 21px; left: 0px; position: relative; -rave-layout: grid" styleClass="page_footer">This is the
+                                Footer</ice:panelLayout>
+                            </ice:panelGroup>
+                        </f:facet>
+                    </ice:panelBorder>
+                    <ice:panelPopup autoCentre="true" binding="#{Look_Up$LuAddressZoneOrCityAndWoredORSubCity.pnlPopUpMsgConf}" draggable="true"
+                        id="pnlPopUpMsgConf" modal="true" rendered="false" style="display: block; height: 156px; left: 97px; top: 226px; position: absolute; width: 623px">
+                        <f:facet name="header">
+                            <ice:panelGrid id="panelGridPopUpMsgConf" style="display: block; height: 20px; width: 500px">
+                                <ice:outputText id="lblPopUpMsgTitleConf" value="Mugher Cement Enterprise Human Resource Management System"/>
+                            </ice:panelGrid>
+                        </f:facet>
+                        <f:facet name="body">
+                            <ice:panelGroup id="panelGroupPopUpMsgBodyConf" style="display: block; height: 94px; position: relative; width: 586px">
+                                <ice:commandButton action="#{Look_Up$LuAddressZoneOrCityAndWoredORSubCity.btnPopUpNoConf_action}"
+                                    binding="#{Look_Up$LuAddressZoneOrCityAndWoredORSubCity.btnPopUpNoConf}" id="btnPopUpNoConf" rendered="true"
+                                    style="left: 450px; top: 60px;                                     position: absolute; visibility: visible; width: 70px"
+                                    value="No" visible="true"/>
+                                <ice:commandButton action="#{Look_Up$LuAddressZoneOrCityAndWoredORSubCity.btnPopUpYesConf_action}"
+                                    binding="#{Look_Up$LuAddressZoneOrCityAndWoredORSubCity.btnPopUpYesConf}" id="btnPopUpYesConf" rendered="true"
+                                    style="background-position: 0 100%; background-repeat: no-repeat; left: 320px; top: 60px; position: absolute; visibility: visible; width: 70px"
+                                    value="Yes" visible="true"/>
+                                <ice:outputText binding="#{Look_Up$LuAddressZoneOrCityAndWoredORSubCity.lblPopUpMsgMainConf}" id="lblPopUpMsgMainConf" style="left: 95px; top: 15px; position: absolute; width: 496px"/>
+                                <ice:graphicImage height="56" id="gimgPopUpMsgConf" style="left: 10px; top: 15px; position: absolute" value="" width="62"/>
+                                <ice:commandButton action="#{Look_Up$LuAddressZoneOrCityAndWoredORSubCity.btnOK_action}"
+                                    binding="#{Look_Up$LuAddressZoneOrCityAndWoredORSubCity.btnOK}" id="btnOK" rendered="false"
+                                    style="left: 450px; top: 60px; position: absolute; visibility: visible; width: 70px" value="Ok"/>
+                            </ice:panelGroup>
+                        </f:facet>
+                    </ice:panelPopup>
+                </ice:form>
+            </body>
+        </html>
+    </f:view>
+</jsp:root>

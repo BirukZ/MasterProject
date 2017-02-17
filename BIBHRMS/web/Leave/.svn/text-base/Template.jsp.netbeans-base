@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Document   : Page1
+    Created on : Feb 26, 2010, 7:48:31 AM
+    Author     : DavePro
+-->
+<jsp:root version="2.0" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:ice="http://www.icesoft.com/icefaces/component"
+    xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:webuijsf="http://www.sun.com/webui/webuijsf">
+    <jsp:directive.page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"/>
+    <f:view>
+        <html id="outputHtml1">
+            <head id="outputHead1">
+                <title></title>
+                <ice:outputStyle href="../resources/stylesheet.css" id="outputStyle1"/>
+                <ice:outputStyle href="../resources/TempCSS.css"/>
+                <ice:outputStyle href="../xmlhttp/css/rime/rime.css"/>
+                <ice:outputStyle href="../resources/TempCSS.css"/>
+                <script src="../Script/Ethiopian_Calendar.js"></script>
+                <script src="../Script/jquery-1.3.2.min.js"></script>
+                <style type="text/css">
+                    .message {
+                        display: none;
+                        margin: 0 0 13px 0;
+                        background-color:#EFA;
+                        padding: 13px 13px 13px 52px;
+                        background-position: 13px 5px;
+                        border: solid 1px #BD8;                                                                                                                                                border: solid 1px #BD8;
+                    }
+                    .message2 {
+                        display: none;
+                        margin: 0 0 13px 0;
+                        background-color:#EFA;
+                        padding: 13px 13px 13px 52px;
+                        background-position: 13px 5px;
+                        border: solid 1px #BD8;                                                                                                                                                border: solid 1px #BD8;
+                    }
+                    .success{
+                        color: #336600;
+                        font-size: 12px;
+                        font-weight: bold;
+                        text-align: center;
+                        vertical-align: middle;
+                        top:5px;left: 0px;
+                        position: absolute;
+                        width: 100%
+                    }
+                    .error{
+                        color: red;
+                        font-size: 12px;
+                        font-weight: bold;
+                        text-align: center;
+                        vertical-align: middle;
+                        top:5px;left: 0px;
+                        position: absolute;
+                        width: 100%
+                    }
+                    .success1{
+                        color: #336600;
+                        font-size: 11px;
+                        font-weight: bold;
+                        height: 16px;
+                        left: 5px;
+                        top: 2px;
+                        position: absolute;
+                        text-align: left;
+                        width: 391px
+                    }
+                    .error1{
+                        color: red;
+                        font-size: 11px;
+                        font-weight: bold;
+                        height: 16px;
+                        left: 5px;
+                        top: 2px;
+                        position: absolute;
+                        text-align: left;
+                        width: 391px
+                    }
+                </style>
+                <script language="javascript" type="text/javascript">
+                    var $j=jQuery.noConflict();
+                    function CandidateExperiences(field){
+
+                        if (field.defaultValue == field.value) field.value = '';
+                        else if (field.value == '') field.value = field.defaultValue;
+
+                    }
+                </script>
+                <link HREF="../FederalIcon.ico" REL="icon"/>
+            </head>
+            <body id="outputBody1" style="-rave-layout: grid">
+                <ice:form id="form1">
+                    <div>
+                        <ice:panelBorder id="whole_page" renderCenter="#{Leave$Template.panelBorder1Bean.renderCenter}"
+                            renderEast="#{Leave$Template.panelBorder1Bean.renderEast}" renderNorth="#{Leave$Template.panelBorder1Bean.renderNorth}"
+                            renderSouth="#{Leave$Template.panelBorder1Bean.renderSouth}" renderWest="#{Leave$Template.panelBorder1Bean.renderEast}"
+                            style="top: 0px; position: relative" styleClass="whole_page" width="1024">
+                            <f:facet name="north">
+                                <ice:panelGroup id="page_header" style="height: 75px">
+                                    <!-- Begin Header -->
+                                    <ice:panelLayout id="header" layout="flow"
+                                        style="height: 75px; left: 0px; position: relative; width: 100%z; -rave-layout: grid" styleClass="header" visible="true">
+                                        <jsp:directive.include file="/Header.jspf"/>
+                                    </ice:panelLayout>
+                                    <!-- End Header -->
+                                </ice:panelGroup>
+                            </f:facet>
+                            <f:facet name="west">
+                                <ice:panelGroup id="menu_left" style="border:none; height:470px;">
+                                    <ice:panelLayout id="left_menu1" layout="flow"
+                                        style="height:470px;top:15px left: 0px; position: relative; width: 100%; -rave-layout: grid" styleClass="left_menu">
+                                        <ice:panelLayout id="list_menu2" style="height:470px; left: -4px; position: absolute; width: 213px" styleClass="left_menu">
+                                            <ice:panelCollapsible expanded="true" id="pnl_col_Search" style="border:none">
+                                                <f:facet name="header">
+                                                    <ice:panelGroup id="search_Group_Header">
+                                                        <ice:outputText id="lblSearchArea" value="Search Area"/>
+                                                    </ice:panelGroup>
+                                                </f:facet>
+                                                <ice:panelGrid id="search_panelGrid" width="100%">
+                                                    <ice:panelGroup id="btnSearchEmployeeState" style="left:-5px;margin: -5px -5px -5px -10px;padding: 7px; background:transparent;;border:none;display: block;float:left;height: 55px; width: 100%">
+                                                        <ice:outputText id="outputText19" value=""/>
+                                                    </ice:panelGroup>
+                                                </ice:panelGrid>
+                                            </ice:panelCollapsible>
+                                            <ice:panelCollapsible expanded="true" id="pnl_col_Common_Tasks" style="border:none">
+                                                <f:facet name="header">
+                                                    <ice:panelGroup id="commonTasksGroup_header">
+                                                        <ice:outputText id="lblCommonTasks" value="Common Tasks"/>
+                                                    </ice:panelGroup>
+                                                </f:facet>
+                                                <ice:panelGrid id="commonTasksGroup_Grid11" width="100%">
+                                                    <ice:panelGroup id="commonTasksGroup_Group22" style="width:100%"/>
+                                                    <ul style="list-style-type: none; list-style-image: none; list-style-position: outside; line-height: 174%;">
+                                                        <li>
+                                                            <ice:commandLink id="lnkPayrollPeriodLists" style="color:#333333;font-weight:bold" value="Workflow Page"/>
+                                                        </li>
+                                                        <li>
+                                                            <ice:commandLink id="lnkPayrollSetUp" style="color:#333333;font-weight:bold" value="Workflow Group Page"/>
+                                                        </li>
+                                                        <li>
+                                                            <ice:commandLink id="lnkAccrualEntries" style="color:#333333;font-weight:bold" value="Workflow User Group Page"/>
+                                                        </li>
+                                                        <li>
+                                                            <ice:commandLink id="lnkPersonalDeductions" style="color:#333333;font-weight:bold" value="Workflow States Page"/>
+                                                        </li>
+                                                        <li>
+                                                            <ice:commandLink id="lnkGovernmentDeductions" style="color:#333333;font-weight:bold" value="Workflow Transition Page"/>
+                                                        </li>
+                                                    </ul>
+                                                </ice:panelGrid>
+                                            </ice:panelCollapsible>
+                                            <ice:panelCollapsible expanded="true" id="pnl_col_Status" style="border:none">
+                                                <f:facet name="header">
+                                                    <ice:panelGroup id="status_Group_Header">
+                                                        <ice:outputText id="lblStatus" value="Status"/>
+                                                    </ice:panelGroup>
+                                                </f:facet>
+                                                <ice:panelGrid id="StatusBoard" width="100%">
+                                                    <ice:panelGroup id="status_Group" style="left:-5px;margin: -5px -5px -5px -10px;padding: 7px; background:transparent;;border:none;display: block;float:left;height:310px; width: 100%">
+                                                        <ice:panelLayout id="StatusContainer" style="position: absolute;height: 187px; width: 100%"/>
+                                                    </ice:panelGroup>
+                                                </ice:panelGrid>
+                                            </ice:panelCollapsible>
+                                        </ice:panelLayout>
+                                    </ice:panelLayout>
+                                </ice:panelGroup>
+                            </f:facet>
+                            <f:facet name="center">
+                                <ice:panelGroup id="page_display" style="height:790px">
+                                    <ice:panelLayout id="container" layout="flow"
+                                        style="height: 775px; left: 0px; position: relative; width: 100%; -rave-layout: grid" styleClass="page_display">
+                                        <fieldset class="filedset_css" style="height: 760px;">
+                                            <legend class="legend_css">
+                                                <ice:outputLabel value="Manage Payroll List and assign a dedecated person"/>
+                                            </legend>
+                                            <ice:panelLayout id="pnProfile" style="height: 770px; left: 0px; top: 0px; position: absolute; width: 100%">
+                                                <ice:panelGroup id="RetirementApproval" style="height: 686px" styleClass="filedset_border">
+                                                    <ice:panelLayout id="pnMessage" style="left: 0px; top:-86px;position: absolute; width: 720px" styleClass="message">
+                                                        <h:outputLabel id="lblFormMessage1"/>
+                                                    </ice:panelLayout>
+                                                    
+                                                 
+                                                </ice:panelGroup>
+                                            </ice:panelLayout>
+                                        </fieldset>
+                                    </ice:panelLayout>
+                                </ice:panelGroup>
+                            </f:facet>
+                            <f:facet name="south">
+                                <ice:panelGroup id="page_footer">
+                                    <ice:panelLayout id="footer" layout="flow" style="height: 21px; left: 0px; position: relative; -rave-layout: grid" styleClass="page_footer">
+                                        <label
+                                                style="margin-left:10px;color:#333333;font-weight:bold;font-family:Cambria">Copyright © 2002-2003 Ethiopian Calander | <a
+                                                href="http://www.insa.gov.et" style="margin-left:10px;color:#333333;">Information Network Security Agency |Directorate Of Research Technology |Software Department.</a> |</label>
+                                    </ice:panelLayout>
+                                </ice:panelGroup>
+                            </f:facet>
+                        </ice:panelBorder>
+                    </div>
+                </ice:form>
+            </body>
+        </html>
+    </f:view>
+</jsp:root>

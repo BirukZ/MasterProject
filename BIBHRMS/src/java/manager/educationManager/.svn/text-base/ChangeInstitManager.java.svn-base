@@ -1,0 +1,515 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package manager.educationManager;
+
+import com.sun.webui.jsf.model.Option;
+import entity.educationEntity.EducationRequestEntity;
+import java.sql.ResultSet;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Date;
+import javax.faces.model.SelectItem;
+import manager.globalUseManager.ErrorLogWriter;
+import manager.globalUseManager.LookUpManager;
+import entity.educationEntity.ChangeInstitutionEntity;
+import manager.educationManager.changeInstituApproveManager;
+
+/**
+ *
+ * @author mekete
+ */
+public class ChangeInstitManager {
+
+    String userName;
+    String loggedInEmployeeId;
+    EducationRequestModel educationRequestModel = new EducationRequestModel();
+    changeInstitutionRequestModel changeInsModel = new changeInstitutionRequestModel();
+    EducationRequestEntity educationRequestEntity = new EducationRequestEntity();
+    ChangeInstitutionEntity changeInstitutionEntity = new ChangeInstitutionEntity();
+    changeInstituApproveManager ChangeInstituApproveManager = new changeInstituApproveManager();
+
+    public ArrayList<SelectItem> getEducationShift(String requesterID) {
+        ArrayList<SelectItem> programtLists = new ArrayList<SelectItem>();
+        try {
+            ResultSet _rs = changeInstitutionEntity.selectEduShift(requesterID);
+
+            while (_rs.next()) {
+                SelectItem currentRequest = new SelectItem(_rs.getString("EDUCATION_SHIFT_CATEGORY"));
+                programtLists.add(currentRequest);
+            }
+            programtLists.add(0, new Option(null, "--Select Shift--"));
+            _rs.close();
+
+            return programtLists;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return null;
+        }
+    }
+
+    public ArrayList<SelectItem> getEducationTypeCatagories() {
+        return (new LookUpManager()).readAllEducationCatagories();
+    }
+
+    public ArrayList<SelectItem> getEducationLevels() {
+        return (new LookUpManager()).readEducationLevel();
+    }
+
+    public ArrayList<SelectItem> getPendingRequests() {
+        ArrayList<SelectItem> requestLists = new ArrayList<SelectItem>();
+        try {
+            ResultSet _rs = changeInstitutionEntity.selectPendingEducationRequests(userName);
+            while (_rs.next()) {
+                SelectItem currentRequest = new SelectItem(_rs.getString("CHANGEINS_REQU_ID") + "--" + _rs.getString("REQUESTER_ID") + "--" + _rs.getString("EDU_REQ_ID") + "--" + _rs.getString("REQUEST_STATUS"), _rs.getString("REQUESTER_ID") + " ON " + _rs.getString("APPLIED_DATE"));
+                requestLists.add(currentRequest);
+            }
+            _rs.close();
+            return requestLists;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return null;
+        }
+    }
+
+    public ArrayList<SelectItem> getNAmeOfInstitution(String requesterID) {
+        ArrayList<SelectItem> requestLists = new ArrayList<SelectItem>();
+        try {
+            ResultSet _rs = changeInstitutionEntity.selectNameOfInstitution(requesterID);
+
+            while (_rs.next()) {
+                SelectItem currentRequest = new SelectItem(_rs.getString("EDUCATION_REQUEST_ID") + "-" + _rs.getString("INSTITUTION_NAME"), _rs.getString("INSTITUTION_NAME"));
+                requestLists.add(currentRequest);
+            }
+            requestLists.add(0, new Option(null, "--Select Name Of Institution--"));
+            _rs.close();
+
+            return requestLists;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return null;
+        }
+    }
+
+    public ArrayList<SelectItem> getprogramName(String requesterID) {
+        ArrayList<SelectItem> programtLists = new ArrayList<SelectItem>();
+        try {
+            ResultSet _rs = changeInstitutionEntity.selectProgramName(requesterID);
+
+            while (_rs.next()) {
+                SelectItem currentRequest = new SelectItem(_rs.getString("EDUCATION_PROGRAM_NAME"));
+                programtLists.add(currentRequest);
+            }
+            programtLists.add(0, new Option(null, "--Select Progarme Name--"));
+            _rs.close();
+
+            return programtLists;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return null;
+        }
+    }
+
+//    public ArrayList<SelectItem> getprogramCategory(String requsterId) {
+//        ArrayList<SelectItem> programtLists = new ArrayList<SelectItem>();
+//        try {
+//            ResultSet _rs = changeInstitutionEntity.selectProgramCAtagory(requsterId);
+//
+//            while (_rs.next()) {
+//                SelectItem currentRequest = new SelectItem(_rs.getString("EDUCATION_TYPE_CATEGORY"));
+//                programtLists.add(currentRequest);
+//            }
+//            programtLists.add(0, new Option(null, "--Select Progarme Category Name--"));
+//            _rs.close();
+//
+//            return programtLists;
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//            ErrorLogWriter.writeError(ex);
+//            return null;
+//        }
+//    }
+    public ArrayList<SelectItem> getEducationLevel(String requesterID) {
+        ArrayList<SelectItem> programtLists = new ArrayList<SelectItem>();
+        try {
+            ResultSet _rs = changeInstitutionEntity.selectEducationLevel(requesterID);
+
+            while (_rs.next()) {
+                SelectItem currentRequest = new SelectItem(_rs.getString("EDUCATION_LEVEL_CATEGORY"));
+                programtLists.add(currentRequest);
+            }
+            programtLists.add(0, new Option(null, "--Select Education Level--"));
+            _rs.close();
+
+            return programtLists;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return null;
+        }
+    }
+
+    public String getInstituAdress(String institiId) {
+        String adress = null;
+
+        try {
+            ResultSet _rs = changeInstitutionEntity.selectInstitutionAdress(institiId);
+            while (_rs.next()) {
+                adress = ("Contact Person-" + _rs.getString("CONTACT_PERSON") + ", Phone No-" + _rs.getString("PHONE_NUMBER") + ", email Add-" + _rs.getString("EMAIL_ADDRESS") + ", Fax Num-" + _rs.getString("FAX_NUMBER"));
+
+
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+        }
+//
+        return adress;
+
+    }
+
+    public String getTypeOFAccredated(String institiId) {
+        String typeOFAccredated = null;
+
+        try {
+            ResultSet _rs = educationRequestEntity.selectTypeOFAccredated(institiId);
+            while (_rs.next()) {
+                typeOFAccredated = _rs.getString("ACCREDITED_OR_NOT");
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+        }
+//
+        return typeOFAccredated;
+
+    }
+
+    public String getInsideOutside(String institiId) {
+        String insideOutSide = null;
+
+        try {
+            ResultSet _rs = changeInstitutionEntity.selectTypeOFAccredated(institiId);
+            while (_rs.next()) {
+                insideOutSide = _rs.getString("LOCATION_CATEGORY");
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+        }
+//
+        return insideOutSide;
+
+    }
+
+    public ArrayList<SelectItem> getEducationalStatus() {
+        ArrayList<SelectItem> requestLists = new ArrayList<SelectItem>();
+        try {
+            ResultSet _rs = educationRequestEntity.selectEducationalStatus();
+
+            while (_rs.next()) {
+                SelectItem currentRequest = new SelectItem(_rs.getString("EDUCATIONAL_STATUS"));
+                requestLists.add(currentRequest);
+            }
+            requestLists.add(0, new Option(null, "--Select Educational Status --"));
+            _rs.close();
+
+            return requestLists;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return null;
+        }
+    }
+
+    public ArrayList<SelectItem> getMyRequestsHistory() {
+        ArrayList<SelectItem> requestLists = new ArrayList<SelectItem>();
+        try {
+            ResultSet _rs = changeInstitutionEntity.selectEducationRequestHistory(userName);
+            while (_rs.next()) {
+                SelectItem currentRequest = new SelectItem(_rs.getString("CHANGEINS_REQU_ID") + "--" + _rs.getString("REQUESTER_ID") + "--" + _rs.getString("EDU_REQ_ID") + "--" + _rs.getString("REQUEST_STATUS"), _rs.getString("REQUESTER_ID") + " ON " + _rs.getString("APPLIED_DATE"));
+                requestLists.add(currentRequest);
+            }
+            _rs.close();
+            return requestLists;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return null;
+        }
+    }
+
+    public changeInstitutionRequestModel getEducationRequest(int requestId) {
+        changeInsModel = new changeInstitutionRequestModel();
+        try {
+            ResultSet _rs = changeInstitutionEntity.selectEducationRequest(requestId);
+            if (_rs.next()) {
+
+                changeInsModel.setEducationRequestId(requestId);
+                changeInsModel.setRequesterId(_rs.getString("REQUESTER_ID"));
+
+                changeInsModel.setChangeInstId(_rs.getInt("CHANGEINS_REQU_ID"));
+                changeInsModel.setEducationProgramNamenew(_rs.getString("EDUCATION_PROGRAM_NAME"));
+                changeInsModel.setEducationLevelCategoryNew(_rs.getString("EDUCATION_LEVEL_CATEGORY"));
+                changeInsModel.setEducationShiftCategoryNew(_rs.getString("EDUCATION_SHIFT_CATEGORY"));
+                changeInsModel.setStartDateNew(_rs.getString("START_DATE"));
+                 changeInsModel.setEndDateNew(_rs.getString("END_DATE"));
+                changeInsModel.setAppliedDateNew(_rs.getString("APPLIED_DATE"));
+                changeInsModel.setDurationInYearNew(_rs.getDouble("DURATION_IN_YEAR"));
+
+                changeInsModel.setReasonDescriptionNew(_rs.getString("REASON_DESCRIPTION"));
+                changeInsModel.setInstitutionNamenew(_rs.getString("INSTITUTION_NAME"));
+              //  changeInsModel.setInstitutionAccredited(_rs.getString("INSTITUTION_ACCREDITED"));
+              //  changeInsModel.setEthiopianInstitution(_rs.getString("ETHIOPIAN_INSTITUTION"));
+                //changeInsModel.setInstitutionAddress(_rs.getString("INSTITUTION_ADDRESS"));
+
+                changeInsModel.setCostPerCreditHourNew(_rs.getDouble("COST_PER_CREDIT_HOUR"));
+                changeInsModel.setNumberOfCreditHoursNew(_rs.getInt("NUMBER_OF_CREDIT_HOURS"));
+                changeInsModel.setTotalAdminstrationCostsNew(_rs.getDouble("TOTAL_ADMIN_COSTS"));
+
+                changeInsModel.setDocumentReferenceNumberNew(_rs.getString("DOCUMENT_REFERENCE_NUMBER"));
+                changeInsModel.setRequestStatus(_rs.getString("REQUEST_STATUS"));
+                changeInsModel.setTimeStamp(_rs.getString("TIME_STAMP"));
+                changeInsModel.setUserName(_rs.getString("USER_NAME"));
+                 changeInsModel.setEndDateNew(_rs.getString("END_DATE"));
+
+
+            } else {
+                changeInsModel.setEducationRequestId(-1);
+            }
+            _rs.close();
+            return changeInsModel;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return null;
+        }
+    }
+///================================================================
+
+    public EducationRequestModel getEducationChangInsRequest(String requesterId) {
+        educationRequestModel = new EducationRequestModel();
+        try {
+            ResultSet _rs = changeInstitutionEntity.selectEducationChangeInsRequest(requesterId);
+            if (_rs.next()) {
+
+                educationRequestModel.setRequesterId(requesterId);
+                educationRequestModel.setRequesterId(_rs.getString("REQUESTER_ID"));
+
+                educationRequestModel.setEducationRequestId(_rs.getInt("EDUCATION_REQUEST_ID"));
+                educationRequestModel.setEducationProgramName(_rs.getString("EDUCATION_PROGRAM_NAME"));
+                educationRequestModel.setEducationLevelCategory(_rs.getString("EDUCATION_LEVEL_CATEGORY"));
+                educationRequestModel.setEducationShiftCategory(_rs.getString("EDUCATION_SHIFT_CATEGORY"));
+                educationRequestModel.setStartDate(_rs.getString("START_DATE"));
+                 educationRequestModel.setEndDate(_rs.getString("END_DATE"));
+                educationRequestModel.setAppliedDate(_rs.getString("APPLIED_DATE"));
+                educationRequestModel.setDurationInYear(_rs.getDouble("DURATION_IN_YEAR"));
+
+                educationRequestModel.setReasonDescription(_rs.getString("REASON_DESCRIPTION"));
+                educationRequestModel.setInstitutionName(_rs.getString("INSTITUTION_NAME"));
+                           educationRequestModel.setCostPerCreditHour(_rs.getDouble("COST_PER_CREDIT_HOUR"));
+                educationRequestModel.setNumberOfCreditHours(_rs.getInt("NUMBER_OF_CREDIT_HOURS"));
+                educationRequestModel.setTotalAdminstrationCosts(_rs.getDouble("TOTAL_ADMIN_COSTS"));
+
+                educationRequestModel.setDocumentReferenceNumber(_rs.getString("DOCUMENT_REFERENCE_NUMBER"));
+                educationRequestModel.setRequestStatus(_rs.getString("REQUEST_STATUS"));
+                educationRequestModel.setTimeStamp(_rs.getString("TIME_STAMP"));
+                educationRequestModel.setUserName(_rs.getString("USER_NAME"));
+                educationRequestModel.setEducatinalStatus(_rs.getString("EDUCATIONAL_STATUS"));
+                educationRequestModel.setDateOfStatusUpdate(_rs.getString("DATE_UPDATE_EDU_STATUS"));
+                educationRequestModel.setEndDate(_rs.getString("END_DATE"));
+
+            } else {
+                educationRequestModel.setEducationRequestId(-1);
+            }
+            _rs.close();
+            return educationRequestModel;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return null;
+        }
+    }
+    //============================================
+
+    public boolean saveEducationRequest(int eduReqId, String requesterId, String educationProgramName, String institutionName, String ethiopianInstitution, String institutionAccredited, String institutionAddress, String startDate, String appliedDate, String educationShiftCategory, String educationLevelCategory, double costPerCreditHour, int numberOfCreditHours, double totalAdminstrationCosts, double durationInYear, String reasonDescription, String documentReferenceNumber, String requestStatus, String endDate) {
+        String timeStamp = new Timestamp((new Date()).getTime()).toString();
+
+        changeInsModel = new changeInstitutionRequestModel(eduReqId, requesterId, educationProgramName, institutionName, ethiopianInstitution, institutionAccredited, institutionAddress, startDate, appliedDate, educationShiftCategory, educationLevelCategory, costPerCreditHour, numberOfCreditHours, totalAdminstrationCosts, durationInYear, reasonDescription, documentReferenceNumber, changeInstituApproveManager.INITIAL_STATE_CHANGEINS, timeStamp, userName,endDate);
+
+        try {
+            changeInstitutionEntity.insertEducationRequest(changeInsModel);
+        //changeInstitutionEntity.updateEducationRequest(changeInsModel);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return false;
+        }
+        return true;
+    }
+
+//    public boolean updateEducationRequest(int educationRequestId, String requesterId, String educationProgramName, String institutionName, String ethiopianInstitution, String institutionAccredited, String institutionAddress, String startDate, String applieddate, String educationShiftCategory, String educationTypeCategory, String educationLevelCategory, double costPerCreditHour, int numberOfCreditHours, double totalAdminstrationCosts, double durationInYear, String reasonDescription, String documentReferenceNumber) {
+//        String timeStamp = new Timestamp((new Date()).getTime()).toString();
+//        changeInsModel = new changeInstitutionRequestModel(educationRequestId, requesterId, educationProgramName, institutionName, ethiopianInstitution, institutionAccredited, institutionAddress, startDate, applieddate, educationShiftCategory, educationTypeCategory, educationLevelCategory, costPerCreditHour, numberOfCreditHours, totalAdminstrationCosts, durationInYear, reasonDescription, documentReferenceNumber, EducationApproveManager.INITIAL_STATE_EDUCATION, timeStamp, userName);
+//        try {
+//            changeInstitutionEntity.updateEducationRequest(changeInsModel);
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//            ErrorLogWriter.writeError(ex);
+//            return false;
+//        }
+//        return true;
+//    }
+    public boolean updateEducationRequest(int changeInstId, int eduReqId, String requesterId, String educationProgramName, String institutionName, String ethiopianInstitution, String institutionAccredited, String institutionAddress, String startDate, String appliedDate, String educationShiftCategory, String educationLevelCategory, double costPerCreditHour, int numberOfCreditHours, double totalAdminstrationCosts, double durationInYear, String reasonDescription, String documentReferenceNumber, String requestStatus,String endDate) {
+        String timeStamp = new Timestamp((new Date()).getTime()).toString();
+
+        changeInsModel = new changeInstitutionRequestModel(changeInstId, eduReqId, requesterId, educationProgramName, institutionName, ethiopianInstitution, institutionAccredited, institutionAddress, startDate, appliedDate, educationShiftCategory, educationLevelCategory, costPerCreditHour, numberOfCreditHours, totalAdminstrationCosts, durationInYear, reasonDescription, documentReferenceNumber, changeInstituApproveManager.INITIAL_STATE_CHANGEINS, timeStamp, userName,endDate);
+
+        try {
+
+            changeInstitutionEntity.updateChangeInst(changeInsModel);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return false;
+        }
+        return true;
+    }
+ public boolean updatePrevEducationRequest(int changeInstId, int eduReqId, String requesterId, String educationProgramName, String institutionName, String ethiopianInstitution, String institutionAccredited, String institutionAddress, String startDate, String appliedDate, String educationShiftCategory, String educationLevelCategory, double costPerCreditHour, int numberOfCreditHours, double totalAdminstrationCosts, double durationInYear, String reasonDescription, String documentReferenceNumber,String endDate) {
+        String timeStamp = new Timestamp((new Date()).getTime()).toString();
+
+        changeInsModel = new changeInstitutionRequestModel(changeInstId, eduReqId, requesterId, educationProgramName, institutionName, ethiopianInstitution, institutionAccredited, institutionAddress, startDate, appliedDate, educationShiftCategory, educationLevelCategory, costPerCreditHour, numberOfCreditHours, totalAdminstrationCosts, durationInYear, reasonDescription, documentReferenceNumber, timeStamp, userName,endDate);
+
+        try {
+
+            changeInstitutionEntity.updatePreviousChangeInst(changeInsModel);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return false;
+        }
+        return true;
+    }
+//    public boolean updateEducationStatus(int educationRequestId, String requesterId, String educatinalStatus, String dateOfStatusUpdate) {
+//        String timeStamp = new Timestamp((new Date()).getTime()).toString();
+//        educationRequestModel = new EducationRequestModel(educationRequestId, requesterId, educatinalStatus, dateOfStatusUpdate);
+//        try {
+//            educationRequestEntity.updateEducationStatus(educationRequestModel);
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//            ErrorLogWriter.writeError(ex);
+//            return false;
+//        }
+//        return true;
+//    }
+    public boolean deleteEducationRequest(int changeInstID) {
+        try {
+            changeInstitutionEntity.deleteEducationRequest(changeInstID);
+
+            return true;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return false;
+        }
+    }
+
+    public EducationRequestEntity getEducationRequestEntity() {
+        return educationRequestEntity;
+    }
+
+    public void setEducationRequestEntity(EducationRequestEntity educationRequestEntity) {
+        this.educationRequestEntity = educationRequestEntity;
+    }
+
+    public EducationRequestModel getEducationRequestModel() {
+        return educationRequestModel;
+    }
+
+    public void setEducationRequestModel(EducationRequestModel educationRequestModel) {
+        this.educationRequestModel = educationRequestModel;
+    }
+
+    public String getLoggedInEmployeeId() {
+        return loggedInEmployeeId;
+    }
+
+    public void setLoggedInEmployeeId(String loggedInEmployeeId) {
+        this.loggedInEmployeeId = loggedInEmployeeId;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public ArrayList<SelectItem> getEducationTypesByCategory(int deptId) {
+        ArrayList<SelectItem> committeeList = new ArrayList<SelectItem>();
+        try {
+
+            ResultSet _rs = changeInstitutionEntity.selectEducationTypeByCategory(deptId);
+            committeeList.add(new SelectItem(null, "--Select Type--"));
+            while (_rs.next()) {
+                committeeList.add(new SelectItem(_rs.getString("description")));
+            }
+            _rs.close();
+            return committeeList;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return null;
+        }
+    }
+
+//     public EducationRequestModel getEducationChangInsRequest(String requesterId) {
+//        educationRequestModel = new EducationRequestModel();
+//        try {
+//            ResultSet _rs = educationRequestEntity.selectEducationChangeInsRequest(requesterId);
+//            if (_rs.next()) {
+//
+//                educationRequestModel.setRequesterId(requesterId);
+//                educationRequestModel.setRequesterId(_rs.getString("REQUESTER_ID"));
+//               // educationRequestModel.setEducationTypeCategory(_rs.getString("EDUCATION_TYPE_CATEGORY"));
+//                educationRequestModel.setEducationProgramName(_rs.getString("EDUCATION_PROGRAM_NAME"));
+//                educationRequestModel.setEducationLevelCategory(_rs.getString("EDUCATION_LEVEL_CATEGORY"));
+//                educationRequestModel.setEducationShiftCategory(_rs.getString("EDUCATION_SHIFT_CATEGORY"));
+//                educationRequestModel.setStartDate(_rs.getString("START_DATE"));
+//                educationRequestModel.setAppliedDate(_rs.getString("APPLIED_DATE"));
+//                educationRequestModel.setDurationInYear(_rs.getDouble("DURATION_IN_YEAR"));
+//                educationRequestModel.setReasonDescription(_rs.getString("REASON_DESCRIPTION"));
+//                educationRequestModel.setInstitutionName(_rs.getString("INSTITUTION_NAME"));
+//                educationRequestModel.setInstitutionAccredited(_rs.getString("INSTITUTION_ACCREDITED"));
+//                educationRequestModel.setEthiopianInstitution(_rs.getString("ETHIOPIAN_INSTITUTION"));
+//                educationRequestModel.setInstitutionAddress(_rs.getString("INSTITUTION_ADDRESS"));
+//                educationRequestModel.setCostPerCreditHour(_rs.getDouble("COST_PER_CREDIT_HOUR"));
+//                educationRequestModel.setNumberOfCreditHours(_rs.getInt("NUMBER_OF_CREDIT_HOURS"));
+//                educationRequestModel.setTotalAdminstrationCosts(_rs.getDouble("TOTAL_ADMIN_COSTS"));
+//
+//                educationRequestModel.setDocumentReferenceNumber(_rs.getString("DOCUMENT_REFERENCE_NUMBER"));
+//                educationRequestModel.setRequestStatus(_rs.getString("REQUEST_STATUS"));
+//                educationRequestModel.setTimeStamp(_rs.getString("TIME_STAMP"));
+//                educationRequestModel.setUserName(_rs.getString("USER_NAME"));
+//                educationRequestModel.setEducatinalStatus(_rs.getString("EDUCATIONAL_STATUS"));
+//                educationRequestModel.setDateOfStatusUpdate(_rs.getString("DATE_UPDATE_EDU_STATUS"));
+//                educationRequestModel.setEducationRequestId(_rs.getInt("EDUCATION_REQUEST_ID"));
+//
+//            } else {
+//                educationRequestModel.setEducationRequestId(-1);
+//            }
+//            _rs.close();
+//            return educationRequestModel;
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//            ErrorLogWriter.writeError(ex);
+//            return null;
+//        }
+//    }
+}

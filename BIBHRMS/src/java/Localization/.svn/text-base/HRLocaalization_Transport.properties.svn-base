@@ -1,0 +1,36 @@
+# To change this template, choose Tools | Templates
+# and open the template in the editor.
+
+LocationName=Location Name:
+EmployeeDepartment=Employee Department:
+Add=Add
+EmployeenotLocated=Employee not Located
+AvailableEmployeeWithOutLocation=Available  Employee  With Out Location
+ListofEmployeewhichavelocation=List of Employee  which have location
+Save=Save
+Add=Add to Table
+Save=Save
+Update=Update
+Reset=Reset
+Delete=Delete
+Requester=Requester
+Department=Department
+Position=Position
+FullName=Full Name
+Id=Id
+StartDate=StartDate
+EndDate=EndDate
+RequestDate=Request Date
+DeciderDepartment=Decider Department
+DeciderId=Decider Id
+Decision=Decision
+DeciderFullName=Decider Full Name
+DeciderPosition=Decider Position
+Comment=Comment
+ServiceDestination=Service  Destination
+Shift=Shift
+AbsenceDate=Absence Date
+ServiceINOUT=Service IN / OUT
+IsManyDays=Is Many Days
+ShowpreviousRecord=Show previous Record
+CalculateTransportPayment=Calculate Transport Payment

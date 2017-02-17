@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+    Document   : HR_HEADER
+    Created on : Aug 27, 2010, 6:24:12 AM
+    Author     : DPClone
+-->
+
+<div style="-rave-layout: grid; width: 400px; height: 200px" xmlns:f="http://java.sun.com/jsf/core" >
+  <f:subview id="HR_HEADER">
+  </f:subview>
+</div>

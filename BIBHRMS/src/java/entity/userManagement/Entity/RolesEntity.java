@@ -1,0 +1,545 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package entity.userManagement.Entity;
+
+import connectionProvider.ConnectionManager;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.HashMap;
+import oracle.jdbc.rowset.OracleCachedRowSet;
+
+/**
+ *
+ * @author 
+ */
+public class RolesEntity
+        extends ConnectionManager {
+
+    Connection _con = null;
+    ResultSet _rs = null;
+    PreparedStatement _ps = null;
+
+    public void releaseResources() throws SQLException {
+        if (_rs != null) {
+            _rs.close();
+        }
+        if (_ps != null) {
+            _ps.close();
+        }
+        if (_con != null) {
+            closePooledConnections(_con);
+        }
+    }
+    private static final long serialVersionUID = 1L;
+    private String name,  newName;
+    private int resourceId;
+    private String description;
+
+    public RolesEntity() {
+    }
+
+    public RolesEntity(String name) {
+        this.name = name;
+    }
+
+    public RolesEntity(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
+
+    /**
+     * Fetches all rows from tbl_role
+     * @return returns <b>ResultSet</b> object on successful completion
+     * of the method, <b>null</b> otherwise
+     */
+    public ResultSet selectAllRoles() throws SQLException {
+        //  String _select = "SELECT role_name,role_description FROM tbl_role order by  role_description";
+        String _select = "SELECT * FROM BIB.tbl_role " +
+                "  order by nlssort(role_name, 'NLS_SORT=BINARY_CI'),role_description ";
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_select);//,   ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            _rs = _ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(_rs);
+            _rs.close();
+            return (ResultSet) ocrs;
+        } finally {
+            releaseResources();
+        }
+    }
+
+    /**
+     * Adds a row into tbl_roles using name and description
+     * (Note: the caller should set name and description before calling
+     * this method)
+     * @return returns <b>true</b> object on successful completion
+     * of the method, <b>false</b> otherwise
+     */
+    public int insert() throws SQLException {
+        //get hash value of the password and insert it
+
+        String _update = "INSERT INTO BIB.tbl_role (ROLE_NAME,ROLE_DESCRIPTION) " +
+                " VALUES(?, ?) ";
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_update);
+            _ps.setString(1, getName());
+            _ps.setString(2, getDescription());
+            _ps.executeUpdate();
+            return 1;
+        } finally {
+            releaseResources();
+        }
+    }
+
+    /**
+     * Updates row in tbl_roles identified by name
+     * (Note: the caller must set name before calling this method)
+     * @return returns <b>true</b> object on successful completion
+     * of the method, <b>false</b> otherwise
+     */
+    public boolean update() throws SQLException {
+
+        String _update = "UPDATE BIB.tbl_role SET role_name = ? , role_description = ?" +
+                " WHERE role_name = ? ";
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_update);
+            _ps.setString(1, getNewName());
+            _ps.setString(2, getDescription());
+            _ps.setString(3, getName());
+
+            _ps.executeUpdate();
+            return true;
+        } finally {
+            releaseResources();
+        }
+
+    }
+
+    /**
+     * Removes a row from tbl_roles identified by name
+     * (Note: the caller should set name before calling
+     * this method)
+     * @return returns <b>true</b> object on successful completion
+     * of the method, <b>false</b> otherwise
+     */
+    public boolean delete() throws SQLException {
+        String _update = "DELETE FROM BIB.tbl_role WHERE role_name = ? ";
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_update);
+            _ps.setString(1, getName());
+
+            _ps.executeUpdate();
+            return true;
+        } finally {
+            releaseResources();
+        }
+    }
+
+    /**
+     * Fetches all resources from tbl_role_resource which belongs to this role
+     * (Note: the caller should set role_name before calling
+     * this method)
+     * @return returns <b>ResultSet</b> object on successful completion
+     * of the method, <b>null</b> otherwise
+     */
+    public ResultSet getAllowedResources() throws SQLException {
+
+        String _select = "SELECT tbl_role_resource.resource_id," +
+                " tbl_role_resource.permision ," +
+                " tbl_resources.resource_name " +
+                " FROM BIB.tbl_role_resource " +
+                " INNER JOIN BIB.tbl_resources ON " +
+                " BIB.tbl_role_resource.resource_id =  BIB.tbl_resources.resource_id" +
+                "  WHERE role_name= ? ";
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_select);//, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            _ps.setString(1, getName());
+            _rs = _ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(_rs);
+            _rs.close();
+            return (ResultSet) ocrs;
+
+        } finally {
+            releaseResources();
+        }
+    }
+
+    /**
+     * Adds a new row into BIB.TBL_ROLE_USER for this user
+     * (Note: the caller should set userName and roleName before calling
+     * this method)
+     * @param _resource the resource to be granted
+     * @param _permision the level of permision (but not in use)
+     * @return returns <b>true</b> on successful completion
+     * of the method, <b>false</b> otherwise
+     */
+    public int grantResource(ResourcesEntity _resource, String _permision) throws SQLException {
+
+        // if resource not granted before, grant it
+
+        String _update = " INSERT INTO bib.TBL_ROLE_RESOURCE " +
+                " (ID,ROLE_NAME,RESOURCE_ID,PERMISION) " +
+                " VALUES(bib.TBL_ROLE_RESOURCE_SEQ.NEXTVAL,?, ?, ?) ";
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_update);
+            _ps.setString(1, getName());
+            _ps.setInt(2, _resource.getId());
+            _ps.setString(3, _permision);
+            return _ps.executeUpdate();
+
+        } finally {
+            releaseResources();
+        }
+    }
+
+    /**
+     * Checks whether a resource is granted for the calling Role
+     * @param _resource the resource to be checked
+     * @return returns <b>true</b> if resource is granted, <b>false</b> otherwise
+     */
+    public boolean hasResource(ResourcesEntity _resource) throws SQLException {
+        String _select = "SELECT id FROM BIB.tbl_role_resource " +
+                " WHERE role_name = ? AND resource_id = ? ";
+        try {
+            _con = getConnection();
+            int _row = 0;
+            _ps = _con.prepareStatement(_select);//, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+
+            _ps.setString(1, getName());
+            _ps.setInt(2, _resource.getId());
+            _rs = _ps.executeQuery();
+//            _rs.last();
+//            _row = _rs.getRow();
+//            if (_row > 0) {
+            if (_rs.next()) {
+                return true;
+            } else {
+                return false;
+            }
+        } finally {
+            releaseResources();
+        }
+    }
+
+    /**
+     * Checks whether a resource is granted for any Role
+     * @param _resource the resource to be checked
+     * @return returns <b>true</b> if resource is granted, <b>false</b> otherwise
+     */
+    public boolean isResourceSecure(ResourcesEntity _resource) throws SQLException {
+        String _select = "SELECT id FROM BIB.tbl_role_resource " +
+                " WHERE resource_id = ? ";
+        try {
+            _con = getConnection();
+            int _row = 0;
+            _ps = _con.prepareStatement(_select);//, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+
+            _ps.setInt(1, _resource.getId());
+            _rs = _ps.executeQuery();
+//            _rs.last();
+//            _row = _rs.getRow();
+//            if (_row > 0) {
+//                return true;
+            if (_rs.next()) {
+                return true;
+            } else {
+                return false;
+            }
+        } finally {
+            releaseResources();
+        }
+    }
+
+    /**
+     * Removes a row from tbl_role_resource identified by roleName and resourseId
+     * (Note: the caller should set roleName before calling
+     * this method)
+     * @param _resource the resource to be denied
+     * @return returns <b>true</b> object on successful completion
+     * of the method, <b>false</b> otherwise
+     */
+    public boolean denyResource(ResourcesEntity _resource) throws SQLException {
+        String _update = " DELETE FROM BIB.tbl_role_resource " +
+                " WHERE role_name = ? AND resource_id = ? ";
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_update);
+            _ps.setString(1, getName());
+            _ps.setInt(2, _resource.getId());
+
+            _ps.executeUpdate();
+            return true;
+        } finally {
+            releaseResources();
+        }
+    }
+
+    /**
+     * Removes all rows from tbl_role_resource identified by this role's name
+     * (Note: the caller should set roleName  before calling
+     * this method)
+     * @return returns <b>true</b> object on successful completion
+     * of the method, <b>false</b> otherwise
+     */
+    public boolean denyAllResource() throws SQLException {
+        String _update = "DELETE FROM BIB.tbl_role_resource " +
+                " WHERE role_name = ? ";
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_update);
+            _ps.setString(1, getName());
+
+            _ps.executeUpdate();
+            return true;
+        } finally {
+            releaseResources();
+        }
+    }
+
+    /**
+     * Fetches all perrmissions from tbl_role_resource which belongs to this role
+     * (Note: the caller should set role name before calling
+     * this method)
+     * @return returns <b>ResultSet</b> object on successful completion
+     * @throws java.sql.SQLException
+     */
+    public ResultSet getAssignedPermissions() throws SQLException {
+        String _select = " SELECT permision FROM BIB.tbl_role_resource " +
+                " WHERE role_name=? AND resource_id=?";
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_select);//, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            _ps.setString(1, getName());
+            _ps.setInt(2, getResourceId());
+            _rs = _ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(_rs);
+            _rs.close();
+            return (ResultSet) ocrs;
+        } finally {
+            releaseResources();
+        }
+    }
+
+    /**
+     * Fetches all permissions from tbl_role_resource which belongs to the role
+     * whch is assigned to process state <b>processState</b><br>
+     * This method is intended tobe called by methods which involve process.
+     * @return returns <b>ResultSet</b> object on successful completion
+     * @param processState the current status of a process
+     * @param resourcePath the URI of the resource on which the decision is to be made
+     * @param userName the  user name of the employee who logged in to the system.
+     * @throws java.sql.SQLException
+     */
+    //added by mekete
+    public ResultSet getAssignedPermissions(String resourcePath, String userName, String processState) throws SQLException {
+        String _select = "SELECT PERMISION FROM BIB.TBL_ROLE_RESOURCE  RES " +
+                " WHERE RES.RESOURCE_ID IN ( SELECT RESOURCE_ID " +
+                " FROM BIB.TBL_RESOURCES WHERE RESOURCE_PATH='" + resourcePath + "') " +
+                " AND RES.ROLE_NAME in (SELECT ROLE_ID " +
+                " FROM  BIB.TBL_ROLE_USER WHERE USER_ID IN(SELECT USER_ID" +
+                "  FROM  BIB.TBL_USERS WHERE USER_NAME='" + userName + "')) " +
+                " AND RES.ROLE_NAME IN (SELECT ROLE_NAME FROM  BIB.tbl_authorization " +
+                " WHERE PROCESS_STATE_ID='" + processState + "')";
+  
+        try {
+
+            _con = getConnection();
+            _ps = _con.prepareStatement(_select);
+            _rs = _ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(_rs);
+            return (ResultSet) ocrs;
+        } finally {
+            releaseResources();
+        }
+    }
+
+    public ResultSet getAssignedPermissions(String resourcePath, String userName) throws SQLException {
+        String _select = "SELECT PERMISION FROM BIB.TBL_ROLE_RESOURCE  RES " +
+                " WHERE RES.RESOURCE_ID IN ( SELECT RESOURCE_ID " +
+                " FROM BIB.TBL_RESOURCES WHERE RESOURCE_PATH='" + resourcePath + "') " +
+                " AND RES.ROLE_NAME in (SELECT ROLE_ID " +
+                " FROM  BIB.TBL_ROLE_USER WHERE USER_ID IN(SELECT USER_ID" +
+                "  FROM  BIB.TBL_USERS WHERE USER_NAME='" + userName + "')) ";
+
+        try {
+
+            _con = getConnection();
+            _ps = _con.prepareStatement(_select);
+            _rs = _ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(_rs);
+            return (ResultSet) ocrs;
+        } finally {
+            releaseResources();
+        }
+    }
+
+    /**
+     * Adds a new permission into tbl_role_resource for this user
+     * (Note: the caller should set userName and roleName before calling
+     * this method)
+     * @param _resource the resource to be granted
+     * @param _permision the assigned  permision
+     * @return returns <b>true</b> on successful completion
+     * of the method, <b>false</b> otherwise
+     */
+    public boolean grantPermissionToResource(String _permision) throws SQLException {
+
+        // if resource not granted before, grant it
+        String _update = "UPDATE BIB.tbl_role_resource SET permision=? " +
+                " WHERE role_name=? and  resource_id=? ";
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_update);
+            _ps.setString(1, _permision);
+            _ps.setString(2, getName());
+            _ps.setInt(3, getResourceId());
+            _ps.executeUpdate();
+
+            return true;
+        } finally {
+            releaseResources();
+        }
+
+    }
+
+    /**
+     * Removes all rows from tbl_role_resource identified by this role's name
+     * (Note: the caller should set roleName  before calling
+     * this method)
+     * @return returns <b>true</b> object on successful completion
+     * of the method, <b>false</b> otherwise
+     */
+    public boolean denyPermissionToResource(String _permision) throws SQLException {
+        String _update = "UPDATE BIB.tbl_role_resource SET permision=? " +
+                " WHERE role_name=? and  resource_id=? ";
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_update);
+            _ps.setString(1, _permision);
+            _ps.setString(2, getName());
+            _ps.setInt(3, getResourceId());
+            _ps.executeUpdate();
+            return true;
+        } finally {
+            releaseResources();
+        }
+    }
+
+    public String readUserPermition(String userName, String resourcePath) {
+        String permision = "";
+        String seletStatment = "SELECT DISTINCT permision, " +
+                "  RO.RESOURCE_ID " +
+                "FROM BIB.TBL_RESOURCES RE, " +
+                "  BIB.TBL_ROLE_RESOURCE RO, " +
+                "  BIB.TBL_USERS US, " +
+                "  BIB.TBL_ROLE_USER RU " +
+                "WHERE RE.RESOURCE_ID=RO.RESOURCE_ID " +
+                "AND RU.USER_ID      =US.USER_ID " +
+                "AND RO.ROLE_NAME    =RU.ROLE_ID " +
+                "AND RE.RESOURCE_ID  = " +
+                "  (SELECT RESOURCE_ID FROM BIB.TBL_RESOURCES WHERE RESOURCE_PATH='" + resourcePath + "')" +
+                " AND US.USER_ID =(SELECT USER_ID FROM BIB.TBL_USERS WHERE USER_NAME='" + userName + "')";
+
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(seletStatment);
+            _rs = _ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(_rs);
+            while (ocrs.next()) {
+                permision += ocrs.getString("permision") + ",";
+            }
+            return permision;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+
+
+    }
+
+    public static String removeDups(String s) {
+        if (s.length() <= 1) {
+            return s;
+        }
+        if (s.substring(1, 2).equals(s.substring(0, 1))) {
+            return removeDups(s.substring(1));
+        } else {
+            return s.substring(0, 1) + removeDups(s.substring(1));
+        }
+    }
+
+    //<editor-fold defaultstate="collapsed" desc="Getters, Setters and overides">
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getResourceId() {
+        return resourceId;
+    }
+
+    public void setResourceId(int resourceId) {
+        this.resourceId = resourceId;
+    }
+
+    public String getNewName() {
+        return newName;
+    }
+
+    public void setNewName(String newName) {
+        this.newName = newName;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (name != null ? name.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof RolesEntity)) {
+            return false;
+        }
+        RolesEntity other = (RolesEntity) object;
+        if ((this.name == null && other.name != null) || (this.name != null && !this.name.equals(other.name))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "entity.Roles[name=" + name + "]";
+    }
+    //</editor-fold>
+}

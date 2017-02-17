@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/MUGHERPROJECT/!svn/ver/3792/src/java/entity/recruitmentEntity
+END
+VacancyNoticeListEntity.java
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/MUGHERPROJECT/!svn/ver/2761/src/java/entity/recruitmentEntity/VacancyNoticeListEntity.java
+END
+CandidateExperienceEntity.java
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/MUGHERPROJECT/!svn/ver/1719/src/java/entity/recruitmentEntity/CandidateExperienceEntity.java
+END
+InitiateEntity.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/MUGHERPROJECT/!svn/ver/1/src/java/entity/recruitmentEntity/InitiateEntity.java
+END
+AdvertisementEntity.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/MUGHERPROJECT/!svn/ver/3668/src/java/entity/recruitmentEntity/AdvertisementEntity.java
+END
+CandidateEntity.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/MUGHERPROJECT/!svn/ver/3792/src/java/entity/recruitmentEntity/CandidateEntity.java
+END
+RecruitmentReportEntity.java
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/MUGHERPROJECT/!svn/ver/3487/src/java/entity/recruitmentEntity/RecruitmentReportEntity.java
+END
+RecruitmentApproveEntity.java
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/MUGHERPROJECT/!svn/ver/246/src/java/entity/recruitmentEntity/RecruitmentApproveEntity.java
+END
+RecruitmentEntity.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/MUGHERPROJECT/!svn/ver/3668/src/java/entity/recruitmentEntity/RecruitmentEntity.java
+END

@@ -1,0 +1,366 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package manager.committeeManager;
+
+import java.io.Serializable;
+
+/**
+ *
+ * @author Mugher
+ */
+public class CommitteeMemberModel implements Serializable {
+
+
+    int committeeMemberId;
+    String employeeId;
+    int committeeId;
+    String committeeType;
+    String memberStatus;
+    String remark;
+    String responsiblity;
+    String assignedDate;
+    String databaseStatus;
+    String memberResponsibility;
+    String committeeName;
+    String employeeFullName;
+    String permanentOrTemporary;
+    String userName;
+    boolean selected;
+    String passWord;
+    String logInConfirmed;
+    String commeentesGiven;
+    String status;
+    String commeentGivenDay;
+    String suggestedPenality;
+
+    public CommitteeMemberModel() {
+    }
+
+    public CommitteeMemberModel(int committeeId, String employeeId, String assignedDate, String memberResponsibility, String remark, String memberStatus, String databaseStatus) {
+        this.employeeId = employeeId;
+        this.committeeId = committeeId;
+        this.memberStatus = memberStatus;
+        this.remark = remark;
+        this.assignedDate = assignedDate;
+        this.databaseStatus = databaseStatus;
+        this.memberResponsibility = memberResponsibility;
+    }
+
+    public CommitteeMemberModel(int committeeId, String employeeId, String employeeFullName, String assignedDate, String memberResponsibility, String remark, String memberStatus, String permanentOrTemporary, String databaseStatus) {
+        this(committeeId, employeeId, assignedDate, memberResponsibility, remark, memberStatus, databaseStatus);
+        this.employeeFullName = employeeFullName;
+        this.permanentOrTemporary = permanentOrTemporary;
+    }
+
+    public CommitteeMemberModel(int committeeId, String employeeId, String employeeFullName, String assignedDate, String memberResponsibility, String remark, String memberStatus, String databaseStatus) {
+        this(committeeId, employeeId, assignedDate, memberResponsibility, remark, memberStatus, databaseStatus);
+        this.employeeFullName = employeeFullName;
+    }
+
+    public CommitteeMemberModel(int committeeMemberId, int committeeId, String employeeId, String employeeFullName, String assignedDate, String memberResponsibility, String remark, String memberStatus, String databaseStatus) {
+        this(committeeId, employeeId, employeeFullName, assignedDate, memberResponsibility, remark, memberStatus, databaseStatus);
+        this.committeeMemberId = committeeMemberId;
+    }
+
+    public CommitteeMemberModel(String memberEmployeeId, String memberFullName, String memberResponsiblity, String memberComentes, String memberUserName, String memberPassWord, String Status) {
+        this.employeeId = memberEmployeeId;
+        this.employeeFullName = memberFullName;
+        this.memberResponsibility = memberResponsiblity;
+        this.commeentesGiven = memberComentes;
+        this.userName = memberUserName;
+        this.passWord = memberPassWord;
+        this.status = Status;
+    }
+    public static class RejectedPenalityComeentes{
+
+          int disciplineProblemId;
+          String courtDecision;
+          String commentesGiven;
+          String approvedDate;
+          String documentReferanceDay;
+
+        public String getApprovedDate() {
+            return approvedDate;
+        }
+
+        public void setApprovedDate(String approvedDate) {
+            this.approvedDate = approvedDate;
+        }
+
+        public String getCommentesGiven() {
+            return commentesGiven;
+        }
+
+        public void setCommentesGiven(String commentesGiven) {
+            this.commentesGiven = commentesGiven;
+        }
+
+        public String getCourtDecision() {
+            return courtDecision;
+        }
+
+        public void setCourtDecision(String courtDecision) {
+            this.courtDecision = courtDecision;
+        }
+
+        public int getDisciplineProblemId() {
+            return disciplineProblemId;
+        }
+
+        public void setDisciplineProblemId(int disciplineProblemId) {
+            this.disciplineProblemId = disciplineProblemId;
+        }
+
+        public String getDocumentReferanceDay() {
+            return documentReferanceDay;
+        }
+
+        public void setDocumentReferanceDay(String documentReferanceDay) {
+            this.documentReferanceDay = documentReferanceDay;
+        }
+
+        public RejectedPenalityComeentes() {
+        }
+
+    }
+
+      public static class ChairManCommentes{
+          int disciplineProblemId;
+          String duration;
+          String commentesGiven;
+          String SuggetedsPenality;
+          double deductionAmount;
+          String commentesGivenDay;
+
+        public ChairManCommentes(int disciplineProblemId, String duration, String commentesGiven, String SuggetedsPenality, double deductionAmount, String commentesGivenDay) {
+            this.disciplineProblemId = disciplineProblemId;
+            this.duration = duration;
+            this.commentesGiven = commentesGiven;
+            this.SuggetedsPenality = SuggetedsPenality;
+            this.deductionAmount = deductionAmount;
+            this.commentesGivenDay = commentesGivenDay;
+        }
+         public ChairManCommentes() {}
+
+        public String getSuggetedsPenality() {
+            return SuggetedsPenality;
+        }
+
+        public void setSuggetedsPenality(String SuggetedsPenality) {
+            this.SuggetedsPenality = SuggetedsPenality;
+        }
+
+        public String getCommentesGiven() {
+            return commentesGiven;
+        }
+
+        public void setCommentesGiven(String commentesGiven) {
+            this.commentesGiven = commentesGiven;
+        }
+
+        public String getCommentesGivenDay() {
+            return commentesGivenDay;
+        }
+
+        public void setCommentesGivenDay(String commentesGivenDay) {
+            this.commentesGivenDay = commentesGivenDay;
+        }
+
+        public double getDeductionAmount() {
+            return deductionAmount;
+        }
+
+        public void setDeductionAmount(double deductionAmount) {
+            this.deductionAmount = deductionAmount;
+        }
+
+        public int getDisciplineProblemId() {
+            return disciplineProblemId;
+        }
+
+        public void setDisciplineProblemId(int disciplineProblemId) {
+            this.disciplineProblemId = disciplineProblemId;
+        }
+
+        public String getDuration() {
+            return duration;
+        }
+
+        public void setDuration(String duration) {
+            this.duration = duration;
+        }
+
+        
+
+    }
+
+    public String getSuggestedPenality() {
+        return suggestedPenality;
+    }
+
+    public void setSuggestedPenality(String suggestedPenality) {
+        this.suggestedPenality = suggestedPenality;
+    }
+
+    public String getCommeentGivenDay() {
+        return commeentGivenDay;
+    }
+
+    public void setCommeentGivenDay(String commeentGivenDay) {
+        this.commeentGivenDay = commeentGivenDay;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getCommeentesGiven() {
+        return commeentesGiven;
+    }
+
+    public void setCommeentesGiven(String CommeentesGiven) {
+        this.commeentesGiven = CommeentesGiven;
+    }
+
+    public String getAssignedDate() {
+        return assignedDate;
+    }
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
+
+    public String getPermanentOrTemporary() {
+        return permanentOrTemporary;
+    }
+
+    public void setPermanentOrTemporary(String permanentOrTemporary) {
+        this.permanentOrTemporary = permanentOrTemporary;
+    }
+
+    public String getCommitteeName() {
+        return committeeName;
+    }
+
+    public void setCommitteeName(String committeeName) {
+        this.committeeName = committeeName;
+    }
+
+    public String getEmployeeFullName() {
+        return employeeFullName;
+    }
+
+    public void setEmployeeFullName(String employeeFullName) {
+        this.employeeFullName = employeeFullName;
+    }
+
+    public String getMemberResponsibility() {
+        return memberResponsibility;
+    }
+
+    public String getPassWord() {
+        return passWord;
+    }
+
+    public String getLogInConfirmed() {
+        return logInConfirmed;
+    }
+
+    public void setLogInConfirmed(String logInConfirmed) {
+        this.logInConfirmed = logInConfirmed;
+    }
+
+    public void setPassWord(String passWord) {
+        this.passWord = passWord;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public void setMemberResponsibility(String memberResponsibility) {
+        this.memberResponsibility = memberResponsibility;
+    }
+
+    public void setAssignedDate(String assignedDate) {
+        this.assignedDate = assignedDate;
+    }
+
+    public int getCommitteeId() {
+        return committeeId;
+    }
+
+    public void setCommitteeId(int committeeId) {
+        this.committeeId = committeeId;
+    }
+
+    public int getCommitteeMemberId() {
+        return committeeMemberId;
+    }
+
+    public void setCommitteeMemberId(int committeeMemberId) {
+        this.committeeMemberId = committeeMemberId;
+    }
+
+    public String getCommitteeType() {
+        return committeeType;
+    }
+
+    public void setCommitteeType(String committeeType) {
+        this.committeeType = committeeType;
+    }
+
+    public String getDatabaseStatus() {
+        return databaseStatus;
+    }
+
+    public void setDatabaseStatus(String databaseStatus) {
+        this.databaseStatus = databaseStatus;
+    }
+
+    public String getEmployeeId() {
+        return employeeId;
+    }
+
+    public void setEmployeeId(String employeeId) {
+        this.employeeId = employeeId;
+    }
+
+    public String getMemberStatus() {
+        return memberStatus;
+    }
+
+    public void setMemberStatus(String memberStatus) {
+        this.memberStatus = memberStatus;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public String getResponsiblity() {
+        return responsiblity;
+    }
+
+    public void setResponsiblity(String responsiblity) {
+        this.responsiblity = responsiblity;
+    }
+}

@@ -1,0 +1,589 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package entity.leaveEntity;
+
+import connectionProvider.ConnectionManager;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Savepoint;
+import java.util.HashMap;
+import oracle.jdbc.rowset.OracleCachedRowSet;
+
+/**
+ *
+ * @author Dereje
+ */
+public class ApproveRequestFromLeaveEntity extends ConnectionManager {
+
+    private String leaveProcessedId;
+    private String requestId;
+    private String processedBy;
+    private String commentGiven;
+    private String decision;
+    private String recordedBy;
+    private String timeStamp;
+    private String currentState;
+    Connection _con = null;
+    PreparedStatement _ps = null;
+    ResultSet _rs = null;
+
+    public ApproveRequestFromLeaveEntity() {
+    }
+
+    public ApproveRequestFromLeaveEntity(
+            String leaveProcessedId,
+            String requestId,
+            String processedBy,
+            String commentGiven,
+            String decision,
+            String recordedBy,
+            String timeStamp,
+            String currentState) {
+        this.leaveProcessedId = leaveProcessedId;
+        this.requestId = requestId;
+        this.processedBy = processedBy;
+        this.commentGiven = commentGiven;
+        this.decision = decision;
+        this.recordedBy = recordedBy;
+        this.timeStamp = timeStamp;
+        this.currentState = currentState;
+    }
+
+    /**
+     * Retrives leave requests which can be processes by the user.
+     * An employee has to see only requests which can be processes with his/her priviledge
+     * @param  userName user name of the employee who logged in to the sysytem
+     * processId =1 for the porcess leave
+     * @throws  SQLException
+     */
+    public ResultSet selectApprovableRequest(String userName, String processReturnFromLeave) throws SQLException {
+        String _innerSelectQuery = "select PROCESS_STATE_ID from MUGHER.TBL_PROCESS_STATE where PROCESS_STATE_ID" +
+                " in  ( select PROCESS_STATE_ID from mugher.tbl_authorization " +
+                "       where ROLE_NAME in(select ROLE_ID from  mugher.tbl_role_user   " +
+                "           where USER_ID=(select USER_ID from mugher.tbl_users where USER_NAME='" + userName + "')) " +
+                "           and PROCESS_STATE_ID in (select PROCESS_STATE_ID from MUGHER.TBL_PROCESS_STATE " +
+                "               where  PROCESS_ID='" + processReturnFromLeave + "'))";
+        String _selectQuery = "SELECT  EMP_ID, REQUESTED_DATE,REQUEST_STATUS AS STATUS,REQUEST_ID FROM HR_EMP_REQUEST_FROM_LEAVE " +
+                " WHERE REQUEST_STATUS  IN (" + _innerSelectQuery + ")" +
+                " GROUP BY EMP_ID,REQUESTED_DATE,REQUEST_STATUS,REQUEST_ID";
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_selectQuery);
+            _rs = _ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(_rs);
+            return (ResultSet) ocrs;
+        } finally {
+            releaseResources();
+        }
+    }
+
+    /**
+     * Retrives leave requests which can be processes by the user.
+     * An employee has to see only requests which can be processes with his/her priviledge
+     * @param  userName user name of the employee who logged in to the sysytem
+     * processId =1 for the porcess leave
+     * @throws  SQLException
+     */
+    public ResultSet selectApprovableLeavePayment(String userName, String processReturnFromLeave) throws SQLException {
+        String _innerSelectQuery = "SELECT PROCESS_STATE_ID " +
+                "FROM MUGHER.TBL_PROCESS_STATE " +
+                "WHERE PROCESS_STATE_ID IN " +
+                "  (SELECT PROCESS_STATE_ID " +
+                "  FROM mugher.tbl_authorization " +
+                "  WHERE ROLE_NAME IN " +
+                "    (SELECT ROLE_ID " +
+                "    FROM mugher.tbl_role_user " +
+                "    WHERE USER_ID= " +
+                "      (SELECT USER_ID FROM mugher.tbl_users WHERE USER_NAME='" + userName + "' " +
+                "      ) " +
+                "    ) " +
+                "  AND PROCESS_STATE_ID IN " +
+                "    (SELECT PROCESS_STATE_ID " +
+                "    FROM MUGHER.TBL_PROCESS_STATE " +
+                "    WHERE PROCESS_ID='" + processReturnFromLeave + "' " +
+                "    ) " +
+                "  )";
+        String _selectQuery = "SELECT EMP_ID, " +
+                "  PAYMENT_REQUESTED_DATE," +
+                "  REQUEST_ID, " +
+                "  PAYMENT_STATUS AS STATUS " +
+                "FROM HR_EMP_LEAVE_PAYMENT_REQUEST " +
+                "WHERE PAYMENT_STATUS IN (" + _innerSelectQuery + " ) " +
+                "GROUP BY EMP_ID, " +
+                "  PAYMENT_REQUESTED_DATE, " +
+                "  PAYMENT_STATUS," +
+                "  REQUEST_ID";
+
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_selectQuery);
+            _rs = _ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(_rs);
+            return (ResultSet) ocrs;
+        } finally {
+            releaseResources();
+        }
+    }
+
+    public HashMap readEmployeeRetrunFromLeaveRequest(
+            String employeeId,
+            String leaveRequestStatus,
+            String requesedDate) {
+        String select = "SELECT LE.LEAVE_ID, " +
+                "  LE.EMP_ID, " +
+                "  LE.LEAVE_DAYS, " +
+                "  LE.REQUESTED_FROM_DATE, " +
+                "  LE.REQUESTED_TO_DATE, " +
+                "  LE.REQUESTING_REASON, " +
+                "  TI.TITLE_DESCRIPTION " +
+                "  || ' ' " +
+                "  || EI.FIRST_NAME " +
+                "  || '  ' " +
+                "  || EI.MIDDLE_NAME " +
+                "  || ' ' " +
+                "  || EI.LAST_NAME AS FULLNAME , " +
+                "  EI.EMP_STATUS, " +
+                "  EI.SEX, " +
+                "  EI.HIRE_DATE, " +
+                "  LT.DESCRIPTION, " +
+                "  JT.JOB_DESCRIPTION, " +
+                "  TD.DEP_DESCRIPTION, " +
+                "  EI.PHOTO, " +
+                "  RFL.REASON, " +
+                "  RFL.REQUESTED_DATE, " +
+                "  RFL.LEAVEREQUESTID, " +
+                "  RFL.REQUEST_RETURN_DATE, " +
+                "  RFL.REQUEST_ID, " +
+                "  NVL(LE.PHYSICALYEAR,'not register') AS PHYSICALYEAR  " +
+                " FROM HR_EMP_LEAVE LE, " +
+                "  HR_EMPLOYEE_INFO EI, " +
+                "  HR_LU_LEAVE_TYPE LT, " +
+                "  HR_LU_TITLE TI, " +
+                "  HR_LU_JOB_TYPE JT, " +
+                "  TBL_DEPARTMENT TD, " +
+                "  HR_EMP_REQUEST_FROM_LEAVE RFL " +
+                " WHERE LE.EMP_ID        =EI.EMP_ID " +
+                " AND LE.LEAVE_TYPE      =LT.LEAVE_TYPE_CODE " +
+                " AND EI.TITLE           =TI.TITLE_ID " +
+                " AND EI.JOB_CODE        =JT.JOB_CODE " +
+                " AND TD.DEPT_ID         =EI.DEPARTMENT_ID " +
+                " AND RFL.LEAVEREQUESTID =LE.LEAVE_ID " +
+                " AND RFL.EMP_ID         ='" + employeeId + "' " +
+                " AND RFL.REQUEST_STATUS ='" + leaveRequestStatus + "' " +
+                " AND RFL.REQUESTED_DATE ='" + requesedDate + "'";
+        PreparedStatement ps = null;
+        _con = null;
+        ResultSet rs = null;
+        try {
+            _con = getConnection();
+            ps = _con.prepareStatement(select);
+            rs = ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(rs);
+            if (ocrs.next()) {
+                HashMap hm = new HashMap();
+                hm.put("EMP_ID", ocrs.getString("EMP_ID"));
+                hm.put("REQUESTED_FROM_DATE", ocrs.getString("REQUESTED_FROM_DATE"));
+                hm.put("REQUESTED_TO_DATE", ocrs.getString("REQUESTED_TO_DATE"));
+                hm.put("REQUESTING_REASON", ocrs.getString("REQUESTING_REASON"));
+                hm.put("LEAVE_DAYS", ocrs.getString("LEAVE_DAYS"));
+                hm.put("DESCRIPTION", ocrs.getString("DESCRIPTION"));
+                hm.put("FULLNAME", ocrs.getString("FULLNAME"));
+                hm.put("SEX", ocrs.getString("SEX"));
+                hm.put("HIRE_DATE", ocrs.getString("HIRE_DATE"));
+                hm.put("JOB_DESCRIPTION", ocrs.getString("JOB_DESCRIPTION"));
+                hm.put("DEP_DESCRIPTION", ocrs.getString("DEP_DESCRIPTION"));
+                hm.put("PHOTO", ocrs.getBlob("PHOTO"));
+                hm.put("EMP_STATUS", ocrs.getString("EMP_STATUS"));
+                hm.put("REASONOFRETRUN", ocrs.getString("REASON"));
+                hm.put("REQUESTED_DATE", ocrs.getString("REQUESTED_DATE"));
+                hm.put("LEAVEREQUESTID", ocrs.getString("LEAVEREQUESTID"));
+                hm.put("RETURN_DATE", ocrs.getString("REQUEST_RETURN_DATE"));
+                hm.put("REQUEST_ID", ocrs.getString("REQUEST_ID"));
+                hm.put("PHYSICALYEAR", ocrs.getString("PHYSICALYEAR"));
+                rs.close();
+                ps.close();
+                closePooledConnections(_con);
+                return hm;
+            } else {
+                return null;
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
+
+    }
+
+    public HashMap loadEmployeePaymentRequestData(
+            String employeeId,
+            String leaveRequestStatus,
+            String requesedDate) {
+        String select = "SELECT LE.LEAVE_ID, " +
+                "  LE.EMP_ID, " +
+                "  LE.LEAVE_DAYS, " +
+                "  LE.REQUESTED_FROM_DATE, " +
+                "  LE.REQUESTED_TO_DATE, " +
+                "  LE.REQUESTING_REASON, " +
+                "  TI.TITLE_DESCRIPTION " +
+                "  || ' ' " +
+                "  || EI.FIRST_NAME " +
+                "  || '  ' " +
+                "  || EI.MIDDLE_NAME " +
+                "  || ' ' " +
+                "  || EI.LAST_NAME AS FULLNAME , " +
+                "  EI.EMP_STATUS, " +
+                "  EI.SEX, " +
+                "  EI.HIRE_DATE, " +
+                "  LT.DESCRIPTION, " +
+                "  JT.JOB_DESCRIPTION, " +
+                "  TD.DEP_DESCRIPTION, " +
+                "  EI.PHOTO, " +
+                "  LP.REASON_PAYMENT, " +
+                "  LP.PAYMENT_REQUESTED_DATE, " +
+                "  LP.REQUEST_ID, " +
+                "  LP.ACTUAL_RETURN_DATE, " +
+                "  LP.PAYMENT_STATUS , " +
+                "  NVL(LE.PHYSICALYEAR,'not register') AS PHYSICALYEAR " +
+                "FROM HR_EMP_LEAVE LE, " +
+                "  HR_EMPLOYEE_INFO EI, " +
+                "  HR_LU_LEAVE_TYPE LT, " +
+                "  HR_LU_TITLE TI, " +
+                "  HR_LU_JOB_TYPE JT, " +
+                "  TBL_DEPARTMENT TD, " +
+                "  HR_EMP_LEAVE_PAYMENT_REQUEST LP, " +
+                "  HR_EMP_REQUEST_FROM_LEAVE RFL " +
+                "WHERE LE.EMP_ID               =EI.EMP_ID " +
+                "AND LE.LEAVE_TYPE             =LT.LEAVE_TYPE_CODE " +
+                "AND EI.TITLE                  =TI.TITLE_ID " +
+                "AND EI.JOB_CODE               =JT.JOB_CODE " +
+                "AND TD.DEPT_ID                =EI.DEPARTMENT_ID " +
+                "AND RFL.LEAVEREQUESTID        =LE.LEAVE_ID " +
+                "AND RFL.REQUEST_ID            =LP.RETURNFROMLEAVEID " +
+                "AND LP.EMP_ID                 ='" + employeeId + "'" +
+                "AND LP.PAYMENT_STATUS         ='" + leaveRequestStatus + "'" +
+                "AND LP.PAYMENT_REQUESTED_DATE ='" + requesedDate + "'";
+        PreparedStatement ps = null;
+        _con = null;
+        ResultSet rs = null;
+
+        try {
+            _con = getConnection();
+            ps = _con.prepareStatement(select);
+            rs = ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(rs);
+            if (ocrs.next()) {
+                HashMap hm = new HashMap();
+                hm.put("EMP_ID", ocrs.getString("EMP_ID"));
+                hm.put("REQUESTED_FROM_DATE", ocrs.getString("REQUESTED_FROM_DATE"));
+                hm.put("REQUESTED_TO_DATE", ocrs.getString("REQUESTED_TO_DATE"));
+                hm.put("REQUESTING_REASON", ocrs.getString("REQUESTING_REASON"));
+                hm.put("LEAVE_DAYS", ocrs.getString("LEAVE_DAYS"));
+                hm.put("DESCRIPTION", ocrs.getString("DESCRIPTION"));
+                hm.put("FULLNAME", ocrs.getString("FULLNAME"));
+                hm.put("SEX", ocrs.getString("SEX"));
+                hm.put("HIRE_DATE", ocrs.getString("HIRE_DATE"));
+                hm.put("JOB_DESCRIPTION", ocrs.getString("JOB_DESCRIPTION"));
+                hm.put("DEP_DESCRIPTION", ocrs.getString("DEP_DESCRIPTION"));
+                hm.put("PHOTO", ocrs.getBlob("PHOTO"));
+                hm.put("EMP_STATUS", ocrs.getString("EMP_STATUS"));
+                hm.put("REASONOFRETRUN", ocrs.getString("REASON_PAYMENT"));
+                hm.put("REQUESTED_DATE", ocrs.getString("PAYMENT_REQUESTED_DATE"));
+                hm.put("LEAVEREQUESTID", ocrs.getString("REQUEST_ID"));
+                hm.put("RETURN_DATE", ocrs.getString("ACTUAL_RETURN_DATE"));
+                hm.put("REQUEST_ID", ocrs.getString("REQUEST_ID"));
+                hm.put("PHYSICALYEAR", ocrs.getString("PHYSICALYEAR"));
+
+
+                rs.close();
+                ps.close();
+                closePooledConnections(_con);
+                return hm;
+            } else {
+                return null;
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
+
+    }
+
+    /**
+     * Inserts leaveDecision attribute to the database.<br>
+     * The constructor with full argument, must be called before calling this method
+     */
+    public boolean insertReturnFromLeaveDecision(
+            ApproveRequestFromLeaveEntity approveRequestFromLeaveEntity) throws SQLException {
+        PreparedStatement ps = null;
+        PreparedStatement psUpdate = null;
+        String _insertQuery =
+                "INSERT " +
+                "INTO HR_RETURN_FROM_LEAVE_PROCESSED " +
+                "  ( " +
+                "    REQUEST_ID, " +
+                "    PROCESSED_BY, " +
+                "    DECISION, " +
+                "    COMMENT_GIVEN, " +
+                "    RECORDED_BY, " +
+                "    TIME_STAMP " +
+                "  ) " +
+                "   VALUES (?,?,?,?,?,?)  ";
+        String _updateQuery = "UPDATE HR_EMP_REQUEST_FROM_LEAVE " +
+                " SET REQUEST_STATUS=? " +
+                " WHERE REQUEST_ID=?";
+        try {
+            _con = getConnection();
+            _con.setAutoCommit(false);
+            Savepoint firstSavePoint = _con.setSavepoint();
+            ps = _con.prepareStatement(_insertQuery);
+            ps.setString(1, approveRequestFromLeaveEntity.getRequestId());
+            ps.setString(2, approveRequestFromLeaveEntity.getProcessedBy());
+            ps.setString(3, approveRequestFromLeaveEntity.getDecision());//decision inserted to HR_LEAVE_PROCESSED table
+            ps.setString(4, approveRequestFromLeaveEntity.getCommentGiven());
+            ps.setString(5, approveRequestFromLeaveEntity.getProcessedBy());
+            ps.setString(6, approveRequestFromLeaveEntity.getTimeStamp());
+            if (ps.executeUpdate() > 0) {
+                psUpdate = _con.prepareStatement(_updateQuery);
+                psUpdate.setString(1, approveRequestFromLeaveEntity.getCurrentState()); //status inserted to HR_LEAVE_REQUEST table
+                psUpdate.setString(2, approveRequestFromLeaveEntity.getRequestId());
+                if (psUpdate.executeUpdate() > 0) {
+                    _con.commit();
+                    return true;
+
+
+                } else {
+                    _con.rollback(firstSavePoint);
+                    return false;
+                }
+
+            } else {
+                _con.rollback(firstSavePoint);
+                return false;
+            }
+
+
+        } finally {
+            releaseResources();
+        }
+    }
+
+    /**
+     * Inserts leaveDecision attribute to the database.<br>
+     * The constructor with full argument, must be called before calling this method
+     */
+    public boolean insertReturnFromLeavePaymentDecision(
+            ApproveRequestFromLeaveEntity approveRequestFromLeaveEntity) throws SQLException {
+        PreparedStatement ps = null;
+        PreparedStatement psUpdate = null;
+        String _insertQuery = "INSERT " +
+                "INTO HR_LEAVE_PAYMENT_PROCESSED " +
+                "  ( " +
+                "    REQUEST_ID, " +
+                "    PROCESSED_BY, " +
+                "    DECISION, " +
+                "    COMMENT_GIVEN, " +
+                "    RECORDED_BY, " +
+                "    TIME_STAMP " +
+                "  ) " +
+                "   VALUES (?,?,?,?,?,?)  ";
+        String _updateQuery = "UPDATE HR_EMP_LEAVE_PAYMENT_REQUEST " +
+                " SET PAYMENT_STATUS=? " +
+                " WHERE REQUEST_ID=?";
+        try {
+            _con = getConnection();
+            _con.setAutoCommit(false);
+            Savepoint firstSavePoint = _con.setSavepoint();
+            ps = _con.prepareStatement(_insertQuery);
+            ps.setString(1, approveRequestFromLeaveEntity.getRequestId());
+            ps.setString(2, approveRequestFromLeaveEntity.getProcessedBy());
+            ps.setString(3, approveRequestFromLeaveEntity.getDecision());//decision inserted to HR_LEAVE_PROCESSED table
+            ps.setString(4, approveRequestFromLeaveEntity.getCommentGiven());
+            ps.setString(5, approveRequestFromLeaveEntity.getProcessedBy());
+            ps.setString(6, approveRequestFromLeaveEntity.getTimeStamp());
+            if (ps.executeUpdate() > 0) {
+                psUpdate = _con.prepareStatement(_updateQuery);
+                psUpdate.setString(1, approveRequestFromLeaveEntity.getCurrentState()); //status inserted to HR_LEAVE_REQUEST table
+                psUpdate.setString(2, approveRequestFromLeaveEntity.getRequestId());
+                if (psUpdate.executeUpdate() > 0) {
+                    _con.commit();
+                    return true;
+
+
+                } else {
+                    _con.rollback(firstSavePoint);
+                    return false;
+                }
+
+            } else {
+                _con.rollback(firstSavePoint);
+                return false;
+            }
+
+
+        } finally {
+            releaseResources();
+        }
+    }
+
+    public void releaseResources() throws SQLException {
+        if (_rs != null) {
+            _rs.close();
+        }
+        if (_ps != null) {
+            _ps.close();
+        }
+        if (_con != null) {
+            closePooledConnections(_con);
+        }
+    }
+
+    public String getCommentGiven() {
+        return commentGiven;
+    }
+
+    public void setCommentGiven(String commentGiven) {
+        this.commentGiven = commentGiven;
+    }
+
+    public String getDecision() {
+        return decision;
+    }
+
+    public void setDecision(String decision) {
+        this.decision = decision;
+    }
+
+    public String getLeaveProcessedId() {
+        return leaveProcessedId;
+    }
+
+    public void setLeaveProcessedId(String leaveProcessedId) {
+        this.leaveProcessedId = leaveProcessedId;
+    }
+
+    public String getProcessedBy() {
+        return processedBy;
+    }
+
+    public void setProcessedBy(String processedBy) {
+        this.processedBy = processedBy;
+    }
+
+    public String getRecordedBy() {
+        return recordedBy;
+    }
+
+    public void setRecordedBy(String recordedBy) {
+        this.recordedBy = recordedBy;
+    }
+
+    public String getRequestId() {
+        return requestId;
+    }
+
+    public void setRequestId(String requestId) {
+        this.requestId = requestId;
+    }
+
+    public String getTimeStamp() {
+        return timeStamp;
+    }
+
+    public void setTimeStamp(String timeStamp) {
+        this.timeStamp = timeStamp;
+    }
+
+    public String getCurrentState() {
+        return currentState;
+    }
+
+    public void setCurrentState(String currentState) {
+        this.currentState = currentState;
+    }
+
+    /**
+     * returns ResultSet object of processed leave requests with their current status<br>
+     * Basically intended to show the history of a  given leave request.
+     * @param  the status of the request
+     * @throws  SQLException*/
+    public ResultSet selectProcessedLeaveRequest(int requestId) throws SQLException {
+        String _selectQuery = "SELECT LP.REQUEST_ID, " +
+                "  mugher.TBL_USERS.EMPLOYEE_ID AS RECORDED_BY_ID, " +
+                "  LP.PROCESSED_BY , " +
+                "  LP.RECORDED_BY, " +
+                "  LP.DECISION, " +
+                "  LP.TIME_STAMP, " +
+                "  LP.COMMENT_GIVEN, " +
+                "  EP.FIRST_NAME, " +
+                "  EP.MIDDLE_NAME, " +
+                "  EP.LAST_NAME , " +
+                "  PERMISSION_NAME " +
+                "FROM HR_RETURN_FROM_LEAVE_PROCESSED LP, " +
+                "  HR_EMPLOYEE_INFO EP, " +
+                "  mugher.TBL_PERMISSION , " +
+                "  mugher.TBL_USERS " +
+                "WHERE REQUEST_ID                = " + requestId + "  " +
+                "AND EP.EMP_ID                   =LP.PROCESSED_BY " +
+                "AND mugher.TBL_USERS.EMPLOYEE_ID=LP.RECORDED_BY " +
+                "AND mugher.TBL_PERMISSION.CODE  =LP.DECISION " +
+                "ORDER BY LP.TIME_STAMP";
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_selectQuery);
+            _rs = _ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(_rs);
+            return (ResultSet) ocrs;
+        } finally {
+            releaseResources();
+        }
+    }
+
+    /**
+     * returns ResultSet object of processed leave requests with their current status<br>
+     * Basically intended to show the history of a  given leave request.
+     * @param  the status of the request
+     * @throws  SQLException*/
+    public ResultSet selectProcessedLeavePaymentRequest(int requestId) throws SQLException {
+        String _selectQuery = "SELECT LP.REQUEST_ID, " +
+                "  mugher.TBL_USERS.EMPLOYEE_ID AS RECORDED_BY_ID, " +
+                "  LP.PROCESSED_BY , " +
+                "  LP.RECORDED_BY, " +
+                "  LP.DECISION, " +
+                "  LP.TIME_STAMP, " +
+                "  LP.COMMENT_GIVEN, " +
+                "  EP.FIRST_NAME, " +
+                "  EP.MIDDLE_NAME, " +
+                "  EP.LAST_NAME , " +
+                "  PERMISSION_NAME " +
+                "FROM HR_LEAVE_PAYMENT_PROCESSED LP, " +
+                "  HR_EMPLOYEE_INFO EP, " +
+                "  mugher.TBL_PERMISSION , " +
+                "  mugher.TBL_USERS " +
+                "WHERE REQUEST_ID                = 1 " +
+                "AND EP.EMP_ID                   =LP.PROCESSED_BY " +
+                "AND mugher.TBL_USERS.EMPLOYEE_ID=LP.RECORDED_BY " +
+                "AND mugher.TBL_PERMISSION.CODE  =LP.DECISION " +
+                "ORDER BY LP.TIME_STAMP";
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_selectQuery);
+            _rs = _ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(_rs);
+            return (ResultSet) ocrs;
+        } finally {
+            releaseResources();
+        }
+    }
+}

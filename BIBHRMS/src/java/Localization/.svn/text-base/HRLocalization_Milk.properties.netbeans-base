@@ -1,0 +1,23 @@
+# To change this template, choose Tools | Templates
+# and open the template in the editor.
+
+Requester=Requester
+FullName=FullName
+Id=Id
+Department=Department
+Position=Position
+btnReset=Reset
+btnNew=New
+btnSave=Save
+btnUpdate=Update
+btnDelete=Delete
+btnAdd=Add To Table
+Remark=Remark
+type=Type Of Taking Milk Bnefit
+Kind=In Kind
+Cash=In Cash
+amount=Amount In Litter
+CurrentDate=Current Date
+MilkAvail=Is Milk Available Today?
+Avail=Available
+NotAvail=Not Available

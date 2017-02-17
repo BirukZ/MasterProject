@@ -1,0 +1,107 @@
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/MUGHERPROJECT/!svn/ver/3704/src/java/entity/leaveEntity
+END
+LeaveBalanceEntity.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/MUGHERPROJECT/!svn/ver/3704/src/java/entity/leaveEntity/LeaveBalanceEntity.java
+END
+ExtendLeaveEntity.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/MUGHERPROJECT/!svn/ver/3704/src/java/entity/leaveEntity/ExtendLeaveEntity.java
+END
+LeaveRequestEntity.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/MUGHERPROJECT/!svn/ver/3704/src/java/entity/leaveEntity/LeaveRequestEntity.java
+END
+LeaveScheduleEntity.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/MUGHERPROJECT/!svn/ver/3473/src/java/entity/leaveEntity/LeaveScheduleEntity.java
+END
+ApproveRequestFromLeaveEntity112.java
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/MUGHERPROJECT/!svn/ver/547/src/java/entity/leaveEntity/ApproveRequestFromLeaveEntity112.java
+END
+ApproveRequestFromLeaveEntity.java
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/MUGHERPROJECT/!svn/ver/2599/src/java/entity/leaveEntity/ApproveRequestFromLeaveEntity.java
+END
+LeaveReportEntity.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/MUGHERPROJECT/!svn/ver/3473/src/java/entity/leaveEntity/LeaveReportEntity.java
+END
+HolidayEntity.java
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/MUGHERPROJECT/!svn/ver/3556/src/java/entity/leaveEntity/HolidayEntity.java
+END
+LeaveApproveEntity.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/MUGHERPROJECT/!svn/ver/3704/src/java/entity/leaveEntity/LeaveApproveEntity.java
+END
+RequestFromLeaveEntity.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/MUGHERPROJECT/!svn/ver/3704/src/java/entity/leaveEntity/RequestFromLeaveEntity.java
+END
+ReserveLeave.java
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/MUGHERPROJECT/!svn/ver/3556/src/java/entity/leaveEntity/ReserveLeave.java
+END
+RequesttoReturnFromAnnualLeaveEntity.java
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/MUGHERPROJECT/!svn/ver/547/src/java/entity/leaveEntity/RequesttoReturnFromAnnualLeaveEntity.java
+END
+LeaveControlEntity.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/MUGHERPROJECT/!svn/ver/3704/src/java/entity/leaveEntity/LeaveControlEntity.java
+END
+LeaveTypeEntity.java
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/MUGHERPROJECT/!svn/ver/1/src/java/entity/leaveEntity/LeaveTypeEntity.java
+END
+OrganizationCalendarEntity.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/MUGHERPROJECT/!svn/ver/1/src/java/entity/leaveEntity/OrganizationCalendarEntity.java
+END
+LeaveSettlementEntity.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/MUGHERPROJECT/!svn/ver/3704/src/java/entity/leaveEntity/LeaveSettlementEntity.java
+END
+LeaveType.java
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/MUGHERPROJECT/!svn/ver/1/src/java/entity/leaveEntity/LeaveType.java
+END

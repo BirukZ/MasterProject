@@ -1,0 +1,157 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package entity.SecurityEntitys;
+
+import connectionProvider.ConnectionManager;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+/**
+ *
+ * @author Administrator
+ */
+public class RolesEntity extends ConnectionManager {
+
+    private String roleId;
+    private String roleName;
+    private String roleDescription;
+    private String userName;
+    private String timeStamp;
+    Connection conn = null;
+    String stm, stm1;
+   
+
+    Connection _con = null;
+    PreparedStatement _ps = null;
+    ResultSet _rs = null;
+
+    public void releaseResources() throws SQLException {
+        if (_rs != null) {
+            _rs.close();
+        }
+        if (_ps != null) {
+            _ps.close();
+        }
+        if (_con != null) {
+         closePooledConnections(_con);
+        }
+    }
+
+    public RolesEntity() {
+    }
+
+    public RolesEntity(String roleId, String roleName, String roleDescription, String userName, String timeStamp) {
+        this.roleId = roleId;
+        this.roleName = roleName;
+        this.roleDescription = roleDescription;
+        this.userName = userName;
+        this.timeStamp = timeStamp;
+    }
+
+    /**
+     * @return the roleId
+     */
+    public String getRoleId() {
+        return roleId;
+    }
+
+    /**
+     * @param roleId the roleId to set
+     */
+    public void setRoleId(String roleId) {
+        this.roleId = roleId;
+    }
+
+    /**
+     * @return the roleName
+     */
+    public String getRoleName() {
+        return roleName;
+    }
+
+    /**
+     * @param roleName the roleName to set
+     */
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
+    }
+
+    /**
+     * @return the roleDescription
+     */
+    public String getRoleDescription() {
+        return roleDescription;
+    }
+
+    /**
+     * @param roleDescription the roleDescription to set
+     */
+    public void setRoleDescription(String roleDescription) {
+        this.roleDescription = roleDescription;
+    }
+
+    /**
+     * @return the userName
+     */
+    public String getUserName() {
+        return userName;
+    }
+
+    /**
+     * @param userName the userName to set
+     */
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    /**
+     * @return the timeStamp
+     */
+    public String getTimeStamp() {
+        return timeStamp;
+    }
+
+    /**
+     * @param timeStamp the timeStamp to set
+     */
+    public void setTimeStamp(String timeStamp) {
+        this.timeStamp = timeStamp;
+    }
+
+    public ArrayList<String> readRolesList() {
+        ArrayList<String> myReturn = new ArrayList<String>();
+        stm = "select * from BIB.tbl_role order by role_description";
+
+        try {
+            conn = getConnection();
+            _ps = conn.prepareStatement(stm);
+            _rs = _ps.executeQuery();
+            if (_rs == null) {
+            } else {
+
+                while (_rs.next()) {
+
+                    String returnValue = "";
+                    returnValue = _rs.getString("ROLE_ID") + "#" + _rs.getString("ROLE_NAME");
+                    myReturn.add(returnValue);
+                }
+            }
+
+        } catch (SQLException ex) {
+            myReturn = null;
+        }
+        finally{
+            try {
+                releaseResources();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+          }
+        return myReturn;
+    }
+}

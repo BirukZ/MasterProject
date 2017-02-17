@@ -1,0 +1,65 @@
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/MUGHERPROJECT/!svn/ver/3772/src/java/entity/disciplineEntity
+END
+RejectedDisciplineReportEntity.java
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/MUGHERPROJECT/!svn/ver/2478/src/java/entity/disciplineEntity/RejectedDisciplineReportEntity.java
+END
+PenaltyRegistrationEntity.java
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/MUGHERPROJECT/!svn/ver/3754/src/java/entity/disciplineEntity/PenaltyRegistrationEntity.java
+END
+DisciplineRequestReportEntity.java
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/MUGHERPROJECT/!svn/ver/2455/src/java/entity/disciplineEntity/DisciplineRequestReportEntity.java
+END
+DisciplinePenaltyRegistrationEntity.java
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn/MUGHERPROJECT/!svn/ver/3752/src/java/entity/disciplineEntity/DisciplinePenaltyRegistrationEntity.java
+END
+ReportEntity.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/MUGHERPROJECT/!svn/ver/3445/src/java/entity/disciplineEntity/ReportEntity.java
+END
+DisciplineRequestEntity.java
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/MUGHERPROJECT/!svn/ver/3364/src/java/entity/disciplineEntity/DisciplineRequestEntity.java
+END
+DisciplineRegistrationEntity.java
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/MUGHERPROJECT/!svn/ver/3753/src/java/entity/disciplineEntity/DisciplineRegistrationEntity.java
+END
+EyeWitnessEntity.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/MUGHERPROJECT/!svn/ver/3538/src/java/entity/disciplineEntity/EyeWitnessEntity.java
+END
+DisciplineApproveEntity.java
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/MUGHERPROJECT/!svn/ver/3772/src/java/entity/disciplineEntity/DisciplineApproveEntity.java
+END
+AccusedDefenceEntity.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/MUGHERPROJECT/!svn/ver/3493/src/java/entity/disciplineEntity/AccusedDefenceEntity.java
+END

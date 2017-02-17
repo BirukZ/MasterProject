@@ -1,0 +1,47 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package util;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
+/**
+ *
+ * @author Administrator
+ */
+public class test {
+
+     public static void main(String [] args) {
+     // remember ... months are 0-based : jan=0 feb=1 ...
+         test test1=new test();
+         try {
+
+
+    //
+     } catch (Exception e) {
+         }
+//     System.out.println
+//       ("1999-12-03 : " + age(2012,8,29));
+   }
+
+
+    /**
+         * Computes the duration between an input date and date today and returns
+         * the value in years, months and days
+         *
+         * @param month
+         *            - input month
+         * @param day
+         *            - input day
+         * @param year
+         *            - input year
+         * @return duration in years, months and days
+         */
+      
+
+
+ 
+}

@@ -1,0 +1,291 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package manager.powerDeligationManager;
+
+import com.sun.webui.jsf.model.Option;
+import entity.powerDeligationEntity.PowerDeligationApproveEntity;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.HashMap;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
+import manager.authorizationManager.AuthorizationManager;
+import manager.authorizationManager.AuthorizationManager.BenefitePakage;
+import manager.authorizationManager.AuthorizationManager.RequestHistoryModel;
+import manager.employeeManager.EmployeeManage;
+import manager.globalUseManager.ErrorLogWriter;
+import manager.userManagement.SiteSecurityManager;
+
+/**
+ *
+ * @author mekete
+ */
+public class PowerDeligationApproveManager {
+
+    PowerDeligationApproveEntity deligationApproveEntity = new PowerDeligationApproveEntity();
+    EmployeeManage employeeManager = new EmployeeManage();
+    public static final String POWER_DELIGATION_DECISION_APPROVE = SiteSecurityManager.Permission_Approve;
+    public static final String POWER_DELIGATION_DECISION_FORWARD = SiteSecurityManager.Permission_Forward;
+    public static final String POWER_DELIGATION_DECISION_RESUBMIT = SiteSecurityManager.Permission_Resubmit;
+    public static final String POWER_DELIGATION_DECISION_REJECT = SiteSecurityManager.Permission_Reject;
+    public static final String POWER_DELIGATION_DECISION_NONE = "-1";
+    public static final String PROCESS_POWER_DELIGATION = AuthorizationManager.PROCESS_POWERDELIGATION;//"5"
+    public static final String FINAL_STATE_POWER_DELIGATION = AuthorizationManager.readFinalState(PROCESS_POWER_DELIGATION);
+    public static final String INITIAL_STATE_POWER_DELIGATION = AuthorizationManager.readInitialState(PROCESS_POWER_DELIGATION);
+    public static final String PROCESS_OTHER_POWER_DELIGATION = AuthorizationManager.PROCESS_OTHER_POWERDELIGATION;//"25"
+    public static final String FINAL_OTHER_STATE_POWER_DELIGATION = AuthorizationManager.readFinalState(PROCESS_OTHER_POWER_DELIGATION);
+    public static final String INITIAL_OTHER_STATE_POWER_DELIGATION = AuthorizationManager.readInitialState(PROCESS_OTHER_POWER_DELIGATION);
+    String userName = "";
+    String loginEmpID="";
+
+    public ArrayList<Option> getAvailableDecisionsToMake(String processState) {
+        ArrayList<Option> decisionLists = new ArrayList<Option>();
+        HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+        decisionLists = new SiteSecurityManager().getAvailableDecisions(request.getRequestURI(), userName, processState);
+        return decisionLists;
+    }
+
+    public ArrayList<Option> getApprovableRequests(boolean checkRole) {
+        ResultSet _rs = null;
+        ArrayList<Option> requestLists = new ArrayList<Option>();
+        String deligationStatus = null;
+        try {
+            _rs = deligationApproveEntity.selectApprovableRequest(userName, checkRole);
+            if (_rs != null) {
+                while (_rs.next()) {
+                    int powDelReqId = _rs.getInt("POW_DEL_REQ_ID");
+                    String deligatorId = _rs.getString("DELIGATOR_ID");
+                    String delegateeId = _rs.getString("DELEGATEE_ID");
+                    String requesterId = _rs.getString("REQUESTER_ID");
+                    String newDepartmentName=_rs.getString("HR_NEWDEPARTMET_NAME");
+                    String newDepartmentPosition=_rs.getString("HR_NEWDEPARTMENT_POSITION");
+                    String delegationStratDate=_rs.getString("START_DATE");
+                    String delegationEndDate=_rs.getString("END_DATE");
+
+                   // int delegatedPostion=Integer.parseInt(_rs.getString("DELIGATED_POSITION"));
+                    if (checkRole) {
+                        deligationStatus = _rs.getString("DELIGATION_STATUS");
+                        //DELIGATION_STATUS
+                    } else {
+                        deligationStatus = _rs.getString("DELIGATION_STATUS");
+                        //EXTERNAL_DELEGATION_STATUS
+                    }
+
+                    String optionId = Integer.toString(powDelReqId) + "--" + deligatorId + "--" + delegateeId + "--" + requesterId + "--" + deligationStatus+ "--" + newDepartmentName+ "--" + newDepartmentPosition+ "--" +delegationStratDate+ "--" +delegationEndDate;
+                    String OptionDesc = deligatorId + "=>" + delegateeId;
+                    Option data = new Option(optionId, OptionDesc);
+                    requestLists.add(data);
+                }
+            }
+            return requestLists;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+        }
+        return null;
+    }
+///////////////
+
+    public ArrayList<RequestHistoryModel> getRequestHistory(int requestId) {
+        try {
+            // ResultSet _rs = deligationApproveEntity. selectProcessedRequestsHistory(requestId);
+            ResultSet _rs = deligationApproveEntity.selectProcessedDeligationRequest(requestId);
+            ArrayList<RequestHistoryModel> requestHistoryList = new ArrayList<RequestHistoryModel>();
+            int counter = 0;
+            while (_rs.next()) {
+                counter++;
+                String deciderEmployeeId = _rs.getString("PROCESSED_BY");
+                String recorderEmployeeId = _rs.getString("RECORDED_BY");
+                String deciderFullName = _rs.getString("FIRST_NAME") + " " + _rs.getString("MIDDLE_NAME") + " " + _rs.getString("LAST_NAME");
+                if (!deciderEmployeeId.equals(recorderEmployeeId)) {//
+                    deciderFullName = deciderFullName + " (Rec. by " + recorderEmployeeId + ")";
+                }
+                String timeStamp = _rs.getString("TIME_STAMP").substring(0, 9);
+                String commentGiven = _rs.getString("COMMENT_GIVEN") == null ? "No comment given." : _rs.getString("COMMENT_GIVEN");
+
+                String givenDecision = _rs.getString("PERMISSION_NAME");
+                requestHistoryList.add(new RequestHistoryModel(counter, deciderEmployeeId, deciderFullName, givenDecision, timeStamp, commentGiven));
+            }
+            _rs = deligationApproveEntity.selectProcessedDeligationRequestExternal(requestId);
+            while (_rs.next()) {
+                counter++;
+                String deciderEmployeeId = _rs.getString("PROCESSED_BY");
+                String recorderEmployeeId = _rs.getString("RECORDED_BY");
+                String deciderFullName = _rs.getString("FIRST_NAME") + " " + _rs.getString("MIDDLE_NAME") + " " + _rs.getString("LAST_NAME");
+                if (!deciderEmployeeId.equals(recorderEmployeeId)) {//
+                    deciderFullName = deciderFullName + " (Rec. by " + recorderEmployeeId + ")";
+                }
+                String timeStamp = _rs.getString("TIME_STAMP").substring(0, 9);
+                String commentGiven = _rs.getString("COMMENT_GIVEN") == null ? "No comment given." : _rs.getString("COMMENT_GIVEN");
+
+                String givenDecision = _rs.getString("PERMISSION_NAME");
+                requestHistoryList.add(new RequestHistoryModel(counter, deciderEmployeeId, deciderFullName, givenDecision, timeStamp, commentGiven));
+            }
+            return requestHistoryList;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return null;
+        }
+
+    }
+
+    public ArrayList<Option> getAllMyPrevieousDecisions() {
+        ResultSet _rs = null;
+        ArrayList<Option> requestLists = new ArrayList<Option>();
+        try {
+            _rs = deligationApproveEntity.selectAllMyPrevieousDecisions(userName);
+            if (_rs != null) {
+                while (_rs.next()) {
+                    int powDelReqId = _rs.getInt("POW_DEL_REQ_ID");
+                    String deligatorId = _rs.getString("DELIGATOR_ID");
+                    String delegateeId = _rs.getString("DELEGATEE_ID");
+                    String requesterId = _rs.getString("REQUESTER_ID");
+                    String deligationStatus = _rs.getString("DELIGATION_STATUS");
+                    String newdepartmentNew=_rs.getString("HR_NEWDEPARTMET_NAME");
+                    String newdepartmentPosition=_rs.getString("HR_NEWDEPARTMENT_POSITION");
+                    String optionId = Integer.toString(powDelReqId) + "--" + deligatorId + "--" + delegateeId + "--" + requesterId + "--" + deligationStatus+ "--" + newdepartmentNew+ "--" + newdepartmentPosition;
+                    String OptionDesc = deligatorId + "=>" + delegateeId;
+                    Option data = new Option(optionId, OptionDesc);
+                    requestLists.add(data);
+                }
+            }
+            return requestLists;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+        }
+        return null;
+    }
+      public ArrayList<BenefitePakage> getAllBenefitePakage(int ID) {
+        ResultSet _rs = null;
+        ArrayList<BenefitePakage> benefitListsPakage = new ArrayList<BenefitePakage>();
+        try {
+            _rs = deligationApproveEntity.selectAllBenefitPakage(ID);
+            if (_rs != null) {
+                while (_rs.next()) 
+                     {
+                    BenefitePakage  benefitList= new BenefitePakage ();
+                    benefitList.setBenefiteName(_rs.getString("benefit_name"));
+                    benefitList.setBenefiteValue(_rs.getString("benefit_value"));
+                    benefitList.setBenefiteDuration(_rs.getString("benefit_duration"));
+                  //  benefitList.setMonetary(_rs.getString("monetary"));
+                    benefitList.setInpercent(_rs.getString("in_percent"));
+                    benefitList.setMonetaryValue(Double.parseDouble(_rs.getString("amount_of_birr")));
+                    benefitList.setPercent(_rs.getString("percent"));
+                    benefitListsPakage.add(benefitList);
+                }
+            }
+            return benefitListsPakage;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+        }
+        return null;
+    }
+
+    /**
+     *
+     */
+    public boolean savePowerDeligationDecision(int powDelReqId, String approver, String decision, String recorder, String toDay, String comment, String currentStatus, boolean external) {
+        String nextState = AuthorizationManager.readNextState(currentStatus, PROCESS_POWER_DELIGATION, decision);
+        String nextStateExternal = AuthorizationManager.readNextState(currentStatus, PROCESS_OTHER_POWER_DELIGATION, decision);
+        if (nextState == null) {
+            return false;
+        }
+        deligationApproveEntity = new PowerDeligationApproveEntity(powDelReqId, approver, decision, nextState, recorder, toDay, comment, nextStateExternal);
+        try {
+            if (deligationApproveEntity.insertPowerDeligationDecision(external)) {
+                if (nextState.equals(FINAL_STATE_POWER_DELIGATION)) {
+                    //update the status of the employee to waiting state
+                    //and make him/her elligible for clearance
+                    //employeeManager.updateEmployeeStatus(empId from powDelReqId, EmployyeManage.EMPLOYEE_STATUS_WAITING);
+                }
+            }
+            return true;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return false;
+        }
+    }
+
+    public boolean updatePowerDeligationDecision() {
+        deligationApproveEntity = new PowerDeligationApproveEntity();
+        try {
+            deligationApproveEntity.updatePowerDeligationDecision();
+            return true;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return false;
+        }
+    }
+
+    /**
+     * Basically intended to be used by dataTable of PowerDeligationApprovePage.<br>
+     * Thus, the returned HashMap key variables are the same as that of dataTable row variables.
+     * @return HashMap list of all decisions made on the request
+     * @param requestId the unique id of the powerDelogationRequest
+     */
+//    public ArrayList<HashMap> getRequestProcessHistory(String requestId) {
+//        try {
+//            ResultSet _rs = deligationApproveEntity.selectProcessedDeligationRequest(requestId);
+//            ArrayList<HashMap> requestHistoryList = new ArrayList<HashMap>();
+//            int counter = 0;
+//            while (_rs.next()) {
+//                HashMap curentHistory = new HashMap();
+//                curentHistory.put("counter", ++counter);
+//                String decision = "";
+//                if (_rs.getString("NEXT_STATE").startsWith("Rej")) {
+//                    decision = "Rejected";
+//                } else if (_rs.getString("NEXT_STATE").startsWith("Res")) {
+//                    decision = "Resubmit";
+//                } else if (_rs.getString("NEXT_STATE").equals(PowerDeligationApproveManager.FINAL_STATE_POWER_DELIGATION)) {
+//                    decision = "Approved";
+//                } else {
+//                    decision = "Forwarded";
+//                }
+//                curentHistory.put("decision", decision);
+//                curentHistory.put("employeeId", _rs.getString("PROCEESED_BY"));
+//                curentHistory.put("employeeFullName", _rs.getString("FIRST_NAME") + " " + _rs.getString("MIDDLE_NAME") + " " + _rs.getString("LAST_NAME"));
+//                curentHistory.put("commentGiven", _rs.getString("COMMENT_GIVEN") == null ? "" : _rs.getString("COMMENT_GIVEN"));
+//                curentHistory.put("commentedDate", _rs.getString("RECORDED_DATE"));
+//                requestHistoryList.add(curentHistory);
+//            }
+//            return requestHistoryList;
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//        return null;
+//    }
+
+    //<editor-fold>
+    public PowerDeligationApproveEntity getDeligationApproveEntity() {
+        return deligationApproveEntity;
+    }
+
+    public void setDeligationApproveEntity(PowerDeligationApproveEntity deligationApproveEntity) {
+        this.deligationApproveEntity = deligationApproveEntity;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getLoginEmpID() {
+        return loginEmpID;
+    }
+
+    public void setLoginEmpID(String loginEmpID) {
+        this.loginEmpID = loginEmpID;
+    }
+
+    //</editor-fold>
+}

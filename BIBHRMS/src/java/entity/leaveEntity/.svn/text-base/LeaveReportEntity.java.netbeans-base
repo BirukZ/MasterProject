@@ -1,0 +1,99 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package entity.leaveEntity;
+
+import connectionProvider.ConnectionManager;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import oracle.jdbc.rowset.OracleCachedRowSet;
+
+/**
+ *
+ * @author Administrator
+ */
+public class LeaveReportEntity extends ConnectionManager {
+
+    ResultSet rs = null;
+    PreparedStatement ps = null;
+    Connection con = null;
+
+    public ResultSet getEmployeeRemainingLeave(String departemntId) throws Exception {
+        try {
+            String sql = "SELECT EI.EMP_ID," +
+                    " EI.FIRST_NAME " +
+                    "  || ' ' " +
+                    "  || EI.MIDDLE_NAME " +
+                    "  || ' ' " +
+                    "  || EI.LAST_NAME AS FULLNAME, " +
+                    "  Lb.Year         AS LASTYEAR, " +
+                    "  Lb.REMAININGAMOUNT , " +
+                    "  PRV.PREVIOUSLEAVEGAMOUNT , " +
+                    "  PRV.Year                   AS PREVIOUSYEAR, " +
+                    "  NVL(Rl.Transferamount,'0') AS Transferamount, " +
+                    "  NVL(Rl.Leaveyear,'2003')   AS Leaveyear " +
+                    "FROM HR_EMPLOYEE_INFO Ei, " +
+                    "  (SELECT EMP_ID, " +
+                    "    YEAR, " +
+                    "    LEAVEAMOUNT -USEDLEAVE AS PREVIOUSLEAVEGAMOUNT " +
+                    "  FROM HR_EMP_LEAVE_BANK " +
+                    "  WHERE YEAR                ='2004' " +
+                    "  AND To_Number(Leaveamount)>To_Number(Usedleave) " +
+                    "  )PRV, " +
+                    "  (SELECT EMP_ID, " +
+                    "    YEAR, " +
+                    "    LEAVEAMOUNT -USEDLEAVE AS REMAININGAMOUNT " +
+                    "  FROM HR_EMP_LEAVE_BANK " +
+                    "  WHERE YEAR                ='2005' " +
+                    "  AND To_Number(Leaveamount)>To_Number(Usedleave) " +
+                    "  )LB, " +
+                    "  (SELECT LB.RESERVELAVEID , " +
+                    "    LB.EMP_ID , " +
+                    "    Lb.Leaveyear , " +
+                    "    LB.AVAILABLELEAVENUMBER -LB.USEDLEAVE AS transferAmount, " +
+                    "    LB.STATUS " +
+                    "  FROM HR_RESERVE_LEAVE LB " +
+                    "  WHERE To_Number(Availableleavenumber)>To_Number(Usedleave) " +
+                    "  AND ( To_Date(Enddate,'yyyy-MM-dd')  >To_Date(TO_CHAR(Sysdate,'yyyy-MM-dd'),'yyyy-MM-dd') ) " +
+                    "  ORDER BY Lb.Emp_Id " +
+                    "  )Rl " +
+                    "WHERE Ei.Emp_Id      =Lb.Emp_Id(+) " +
+                    "AND Ei.Emp_Id        =PRV.Emp_Id(+) " +
+                    "AND Ei.Emp_Id        = Rl.Emp_Id(+) " +
+                    "AND ei.department_id ='" + departemntId + "' " +
+                    "ORDER BY Lb.Emp_Id, " +
+                    "  Lb.Year";
+            con = getConnection();
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(rs);
+            return ocrs;
+
+        } finally {
+        }
+
+    }
+
+    public ResultSet getLeaveStaticReport() throws Exception {
+        try {
+            String sql = "SELECT SUM(EL.LEAVE_DAYS) AS SUMOFUSEDLEAVE, " +
+                    "  LT.DESCRIPTION  AS LEAVETYPE  " +
+                    "FROM HR_EMP_LEAVE EL " +
+                    "INNER JOIN HR_LU_LEAVE_TYPE LT " +
+                    "ON EL.LEAVE_TYPE=LT.LEAVE_TYPE_CODE " +                    
+                    "GROUP BY LT.DESCRIPTION";
+            con = getConnection();
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(rs);
+            return ocrs;
+
+        } finally {
+        }
+
+    }
+}

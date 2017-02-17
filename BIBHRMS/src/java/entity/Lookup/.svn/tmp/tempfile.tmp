@@ -1,0 +1,1067 @@
+<<<<<<< .mine
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package entity.Lookup;
+
+import connectionProvider.ConnectionManager;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+/**
+ *
+ * @author leul
+ */
+public class TableInformation extends ConnectionManager {
+
+    private String tableNames;
+    private int noColumn;
+    private String columnNames;
+    private String values;
+    private String owner;
+    //[F_NAME, L_NAME, REMARK]
+    //[sheme, yonatan, hhkj]
+
+    public String getTableName() {
+
+        return tableNames;
+    }
+
+    public void setTableName(String tableName) {
+        this.tableNames = tableName;
+    }
+
+    public int getNoColumn() {
+        return noColumn;
+    }
+
+    public void setNoColumn(int noColumn) {
+        this.noColumn = noColumn;
+    }
+
+    public String getColumnNames() {
+
+        return columnNames;
+    }
+
+    public String getOwner() {
+
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
+    }
+
+    public void setColumnNames(String columnNames) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(columnNames);
+        sb.deleteCharAt(0);
+        sb.deleteCharAt(columnNames.length() - 2);
+        this.columnNames = sb.toString();
+    }
+
+    public String getValues() {
+        return values;
+    }
+
+    public void setValues(String values) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(values);
+        sb.deleteCharAt(0);
+        sb.deleteCharAt(values.length() - 2);
+        this.values = sb.toString();
+    }
+
+    public ArrayList<String> getLookUpTables(String owner) {
+
+        ResultSet _rs = null;
+        ArrayList<String> lookUpData = new ArrayList<String>();
+        String selectLookUp = "SELECT DISTINCT TABLE_NAME " +
+                "FROM DBA_TAB_COLUMNS " +
+                "WHERE TABLE_NAME LIKE 'HR_LU_%' " +
+                "AND OWNER= 'HRMS' " +
+                "ORDER BY TABLE_NAME";
+        // String selectLookUp = "SELECT DISTINCT TABLE_NAME FROM all_tables WHERE TABLE_NAME LIKE 'HR_LU_%'";
+        try {
+            Connection con = getConnection();
+            PreparedStatement _ps =
+                    con.prepareStatement(selectLookUp);
+            _rs = _ps.executeQuery();
+            while (_rs.next()) {
+
+                lookUpData.add(_rs.getString("TABLE_NAME"));
+            }
+            _rs.close();
+            return lookUpData;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
+    public ArrayList<String> checkForeignKey(String tableName) {
+        ResultSet _rs = null;
+        String selectForeignKey = "select user_cons_columns.constraint_name," +
+                " user_cons_columns.column_name from user_constraints " +
+                "inner join user_cons_columns on user_constraints.constraint_name = " +
+                "user_cons_columns.constraint_name " +
+                "AND user_constraints.table_name = ? AND " +
+                "user_constraints.constraint_type='R'";
+        ArrayList<String> foreignKeyList = new ArrayList<String>();
+        try {
+            Connection con = getConnection();
+            PreparedStatement _ps =
+                    con.prepareStatement(selectForeignKey);
+            _ps.setString(1, tableName);
+            _rs = _ps.executeQuery();
+            while (_rs.next()) {
+                foreignKeyList.add(_rs.getString("column_name").toString());
+            }
+            _rs.close();
+            return foreignKeyList;
+        } catch (Exception x) {
+            x.printStackTrace();
+            return null;
+        }
+    }
+
+    public ArrayList<String> getColumns() {
+        ResultSet _rs = null;
+        ArrayList<String> lookUpData = new ArrayList<String>();
+        String selectLookUp = "SELECT COLUMN_NAME " +
+                "            FROM DBA_TAB_COLUMNS " +
+                "            WHERE TABLE_NAME =? and owner =? " +
+                "             ORDER BY column_id";
+        try {
+            Connection conn = getConnection();
+            PreparedStatement _ps =
+                    conn.prepareStatement(selectLookUp);
+            _ps.setString(1, getTableName());
+            _ps.setString(2, getOwner());
+            _rs = _ps.executeQuery();
+            lookUpData.clear();
+            while (_rs.next()) {
+                lookUpData.add(_rs.getString("COLUMN_NAME"));
+
+            }
+            _rs.close();
+            _ps.close();
+            return lookUpData;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
+    public ArrayList<String[]> selectData() {
+        ResultSet _rs = null;
+        ArrayList<String[]> lookUpData = new ArrayList<String[]>();
+
+        String selectLookUp = "SELECT DISTINCT * FROM " + getTableName();
+        try {
+            ConnectionManager con = new ConnectionManager();
+            PreparedStatement _ps =
+                    con.getConnection().prepareStatement(selectLookUp);
+            _rs = _ps.executeQuery();
+            ResultSetMetaData metaData = _rs.getMetaData();
+            lookUpData.clear();
+            if (_rs.next()) {
+                do {
+                    String[] rowData = new String[getNoColumn()];
+                    for (int i = 0; i < rowData.length; i++) {
+//                        String col = metaData.getColumnName(i + 1);
+//                        if (checkForeignKey(getTableName(), col) == true) {
+////                        String ref = selectReferenceTable(getTableName(), col);
+////                            rowData[i] = selectFromRef(ref, _rs.getString(i + 1));
+//                        }
+//                        else {
+                        rowData[i] = _rs.getString(i + 1);
+//                        }
+                    }
+                    lookUpData.add(rowData);
+                } while (_rs.next());
+                _rs.close();
+
+            } else {
+                return null;
+            }
+            _rs.close();
+            _ps.close();
+            return lookUpData;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * Adds a row into tbl_users using userName and password
+     * (Note: the caller should set userName and password before calling
+     * this method)
+     * @return returns <b>true</b> object on successful completion
+     * of the method, <b>false</b> otherwise
+     */
+    public boolean insert() throws SQLException {
+        //get hash value of the password and insert it
+        String[] _data = getValues().split(",");
+        String columnsValue = "";
+        String[] _col = getColumnNames().split(",");
+        String pkInfo[] = selectMaxId();
+        for (int i = 0; i < _data.length; i++) {
+            if ((i + 1) != _data.length) {
+                if (_col[i].contains(pkInfo[0]) == true) {
+                    _data[i] = pkInfo[1];
+                    columnsValue += _data[i] + "','";
+                } else {
+                    columnsValue += _data[i] + "','";
+                }
+            } else {
+              
+                if (_col[i].contains(pkInfo[0]) == true) {
+                    _data[i] = pkInfo[1];
+                    columnsValue += _data[i];
+                } else {
+                    columnsValue += _data[i];
+               }
+            }
+        }
+        String _update = "INSERT INTO " + getTableName() + " (" +
+                getColumnNames() + " ) VALUES( '" + columnsValue + "')";
+        Connection con = getConnection();
+        try {
+            PreparedStatement _ps = con.prepareStatement(_update);
+            _ps.executeUpdate();
+            return true;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean checkForeignKey(String tableName, String columnName) {
+        ResultSet _rs = null;
+        String selectForeignKey = "SELECT user_cons_columns.constraint_name, " +
+                "  user_cons_columns.column_name " +
+                "FROM user_constraints " +
+                "INNER JOIN user_cons_columns " +
+                "ON user_constraints.constraint_name = user_cons_columns.constraint_name " +
+                "AND user_constraints.table_name     =? " +
+                "AND user_constraints.constraint_type='R'";
+        boolean foreignKeyList = false;
+        try {
+            Connection con = getConnection();
+            PreparedStatement _ps =
+                    con.prepareStatement(selectForeignKey);
+            _ps.setString(1, tableName);
+            _rs = _ps.executeQuery();
+
+            while (_rs.next()) {
+                if (_rs.getString("COLUMN_NAME").toString().contains(columnName) == true) {
+                    foreignKeyList = true;
+                    break;
+                }
+
+            }
+            _ps.close();
+            _rs.close();
+            return foreignKeyList;
+        } catch (Exception x) {
+            x.printStackTrace();
+            return foreignKeyList;
+        }
+    }
+
+    public String selectReferenceTable(String tableName, String columnName) {
+        ResultSet _rs = null;
+        String refTable = "";
+        String selectrefTable = "SELECT a.column_name, " +
+                "  a.constraint_name, " +
+                "  c_pk.table_name r_table_name " +
+                "FROM all_cons_columns a " +
+                "JOIN all_constraints c " +
+                "ON a.owner            = c.owner " +
+                "AND a.constraint_name = c.constraint_name " +
+                "JOIN all_constraints c_pk " +
+                "ON c.r_owner            = c_pk.owner " +
+                "AND c.r_constraint_name = c_pk.constraint_name " +
+                "WHERE c.constraint_type = 'R' " +
+                "AND a.table_name        =? " +
+                "AND a.column_name       =?";
+        try {
+            Connection con = getConnection();
+            PreparedStatement _ps =
+                    con.prepareStatement(selectrefTable, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            _ps.setString(1, tableName);
+            _ps.setString(2, columnName);
+            _rs = _ps.executeQuery();
+            if (_rs.next()) {
+                refTable = _rs.getString("r_table_name");
+            }
+            _rs.close();
+            _ps.close();
+            return refTable;
+        } catch (Exception x) {
+            x.printStackTrace();
+            return null;
+        }
+    }
+
+    public String selectFromRef(String tableName, String pkValue) throws SQLException {
+        ResultSet _rs = null;
+        String label = "";
+
+//        String _fromRef = selectReferenceTable(tableName, columnName);
+        String pk = selectPkCol(tableName);
+
+        String selectRefTableDet = "SELECT * FROM " + tableName + " WHERE " + pk + " = " + pkValue + "";
+        try {
+            Connection con = getConnection();
+            PreparedStatement _ps =
+                    con.prepareStatement(selectRefTableDet);
+            _rs = _ps.executeQuery();
+            if (_rs.next()) {
+                label = _rs.getString(2);
+            }
+            _rs.close();
+            _ps.close();
+            return label;
+        } catch (Exception x) {
+            x.printStackTrace();
+            return null;
+        }
+    }
+
+    public String selectFromRefNew(String tableName, String pkValue, String colName) throws SQLException {
+        ResultSet _rs = null;
+        String label = "";
+
+        String refTable = "";
+        String selectrefTable = "SELECT a.column_name, " +
+                "  a.constraint_name, " +
+                "  c_pk.table_name r_table_name " +
+                "FROM all_cons_columns a " +
+                "JOIN all_constraints c " +
+                "ON a.owner            = c.owner " +
+                "AND a.constraint_name = c.constraint_name " +
+                "JOIN all_constraints c_pk " +
+                "ON c.r_owner   = c_pk.owner " +
+                "AND c.r_constraint_name = c_pk.constraint_name " +
+                "WHERE c.constraint_type = 'R' " +
+                "AND a.table_name        = ?' " +
+                "AND a.column_name       = ?";
+
+        Connection con = getConnection();
+        PreparedStatement _ps =
+                con.prepareStatement(selectrefTable, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+        _ps.setString(1, tableName);
+        _ps.setString(2, colName);
+        _rs = _ps.executeQuery();
+        if (_rs.next()) {
+            refTable = _rs.getString("r_table_name");
+        }
+        String pk = selectPkCol(tableName);
+        String selectRefTableDet = "SELECT * FROM " + refTable + " WHERE " + pk + " = " + pkValue + "";
+        try {
+
+            _ps =
+                    con.prepareStatement(selectRefTableDet);
+            _rs = _ps.executeQuery();
+            if (_rs.next()) {
+                label = _rs.getString(2);
+            }
+            _rs.close();
+            _ps.close();
+            return label;
+        } catch (Exception x) {
+            x.printStackTrace();
+            return null;
+        }
+    }
+
+    public String selectPkCol(String tableName) throws SQLException {
+        String pkColumn = "";
+        ResultSet _rs = null;
+        String selectPk = "SELECT user_cons_columns.constraint_name, " +
+                "  user_cons_columns.column_name " +
+                "FROM user_constraints " +
+                "INNER JOIN user_cons_columns " +
+                "ON user_constraints.constraint_name = user_cons_columns.constraint_name " +
+                "AND user_constraints.table_name     = ? " +
+                "AND user_constraints.constraint_type='P'";
+        try {
+
+            Connection con = getConnection();
+            PreparedStatement _ps =
+                    con.prepareStatement(selectPk);
+            _ps.setString(1, tableName);
+            _rs = _ps.executeQuery();
+
+            if (_rs.next()) {
+                pkColumn = _rs.getString("column_name").toString();
+            }
+            _rs.close();
+            _ps.close();
+            return pkColumn;
+        } catch (Exception x) {
+            x.printStackTrace();
+            return null;
+        }
+    }
+
+    public String[] selectMaxId() throws SQLException {
+        Connection con = getConnection();
+        String pkColName = "";
+        String selectPk = "select user_cons_columns.constraint_name," +
+                " user_cons_columns.column_name from user_constraints " +
+                "inner join user_cons_columns on user_constraints.constraint_name = " +
+                "user_cons_columns.constraint_name " +
+                "AND user_constraints.table_name ='" + getTableName() + "' AND " +
+                "user_constraints.constraint_type='P'";
+        PreparedStatement _psPk = null;
+        ResultSet _rsPk = null;
+        ResultSet _rsMaxPk = null;
+        int maxPkId = 1;
+        try {
+            _psPk = con.prepareStatement(selectPk, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            _rsPk = _psPk.executeQuery();
+            if (_rsPk.next()) {
+
+                pkColName = _rsPk.getString("column_name").toString();
+            }
+            String maxPkValue = "SELECT MAX(" + pkColName + ") AS id FROM " + getTableName() + "";
+            _psPk = con.prepareStatement(maxPkValue,
+                    ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            _rsMaxPk = _psPk.executeQuery();
+            if (_rsMaxPk.next()) {
+                maxPkId = _rsMaxPk.getInt("id") + 1;
+            }
+            _rsMaxPk.close();
+            _psPk.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        String pkInfo[] = {pkColName, String.valueOf(maxPkId)};
+        return pkInfo;
+    }
+
+    /**
+     * Adds a row into tbl_users using userName and password
+     * (Note: the caller should set userName and password before calling
+     * this method)
+     * @return returns <b>true</b> object on successful completion
+     * of the method, <b>false</b> otherwise
+     */
+    public boolean update() throws SQLException {
+        //get hash value of the password and insert it
+        Connection con = getConnection();
+        String pkColName = "", pkColNameValue = "";
+        String selectPk = "select user_cons_columns.constraint_name," +
+                " user_cons_columns.column_name from user_constraints " +
+                "inner join user_cons_columns on user_constraints.constraint_name = " +
+                "user_cons_columns.constraint_name " +
+                "AND user_constraints.table_name ='" + getTableName() + "' AND " +
+                "user_constraints.constraint_type='P'";
+        PreparedStatement _psPk = null;
+        ResultSet _rsPk = null;
+        try {
+            _psPk = con.prepareStatement(selectPk, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            _rsPk = _psPk.executeQuery();
+            if (_rsPk.next()) {
+
+                pkColName = _rsPk.getString("column_name").toString();
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        String[] _data = getValues().split(",");
+        String columnsValue = "";
+        String[] _col = getColumnNames().split(",");
+        String colNames = "";
+        for (int i = 0; i < _data.length; i++) {
+            if ((i + 1) != _data.length) {
+                if (_col[i].contains(pkColName) == true) {
+                    pkColNameValue = _col[i] + "='" + _data[i] + "'";
+                } else {
+                    columnsValue += _col[i] + "='" + _data[i] + "',";
+                }
+            } else {
+                if (_col[i].contains(pkColName) == true) {
+                    pkColNameValue = _col[i] + "='" + _data[i] + "'";
+                } else {
+                    columnsValue += _col[i] + "='" + _data[i] + "'";
+                }
+            }
+        }
+        String _update = "UPDATE " + getTableName() + " SET " + columnsValue + " where " + pkColNameValue + "";
+
+        try {
+            PreparedStatement _ps = con.prepareStatement(_update);
+            _ps.executeUpdate();
+            return true;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return false;
+        }
+    }
+
+    public ResultSet selectAllFromRef(String tableName, String columnName) throws SQLException {
+        ResultSet _rs = null;
+//        ResultSet _fromRef = selectReferenceTable1(tableName, columnName);
+        String _fromRef = selectReferenceTable(tableName, columnName);
+        String selectRefTableDet = "SELECT * FROM " + _fromRef + "";
+        try {
+            Connection con = getConnection();
+            PreparedStatement _ps =
+                    con.prepareStatement(selectRefTableDet);
+            _rs = _ps.executeQuery();
+            return _rs;
+        } catch (Exception x) {
+            x.printStackTrace();
+            return null;
+        }
+    }
+
+    ArrayList<String> getLookUpTables() {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
+}
+=======
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package entity.Lookup;
+
+import connectionProvider.ConnectionManager;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+/**
+ *
+ * @author leul
+ */
+public class TableInformation extends ConnectionManager {
+
+    private String tableNames;
+    private int noColumn;
+    private String columnNames;
+    private String values;
+    private String owner;
+    //[F_NAME, L_NAME, REMARK]
+    //[sheme, yonatan, hhkj]
+
+    public String getTableName() {
+
+        return tableNames;
+    }
+
+    public void setTableName(String tableName) {
+        this.tableNames = tableName;
+    }
+
+    public int getNoColumn() {
+        return noColumn;
+    }
+
+    public void setNoColumn(int noColumn) {
+        this.noColumn = noColumn;
+    }
+
+    public String getColumnNames() {
+
+        return columnNames;
+    }
+
+    public String getOwner() {
+
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
+    }
+
+    public void setColumnNames(String columnNames) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(columnNames);
+        sb.deleteCharAt(0);
+        sb.deleteCharAt(columnNames.length() - 2);
+        this.columnNames = sb.toString();
+    }
+
+    public String getValues() {
+        return values;
+    }
+
+    public void setValues(String values) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(values);
+        sb.deleteCharAt(0);
+        sb.deleteCharAt(values.length() - 2);
+        this.values = sb.toString();
+    }
+
+    public ArrayList<String> getLookUpTables(String owner) {
+
+        ResultSet _rs = null;
+        ArrayList<String> lookUpData = new ArrayList<String>();
+        String selectLookUp = "SELECT DISTINCT TABLE_NAME " +
+                "FROM DBA_TAB_COLUMNS " +
+                "WHERE TABLE_NAME LIKE 'HR_LU_%' " +
+                "AND OWNER= 'HRMS' " +
+                "ORDER BY TABLE_NAME";
+        // String selectLookUp = "SELECT DISTINCT TABLE_NAME FROM all_tables WHERE TABLE_NAME LIKE 'HR_LU_%'";
+        try {
+            Connection con = getConnection();
+            PreparedStatement _ps =
+                    con.prepareStatement(selectLookUp);
+            _rs = _ps.executeQuery();
+            while (_rs.next()) {
+
+                lookUpData.add(_rs.getString("TABLE_NAME"));
+            }
+            _rs.close();
+            return lookUpData;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
+    public ArrayList<String> checkForeignKey(String tableName) {
+        ResultSet _rs = null;
+        String selectForeignKey = "select user_cons_columns.constraint_name," +
+                " user_cons_columns.column_name from user_constraints " +
+                "inner join user_cons_columns on user_constraints.constraint_name = " +
+                "user_cons_columns.constraint_name " +
+                "AND user_constraints.table_name = ? AND " +
+                "user_constraints.constraint_type='R'";
+        ArrayList<String> foreignKeyList = new ArrayList<String>();
+        try {
+            Connection con = getConnection();
+            PreparedStatement _ps =
+                    con.prepareStatement(selectForeignKey);
+            _ps.setString(1, tableName);
+            _rs = _ps.executeQuery();
+            while (_rs.next()) {
+                foreignKeyList.add(_rs.getString("column_name").toString());
+            }
+            _rs.close();
+            return foreignKeyList;
+        } catch (Exception x) {
+            x.printStackTrace();
+            return null;
+        }
+    }
+
+    public ArrayList<String> getColumns() {
+        ResultSet _rs = null;
+        ArrayList<String> lookUpData = new ArrayList<String>();
+        String selectLookUp = "SELECT COLUMN_NAME " +
+                "            FROM DBA_TAB_COLUMNS " +
+                "            WHERE TABLE_NAME =? and owner =? " +
+                "             ORDER BY column_id";
+        try {
+            Connection conn = getConnection();
+            PreparedStatement _ps =
+                    conn.prepareStatement(selectLookUp);
+            _ps.setString(1, getTableName());
+            _ps.setString(2, getOwner());
+            _rs = _ps.executeQuery();
+            lookUpData.clear();
+            while (_rs.next()) {
+                lookUpData.add(_rs.getString("COLUMN_NAME"));
+
+            }
+            _rs.close();
+            _ps.close();
+            return lookUpData;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
+    public ArrayList<String[]> selectData() {
+        ResultSet _rs = null;
+        ArrayList<String[]> lookUpData = new ArrayList<String[]>();
+
+        String selectLookUp = "SELECT DISTINCT * FROM " + getTableName();
+        try {
+            ConnectionManager con = new ConnectionManager();
+            PreparedStatement _ps =
+                    con.getConnection().prepareStatement(selectLookUp);
+            _rs = _ps.executeQuery();
+            ResultSetMetaData metaData = _rs.getMetaData();
+            lookUpData.clear();
+            if (_rs.next()) {
+                do {
+                    String[] rowData = new String[getNoColumn()];
+                    for (int i = 0; i < rowData.length; i++) {
+//                        String col = metaData.getColumnName(i + 1);
+//                        if (checkForeignKey(getTableName(), col) == true) {
+////                        String ref = selectReferenceTable(getTableName(), col);
+////                            rowData[i] = selectFromRef(ref, _rs.getString(i + 1));
+//                        }
+//                        else {
+                        rowData[i] = _rs.getString(i + 1);
+//                        }
+                    }
+                    lookUpData.add(rowData);
+                } while (_rs.next());
+                _rs.close();
+
+            } else {
+                return null;
+            }
+            _rs.close();
+            _ps.close();
+            return lookUpData;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * Adds a row into tbl_users using userName and password
+     * (Note: the caller should set userName and password before calling
+     * this method)
+     * @return returns <b>true</b> object on successful completion
+     * of the method, <b>false</b> otherwise
+     */
+    public boolean insert() throws SQLException {
+        //get hash value of the password and insert it
+        String[] _data = getValues().split(",");
+        String columnsValue = "";
+        String[] _col = getColumnNames().split(",");
+        String pkInfo[] = selectMaxId();
+        for (int i = 0; i < _data.length; i++) {
+            if ((i + 1) != _data.length) {
+                if (_col[i].contains(pkInfo[0]) == true) {
+                    _data[i] = pkInfo[1];
+                    columnsValue += _data[i] + "','";
+                } else {
+                    columnsValue += _data[i] + "','";
+                }
+            } else {
+                if (_col[i].contains(pkInfo[0]) == true) {
+                    _data[i] = pkInfo[1];
+                    columnsValue += _data[i];
+                } else {
+                    columnsValue += _data[i];
+                }
+            }
+        }
+        String _update = "INSERT INTO " + getTableName() + " (" +
+                getColumnNames() + " ) VALUES( '" + columnsValue + "')";
+        System.out.println(_update);
+        Connection con = getConnection();
+        try {
+            PreparedStatement _ps = con.prepareStatement(_update);
+            _ps.executeUpdate();
+            return true;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean checkForeignKey(String tableName, String columnName) {
+        ResultSet _rs = null;
+        String selectForeignKey = "SELECT user_cons_columns.constraint_name, " +
+                "  user_cons_columns.column_name " +
+                "FROM user_constraints " +
+                "INNER JOIN user_cons_columns " +
+                "ON user_constraints.constraint_name = user_cons_columns.constraint_name " +
+                "AND user_constraints.table_name     =? " +
+                "AND user_constraints.constraint_type='R'";
+        boolean foreignKeyList = false;
+        try {
+            Connection con = getConnection();
+            PreparedStatement _ps =
+                    con.prepareStatement(selectForeignKey);
+            _ps.setString(1, tableName);
+            _rs = _ps.executeQuery();
+
+            while (_rs.next()) {
+                if (_rs.getString("COLUMN_NAME").toString().contains(columnName) == true) {
+                    foreignKeyList = true;
+                    break;
+                }
+
+            }
+            _ps.close();
+            _rs.close();
+            return foreignKeyList;
+        } catch (Exception x) {
+            x.printStackTrace();
+            return foreignKeyList;
+        }
+    }
+
+    public String selectReferenceTable(String tableName, String columnName) {
+        ResultSet _rs = null;
+        String refTable = "";
+        String selectrefTable = "SELECT a.column_name, " +
+                "  a.constraint_name, " +
+                "  c_pk.table_name r_table_name " +
+                "FROM all_cons_columns a " +
+                "JOIN all_constraints c " +
+                "ON a.owner            = c.owner " +
+                "AND a.constraint_name = c.constraint_name " +
+                "JOIN all_constraints c_pk " +
+                "ON c.r_owner            = c_pk.owner " +
+                "AND c.r_constraint_name = c_pk.constraint_name " +
+                "WHERE c.constraint_type = 'R' " +
+                "AND a.table_name        =? " +
+                "AND a.column_name       =?";
+        try {
+            Connection con = getConnection();
+            PreparedStatement _ps =
+                    con.prepareStatement(selectrefTable, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            _ps.setString(1, tableName);
+            _ps.setString(2, columnName);
+            _rs = _ps.executeQuery();
+            if (_rs.next()) {
+                refTable = _rs.getString("r_table_name");
+            }
+            _rs.close();
+            _ps.close();
+            return refTable;
+        } catch (Exception x) {
+            x.printStackTrace();
+            return null;
+        }
+    }
+
+    public String selectFromRef(String tableName, String pkValue) throws SQLException {
+        ResultSet _rs = null;
+        String label = "";
+
+//        String _fromRef = selectReferenceTable(tableName, columnName);
+        String pk = selectPkCol(tableName);
+
+        String selectRefTableDet = "SELECT * FROM " + tableName + " WHERE " + pk + " = " + pkValue + "";
+        try {
+            Connection con = getConnection();
+            PreparedStatement _ps =
+                    con.prepareStatement(selectRefTableDet);
+            _rs = _ps.executeQuery();
+            if (_rs.next()) {
+                label = _rs.getString(2);
+            }
+            _rs.close();
+            _ps.close();
+            return label;
+        } catch (Exception x) {
+            x.printStackTrace();
+            return null;
+        }
+    }
+
+    public String selectFromRefNew(String tableName, String pkValue, String colName) throws SQLException {
+        ResultSet _rs = null;
+        String label = "";
+
+        String refTable = "";
+        String selectrefTable = "SELECT a.column_name, " +
+                "  a.constraint_name, " +
+                "  c_pk.table_name r_table_name " +
+                "FROM all_cons_columns a " +
+                "JOIN all_constraints c " +
+                "ON a.owner            = c.owner " +
+                "AND a.constraint_name = c.constraint_name " +
+                "JOIN all_constraints c_pk " +
+                "ON c.r_owner   = c_pk.owner " +
+                "AND c.r_constraint_name = c_pk.constraint_name " +
+                "WHERE c.constraint_type = 'R' " +
+                "AND a.table_name        = ?' " +
+                "AND a.column_name       = ?";
+
+        Connection con = getConnection();
+        PreparedStatement _ps =
+                con.prepareStatement(selectrefTable, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+        _ps.setString(1, tableName);
+        _ps.setString(2, colName);
+        _rs = _ps.executeQuery();
+        if (_rs.next()) {
+            refTable = _rs.getString("r_table_name");
+        }
+        String pk = selectPkCol(tableName);
+        String selectRefTableDet = "SELECT * FROM " + refTable + " WHERE " + pk + " = " + pkValue + "";
+        try {
+
+            _ps =
+                    con.prepareStatement(selectRefTableDet);
+            _rs = _ps.executeQuery();
+            if (_rs.next()) {
+                label = _rs.getString(2);
+            }
+            _rs.close();
+            _ps.close();
+            return label;
+        } catch (Exception x) {
+            x.printStackTrace();
+            return null;
+        }
+    }
+
+    public String selectPkCol(String tableName) throws SQLException {
+        String pkColumn = "";
+        ResultSet _rs = null;
+        String selectPk = "SELECT user_cons_columns.constraint_name, " +
+                "  user_cons_columns.column_name " +
+                "FROM user_constraints " +
+                "INNER JOIN user_cons_columns " +
+                "ON user_constraints.constraint_name = user_cons_columns.constraint_name " +
+                "AND user_constraints.table_name     = ? " +
+                "AND user_constraints.constraint_type='P'";
+        try {
+
+            Connection con = getConnection();
+            PreparedStatement _ps =
+                    con.prepareStatement(selectPk);
+            _ps.setString(1, tableName);
+            _rs = _ps.executeQuery();
+
+            if (_rs.next()) {
+                pkColumn = _rs.getString("column_name").toString();
+            }
+            _rs.close();
+            _ps.close();
+            return pkColumn;
+        } catch (Exception x) {
+            x.printStackTrace();
+            return null;
+        }
+    }
+
+    public String[] selectMaxId() throws SQLException {
+        Connection con = getConnection();
+        String pkColName = "";
+        String selectPk = "select user_cons_columns.constraint_name," +
+                " user_cons_columns.column_name from user_constraints " +
+                "inner join user_cons_columns on user_constraints.constraint_name = " +
+                "user_cons_columns.constraint_name " +
+                "AND user_constraints.table_name ='" + getTableName() + "' AND " +
+                "user_constraints.constraint_type='P'";
+        PreparedStatement _psPk = null;
+        ResultSet _rsPk = null;
+        ResultSet _rsMaxPk = null;
+        int maxPkId = 1;
+        try {
+            _psPk = con.prepareStatement(selectPk, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            _rsPk = _psPk.executeQuery();
+            if (_rsPk.next()) {
+
+                pkColName = _rsPk.getString("column_name").toString();
+            }
+            String maxPkValue = "SELECT MAX(" + pkColName + ") AS id FROM " + getTableName() + "";
+            _psPk = con.prepareStatement(maxPkValue,
+                    ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            _rsMaxPk = _psPk.executeQuery();
+            if (_rsMaxPk.next()) {
+                maxPkId = _rsMaxPk.getInt("id") + 1;
+            }
+            _rsMaxPk.close();
+            _psPk.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        String pkInfo[] = {pkColName, String.valueOf(maxPkId)};
+        return pkInfo;
+    }
+
+    /**
+     * Adds a row into tbl_users using userName and password
+     * (Note: the caller should set userName and password before calling
+     * this method)
+     * @return returns <b>true</b> object on successful completion
+     * of the method, <b>false</b> otherwise
+     */
+    public boolean update() throws SQLException {
+        //get hash value of the password and insert it
+        Connection con = getConnection();
+        String pkColName = "", pkColNameValue = "";
+        String selectPk = "select user_cons_columns.constraint_name," +
+                " user_cons_columns.column_name from user_constraints " +
+                "inner join user_cons_columns on user_constraints.constraint_name = " +
+                "user_cons_columns.constraint_name " +
+                "AND user_constraints.table_name ='" + getTableName() + "' AND " +
+                "user_constraints.constraint_type='P'";
+        PreparedStatement _psPk = null;
+        ResultSet _rsPk = null;
+        try {
+            _psPk = con.prepareStatement(selectPk, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            _rsPk = _psPk.executeQuery();
+            if (_rsPk.next()) {
+
+                pkColName = _rsPk.getString("column_name").toString();
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        String[] _data = getValues().split(",");
+        String columnsValue = "";
+        String[] _col = getColumnNames().split(",");
+        String colNames = "";
+        for (int i = 0; i < _data.length; i++) {
+            if ((i + 1) != _data.length) {
+                if (_col[i].contains(pkColName) == true) {
+                    pkColNameValue = _col[i] + "='" + _data[i] + "'";
+                } else {
+                    columnsValue += _col[i] + "='" + _data[i] + "',";
+                }
+            } else {
+                if (_col[i].contains(pkColName) == true) {
+                    pkColNameValue = _col[i] + "='" + _data[i] + "'";
+                } else {
+                    columnsValue += _col[i] + "='" + _data[i] + "'";
+                }
+            }
+        }
+        String _update = "UPDATE " + getTableName() + " SET " + columnsValue + " where " + pkColNameValue + "";
+
+        try {
+            PreparedStatement _ps = con.prepareStatement(_update);
+            _ps.executeUpdate();
+            return true;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return false;
+        }
+    }
+
+    public ResultSet selectAllFromRef(String tableName, String columnName) throws SQLException {
+        ResultSet _rs = null;
+//        ResultSet _fromRef = selectReferenceTable1(tableName, columnName);
+        String _fromRef = selectReferenceTable(tableName, columnName);
+        String selectRefTableDet = "SELECT * FROM " + _fromRef + "";
+        try {
+            Connection con = getConnection();
+            PreparedStatement _ps =
+                    con.prepareStatement(selectRefTableDet);
+            _rs = _ps.executeQuery();
+            return _rs;
+        } catch (Exception x) {
+            x.printStackTrace();
+            return null;
+        }
+    }
+
+    ArrayList<String> getLookUpTables() {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
+}
+>>>>>>> .r3110

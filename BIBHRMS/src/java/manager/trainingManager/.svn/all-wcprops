@@ -1,0 +1,125 @@
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/MUGHERPROJECT/!svn/ver/3145/src/java/manager/trainingManager
+END
+TrainingLookupManger.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/MUGHERPROJECT/!svn/ver/2417/src/java/manager/trainingManager/TrainingLookupManger.java
+END
+TrainerList.java
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/MUGHERPROJECT/!svn/ver/513/src/java/manager/trainingManager/TrainerList.java
+END
+TrainingReportManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/MUGHERPROJECT/!svn/ver/2656/src/java/manager/trainingManager/TrainingReportManager.java
+END
+TrainingCandidateManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/MUGHERPROJECT/!svn/ver/1/src/java/manager/trainingManager/TrainingCandidateManager.java
+END
+TrainingNeedAssessementModel.java
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/MUGHERPROJECT/!svn/ver/2604/src/java/manager/trainingManager/TrainingNeedAssessementModel.java
+END
+ActionPlanModel.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/MUGHERPROJECT/!svn/ver/1/src/java/manager/trainingManager/ActionPlanModel.java
+END
+TrainingNeedAssessementApproveManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/MUGHERPROJECT/!svn/ver/2656/src/java/manager/trainingManager/TrainingNeedAssessementApproveManager.java
+END
+ActionPlanCostManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/MUGHERPROJECT/!svn/ver/2694/src/java/manager/trainingManager/ActionPlanCostManager.java
+END
+TrainingProgressModel.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/MUGHERPROJECT/!svn/ver/486/src/java/manager/trainingManager/TrainingProgressModel.java
+END
+TrainingTypesModel.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/MUGHERPROJECT/!svn/ver/873/src/java/manager/trainingManager/TrainingTypesModel.java
+END
+ActionPlanManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/MUGHERPROJECT/!svn/ver/2593/src/java/manager/trainingManager/ActionPlanManager.java
+END
+InternalTrainnersModel.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/MUGHERPROJECT/!svn/ver/1/src/java/manager/trainingManager/InternalTrainnersModel.java
+END
+TrainingProgressCostManger.java
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/MUGHERPROJECT/!svn/ver/3145/src/java/manager/trainingManager/TrainingProgressCostManger.java
+END
+TrainingTypesRegistrationManger.java
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/MUGHERPROJECT/!svn/ver/774/src/java/manager/trainingManager/TrainingTypesRegistrationManger.java
+END
+TrainingNeedAssessementRequestManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/MUGHERPROJECT/!svn/ver/2656/src/java/manager/trainingManager/TrainingNeedAssessementRequestManager.java
+END
+InternalTrainnersRegistrationManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn/MUGHERPROJECT/!svn/ver/588/src/java/manager/trainingManager/InternalTrainnersRegistrationManager.java
+END
+TrainingReportModel.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/MUGHERPROJECT/!svn/ver/2465/src/java/manager/trainingManager/TrainingReportModel.java
+END
+TrainingParticipantModel.java
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/MUGHERPROJECT/!svn/ver/349/src/java/manager/trainingManager/TrainingParticipantModel.java
+END
+TrainingProgressManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/MUGHERPROJECT/!svn/ver/2656/src/java/manager/trainingManager/TrainingProgressManager.java
+END
+TrainingContoller.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/MUGHERPROJECT/!svn/ver/1896/src/java/manager/trainingManager/TrainingContoller.java
+END

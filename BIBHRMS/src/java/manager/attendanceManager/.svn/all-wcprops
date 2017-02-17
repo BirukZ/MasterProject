@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/MUGHERPROJECT/!svn/ver/3471/src/java/manager/attendanceManager
+END
+AssignEmployeeManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/MUGHERPROJECT/!svn/ver/3003/src/java/manager/attendanceManager/AssignEmployeeManager.java
+END
+AttendanceManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/MUGHERPROJECT/!svn/ver/3415/src/java/manager/attendanceManager/AttendanceManager.java
+END
+AttendanceCertifyManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/MUGHERPROJECT/!svn/ver/3219/src/java/manager/attendanceManager/AttendanceCertifyManager.java
+END
+AttendanceReportManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/MUGHERPROJECT/!svn/ver/3471/src/java/manager/attendanceManager/AttendanceReportManager.java
+END
+AttendanceApproveManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/MUGHERPROJECT/!svn/ver/3219/src/java/manager/attendanceManager/AttendanceApproveManager.java
+END

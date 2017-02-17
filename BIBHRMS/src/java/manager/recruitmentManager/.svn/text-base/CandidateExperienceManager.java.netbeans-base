@@ -1,0 +1,274 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package manager.recruitmentManager;
+
+import entity.recruitmentEntity.CandidateExperienceEntity;
+import java.sql.Timestamp;
+import java.util.Date;
+import java.util.HashMap;
+
+/**
+ *
+ * @author kibrom
+ */
+public class CandidateExperienceManager {
+
+    String institution;
+    String terminationReason;
+    String rank;
+    String startDate;
+    String copletionDate;
+    String salary;
+    String job_Code;
+    String id;
+    String job_description;
+    int equvalentJobCode;
+    String experiencePrivateOrGovernmental;
+    String experienceContractOrPrtmanent;
+    CandidateExperienceEntity candidateExperience = new CandidateExperienceEntity();
+    String currentDateAndTime = new Timestamp((new Date()).getTime()).toString();
+    String candidateId;
+    private String expRelationType;
+    private boolean selectedExperance;
+
+    public CandidateExperienceManager() {
+    }
+
+    public CandidateExperienceManager(String candidateId, String salary,
+            String institution, String rank, String job_Code, String startDate,
+            String copletionDate, String terminationReason, String experiencePrivateOrGovernmental,
+            String experienceContractOrPrtmanent, String experianceId,
+            String job_description, int equvalentJobCode, String expRelationType) {
+        this.candidateId = candidateId;
+        this.salary = salary;
+        this.institution = institution;
+        this.rank = rank;
+        this.job_Code = job_Code;
+        this.startDate = startDate;
+        this.copletionDate = copletionDate;
+        this.terminationReason = terminationReason;
+        this.experienceContractOrPrtmanent = experienceContractOrPrtmanent;
+        this.experiencePrivateOrGovernmental = experiencePrivateOrGovernmental;
+        this.id = experianceId;
+        this.equvalentJobCode = equvalentJobCode;
+        this.expRelationType = expRelationType;
+    }
+
+    public CandidateExperienceManager(String candidateId, String salary,
+            String institution, String rank, String job_Code, String startDate,
+            String copletionDate, String terminationReason,
+            String experiencePrivateOrGovernmental, String experienceContractOrPrtmanent,
+            String job_description, int equvalentJobCode, String experianceId, String expRelationType) {
+        this.candidateId = candidateId;
+        this.salary = salary;
+         this.institution = institution;
+        this.rank = rank;
+        this.job_Code = job_Code;
+        this.startDate = startDate;
+        this.copletionDate = copletionDate;
+        this.terminationReason = terminationReason;
+        this.experienceContractOrPrtmanent = experienceContractOrPrtmanent;
+        this.experiencePrivateOrGovernmental = experiencePrivateOrGovernmental;
+        this.equvalentJobCode = equvalentJobCode;
+        this.job_description=job_description;
+         this.id = experianceId;
+         this.expRelationType = expRelationType;
+    }
+
+    public CandidateExperienceManager(String institution, String terminationReason, String rank, String startDate, String copletionDate, String salary, String candidateId, String job_Code, String id,
+            String experiencePrivateOrGovernmental, String experienceContractOrPrtmanent, String employeeId) {
+        this.institution = institution;
+        this.terminationReason = terminationReason;
+        this.rank = rank;
+        this.startDate = startDate;
+        this.copletionDate = copletionDate;
+        this.salary = salary;
+        this.candidateId = candidateId;
+        this.job_Code = job_Code;
+        this.id = id;
+        this.experiencePrivateOrGovernmental = experiencePrivateOrGovernmental;
+        this.experienceContractOrPrtmanent = experienceContractOrPrtmanent;
+        this.candidateId = employeeId;
+
+    }
+
+    // <editor-fold defaultstate="collapsed" desc="get & set ">
+    public CandidateExperienceEntity getCandidateExperience() {
+        return candidateExperience;
+    }
+
+    public void setCandidateExperience(CandidateExperienceEntity candidateExperience) {
+        this.candidateExperience = candidateExperience;
+    }
+
+    public int getEquvalentJobCode() {
+        return equvalentJobCode;
+    }
+
+    public void setEquvalentJobCode(int job_code) {
+        this.equvalentJobCode = job_code;
+    }
+
+    public String getJob_description() {
+        return job_description;
+    }
+
+    public void setJob_description(String job_description) {
+        this.job_description = job_description;
+    }
+
+    public String getCurrentDateAndTime() {
+        return currentDateAndTime;
+    }
+
+    public void setCurrentDateAndTime(String currentDateAndTime) {
+        this.currentDateAndTime = currentDateAndTime;
+    }
+
+    public boolean isSelectedExperance() {
+        return selectedExperance;
+    }
+
+    public void setSelectedExperance(boolean selectedExperance) {
+        this.selectedExperance = selectedExperance;
+    }
+
+    public String getCandidateId() {
+        return candidateId;
+    }
+
+    public void setCandidateId(String candidateId) {
+        this.candidateId = candidateId;
+    }
+
+    public String getCopletionDate() {
+        return copletionDate;
+    }
+
+    public void setCopletionDate(String copletionDate) {
+        this.copletionDate = copletionDate;
+    }
+
+    public String getExperienceContractOrPrtmanent() {
+        return experienceContractOrPrtmanent;
+    }
+
+    public void setExperienceContractOrPrtmanent(String experienceContractOrPrtmanent) {
+        this.experienceContractOrPrtmanent = experienceContractOrPrtmanent;
+    }
+
+    public String getExperiencePrivateOrGovernmental() {
+        return experiencePrivateOrGovernmental;
+    }
+
+    public void setExperiencePrivateOrGovernmental(String experiencePrivateOrGovernmental) {
+        this.experiencePrivateOrGovernmental = experiencePrivateOrGovernmental;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getInstitution() {
+        return institution;
+    }
+
+    public void setInstitution(String institution) {
+        this.institution = institution;
+    }
+
+    public String getJob_Code() {
+        return job_Code;
+    }
+
+    public void setJob_Code(String job_Code) {
+        this.job_Code = job_Code;
+    }
+
+    public String getRank() {
+        return rank;
+    }
+
+    public void setRank(String rank) {
+        this.rank = rank;
+    }
+
+    public String getSalary() {
+        return salary;
+    }
+
+    public void setSalary(String salary) {
+        this.salary = salary;
+    }
+
+    public String getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+    public String getTerminationReason() {
+        return terminationReason;
+    }
+
+    public void setTerminationReason(String terminationReason) {
+        this.terminationReason = terminationReason;
+    }
+    // </editor-fold>
+
+    public int saveCandidatExperiance(CandidateExperienceManager saveExperiance, int perform) {
+        CandidateExperienceEntity candidateExperienceEntity = new CandidateExperienceEntity(saveExperiance.getInstitution(),
+                saveExperiance.getTerminationReason(),
+                saveExperiance.getStartDate(),
+                saveExperiance.getCopletionDate(),
+                saveExperiance.getSalary(),
+                saveExperiance.getCandidateId(),
+                saveExperiance.getJob_Code(),
+                saveExperiance.getRank(),
+                saveExperiance.getExperiencePrivateOrGovernmental(),
+                saveExperiance.getExperienceContractOrPrtmanent(),
+                saveExperiance.getId(), saveExperiance.getJob_description(), 
+                saveExperiance.getEquvalentJobCode(), saveExperiance.getExpRelationType());
+        if (perform == 1) {
+            return candidateExperienceEntity.saveCandidateExperience(candidateExperienceEntity);
+        } else {
+            return candidateExperienceEntity.updateCandidateExperience(candidateExperienceEntity);
+        }
+
+
+    }
+
+    public HashMap[] readEmployeeExperiance(String candidateId) {
+        return candidateExperience.readExperiance(candidateId);
+    }
+
+    public int countExperiance(String candidateId) {
+        return candidateExperience.countExperiance(candidateId);
+    }
+
+    public int deleteCandidateExperiance(String id) {
+        return candidateExperience.deleteCandidateExperiance(id);
+    }
+
+    /**
+     * @return the expRelationType
+     */
+    public String getExpRelationType() {
+        return expRelationType;
+    }
+
+    /**
+     * @param expRelationType the expRelationType to set
+     */
+    public void setExpRelationType(String expRelationType) {
+        this.expRelationType = expRelationType;
+    }
+}

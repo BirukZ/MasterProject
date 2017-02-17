@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+    Document   : Templete
+    Created on : Dec 26, 2012, 10:33:40 AM
+    Author     : Administrator
+-->
+<jsp:root version="2.1" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:ice="http://www.icesoft.com/icefaces/component" xmlns:jsp="http://java.sun.com/JSP/Page">
+    <jsp:directive.page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"/>
+    <f:view>
+        <html id="outputHtml1">
+            <head id="outputHead1">
+                <title>Employee Registration</title>
+                <ice:outputStyle href="../resources/stylesheet.css" id="outputStyle1"/>
+                <ice:outputStyle href="../xmlhttp/css/rime/rime.css"/>
+                <ice:outputStyle href="../resources/images/main.css"/>
+                <ice:outputStyle href="../resources/TempCSS.css"/>
+                <script src="../Script/jquery-1.3.2.min.js"></script>
+                <style type="text/css">
+                    .message {
+                        display: none;
+                        margin: 0 0 13px 0;
+                        background-color:#EFA;
+                        padding: 13px 13px 13px 52px;
+                        background-position: 13px 5px;
+                        border: solid 1px #BD8;                                                                                                                                                border: solid 1px #BD8;
+                    }
+                    .message2 {
+                        display: none;
+                        margin: 0 0 13px 0;
+                        background-color:#EFA;
+                        padding: 13px 13px 13px 52px;
+                        background-position: 13px 5px;
+                        border: solid 1px #BD8;                                                                                                                                                border: solid 1px #BD8;
+                    }
+                    .success{
+                        color: #336600;
+                        font-size: 12px;
+                        font-weight: bold;
+                        text-align: center;
+                        vertical-align: middle;
+                        top:5px;left: 0px;
+                        position: absolute;
+                        width: 100%
+                    }
+                    .error{
+                        color: red;
+                        font-size: 12px;
+                        font-weight: bold;
+                        text-align: center;
+                        vertical-align: middle;
+                        top:5px;left: 0px;
+                        position: absolute;
+                        width: 100%
+                    }
+                    .success1{
+                        color: #336600;
+                        font-size: 11px;
+                        font-weight: bold;
+                        height: 16px;
+                        left: 5px;
+                        top: 2px;
+                        position: absolute;
+                        text-align: left;
+                        width: 391px
+                    }
+                    .error1{
+                        color: red;
+                        font-size: 11px;
+                        font-weight: bold;
+                        height: 16px;
+                        left: 5px;
+                        top: 2px;
+                        position: absolute;
+                        text-align: left;
+                        width: 391px
+                    }
+                </style>
+                <script language="javascript" type="text/javascript">
+                    var $j=jQuery.noConflict();
+                    function AttendanceReportPage(field){
+                        if (field.defaultValue == field.value) field.value = '';
+                        else if (field.value == '') field.value = field.defaultValue;
+                    }
+                </script>
+                <link HREF="../header_icon.ico" REL="icon"/>
+            </head>
+            <body id="outputBody1">
+                <ice:form id="form1">
+                    <div style="width:100%">
+                        <img alt="" class="source-image" id="img" src="../resources/images/WholePageBG.png" width="100%"/>
+                        <ice:panelBorder id="whole_page" renderCenter="#{Attendance$TakeAttendancePage.panelBorder1Bean.renderCenter}"
+                            renderEast="#{Attendance$TakeAttendancePage.panelBorder1Bean.renderEast}"
+                            renderNorth="#{Attendance$TakeAttendancePage.panelBorder1Bean.renderNorth}"
+                            renderSouth="#{Attendance$TakeAttendancePage.panelBorder1Bean.renderSouth}"
+                            renderWest="#{Attendance$TakeAttendancePage.panelBorder1Bean.renderWest}"
+                            style="top: 5px; position: relative; background:transparent;" styleClass="whole_page" width="1024">
+                            <f:facet name="north">
+                                <ice:panelGroup id="page_header" style="height: 117px">
+                                    <!-- Begin Header -->
+                                    <ice:panelLayout id="header" layout="flow"
+                                        style="height: 129px; left: 0px; position: relative; width: 100%; -rave-layout: grid" styleClass="header" visible="true">
+                                        <jsp:directive.include file="/Header.jspf"/>
+                                    </ice:panelLayout>
+                                    <!-- End Header -->
+                                </ice:panelGroup>
+                            </f:facet>
+                            <f:facet name="west">
+                                <ice:panelGroup id="menu_left" style="height: 613px; top: 37px; position: relative">
+                                    <ice:panelLayout id="left_menu1" layout="flow"
+                                        style="height: 670px; left: 0px; top: 17px; position: relative; width: 100%; -rave-layout: grid" styleClass="left_menu">
+                                        <ice:panelLayout id="list_menu2" style="height: 640px; left: 0px; top: 15px; position: absolute; width: 213px" styleClass="list_menu">
+                                            <ice:panelCollapsible id="colsEmployeeSearchByName" style="border:none">
+                                                <f:facet name="header">
+                                                    <ice:panelGroup id="panelGroup4" styleClass=""/>
+                                                </f:facet>
+                                                <ice:panelGrid id="panelGrid4" style="height: 200px; width: 100%;border:none"/>
+                                            </ice:panelCollapsible>
+                                            <ice:panelCollapsible expanded="true" id="colsRequestLisrt">
+                                                <f:facet name="header">
+                                                    <ice:panelGroup id="panelGroup1" styleClass=""/>
+                                                </f:facet>
+                                                <ice:panelGrid id="panelGrid1" width="100%">
+                                                    <ice:panelGroup id="status_Group" style="left:-5px;margin: -5px -5px -5px -10px;padding: 7px; background:transparent;border:none;display: block;float:left;height:225px; width: 100%">
+                                                        <ice:panelLayout id="StatusContainer" style="border-style: none; background-color: transparent; height: 78px; position: absolute; width: 100%"/>
+                                                    </ice:panelGroup>
+                                                </ice:panelGrid>
+                                            </ice:panelCollapsible>
+                                        </ice:panelLayout>
+                                    </ice:panelLayout>
+                                </ice:panelGroup>
+                            </f:facet>
+                            <f:facet name="center">
+                                <ice:panelGroup id="page_display" style="height: 900px">
+                                    <ice:panelLayout id="container" layout="flow"
+                                        style="height: 720px; left: 0px; position: relative; top: 20px; width:100%; -rave-layout: grid" styleClass="page_display">
+                                        <fieldset class="filedset_css" style="height: 800px;">
+                                            <legend class="legend_css">
+                                                <ice:outputLabel value="Maintain Attendance Record(s)"/>
+                                            </legend>
+                                            <ice:panelLayout id="pnProfile" style="height: 780px; left: 0px; top: 24px; position: absolute; width: 100%">
+                                                <ice:panelGroup id="RetirementApproval" style="height: 695px" styleClass="filedset_border">
+                                                    <ice:outputText id="outputText1" style="font-size: 12px; left: 40px; top: 35px; position: absolute" value="#{msgAttendance.Date}"/>
+                                                    <ice:outputText id="outputText2" style="font-size: 12px; left: 40px; top: 65px; position: absolute" value="Timekeeper Full Name"/>
+                                                    <ice:outputText id="outputText3" style="font-size: 12px; left: 40px; top: 110px; position: absolute" value="Employee Name :"/>
+                                                    <ice:outputText id="outputText4" style="font-size: 12px; left: 40px; top: 165px; position: absolute" value="Employee Full Name :"/>
+                                                    <ice:outputText id="outputText5"
+                                                        style="border-bottom: solid rgb(153, 153, 153) 1px; font-family: Cambria; left: 170px; top: 60px; position: absolute; width: 507px" value=":"/>
+                                                    <ice:outputText id="outputText6" style="font-size: 12px; left: 40px; top: 220px; position: absolute" value="Select Absence Value :"/>
+                                                    <ice:inputText binding="#{Attendance$TakeAttendancePage.txtfAbsentDate}" id="txtfAbsentDate" style="border: 1px solid rgb(115, 179, 206); background-color: rgb(242, 246, 240); color: rgb(54, 76, 94); font-family: 'Lucida Sans'; font-size: 11px; font-style: normal; font-weight: lighter; left: 170px; top: 30px; position: absolute; width: 190px"/>
+                                                    <ice:inputText binding="#{Attendance$TakeAttendancePage.txtEmployeeId}" id="txtEmployeeId" style="border: 1px solid rgb(115, 179, 206); background-color: rgb(242, 246, 240); color: rgb(54, 76, 94); font-family: 'Lucida Sans'; font-size: 11px; font-style: normal; font-weight: lighter; left: 500px; top: 105px; position: absolute; width: 174px"/>
+                                                    <ice:outputText id="outputText8" style="font-size: 12px; left: 40px; top: 275px; position: absolute" value="Morning "/>
+                                                    <ice:selectInputText id="selectInputText1" style="font-family: 'Lucida Sans'; font-size: 11px; font-style: normal; font-weight: lighter; left: 170px; top: 105px; position: absolute; width: 350px">
+                                                        <f:selectItems id="selectInputText1selectedItems"/>
+                                                    </ice:selectInputText>
+                                                    <ice:selectInputText action="#{Attendance$TakeAttendancePage.txtSearchByName_action}"
+                                                        binding="#{Attendance$TakeAttendancePage.txtSearchByName}" id="txtSearchByName"
+                                                        listValue="#{ApplicationBean1.list}" listVar="employeeList" partialSubmit="true" rows="10"
+                                                        style="font-family: 'Lucida Sans'; font-size: 11px; font-style: normal; font-weight: lighter; left: 170px; top: 105px; position: absolute; width: 350px" valueChangeListener="#{ApplicationBean1.updateList}">
+                                                        <f:facet name="selectInputText">
+                                                            <ice:panelGrid columnClasses="empIdCol,fullNameCol" columns="2" style="width:150px">
+                                                                <ice:outputText id="lblFullNameAutoComplete2" value="#{employeeList.fullName}"/>
+                                                                <ice:outputText id="lblEmployeeIdAutoComplete2" value="#{employeeList.empIdentification}"/>
+                                                            </ice:panelGrid>
+                                                        </f:facet>
+                                                    </ice:selectInputText>
+                                                    <ice:commandButton action="#{Attendance$TakeAttendancePage.button3_action}" id="button3"
+                                                        style="left: 500px; top: 210px; position: absolute; width: 125px" value="Add"/>
+                                                    <ice:commandButton action="#{Attendance$TakeAttendancePage.button2_action}" id="button2"
+                                                        image="/resources/images/cal_button.gif" style="left: 345px; top: 36px; position: absolute" value="submit"/>
+                                                    <ice:commandButton action="#{Attendance$TakeAttendancePage.button1_action}" id="button1"
+                                                        image="/Employee/images/btn_search.gif" style="left: 610px; top: 108px; position: absolute" value="submit"/>
+                                                    <ice:outputText binding="#{Attendance$TakeAttendancePage.txtEmployeeFullName}" id="txtEmployeeFullName"
+                                                        style="border-bottom: solid rgb(153, 153, 153) 1px; font-family: Cambria; left: 170px; top: 165px; position: absolute; width: 507px" value=":"/>
+                                                    <ice:selectBooleanCheckbox binding="#{Attendance$TakeAttendancePage.chkMorning}" id="chkMorning"
+                                                        partialSubmit="true" style="font-size: 12px; left: 170px; top: 275px; position: absolute" value="#{Attendance$TakeAttendancePage.selectBooleanCheckbox2Bean.selectedBoolean}"/>
+                                                    <ice:selectBooleanCheckbox binding="#{Attendance$TakeAttendancePage.chkAfternoon}" id="chkAfternoon"
+                                                        partialSubmit="true" style="font-size: 12px; left: 350px; top: 275px; position: absolute" value="#{Attendance$TakeAttendancePage.selectBooleanCheckbox3Bean.selectedBoolean}"/>
+                                                    <ice:outputText id="outputText9" style="font-size: 12px; left: 240px; top: 275px; position: absolute" value="Afternoon "/>
+                                                    <ice:panelLayout id="pnlAbsentee" style="border: 1px solid rgb(204, 204, 204); height: 218px; left: 30px; top: 320px; overflow: auto; position: absolute; width: 732px">
+                                                        <ice:dataTable id="dataTable1" style="top: -10px; position: absolute; width: 100%"
+                                                            value="#{Attendance$TakeAttendancePage.attendanceAbsenteesLoad}" var="currentRow">
+                                                            <ice:column id="column2">
+                                                                <ice:outputText id="outputText4" value="#{currentRow['empId']}"/>
+                                                                <f:facet name="header">
+                                                                    <ice:outputText id="outputText6" value="Employee id"/>
+                                                                </f:facet>
+                                                            </ice:column>
+                                                            <ice:column id="colEmpFullName1" style="width:250px;cursor:pointer;">
+                                                                <h:outputText id="outputTex234t5" value="#{currentRow['empFullName']}"/>
+                                                                <f:facet name="header">
+                                                                    <ice:outputText id="outputText71" value="Full Name"/>
+                                                                </f:facet>
+                                                            </ice:column>
+                                                            <ice:column id="column3">
+                                                                <ice:outputText id="outputText10" value="#{currentRow['absentAmout']}"/>
+                                                                <f:facet name="header">
+                                                                    <ice:outputText id="outputText11" value="Absent"/>
+                                                                </f:facet>
+                                                            </ice:column>
+                                                            <ice:column id="colDayCval">
+                                                                <ice:outputText id="txtDayVal" value="#{currentRow['absentAmout']}"/>
+                                                                <f:facet name="header">
+                                                                    <ice:outputText id="lblDayVal" value="Day Value"/>
+                                                                </f:facet>
+                                                            </ice:column>
+                                                        </ice:dataTable>
+                                                    </ice:panelLayout>
+                                                    <ice:selectInputDate binding="#{Attendance$TakeAttendancePage.calAbsentDate}" id="calAbsentDate"
+                                                        rendered="false" style="left: 24px; top: 16px; position: absolute; height:212px; width: 190px" value="#{Attendance$TakeAttendancePage.selectInputDate1Bean.date1}"/>
+                                                    <ice:selectOneMenu binding="#{Attendance$TakeAttendancePage.drlAbsentValue}" id="drlAbsentValue"
+                                                        partialSubmit="true"
+                                                        style="border: 1px solid rgb(115, 179, 206); background-color: rgb(242, 246, 240); color: rgb(54, 76, 94); font-family: 'Lucida Sans'; font-size: 11px; font-style: normal; font-weight: lighter; left: 170px; top: 218px; position: absolute; width: 174px" value="#{Attendance$TakeAttendancePage.defaultSelectedData5.selectedObject}">
+                                                        <f:selectItems id="selectOneMenu1selectItems" value="#{Attendance$TakeAttendancePage.stateLists}"/>
+                                                    </ice:selectOneMenu>
+                                                </ice:panelGroup>
+                                            </ice:panelLayout>
+                                        </fieldset>
+                                    </ice:panelLayout>
+                                </ice:panelGroup>
+                            </f:facet>
+                        </ice:panelBorder>
+                    </div>
+                </ice:form>
+            </body>
+        </html>
+    </f:view>
+</jsp:root>

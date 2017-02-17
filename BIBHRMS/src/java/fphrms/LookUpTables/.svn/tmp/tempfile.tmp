@@ -1,0 +1,760 @@
+/*
+ * Template.java
+ *
+ * Created on May 20, 2011, 1:31:12 AM
+ * Copyright Leul
+ */
+package fphrms.LookUpTables;
+
+//import amara_template.control.LookUpManger;
+import com.icesoft.faces.component.ext.HtmlMessage;
+import com.icesoft.faces.component.ext.HtmlOutputText;
+import com.icesoft.faces.component.ext.UIColumns;
+import control.LookUpManger;
+import util.CellKey;
+import com.icesoft.faces.component.ext.HtmlCommandButton;
+import com.icesoft.faces.component.ext.HtmlInputText;
+import com.icesoft.faces.component.ext.HtmlSelectOneMenu;
+import com.icesoft.faces.component.ext.RowSelectorEvent;
+import com.icesoft.faces.component.ext.UIColumn;
+import com.icesoft.faces.component.jsfcl.data.BorderLayoutBean;
+import com.icesoft.faces.component.jsfcl.data.DefaultSelectedData;
+import com.icesoft.faces.component.jsfcl.data.DefaultSelectionItems;
+import com.icesoft.faces.component.jsfcl.data.DefaultTableDataModel;
+import com.icesoft.faces.component.panellayout.PanelLayout;
+import com.icesoft.faces.component.panelpopup.PanelPopup;
+import com.sun.rave.web.ui.appbase.AbstractPageBean;
+import com.sun.webui.jsf.model.Option;
+import fphrms.ApplicationBean1;
+import fphrms.RequestBean1;
+import fphrms.SessionBean1;
+import java.io.Serializable;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.ResourceBundle;
+import javax.faces.FacesException;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UISelectItem;
+import javax.faces.component.html.HtmlOutputLabel;
+import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
+import javax.faces.event.ValueChangeEvent;
+import javax.faces.model.DataModel;
+import javax.faces.model.ListDataModel;
+import javax.faces.model.SelectItem;
+import util.UINotify;
+
+/**
+ * <p>Page bean that corresponds to a similarly named JSP page.  This
+ * class contains component definitions (and initialization code) for
+ * all components that you have defined on this page, as well as
+ * lifecycle methods and event handlers where you may add behavior
+ * to respond to incoming events.</p>
+ */
+public class DynamicTableloockupCreator extends AbstractPageBean {
+    // <editor-fold defaultstate="collapsed" desc="Managed Component Definition">
+
+    private int __placeholder;
+
+    /**
+     * <p>Automatically managed component initialization.  <strong>WARNING:</strong>
+     * This method is automatically generated, so any user-specified code inserted
+     * here is subject to being replaced.</p>
+     */
+    private void _init() throws Exception {
+        getBtnNew().setDisabled(true);
+        tableList.clear();
+    }
+    private BorderLayoutBean panelBorder1Bean = new BorderLayoutBean();
+    private PanelLayout messageBdy = new PanelLayout();
+
+    public int getCursor_Row() {
+        return Cursor_Row;
+    }
+
+    public void setCursor_Row(int Cursor_Row) {
+        this.Cursor_Row = Cursor_Row;
+    }
+
+    public int get__placeholder() {
+        return __placeholder;
+    }
+
+    public void set__placeholder(int __placeholder) {
+        this.__placeholder = __placeholder;
+    }
+
+    public ArrayList<String[]> get_data() {
+        return _data;
+    }
+
+    public void set_data(ArrayList<String[]> _data) {
+        this._data = _data;
+    }
+
+    public HashMap getCellMap() {
+        return cellMap;
+    }
+
+    public void setCellMap(HashMap cellMap) {
+        this.cellMap = cellMap;
+    }
+
+    public ArrayList<String> getColumns() {
+        return columns;
+    }
+
+    public void setColumns(ArrayList<String> columns) {
+        this.columns = columns;
+    }
+
+    public LookUpManger getLuManager() {
+        return luManager;
+    }
+
+    public void setLuManager(LookUpManger luManager) {
+        this.luManager = luManager;
+    }
+
+    public BorderLayoutBean getPanelBorder1Bean() {
+        return panelBorder1Bean;
+    }
+
+    public void setPanelBorder1Bean(BorderLayoutBean panelBorder1Bean) {
+        this.panelBorder1Bean = panelBorder1Bean;
+    }
+
+    public ArrayList<SelectItem> getTableColumn() {
+        return tableColumn;
+    }
+
+    public void setTableColumn(ArrayList<SelectItem> tableColumn) {
+        this.tableColumn = tableColumn;
+    }
+
+    public PanelLayout getMessageBdy() {
+        return messageBdy;
+    }
+
+    public void setMessageBdy(PanelLayout pl) {
+        this.messageBdy = pl;
+    }
+    private HtmlOutputLabel messageLable = new HtmlOutputLabel();
+
+    public HtmlOutputLabel getMessageLable() {
+        return messageLable;
+    }
+
+    public void setMessageLable(HtmlOutputLabel hol) {
+        this.messageLable = hol;
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////
+    LookUpManger luManager = new LookUpManger();
+
+    private void initialize() {
+    }
+    private DataModel columnDataModel;
+
+    public DataModel getColumnDataModel() {
+        return columnDataModel;
+    }
+    private DataModel rowDataModel;
+
+    public DataModel getRowDataModel() {
+        return rowDataModel;
+    }
+    // default column and row values
+    private int rows = 0;
+
+    public int getRows() {
+        return rows;
+    }
+    ArrayList<String> columns = new ArrayList<String>();
+     ArrayList<String> empitiedTableList = null;
+    ArrayList<String[]> _data;
+    private HashMap cellMap = new HashMap();
+    /**
+     * Called from the ice:dataTable.  This method uses the columnDataModel and
+     * rowDataModel with the CellKey utility class to display the correct cell
+     * value.
+     * @return data which should be displayed for the given model state.
+     */
+    private ArrayList<LookUpTableList> tableList = new ArrayList<LookUpTableList>();
+
+    public ArrayList<LookUpTableList> getTableList() {
+        return tableList;
+    }
+
+    public ArrayList<String> getEmpitiedTableList() {
+        return empitiedTableList;
+    }
+
+    public void setEmpitiedTableList(ArrayList<String> empitiedTableList) {
+        this.empitiedTableList = empitiedTableList;
+    }
+
+    public void setTableList(ArrayList<LookUpTableList> tableList) {
+        this.tableList = tableList;
+    }
+    private HtmlInputText txtTableNames = new HtmlInputText();
+
+    public HtmlInputText getTxtTableNames() {
+        return txtTableNames;
+    }
+
+    public void setTxtTableNames(HtmlInputText hit) {
+        this.txtTableNames = hit;
+    }
+    private PanelLayout pnlContainer = new PanelLayout();
+
+    public PanelLayout getPnlContainer() {
+        return pnlContainer;
+    }
+
+    public void setPnlContainer(PanelLayout pl) {
+        this.pnlContainer = pl;
+    }
+    private PanelPopup pnlPopUp = new PanelPopup();
+
+    public PanelPopup getPnlPopUp() {
+        return pnlPopUp;
+    }
+
+    public void setPnlPopUp(PanelPopup pp) {
+        this.pnlPopUp = pp;
+    }
+    private PanelLayout divLabel = new PanelLayout();
+
+    public PanelLayout getDivLabel() {
+        divLabel.setStyle("left: 24px;");
+        return divLabel;
+    }
+    private PanelLayout divValue = new PanelLayout();
+
+    public PanelLayout getDivValue() {
+        divValue.setStyle("display: block; left: 190px;");
+        return divValue;
+    }
+    int Cursor_Row = -1;
+    private DefaultSelectedData selectOneMenu1Bean = new DefaultSelectedData();
+
+    public DefaultSelectedData getSelectOneMenu1Bean() {
+        return selectOneMenu1Bean;
+    }
+
+    public void setSelectOneMenu1Bean(DefaultSelectedData dsd) {
+        this.selectOneMenu1Bean = dsd;
+    }
+    private DefaultSelectionItems selectOneMenu1DefaultItems = new DefaultSelectionItems();
+
+    public DefaultSelectionItems getSelectOneMenu1DefaultItems() {
+        return selectOneMenu1DefaultItems;
+    }
+
+    public void setSelectOneMenu1DefaultItems(DefaultSelectionItems dsi) {
+        this.selectOneMenu1DefaultItems = dsi;
+    }
+    private HtmlSelectOneMenu cmbSchemaName = new HtmlSelectOneMenu();
+
+    public HtmlSelectOneMenu getCmbSchemaName() {
+        return cmbSchemaName;
+    }
+
+    public void setCmbSchemaName(HtmlSelectOneMenu hsom) {
+        this.cmbSchemaName = hsom;
+    }
+    private HtmlCommandButton btnSubmit = new HtmlCommandButton();
+
+    public HtmlCommandButton getBtnSubmit() {
+        return btnSubmit;
+    }
+
+    public void setBtnSubmit(HtmlCommandButton hcb) {
+        this.btnSubmit = hcb;
+    }
+    private HtmlCommandButton btnUpdate = new HtmlCommandButton();
+
+    public HtmlCommandButton getBtnUpdate() {
+        return btnUpdate;
+    }
+
+    public void setBtnUpdate(HtmlCommandButton hcb) {
+        this.btnUpdate = hcb;
+    }
+    private HtmlCommandButton btnNew = new HtmlCommandButton();
+
+    public HtmlCommandButton getBtnNew() {
+        return btnNew;
+    }
+
+    public void setBtnNew(HtmlCommandButton hcb) {
+        this.btnNew = hcb;
+    }
+    private UIColumn coltableList = new UIColumn();
+
+    public UIColumn getColtableList() {
+        return coltableList;
+    }
+
+    public void setColtableList(UIColumn uic) {
+        this.coltableList = uic;
+    }
+    private DefaultTableDataModel dataTable3Model = new DefaultTableDataModel();
+
+    public DefaultTableDataModel getDataTable3Model() {
+        return dataTable3Model;
+    }
+
+    public void setDataTable3Model(DefaultTableDataModel dtdm) {
+        this.dataTable3Model = dtdm;
+    }
+    private UIColumns tdTableNames = new UIColumns();
+
+    public UIColumns getTdTableNames() {
+        return tdTableNames;
+    }
+
+    public void setTdTableNames(UIColumns uic) {
+        this.tdTableNames = uic;
+    }
+    private HtmlMessage message = new HtmlMessage();
+
+    public HtmlMessage getMessage() {
+        return message;
+    }
+
+    public void setMessage(HtmlMessage hm) {
+        this.message = hm;
+    }
+    private HtmlOutputText lblPopTitle = new HtmlOutputText();
+
+    public HtmlOutputText getLblPopTitle() {
+        return lblPopTitle;
+    }
+
+    public void setLblPopTitle(HtmlOutputText hot) {
+        this.lblPopTitle = hot;
+    }
+
+/////////////////////////////////////////////////////////////////////////////////
+    // </editor-fold>
+    /**
+     * <p>Construct a new Page bean instance.</p>
+     */
+    public DynamicTableloockupCreator() {
+    }
+
+    /**
+     * <p>Callback method that is called whenever a page is navigated to,
+     * either directly via a URL, or indirectly via page navigation.
+     * Customize this method to acquire resources that will be needed
+     * for event handlers and lifecycle methods, whether or not this
+     * page is performing post back processing.</p>
+     *
+     * <p>Note that, if the current request is a postback, the property
+     * values of the components do <strong>not</strong> represent any
+     * values submitted with this request.  Instead, they represent the
+     * property values that were saved for this view when it was rendered.</p>
+     */
+    public void init() {
+        // Perform initializations inherited from our superclass
+        super.init();
+        // Perform application initialization that must complete
+        // *before* managed components are initialized
+        // TODO - add your own initialiation code here
+
+        // <editor-fold defaultstate="collapsed" desc="Managed Component Initialization">
+        // Initialize automatically managed components
+        // *Note* - this logic should NOT be modified
+        try {
+            _init();
+        } catch (Exception e) {
+            log("Page1 Initialization Failure", e);
+            throw e instanceof FacesException ? (FacesException) e : new FacesException(e);
+        }
+
+    // </editor-fold>
+    // Perform application initialization that must complete
+    // *after* managed components are initialized
+    // TODO - add your own initialization code here
+    }
+
+    /**
+     * <p>Callback method that is called after the component tree has been
+     * restored, but before any event processing takes place.  This method
+     * will <strong>only</strong> be called on a postback request that
+     * is processing a form submit.  Customize this method to allocate
+     * resources that will be required in your event handlers.</p>
+     */
+    public void preprocess() {
+    }
+
+    /**
+     * <p>Callback method that is called just before rendering takes place.
+     * This method will <strong>only</strong> be called for the page that
+     * will actually be rendered (and not, for example, on a page that
+     * handled a postback and then navigated to a different page).  Customize
+     * this method to allocate resources that will be required for rendering
+     * this page.</p>
+     */
+    public void prerender() {
+    }
+
+    /**
+     * <p>Callback method that is called after rendering is completed for
+     * this request, if <code>init()</code> was called (regardless of whether
+     * or not this was the page that was actually rendered).  Customize this
+     * method to release resources acquired in the <code>init()</code>,
+     * <code>preprocess()</code>, or <code>prerender()</code> methods (or
+     * acquired during execution of an event handler).</p>
+     */
+    public void destroy() {
+    }
+
+    /**
+     * <p>Return a reference to the scoped data bean.</p>
+     *
+     * @return reference to the scoped data bean
+     */
+    protected SessionBean1 getSessionBean1() {
+        return (SessionBean1) getBean("SessionBean1");
+    }
+
+    /**
+     * <p>Return a reference to the scoped data bean.</p>
+     *
+     * @return reference to the scoped data bean
+     */
+    protected ApplicationBean1 getApplicationBean1() {
+        return (ApplicationBean1) getBean("ApplicationBean1");
+    }
+
+    /**
+     * <p>Return a reference to the scoped data bean.</p>
+     *
+     * @return reference to the scoped data bean
+     */
+    protected RequestBean1 getRequestBean1() {
+        return (RequestBean1) getBean("RequestBean1");
+    }
+
+    public class LookUpTableList implements Serializable {
+
+        public LookUpTableList() {
+        }
+        private String name;
+        private boolean selected;
+
+        public boolean isSelected() {
+            return selected;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+        private String rowlist;
+
+        public String getRowlist() {
+            return rowlist;
+        }
+
+        public void setRowlist(String rowlist) {
+            this.rowlist = rowlist;
+        }
+
+        public void setSelected(boolean selected) {
+            this.selected = selected;
+        }
+
+        public LookUpTableList(String name) {
+            this.name = name;
+        }
+    }
+    ArrayList<Option> schemaList = new ArrayList<Option>();
+
+    public ArrayList<Option> getSchemaList() {
+        schemaList.clear();
+        schemaList.add(0, new Option(null, "Please Select Schema"));
+        schemaList.add(1, new Option("HRMS"));
+//    schemaList.add(2, new Option("AEMS"));
+        return schemaList;
+    }
+
+    public void setSchemaList(ArrayList<Option> schemaList) {
+        this.schemaList = schemaList;
+    }
+
+    /**
+     * Method called when the dataTable parameters have changed, in order to
+     * generate a new rowDataModel and columnDataModel.
+     */
+    private void generateDataModels() {
+        // Generate rowDataModel
+        List rowList = new ArrayList();
+        for (int i = 1; i <= rows; i++) {
+            rowList.add(String.valueOf(i));
+        }
+        rowDataModel = new ListDataModel(rowList);
+        // Generate columnDataModel
+        columnDataModel = new ListDataModel(columns);
+    }
+
+    private void populateTblData(String selectedTbl) {
+
+        columns = luManager.getColumns(selectedTbl, getCmbSchemaName().getValue().toString());
+        HashMap tableInfo = new HashMap();
+        tableInfo.put("name", selectedTbl);
+        tableInfo.put("noColumn", columns.size());
+<<<<<<< .mine
+=======
+        lblPopTitle.setValue(selectedTbl);
+>>>>>>> .r2319
+
+
+        if (luManager.selectData(tableInfo) == null) {
+
+            rows = 0;
+        } else {
+            _data = luManager.selectData(tableInfo);
+            rows = _data.size();
+
+        }
+        generateDataModels();
+    }
+
+    public void btnNew_processAction(ActionEvent ae) throws SQLException {
+        populatePopUp(Cursor_Row);
+        getBtnUpdate().setDisabled(true);
+        getBtnSubmit().setDisabled(false);
+    }
+
+    /*selection listener is used when a row is selected
+     *on the data luManager component
+     *@param e RowSelectorEvent */
+    public void selectRow_processAction(RowSelectorEvent rse) throws SQLException {
+        populatePopUp(rse.getRow());
+        getBtnUpdate().setDisabled(false);
+        getBtnSubmit().setDisabled(true);
+
+    }
+    private ArrayList<SelectItem> tableColumn = null;
+
+    private void populatePopUp(int cursor) throws SQLException {
+        //   getTableList().get(cursor).getName();
+
+        String[] _rowData;
+        if (cursor >= 0) {
+
+            _rowData = _data.get(cursor);
+        } else {
+
+            _rowData = null;
+        }
+        getDivLabel().getChildren().clear();
+        getDivValue().getChildren().clear();
+
+        for (int i = 0; i < columns.size(); i++) {
+            int top = 24 * (i + 1);
+            HtmlOutputLabel fieldLable = new HtmlOutputLabel();
+            fieldLable.setValue(columns.get(i));
+            fieldLable.setStyle("display: block; position: " +
+                    "absolute; top: " + top + "px");
+            getDivLabel().getChildren().add(fieldLable);
+
+            if (luManager.checkForegnKey(getTxtTableNames().getValue().toString()).contains(columns.get(i)) == true) {
+                //for forienkey
+                HtmlSelectOneMenu fieldValue = new HtmlSelectOneMenu();
+                fieldValue.setId("cmb" + i);
+                tableColumn = luManager.refTableDetail(
+                        getTxtTableNames().getValue().toString(), columns.get(i));
+                UISelectItem itemSelect = new UISelectItem();
+                itemSelect.setItemLabel("Please select One");
+                itemSelect.setItemValue(null);
+                fieldValue.getChildren().add(itemSelect);
+                for (int z = 0; z < tableColumn.size(); z++) {
+                    UISelectItem item = new UISelectItem();
+                    item.setItemLabel(tableColumn.get(z).getLabel().toString());
+                    item.setItemValue(tableColumn.get(z).getValue().toString());
+                    fieldValue.getChildren().add(item);
+                }
+//                itemSelect.setItemLabel(_rowData[i]);
+                fieldValue.setStyle("display: block; position: " +
+                        "absolute; top: " + top + "px");
+                getDivValue().getChildren().add(fieldValue);
+
+            } else if (luManager.checkPrimaryKey(
+                    getTxtTableNames().getValue().toString()).contains(columns.get(i)) == true) {
+                HtmlInputText fieldValue = new HtmlInputText();
+                fieldValue.setId("txt" + i);
+                if (_rowData != null) {
+                    fieldValue.setValue(_rowData[i]);
+                } else {
+                    fieldValue.setValue(0);
+                }
+                fieldValue.setDisabled(true);
+                fieldValue.setStyle("display: block; position: " +
+                        "absolute; top: " + top + "px");
+                getDivValue().getChildren().add(fieldValue);
+            } else {
+                //for usei
+                HtmlInputText fieldValue = new HtmlInputText();
+                fieldValue.setId("txtValue" + i);
+                if (_rowData != null) {
+                    fieldValue.setValue(_rowData[i]);
+                } else {
+                    fieldValue.setValue(null);
+                }
+                fieldValue.setStyle("display: block; position: " +
+                        "absolute; top: " + top + "px");
+                getDivValue().getChildren().add(fieldValue);
+            }
+
+        }
+        getPnlContainer().getChildren().add(getDivLabel());
+        getPnlContainer().getChildren().add(getDivValue());
+        getPnlPopUp().setRendered(true);
+
+    }
+
+    public void imgPopX_processAction(ActionEvent ae) {
+        getPnlPopUp().setRendered(false);
+    }
+
+    public void btnSubmit_processAction(ActionEvent ae) {
+        String message = "";
+        List<UIComponent> newData = getDivValue().getChildren();
+        ArrayList<String> rowData = new ArrayList();
+        for (int i = 0; i < newData.size(); i++) {
+            if (newData.get(i).getId().contains("cmb") == true) {
+                HtmlSelectOneMenu item = (HtmlSelectOneMenu) newData.get(i);
+                rowData.add(item.getValue().toString());
+            } else {
+                HtmlInputText fieldValue = (HtmlInputText) newData.get(i);
+                rowData.add(fieldValue.getValue().toString());
+            }
+        }
+
+        if (rowData.contains("")) {
+            message = "There are empty fields.";
+        } else {
+            boolean save = false;
+            
+            save = luManager.processLookUp(
+                    getTxtTableNames().getValue().toString(),
+                    columns.toString(),
+                    rowData.toString());
+            populateTblData(getTxtTableNames().getValue().toString());
+            if (save == true) {
+
+                message = "Successfully Saved.";
+                btnSubmit.setDisabled(true);
+            } else {
+                message = "Not Saved.";
+            }
+        }
+        UINotify.showMessage(getMessageBdy(), getMessageLable(),
+                UINotify.getSuccess(), message);
+    }
+
+    public void btnUpdate_processAction(ActionEvent ae) {
+        List<UIComponent> newData = getDivValue().getChildren();
+        ArrayList<String> rowData = new ArrayList();
+        for (int i = 0; i < newData.size(); i++) {
+            if (newData.get(i).getRendererType().compareToIgnoreCase("com.icesoft.faces.Menu") == 0) {
+                HtmlSelectOneMenu item = (HtmlSelectOneMenu) newData.get(i);
+                rowData.add(item.getValue().toString());
+            } else {
+                HtmlInputText fieldValue = (HtmlInputText) newData.get(i);
+                rowData.add(fieldValue.getValue().toString());
+            }
+        }
+        String message = "";
+        boolean update = false;
+        update = luManager.processLookUpUpdate(
+                getTxtTableNames().getValue().toString(),
+                columns.toString(),
+                rowData.toString());
+        populateTblData(getTxtTableNames().getValue().toString());
+        UINotify.showMessage(getMessageBdy(), getMessageLable(),
+                UINotify.getSuccess(), "Successfully Updated");
+        btnUpdate.setDisabled(true);
+        if (update == true) {
+            message = "Successfully updated.";
+        } else {
+            message = "Not updated.";
+        }
+        UINotify.showMessage(getMessageBdy(), getMessageLable(),
+                UINotify.getSuccess(), message);
+    }
+
+    public String getBundle(String value) {
+        ResourceBundle _bundle = ResourceBundle.getBundle("amara_template.DynamicTable");
+        String name = _bundle.getString(value);
+        return name;
+    }
+
+    public void cmbSchemaName_processValueChange(ValueChangeEvent vce) {
+        Object event = vce.getNewValue();
+        if (event != null && event != "") {
+            tableList.clear();
+            ArrayList<String> tableNames = luManager.getLookUpTables(event.toString());
+            for (String tableName : tableNames) {
+                getTableList().add(new LookUpTableList(tableName));
+            }
+        }
+    }
+
+    public void rwSelectorList_processMyEvent(RowSelectorEvent rse) {
+        try {
+            int cursor = rse.getRow();
+            String selectedTbl = tableList.get(cursor).getName();
+            txtTableNames.setValue(selectedTbl);
+
+            populateTblData(selectedTbl);
+            getBtnNew().setDisabled(false);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public String getCellValue() {
+        if (rowDataModel.isRowAvailable() && columnDataModel.isRowAvailable() && _data != null) {
+            // get the index of the row and column for this cell
+            String row = (String) rowDataModel.getRowData();
+            int currentRow = Integer.parseInt(row);
+            Object column = columnDataModel.getRowData();
+            int currentColumn = ((ArrayList) columnDataModel.getWrappedData()).indexOf(column);
+            // return the element at this location
+            Object key = new CellKey(row, column);
+
+            if (!cellMap.containsKey(key)) {
+                cellMap.put(key, _data.get(currentRow - 1)[currentColumn]);
+            }
+
+            return (String) cellMap.get(key);
+
+        }
+        return null;
+    }
+
+    public String btnNew_action() {
+        //return null means stay on the same page
+        return null;
+    }
+
+    public void cmbSchemaName_validate(FacesContext fc, UIComponent uic, Object o) {
+    }
+
+    public String btnSubmit_action() {
+        //return null means stay on the same page
+        return null;
+    }
+}
+

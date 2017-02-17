@@ -1,0 +1,28 @@
+# To change this template, choose Tools | Templates
+# and open the template in the editor.
+
+Requester=Requester
+FullName=FullName
+Id=Id
+Department=Department
+Position=Position
+location=Subsidy Location
+totalAmount=Total Amount Of Subsidy In Birr
+currentMonth=Current Month
+remark=Remark
+Delete=Delete
+Reset=Reset
+document=Document Reference Number
+appliedDate=Applied Date
+New=New
+DeciderDepartment=Decider Department
+DeciderId=Decider Id
+Decision=Decision
+DeciderFullName=Decider Full Name
+DeciderPosition=Decider Position
+comment=Comment
+Save=Post
+BudgetYear=Budget Year
+Location=Location
+BonesType=Bones Type
+HolidayName=Holiday Name

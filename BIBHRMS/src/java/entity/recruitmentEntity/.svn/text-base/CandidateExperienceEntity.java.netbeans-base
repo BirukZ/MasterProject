@@ -1,0 +1,369 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package entity.recruitmentEntity;
+
+import connectionProvider.ConnectionManager;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.HashMap;
+import manager.globalUseManager.ErrorLogWriter;
+import oracle.jdbc.driver.OracleResultSetMetaData;
+
+/**
+ *
+ * @author Administrator
+ */
+public class CandidateExperienceEntity extends ConnectionManager {
+
+    String institution;
+    String terminationReason;
+    String rank;
+    String startDate;
+    String copletionDate;
+    String salary;
+    String job_Code;
+    String id;
+    String experiencePrivateOrGovernmental;
+    String experienceContractOrPrtmanent;
+    String candidateId;
+    String job_description;
+    private String expRelationType;
+    int equvalentJobCode;
+    Connection _con = null;
+    PreparedStatement _ps = null;
+    ResultSet _rs = null;
+    int check = 0;
+
+    public void releaseResources() throws SQLException {
+        if (_rs != null) {
+            _rs.close();
+        }
+        if (_ps != null) {
+            _ps.close();
+        }
+        if (_con != null) {
+            closePooledConnections(_con);
+        }
+    }
+
+    // <editor-fold defaultstate="collapsed" desc="get & set ">
+    public int getEquvalentJobCode() {
+        return equvalentJobCode;
+    }
+
+    public void setEquvalentJobCode(int equvalentJobCode) {
+        this.equvalentJobCode = equvalentJobCode;
+    }
+
+    public String getJob_description() {
+        return job_description;
+    }
+
+    public void setJob_description(String job_description) {
+        this.job_description = job_description;
+    }
+
+    public String getCandidateId() {
+        return candidateId;
+    }
+
+    public void setCandidateId(String candidateId) {
+        this.candidateId = candidateId;
+    }
+
+    public String getCopletionDate() {
+        return copletionDate;
+    }
+
+    public void setCopletionDate(String copletionDate) {
+        this.copletionDate = copletionDate;
+    }
+
+    public String getExperienceContractOrPrtmanent() {
+        return experienceContractOrPrtmanent;
+    }
+
+    public void setExperienceContractOrPrtmanent(String experienceContractOrPrtmanent) {
+        this.experienceContractOrPrtmanent = experienceContractOrPrtmanent;
+    }
+
+    public String getExperiencePrivateOrGovernmental() {
+        return experiencePrivateOrGovernmental;
+    }
+
+    public void setExperiencePrivateOrGovernmental(String experiencePrivateOrGovernmental) {
+        this.experiencePrivateOrGovernmental = experiencePrivateOrGovernmental;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getInstitution() {
+        return institution;
+    }
+
+    public void setInstitution(String institution) {
+        this.institution = institution;
+    }
+
+    public String getJob_Code() {
+        return job_Code;
+    }
+
+    public void setJob_Code(String job_Code) {
+        this.job_Code = job_Code;
+    }
+
+    public String getRank() {
+        return rank;
+    }
+
+    public void setRank(String rank) {
+        this.rank = rank;
+    }
+
+    public String getSalary() {
+        return salary;
+    }
+
+    public void setSalary(String salary) {
+        this.salary = salary;
+    }
+
+    public String getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+    public String getTerminationReason() {
+        return terminationReason;
+    }
+
+    public void setTerminationReason(String terminationReason) {
+        this.terminationReason = terminationReason;
+    }
+    // </editor-fold>
+
+    public CandidateExperienceEntity() {
+    }
+
+    public CandidateExperienceEntity(String institution, String terminationReason,
+            String startDate, String copletionDate, String salary, String candidateId,
+            String job_Code, String rank, String experiencePrivateOrGovernmental,
+            String experienceContractOrPrtmanent, String id, String job_description,
+            int equvalentJobCode, String expRelationType) {
+        this.candidateId = candidateId;
+        this.salary = salary;
+        this.institution = institution;
+        this.rank = rank;
+        this.job_Code = job_Code;
+        this.startDate = startDate;
+        this.copletionDate = copletionDate;
+        this.terminationReason = terminationReason;
+        this.experienceContractOrPrtmanent = experienceContractOrPrtmanent;
+        this.experiencePrivateOrGovernmental = experiencePrivateOrGovernmental;
+        this.id = id;
+        this.equvalentJobCode = equvalentJobCode;
+        this.expRelationType = expRelationType;
+    }
+
+    public int saveCandidateExperience(CandidateExperienceEntity candidateExperienceEntity) {
+        int checkSave = 0;
+        String _select = "INSERT INTO hr_Candidate_experience " +
+                "(CANDIDATE_ID,INSTITUION,START_DATE,END_DATE,SALARY," +
+                "JOB_TITLE,RANK,REASON_FOR_TERMINATION,PERMANENT_OR_CONTRACT," +
+                "PRIVATE_OR_GVTAL,EQUVALENTJOBCODE, EXP_RELATION_TYPE)" +
+                " VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_select);
+            _ps.setString(1, candidateExperienceEntity.getCandidateId());
+            _ps.setString(2, candidateExperienceEntity.getInstitution());
+            _ps.setString(3, candidateExperienceEntity.getStartDate());
+            _ps.setString(4, candidateExperienceEntity.getCopletionDate());
+            _ps.setString(5, candidateExperienceEntity.getSalary());
+            _ps.setString(6, candidateExperienceEntity.getJob_Code());
+            _ps.setString(7, candidateExperienceEntity.getRank());
+            _ps.setString(8, candidateExperienceEntity.getTerminationReason());
+            _ps.setString(9, candidateExperienceEntity.getExperienceContractOrPrtmanent());
+            _ps.setString(10, candidateExperienceEntity.getExperiencePrivateOrGovernmental());
+            _ps.setInt(11, candidateExperienceEntity.getEquvalentJobCode());
+            _ps.setString(12, candidateExperienceEntity.getExpRelationType());
+            checkSave = _ps.executeUpdate();
+            return checkSave;
+        } catch (Exception ex) {
+            ErrorLogWriter.writeError(ex);
+            ex.printStackTrace();
+        } finally {
+            try {
+                releaseResources();
+            } catch (SQLException ex) {
+
+                ex.printStackTrace();
+            }
+        }
+        return checkSave;
+    }
+
+    public int countExperiance(String empID) {
+        String count = "SELECT Max(rownum)as num  from hr_Candidate_experience WHERE CANDIDATE_ID=?";
+        Connection _conn;
+        ResultSet rsFamily;
+        int rownum;
+
+        try {
+            _conn = getConnection();
+            _ps = _conn.prepareStatement(count);
+            _ps.setString(1, empID);
+            rsFamily = _ps.executeQuery();
+            rsFamily.next();
+            rownum = rsFamily.getInt("num");
+            return rownum;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                releaseResources();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return 0;
+    }
+
+    public HashMap[] readExperiance(String empID) {
+
+        Connection _conn;
+        ResultSet rsExper;
+        int i = 0;
+        HashMap[] _list = null;
+        String select = "SELECT * FROM hr_Candidate_experience WHERE CANDIDATE_ID=?";
+        try {
+            _conn = getConnection();
+            _ps = _conn.prepareStatement(select);
+            _ps.setString(1, empID);
+            rsExper = _ps.executeQuery();
+            OracleResultSetMetaData count = (OracleResultSetMetaData) rsExper.getMetaData();
+            _list = new HashMap[count.getColumnCount()];
+            while (rsExper.next()) {
+                _list[i] = new HashMap();
+                _list[i].put("CANDIDATE_ID", rsExper.getString("CANDIDATE_ID"));
+                _list[i].put("RANK", rsExper.getString("RANK") == null ? "" : rsExper.getString("RANK"));
+                _list[i].put("INSTITUION", rsExper.getString("INSTITUION") == null ? "" : rsExper.getString("INSTITUION"));
+                _list[i].put("PRIVATE_OR_GVTAL", rsExper.getString("PRIVATE_OR_GVTAL"));
+                _list[i].put("START_DATE", rsExper.getString("START_DATE") == null ? "" : rsExper.getString("START_DATE"));
+                _list[i].put("END_DATE", rsExper.getString("END_DATE"));
+                _list[i].put("JOB_TITLE", rsExper.getString("JOB_TITLE") == null ? "" : rsExper.getString("JOB_TITLE"));
+                _list[i].put("PERMANENT_OR_CONTRACT", rsExper.getString("PERMANENT_OR_CONTRACT"));
+                _list[i].put("SALARY", rsExper.getString("SALARY") == null ? "" : rsExper.getString("SALARY"));
+                _list[i].put("REASON_FOR_TERMINATION", rsExper.getString("REASON_FOR_TERMINATION") == null ? "" : rsExper.getString("REASON_FOR_TERMINATION"));
+                _list[i].put("EXPERIENCE_ID", Integer.toString(rsExper.getInt("EXPERIENCE_ID")));
+                _list[i].put("EQUVALENTJOBCODE", Integer.toString(rsExper.getInt("EQUVALENTJOBCODE")));
+                _list[i].put("EXP_RELATION_TYPE", rsExper.getString("EXP_RELATION_TYPE"));
+                i++;
+            }
+
+            return _list;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            return null;
+        } finally {
+            try {
+                releaseResources();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
+    public int deleteCandidateExperiance(String id) {
+
+        String _deletet = "DELETE FROM hr_Candidate_experience WHERE EXPERIENCE_ID=?";
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_deletet);
+            _ps.setInt(1, Integer.parseInt(id));
+            check = _ps.executeUpdate();
+            return check;
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+
+
+        } finally {
+            try {
+                releaseResources();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return 0;
+    }
+
+    public int updateCandidateExperience(CandidateExperienceEntity candidateExperienceEntity) {
+        String _select = "UPDATE hr_Candidate_experience SET  " +
+                "CANDIDATE_ID=?,INSTITUION=?,START_DATE=?,END_DATE=?,SALARY=?,JOB_TITLE=?," +
+                " RANK=?,REASON_FOR_TERMINATION=?, PERMANENT_OR_CONTRACT=?, " +
+                "PRIVATE_OR_GVTAL=?,EQUVALENTJOBCODE=?, EXP_RELATION_TYPE=? WHERE  EXPERIENCE_ID=?";
+
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_select);
+            _ps.setString(1, candidateExperienceEntity.getCandidateId());
+            _ps.setString(2, candidateExperienceEntity.getInstitution());
+            _ps.setString(3, candidateExperienceEntity.getStartDate());
+            _ps.setString(4, candidateExperienceEntity.getCopletionDate());
+            _ps.setInt(5, Integer.parseInt(candidateExperienceEntity.getSalary()));
+            _ps.setString(6, candidateExperienceEntity.getJob_Code());
+            _ps.setString(7, candidateExperienceEntity.getRank());
+            _ps.setString(8, candidateExperienceEntity.getTerminationReason());
+            _ps.setString(9, candidateExperienceEntity.getExperienceContractOrPrtmanent());
+            _ps.setString(10, candidateExperienceEntity.getExperiencePrivateOrGovernmental());
+            _ps.setInt(11, candidateExperienceEntity.getEquvalentJobCode());
+            _ps.setString(12, candidateExperienceEntity.getExpRelationType());
+            _ps.setInt(13, Integer.parseInt(candidateExperienceEntity.getId()));
+            
+            check = _ps.executeUpdate();
+            return check;
+        } catch (Exception ex) {
+            ErrorLogWriter.writeError(ex);
+            ex.printStackTrace();
+        } finally {
+            try {
+                releaseResources();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return 0;
+    }
+
+    /**
+     * @return the expRelationType
+     */
+    public String getExpRelationType() {
+        return expRelationType;
+    }
+
+    /**
+     * @param expRelationType the expRelationType to set
+     */
+    public void setExpRelationType(String expRelationType) {
+        this.expRelationType = expRelationType;
+    }
+}

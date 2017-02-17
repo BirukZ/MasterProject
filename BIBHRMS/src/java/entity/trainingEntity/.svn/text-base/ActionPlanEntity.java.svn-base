@@ -1,0 +1,290 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package entity.trainingEntity;
+
+import connectionProvider.ConnectionManager;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import javax.faces.model.SelectItem;
+import oracle.jdbc.rowset.OracleCachedRowSet;
+
+/**
+ *
+ * @author mekete
+ */
+public class ActionPlanEntity extends ConnectionManager {
+
+    Connection _con = null;
+    PreparedStatement _ps = null;
+    ResultSet _rs = null;
+
+    public void releaseResources() throws SQLException {
+        if (_rs != null) {
+            _rs.close();
+        }
+        if (_ps != null) {
+            _ps.close();
+        }
+        if (_con != null) {
+            closePooledConnections(_con);
+        }
+    }
+
+    public boolean insertTrainingsForInstitution(String budjetYear, int institutionId, String assignedTrainingsList) throws SQLException {
+        String _insertTrainingListQuery = "INSERT INTO  HR_TRAIN_ASSIGNED_INSTITUTIONS " +
+                " ( TRAIN_ASSIGNED_INSTITUTIONS_ID, BUDJET_YEAR, INSTITUTION_ID, " +
+                " ASSIGNED_TRAINING_LISTS ) " +
+                " VALUES( TRAIN_ASSIGNED_INSTITUTIONS_SEQ.NEXTVAL,?,?,? )";
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_insertTrainingListQuery);
+            _ps.setString(1, budjetYear);
+            _ps.setInt(2, institutionId);
+            _ps.setString(3, assignedTrainingsList);
+            _ps.executeUpdate();
+            return true;
+        } finally {
+            releaseResources();
+        }
+    }
+
+    public boolean updateTrainingsForInstitution(int institutionTrainingId, String budjetYear, int institutionId, String assignedTrainingsList) throws SQLException {
+        String _insertTrainingListQuery = "UPDATE  HR_TRAIN_ASSIGNED_INSTITUTIONS  SET  " +
+                " BUDJET_YEAR = ? , " +
+                " INSTITUTION_ID = ? , " +
+                " ASSIGNED_TRAINING_LISTS = ? " +
+                " WHERE TRAIN_ASSIGNED_INSTITUTIONS_ID = ? ";
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_insertTrainingListQuery);
+            _ps.setString(1, budjetYear);
+            _ps.setInt(2, institutionId);
+            _ps.setString(3, assignedTrainingsList);
+            _ps.setInt(4, institutionTrainingId);
+            _ps.executeUpdate();
+            return true;
+        } finally {
+            releaseResources();
+        }
+    }
+
+    public boolean updateActionPlan(String budgetYear, int institutionId, ArrayList<SelectItem> assignedList, ArrayList<SelectItem> notAssignedList, String onOrOffWork, String startDate, String endDate) throws SQLException {
+        String _updateAssignedQuery = "UPDATE HR_TRAIN_NEED_ASSESSEMENT_REQ SET " +
+                " ASSIGNED_INSTITUTION = ?, " +
+                " ON_OFF_WORK = ?, " +
+                " TENTATIVE_START_DATE = ?, " +
+                " TENTATIVE_END_DATE = ? " +
+                " WHERE BUDJET_YEAR = ? " +
+                " AND TRAINING_ID = ? ";
+
+
+        String _updateNotAssignedQuery = "UPDATE HR_TRAIN_NEED_ASSESSEMENT_REQ SET " +
+                " ASSIGNED_INSTITUTION = '-1' " +
+                " WHERE BUDJET_YEAR = ? " +
+                " AND TRAINING_ID = ? ";
+
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_updateAssignedQuery);
+            for (SelectItem currentRequest : assignedList) {
+                _ps.setInt(1, institutionId);
+                _ps.setString(2, onOrOffWork);
+                _ps.setString(3, startDate);
+                _ps.setString(4, endDate);
+                _ps.setString(5, budgetYear);
+                _ps.setString(6, currentRequest.getValue().toString());
+//                _ps.setString(4, onOrOffWork);
+                _ps.addBatch();
+            }
+            _ps.executeBatch();
+            //====================================
+            _ps = _con.prepareStatement(_updateNotAssignedQuery);
+            for (SelectItem currentRequest : notAssignedList) {
+                _ps.setString(1, budgetYear);
+                _ps.setString(2, currentRequest.getValue().toString());
+                _ps.addBatch();
+            }
+            _ps.executeBatch();
+            return true;
+        } finally {
+            releaseResources();
+        }
+    }
+
+    public ResultSet selectAssignedNeedRequests(String budjetYear, int institutionId) throws SQLException {
+        String _selectQuery = " SELECT * FROM HR_TRAIN_ASSGNED_INSTITUTIONS " +
+                " WHERE  INSTITUTION_ID = ? " +
+                " AND BUDJET_YEAR = ? ";
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_selectQuery);
+            _ps.setInt(1, institutionId);
+            _ps.setString(2, budjetYear);
+            _rs = _ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(_rs);
+            return (ResultSet) ocrs;
+        } finally {
+            releaseResources();
+        }
+    }
+
+    public ResultSet selectApprovedAndAssignedNeedRequests(String budjetYear) throws SQLException {
+        String _selectQuery = " SELECT * FROM HR_TRAIN_NEED_ASSESSEMENT_REQ " +
+                " WHERE  REQUEST_STATUS LIKE 'App-%' " +
+                " AND INSTITITUION_ASSIGNED = 'YES' " +
+                " AND BUDJET_YEAR = ? ";
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_selectQuery);
+            _ps.setString(1, budjetYear);
+            _rs = _ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(_rs);
+            return (ResultSet) ocrs;
+        } finally {
+            releaseResources();
+        }
+    }
+
+    public ResultSet selectApprovedAndAssignedNeedRequests(String budjetYear, int institutionId) throws SQLException {
+        String _selectQuery = "SELECT DISTINCT HR_LU_TRAIN_TRAINING_TYPES.TRAINING_TYPE_ID , " +
+                "  HR_LU_TRAIN_TRAINING_TYPES.TRAININIG_NAME " +
+                "FROM HR_TRAIN_NEED_ASSESSEMENT_REQ, " +
+                "  HR_LU_TRAIN_TRAINING_TYPES " +
+                "WHERE HR_TRAIN_NEED_ASSESSEMENT_REQ.BUDJET_YEAR         =? " +
+                "AND HR_TRAIN_NEED_ASSESSEMENT_REQ.ASSIGNED_INSTITUTION  =? " +
+                "AND to_number(HR_TRAIN_NEED_ASSESSEMENT_REQ.TRAINING_ID)= HR_LU_TRAIN_TRAINING_TYPES.TRAINING_TYPE_ID";
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_selectQuery);
+            _ps.setString(1, budjetYear);
+            _ps.setInt(2, institutionId);
+            _rs = _ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(_rs);
+            return (ResultSet) ocrs;
+        } finally {
+            releaseResources();
+        }
+    }
+
+    public ResultSet selectStartDate(String budjetYear, int institutionId, ArrayList<SelectItem> selectedTrainingId) throws SQLException {
+        String _selectQuery = "SELECT TENTATIVE_START_DATE  " +
+                "FROM HR_TRAIN_NEED_ASSESSEMENT_REQ " +
+                "WHERE BUDJET_YEAR         =? " +
+                "AND ASSIGNED_INSTITUTION  =? " +
+                "AND TRAINING_ID  =?";
+
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_selectQuery);
+
+            for (SelectItem currentRequest : selectedTrainingId) {
+                _ps.setString(1, budjetYear);
+                _ps.setInt(2, institutionId);
+                _ps.setString(3, currentRequest.getValue().toString());
+//                _ps.addBatch();
+            }
+//            _ps.executeBatch();
+//            _ps.setString(1, budjetYear);
+//            _ps.setInt(2, institutionId);
+//            _ps.setString(3, selectedTrainingId.toString());
+            _rs = _ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(_rs);
+            return (ResultSet) ocrs;
+        } finally {
+            releaseResources();
+        }
+    }
+
+    public ResultSet selectEndDate(String budjetYear, int institutionId, ArrayList<SelectItem> selectedTrainingId) throws SQLException {
+        String _selectQuery = "SELECT TENTATIVE_END_DATE  " +
+                "FROM HR_TRAIN_NEED_ASSESSEMENT_REQ " +
+                "WHERE BUDJET_YEAR         =? " +
+                "AND ASSIGNED_INSTITUTION  =? " +
+                "AND TRAINING_ID  =?";
+
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_selectQuery);
+            for (SelectItem currentRequest : selectedTrainingId) {
+                _ps.setString(1, budjetYear);
+                _ps.setInt(2, institutionId);
+                _ps.setString(3, currentRequest.getValue().toString());
+//                _ps.addBatch();
+            }
+//            _ps.executeBatch();
+                _rs = _ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(_rs);
+            return (ResultSet) ocrs;
+        } finally {
+            releaseResources();
+        }
+    }
+
+    public ResultSet selectApprovedTrainingTypes(String budjetYear) throws SQLException {
+        String _selectQuery = "SELECT DISTINCT TRAINING_ID, TRAINING_NAME  " +
+                "FROM HR_TRAIN_NEED_ASSESSEMENT_REQ " +
+                "WHERE REQUEST_STATUS LIKE 'App-%' " +
+                "AND BUDJET_YEAR = ? ";
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_selectQuery);
+            _ps.setString(1, budjetYear);
+            _rs = _ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(_rs);
+            return (ResultSet) ocrs;
+        } finally {
+            releaseResources();
+        }
+    }
+
+    public ResultSet selectApprovedNeedRequests(String budjetYear) throws SQLException {
+        String _selectQuery = "SELECT * " +
+                "FROM HR_TRAIN_NEED_ASSESSEMENT_REQ " +
+                "WHERE REQUEST_STATUS LIKE 'App-%' " +
+                "AND BUDJET_YEAR = ? ";
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_selectQuery);
+            _ps.setString(1, budjetYear);
+            _rs = _ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(_rs);
+            return (ResultSet) ocrs;
+        } finally {
+            releaseResources();
+        }
+    }
+
+    public ResultSet selectApprovedAndNotAssignedNeedRequests(String budjetYear) throws SQLException {
+        String _selectQuery = "SELECT DISTINCT HR_LU_TRAIN_TRAINING_TYPES.TRAINING_TYPE_ID , " +
+                "  HR_LU_TRAIN_TRAINING_TYPES.TRAININIG_NAME " +
+                "FROM HR_TRAIN_NEED_ASSESSEMENT_REQ, " +
+                "  HR_LU_TRAIN_TRAINING_TYPES " +
+                "WHERE (HR_TRAIN_NEED_ASSESSEMENT_REQ.ASSIGNED_INSTITUTION ='-1' " +
+                "OR HR_TRAIN_NEED_ASSESSEMENT_REQ.ASSIGNED_INSTITUTION IS NULL) " +
+                "AND HR_TRAIN_NEED_ASSESSEMENT_REQ.BUDJET_YEAR=? " +
+                "AND HR_TRAIN_NEED_ASSESSEMENT_REQ.TRAINING_ID=HR_LU_TRAIN_TRAINING_TYPES.TRAINING_TYPE_ID";
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_selectQuery);
+            _ps.setString(1, budjetYear);
+            _rs = _ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(_rs);
+            return (ResultSet) ocrs;
+        } finally {
+            releaseResources();
+        }
+    }
+}

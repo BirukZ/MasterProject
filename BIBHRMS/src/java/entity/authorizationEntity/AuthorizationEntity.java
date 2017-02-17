@@ -1,0 +1,484 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package entity.authorizationEntity;
+
+import connectionProvider.ConnectionManager;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import manager.authorizationManager.AuthorizationManager.AuthorizationModel;
+import manager.globalUseManager.ErrorLogWriter;
+import oracle.jdbc.rowset.OracleCachedRowSet;
+
+/**
+ *
+ * @author 
+ */
+public class AuthorizationEntity extends ConnectionManager {
+
+    private String authorizationId;
+    private String processStateId;
+    private String processStateName;
+    private String roleName;
+    private String roleId;
+    private String assignedDate;
+    private String userName;
+    private String timeStamp;
+    Connection conn = null;
+    String stm, stm1;
+    ResultSet rs;
+    PreparedStatement ps;
+
+    public void releaseResources() throws SQLException {
+        if (conn != null) {
+            closePooledConnections(conn);
+        }
+        if (rs != null) {
+            rs = null;
+        }
+        if (ps != null) {
+            ps = null;
+        }
+    }
+
+    public AuthorizationEntity() {
+    }
+
+    public AuthorizationEntity(String authorizationId, String processStateId, String processStateName, String roleId, String roleName, String assignedDate, String userName, String timeStamp) {
+        this.authorizationId = authorizationId;
+        this.processStateId = processStateId;
+        this.processStateName = processStateName;
+        this.roleId = roleId;
+        this.roleName = roleName;
+        this.assignedDate = assignedDate;
+        this.userName = userName;
+        this.timeStamp = timeStamp;
+    }
+
+    /**
+     * @return the authorizationId
+     */
+    public String getAuthorizationId() {
+        return authorizationId;
+    }
+
+    /**
+     * @param authorizationId the authorizationId to set
+     */
+    public void setAuthorizationId(String authorizationId) {
+        this.authorizationId = authorizationId;
+    }
+
+    /**
+     * @return the processStateId
+     */
+    public String getProcessStateId() {
+        return processStateId;
+    }
+
+    /**
+     * @param processStateId the processStateId to set
+     */
+    public void setProcessStateId(String processStateId) {
+        this.processStateId = processStateId;
+    }
+
+    /**
+     * @return the processStateId
+     */
+    public String getProcessStateName() {
+        return processStateName;
+    }
+
+    /**
+     * @param processStateId the processStateId to set
+     */
+    public void setProcessStateName(String processStateName) {
+        this.processStateName = processStateName;
+    }
+
+    /**
+     * @return the roleId
+     */
+    public String getRoleId() {
+        return roleId;
+    }
+
+    /**
+     * @param roleId the roleId to set
+     */
+    public void setRoleId(String roleId) {
+        this.roleId = roleId;
+    }
+
+    /**
+     * @return the roleId
+     */
+    public String getRoleName() {
+        return roleName;
+    }
+
+    /**
+     * @param roleId the roleId to set
+     */
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
+    }
+
+    /**
+     * @return the assignedDate
+     */
+    public String getAssignedDate() {
+        return assignedDate;
+    }
+
+    /**
+     * @param assignedDate the assignedDate to set
+     */
+    public void setAssignedDate(String assignedDate) {
+        this.assignedDate = assignedDate;
+    }
+
+    /**
+     * @return the userName
+     */
+    public String getUserName() {
+        return userName;
+    }
+
+    /**
+     * @param userName the userName to set
+     */
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    /**
+     * @return the timeStamp
+     */
+    public String getTimeStamp() {
+        return timeStamp;
+    }
+
+    /**
+     * @param timeStamp the timeStamp to set
+     */
+    public void setTimeStamp(String timeStamp) {
+        this.timeStamp = timeStamp;
+    }
+
+    public String readAuthorizedStates(String process, String userName) {
+
+        String myReturn = new String();
+
+        String stm;
+
+
+        stm = "select PROCESS_STATE_ID from BIB.TBL_PROCESS_STATE where PROCESS_STATE_ID in  (select PROCESS_STATE_ID from BIB.tbl_authorization where ROLE_ID in(select  ROLE_ID from  BIB.tbl_role_user where USER_ID=(select USER_ID from  BIB.tbl_users where USER_NAME='" + userName + "')) and PROCESS_STATE_ID in (select PROCESS_STATE_ID from BIB.TBL_PROCESS_STATE where  PROCESS_ID='" + process + "'))";
+
+        try {
+            conn = getConnection();
+            ps = conn.prepareStatement(stm);
+            rs = ps.executeQuery();
+            if (rs == null) {
+            } else {
+                while (rs.next()) {
+
+                    myReturn = rs.getString("PROCESS_STATE_ID");
+                }
+            }
+
+        } catch (SQLException ex) {
+            myReturn = null;
+        } finally {
+            try {
+                releaseResources();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        return myReturn;
+    }
+
+    public ResultSet selectProcessStates(String processId) throws SQLException {
+        OracleCachedRowSet ocrs = new OracleCachedRowSet();
+        stm = "select * from BIB.TBL_PROCESS_STATE where PROCESS_ID ='" + processId + "'";
+        try {
+            conn = getConnection();
+            ps = conn.prepareStatement(stm);
+            rs = ps.executeQuery();
+            ocrs.populate(rs);
+            rs.close();
+            return (ResultSet) ocrs;
+        } finally {
+            releaseResources();
+        }
+    }
+
+    public ResultSet selectAuthorizedStates(String processId) throws SQLException {
+        OracleCachedRowSet ocrs = new OracleCachedRowSet();
+        //       stm = "select * from BIB.tbl_authorization where PROCESS_ID ='" + processId + "'";
+        stm = "SELECT AUTHORIZATION_ID, " +
+                "  TBL_AUTHORIZATION.PROCESS_STATE_ID, " +
+                "  ROLE_NAME, " +
+                "  TBL_PROCESS_STATE.PROCESS_ID, " +
+                "  STATE_NAME, " +
+                "  PROCESS_NAME, " +
+                "  SEQUENCE_NUMBER " +
+                "FROM BIB.TBL_AUTHORIZATION, " +
+                "  BIB.TBL_PROCESS_STATE , " +
+                "  BIB.TBL_PROCESS " +
+                "WHERE BIB.TBL_PROCESS_STATE.PROCESS_ID    ='" + processId + "'" +
+                "AND BIB.TBL_PROCESS.PROCESS_ID            = TBL_PROCESS_STATE.PROCESS_ID " +
+                "AND BIB.TBL_AUTHORIZATION.PROCESS_STATE_ID=BIB.TBL_PROCESS_STATE.PROCESS_STATE_ID " +
+                "ORDER BY SEQUENCE_NUMBER";
+
+        try {
+            conn = getConnection();
+            ps = conn.prepareStatement(stm);
+            rs = ps.executeQuery();
+            ocrs.populate(rs);
+            rs.close();
+            return (ResultSet) ocrs;
+        } finally {
+            releaseResources();
+        }
+    }
+
+    public String readInitialState(String processId) {
+        String myReturn = new String();
+        String stm = "select PROCESS_STATE_ID from BIB.TBL_PROCESS_STATE where PREVIES_PROCESS_STATE_ID=0 and PROCESS_ID='" + processId + "'";
+        try {
+            conn = getConnection();
+            ps = conn.prepareStatement(stm);
+            ResultSet rs1 = ps.executeQuery();
+            if (rs1 != null) {
+                while (rs1.next()) {
+                    myReturn = rs1.getString("PROCESS_STATE_ID");
+                }
+            }
+        } catch (SQLException ex) {
+        } finally {
+            try {
+                releaseResources();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return myReturn;
+    }
+
+    public String readFinalState(String processId) {
+        String myReturn = new String();
+        String stm = "select PROCESS_STATE_ID from BIB.TBL_PROCESS_STATE where CAN_BE_FINAL='true' and PROCESS_ID='" + processId + "'";
+        try {
+            conn = getConnection();
+            ps = conn.prepareStatement(stm);
+            ResultSet rs1 = ps.executeQuery();
+            if (rs1 == null) {
+            } else {
+                while (rs1.next()) {
+                    myReturn = rs1.getString("PROCESS_STATE_ID");
+                }
+            }
+
+        } catch (SQLException ex) {
+        } finally {
+            try {
+                releaseResources();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return myReturn;
+    }
+
+    /**
+     */
+    public String readNextState(String processStateId, String processId) {
+        String _select = "SELECT PROCESS_STATE_ID,CAN_BE_FINAL FROM BIB.TBL_PROCESS_STATE WHERE PROCESS_ID='" + processId + "' AND PREVIES_PROCESS_STATE_ID='" + processStateId + "'";
+        try {
+
+            conn = getConnection();
+            PreparedStatement _ps = conn.prepareStatement(_select);
+            ResultSet _rs = _ps.executeQuery();
+            if (_rs.next()) {
+                return _rs.getString("PROCESS_STATE_ID");
+            } else {
+                return "closed";
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+        } finally {
+            try {
+                releaseResources();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        return null;
+    }
+
+    public boolean saveAuthorization(ArrayList<AuthorizationEntity> authorizations) {
+        boolean myReturn = false;
+        stm = "insert into BIB.tbl_authorization (AUTHORIZATION_ID,PROCESS_STATE_ID,ROLE_NAME,ASSIGNED_DATE,TIMESTAMP,USERNAME) values(BIB.TBL_AUTHORIZATION_SEQ.nextval,?,?,?,?,?)";
+        try {
+            conn = getConnection();
+            Iterator<AuthorizationEntity> it = authorizations.iterator();
+            while (it.hasNext()) {
+                AuthorizationEntity au = it.next();
+                ps = conn.prepareStatement(stm);
+                ps.setString(1, au.getProcessStateId());
+                ps.setString(2, au.getRoleId());
+                ps.setString(3, au.getAssignedDate());
+                ps.setString(4, au.getTimeStamp());
+                ps.setString(5, au.getUserName());
+                ps.addBatch();
+            }
+            ps.executeBatch();
+            conn.commit();
+            ps.clearParameters();
+            myReturn = true;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            myReturn = false;
+        } finally {
+            try {
+                releaseResources();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return myReturn;
+    }
+
+    public boolean deleteAuthorizations(ArrayList<AuthorizationModel> authorizations) {
+        String _deleteQuery = "delete from BIB.tbl_authorization where PROCESS_STATE_ID=?";
+        try {
+            Connection _con = getConnection();
+            PreparedStatement _ps = _con.prepareStatement(_deleteQuery);
+            int sizeOfArrayList = authorizations.size();
+            for (int i = 0; i < sizeOfArrayList; i++) {
+                AuthorizationModel am = authorizations.get(i);
+                _ps.setString(1, processStateId);
+                _ps.addBatch();
+            }
+            _ps.executeBatch();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                releaseResources();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return true;
+    }
+
+    public boolean saveAuthorizations(ArrayList<AuthorizationModel> authorizations) {
+        boolean myReturn = false;
+
+        String _updateQuery = "UPDATE BIB.TBL_PROCESS_STATE " +
+                //  " SET SEQUENCE_NUMBER =? ,PREVIES_PROCESS_STATE_ID=?,CAN_BE_FINAL=?" +
+                " SET SEQUENCE_NUMBER =? ,PREVIES_PROCESS_STATE_ID=? " +
+                " WHERE PROCESS_STATE_ID= ? ";
+        String _insertQuery = "insert into BIB.tbl_authorization " +
+                " (AUTHORIZATION_ID," +
+                " PROCESS_STATE_ID," +
+                " ROLE_NAME," +
+                " ASSIGNED_DATE," +
+                " TIMESTAMP," +
+                " USERNAME) " +
+                " values(BIB.tbl_authorization_seq.nextval,?,?,?,?,?)";
+
+        try {
+            conn = getConnection();
+            ps = conn.prepareStatement(_updateQuery);
+            String previeousStateId = "0";
+            int sizeOfArrayList = authorizations.size();
+            for (int i = 0; i < sizeOfArrayList; i++) {
+                AuthorizationModel am = authorizations.get(i);
+                String isFinal = (i == sizeOfArrayList - 1) ? "true" : "false";
+                ps.setInt(1, am.getCounter());
+                ps.setString(2, previeousStateId);
+                ps.setString(3, am.getStateId());
+                ps.addBatch();
+                previeousStateId = am.getStateId();
+            }
+            ps.executeBatch();
+
+            ps = conn.prepareStatement(_insertQuery);
+            for (int i = 0; i < sizeOfArrayList; i++) {
+                AuthorizationModel am = authorizations.get(i);
+                boolean isFinal = (i == sizeOfArrayList);
+                ps.setString(1, am.getStateId());
+                ps.setString(2, am.getRoleid());
+                ps.setString(3, "  ");
+                ps.setString(4, "no user");
+                ps.setString(5, "no time");
+                ps.addBatch();
+            }
+            ps.executeBatch();
+            return true;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return false;
+        } finally {
+            try {
+                releaseResources();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
+     /**
+     * returns ResultSet object of processed leave requests with their current status<br>
+     * Basically intended to show the history of a  given leave request.
+     * @param  the status of the request
+     * @throws  SQLException*/
+    public ResultSet selectProcessedHistoryOfRequest(String tableName, int requestId) throws SQLException {
+        String _selectQuery = "SELECT REQUEST_ID, " +
+                "  BIB.TBL_USERS.EMPLOYEE_ID AS RECORDED_BY_ID, " +
+                "  PROCESSED_BY , " +
+                "  RECORDED_BY, " +
+                //   "  NEXT_STATE AS DECISION, " +
+                "  DECISION, " +
+                "  TIME_STAMP, " +
+                "  COMMENT_GIVEN, " +
+                "  FIRST_NAME, " +
+                "  MIDDLE_NAME, " +
+                "  LAST_NAME ," +
+                "  DEDUCTION_AMOUNT," +
+                "  DURATION, " +
+                "  PERMISSION_NAME " +
+                "FROM "+tableName+", " +
+                "  HR_EMPLOYEE_INFO , " +
+                "  BIB.TBL_PERMISSION , " +
+                "  BIB.TBL_USERS " +
+                "WHERE REQUEST_ID              =" + requestId +
+                "AND HR_EMPLOYEE_INFO.EMP_ID   =PROCESSED_BY " +
+                "AND BIB.TBL_USERS.user_name=RECORDED_BY " +
+                "AND BIB.TBL_PERMISSION.CODE=DECISION " +
+                "ORDER BY TIME_STAMP";
+        try {
+           conn = getConnection();
+           ps = conn.prepareStatement(_selectQuery);
+           rs = ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(rs);
+            return (ResultSet) ocrs;
+        } finally {
+            releaseResources();
+        }
+    }
+}

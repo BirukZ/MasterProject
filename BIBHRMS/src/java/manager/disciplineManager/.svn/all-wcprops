@@ -1,0 +1,71 @@
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/MUGHERPROJECT/!svn/ver/3771/src/java/manager/disciplineManager
+END
+DisciplineReportModel.java
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/MUGHERPROJECT/!svn/ver/2477/src/java/manager/disciplineManager/DisciplineReportModel.java
+END
+RejectedDisciplineReportManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/MUGHERPROJECT/!svn/ver/2476/src/java/manager/disciplineManager/RejectedDisciplineReportManager.java
+END
+PenaltyRegistrationManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/MUGHERPROJECT/!svn/ver/3751/src/java/manager/disciplineManager/PenaltyRegistrationManager.java
+END
+DisciplineRequestReportManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/MUGHERPROJECT/!svn/ver/2453/src/java/manager/disciplineManager/DisciplineRequestReportManager.java
+END
+DisciplinePenaltyRegistrationManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/svn/MUGHERPROJECT/!svn/ver/3749/src/java/manager/disciplineManager/DisciplinePenaltyRegistrationManager.java
+END
+DisciplineRequestManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/MUGHERPROJECT/!svn/ver/3388/src/java/manager/disciplineManager/DisciplineRequestManager.java
+END
+DisciplineRegistrationManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/MUGHERPROJECT/!svn/ver/3750/src/java/manager/disciplineManager/DisciplineRegistrationManager.java
+END
+EyeWitnessManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/MUGHERPROJECT/!svn/ver/3507/src/java/manager/disciplineManager/EyeWitnessManager.java
+END
+DisciplineReportManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/MUGHERPROJECT/!svn/ver/3442/src/java/manager/disciplineManager/DisciplineReportManager.java
+END
+DisciplineApproveManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/MUGHERPROJECT/!svn/ver/3771/src/java/manager/disciplineManager/DisciplineApproveManager.java
+END
+AccusedDefenceManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/MUGHERPROJECT/!svn/ver/3402/src/java/manager/disciplineManager/AccusedDefenceManager.java
+END

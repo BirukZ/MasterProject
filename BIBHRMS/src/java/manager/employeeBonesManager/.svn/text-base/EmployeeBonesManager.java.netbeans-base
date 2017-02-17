@@ -1,0 +1,76 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package manager.employeeBonesManager;
+
+import control.ReportControl;
+import entity.employeeBonesEntity.EmployeeBonesEntity;
+import java.util.ArrayList;
+import java.util.HashMap;
+import oracle.jdbc.rowset.OracleCachedRowSet;
+
+/**
+ *
+ * @author Administrator
+ */
+public class EmployeeBonesManager {
+
+    private EmployeeBonesEntity employeeBonesEntity = new EmployeeBonesEntity();
+    private ReportControl reportControl = new ReportControl();
+
+    public OracleCachedRowSet selectEmployeeYearlyBones(String location, String budgetYear) {
+        try {
+            return employeeBonesEntity.selectEmployeeYearlyBones(location, budgetYear);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public OracleCachedRowSet selectEmployeeHolidayBones(String location, String budgetYear, String holidayName) {
+        try {
+            return employeeBonesEntity.selectEmployeeHolidayBones(location, budgetYear, holidayName);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public ArrayList<HashMap> selectEmployeeYearlyBonesList(String location, String budgetYear) {
+        try {
+            ArrayList<HashMap> listOfBones = new ArrayList<HashMap>();
+            OracleCachedRowSet ocrs = employeeBonesEntity.selectEmployeeYearlyBones(location, budgetYear);
+            while (ocrs.next()) {
+                HashMap hm = new HashMap();
+                hm.put("Employeeid", ocrs.getString("Employeeid"));
+                hm.put("BONES", ocrs.getString("BONES"));
+                hm.put("EXPERIENCE", ocrs.getString("EXPERIENCE"));
+                hm.put("JUNESALARY", ocrs.getString("JUNESALARY"));
+                hm.put("EMPLOYEEFULLNAME", ocrs.getString("EMPLOYEEFULLNAME"));
+                listOfBones.add(hm);
+            }
+            return listOfBones;
+        } catch (Exception e) {
+             return null;
+        }
+    }
+        public ArrayList<HashMap> selectEmployeeHolidayBonesList(String location, String budgetYear, String holidayName) {
+        try {
+            ArrayList<HashMap> listOfBones = new ArrayList<HashMap>();
+            OracleCachedRowSet ocrs = employeeBonesEntity.selectEmployeeHolidayBones(location, budgetYear, holidayName);
+            while (ocrs.next()) {
+                HashMap hm = new HashMap();
+                System.out.println(ocrs.getString("BONES"));
+                 System.out.println(ocrs.getString("EMPLOYEEFULLNAME"));
+                hm.put("Employeeid", ocrs.getString("EMPLOYEEID"));
+                hm.put("BONES", ocrs.getString("BONES"));
+                hm.put("EMPLOYEEFULLNAME", ocrs.getString("EMPLOYEEFULLNAME"));
+                listOfBones.add(hm);
+            }
+            return listOfBones;
+        } catch (Exception e) {
+            e.printStackTrace();
+             return null;
+        }
+    }
+}

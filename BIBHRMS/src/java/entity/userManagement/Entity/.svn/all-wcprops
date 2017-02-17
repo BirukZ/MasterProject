@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/MUGHERPROJECT/!svn/ver/3315/src/java/entity/userManagement/Entity
+END
+RolesEntity.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/MUGHERPROJECT/!svn/ver/3315/src/java/entity/userManagement/Entity/RolesEntity.java
+END
+PermissionEntity.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/MUGHERPROJECT/!svn/ver/462/src/java/entity/userManagement/Entity/PermissionEntity.java
+END
+ResourcesEntity.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/MUGHERPROJECT/!svn/ver/3315/src/java/entity/userManagement/Entity/ResourcesEntity.java
+END
+UsersEntity.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/MUGHERPROJECT/!svn/ver/1/src/java/entity/userManagement/Entity/UsersEntity.java
+END

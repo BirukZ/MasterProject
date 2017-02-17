@@ -1,0 +1,74 @@
+9
+
+dir
+3039
+https://insa-86a57d062c:8443/svn/MUGHERPROJECT/web/resources/DataTables-1.9.2/media/src
+https://insa-86a57d062c:8443/svn/MUGHERPROJECT
+
+
+
+2012-07-13T07:14:28.500000Z
+746
+hrms
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+621d1ebf-33df-c043-b56e-65f36b9fe920
+
+DataTables.js
+file
+
+
+
+
+2012-12-26T11:56:40.421875Z
+9087d0e030115b0275edfb8c7427dfa0
+2012-07-13T07:14:28.500000Z
+746
+hrms
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+10339
+
+ext
+dir
+
+model
+dir
+
+core
+dir
+
+api
+dir
+

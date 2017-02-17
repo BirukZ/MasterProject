@@ -1,0 +1,675 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package entity.powerDeligationEntity;
+
+import connectionProvider.ConnectionManager;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import manager.powerDeligationManager.PowerDeligationApproveManager;
+import manager.powerDeligationManager.PowerDeligationRequestManager.PowerDeligationRequestModel;
+import manager.powerDeligationManager.PowerDeligationRequestManager.PowerDeligationTakenModel;
+import oracle.jdbc.rowset.OracleCachedRowSet;
+
+/**
+ *
+ * @author BravoZulu
+ */
+public class PowerDeligationRequestEntity extends ConnectionManager {
+
+    Connection _con = null;
+    PreparedStatement _ps = null;
+    ResultSet _rs = null;
+
+    public void releaseResources() throws SQLException {
+        if (_rs != null) {
+            _rs.close();
+            _rs = null;
+        }
+        if (_ps != null) {
+            _ps.close();
+            _ps = null;
+        }
+        if (_con != null) {
+            _con.close();
+            closePooledConnections(_con);
+        }
+    }
+
+    /**
+     * returns ResultSet object of a request with the given id.<br>
+     * It returns a ResultSet of either a single row or with no row.
+     * @param  powerDeligationRequestId request Id, primary key of the table.
+     * @throws  SQLException
+     */
+    public ResultSet cheakDisciplineAutontication(String requesterID) throws SQLException {
+        String _selectQuery = " SELECT pr.delegatee_id, " +
+                "  pr.start_date, " +
+                "  pr.end_date, " +
+                "  pr.deligated_position, " +
+                "  pr.DELIGATOR_ID, " +
+                "  bk.rank_id, " +
+                "  pr.external_delegation_status " +
+                " FROM hr_power_deligation_request pr " +
+                " INNER JOIN vw_employee_by_department_bi bk " +
+                " ON bk.EMP_ID=pr.deligator_id " +
+                " WHERE pr.delegatee_id=? " +
+                " AND bk.rank_id >='12' " +
+                " AND pr.deligation_status LIKE 'App%'";
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_selectQuery);
+            _ps.setString(1, requesterID);
+            _rs = _ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(_rs);
+            return (ResultSet) ocrs;
+        } finally {
+            releaseResources();
+        }
+    }
+
+    public ResultSet selectPowerDeligationRequestFromId(int powerDeligationRequestId) throws SQLException {
+        String _selectQuery = "SELECT * FROM HR_POWER_DELIGATION_REQUEST WHERE POW_DEL_REQ_ID= ? ";
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_selectQuery);
+            _ps.setInt(1, powerDeligationRequestId);
+            _rs = _ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(_rs);
+            return (ResultSet) ocrs;
+        } finally {
+            releaseResources();
+        }
+    }
+
+    public ResultSet selectRequestsByStatus(String status) throws SQLException {
+        String _selectQuery = " SELECT * FROM HR_POWER_DELIGATION_REQUEST WHERE DELIGATION_STATUS=? ORDER BY TIME_STAMP DESC";
+        String _innerSelectQuery = "to refine employees from the department of the logged in employee";
+
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_selectQuery);
+            _ps.setString(1, status);
+            //_ps.setString(2,userName);
+            _rs = _ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(_rs);
+            return (ResultSet) ocrs;
+        } finally {
+            releaseResources();
+        }
+    }
+
+    /**
+     * Returns ResultSet object of requests with their current status
+     * as of the argument.
+     * @param the status of the request
+     * @param userName  the user name of the employee who logged in to the system
+     * @throws SQLException
+     */
+    public ResultSet selectPowerDeligationRequestByStatus(int status, String userName) throws SQLException {
+
+        String _innerSelectQuery = "select PROCESS_STATE_ID from BIB.TBL_PROCESS_STATE where PROCESS_STATE_ID" +
+                " in  ( select PROCESS_STATE_ID from BIB.tbl_authorization " +
+                "       where ROLE_NAME in(select ROLE_ID from BIB.TBL_ROLE_USER   " +
+                "           where USER_ID=(select USER_ID from BIB.tbl_users where USER_NAME='" + userName + "')) " +
+                "           and PROCESS_STATE_ID in (select PROCESS_STATE_ID from BIB.TBL_PROCESS_STATE " +
+                "               where  PROCESS_ID='" + PowerDeligationApproveManager.PROCESS_POWER_DELIGATION + "'))";
+
+        String _selectQuery = "SELECT * FROM HR_POWER_DELIGATION_REQUEST WHERE DELIGATION_STATUS ='" + status + "'" +
+                " AND DELIGATION_STATUS IN(" + _innerSelectQuery + ")";
+
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_selectQuery);
+            _rs = _ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(_rs);
+            return (ResultSet) ocrs;
+        } finally {
+            releaseResources();
+        }
+    }
+
+    /**
+     * returns ResultSet object of rejected requests
+     * @throws  SQLException
+     */
+    public ResultSet selectRejectedPowerDeligationRequests() throws SQLException {
+        String _selectQuery = "SELECT * FROM HR_POWER_DELIGATION_REQUEST WHERE DELIGATION_STATUS LIKE 'Rej%'";
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_selectQuery);
+            _rs = _ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(_rs);
+            return (ResultSet) ocrs;
+        } finally {
+            releaseResources();
+        }
+    }
+
+    /**
+     * requestes which are resubmitted. <br>
+     * Their status stored starting with the symbol
+     * <b>#</b> followed by <b>initial state</b> of power deligation.
+     * @throws  SQLException
+     */
+    public ResultSet selectPowerDeligationRequestsToBeResubmitted() throws SQLException {
+        String _selectQuery = "SELECT * FROM HR_POWER_DELIGATION_REQUEST WHERE DELIGATION_STATUS LIKE 'Res%'";
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_selectQuery);
+            _rs = _ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(_rs);
+            return (ResultSet) ocrs;
+        } finally {
+            releaseResources();
+        }
+    }
+
+    /**
+     * returns ResultSet object of requests which are not in their final state, nor rejected
+     * @param userName  the user name of the employee who logged in to the system
+     * @throws  SQLException
+     */
+    public ResultSet selectPowerDeligationRequestsOnProgress(String userName) throws SQLException {
+
+        //select process possible states accessible to the user in the process Power deligation
+        String _innerSelectQuery = "select PROCESS_STATE_ID from BIB.TBL_PROCESS_STATE where PROCESS_STATE_ID" +
+                " in  ( select PROCESS_STATE_ID from BIB.tbl_authorization " +
+                "       where ROLE_NAME in(select ROLE_ID from BIB.TBL_ROLE_USER   " +
+                "           where USER_ID=(select USER_ID from BIB.tbl_users where USER_NAME='" + userName + "')) " +
+                "           and PROCESS_STATE_ID in (select PROCESS_STATE_ID from BIB.TBL_PROCESS_STATE " +
+                "               where  PROCESS_ID='" + PowerDeligationApproveManager.PROCESS_POWER_DELIGATION + "'))";
+
+        String _selectQuery = "SELECT * FROM HR_POWER_DELIGATION_REQUEST " +
+                //                " WHERE DELIGATION_STATUS NOT LIKE '#%' " +//not on pending
+                //                " AND DELIGATION_STATUS NOT LIKE '-%' " +//not rejected
+                //                " AND DELIGATION_STATUS <> '" + PowerDeligationApproveManager.INITIAL_STATE_POWER_DELIGATION + "' " +//not initial state
+                //                " AND DELIGATION_STATUS <> '" + PowerDeligationApproveManager.FINAL_STATE_POWER_DELIGATION + "' " +//not in final state
+                //                " AND DELIGATION_STATUS IN(" + _innerSelectQuery + ")";//the user is authorized to access the result
+                " WHERE DELIGATION_STATUS IN(" + _innerSelectQuery + ")";
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_selectQuery);
+            _rs = _ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(_rs);
+            return (ResultSet) ocrs;
+        } finally {
+            releaseResources();
+        }
+    }
+
+    public ResultSet selectMyPowerDeligationRequests(String userName, String loginID) throws SQLException {
+
+        OracleCachedRowSet ocrs = new OracleCachedRowSet();
+        String innerQuary = " select PROCESS_STATE_ID from BIB.TBL_PROCESS_STATE where PROCESS_STATE_ID" +
+                " in  ( select PROCESS_STATE_ID from BIB.tbl_authorization " +
+                "       where ROLE_NAME in(select ROLE_ID from BIB.TBL_ROLE_USER   " +
+                "           where USER_ID=(select USER_ID from BIB.tbl_users where USER_NAME='" + userName + "')) " +
+                "           and PROCESS_STATE_ID in (select PROCESS_STATE_ID from BIB.TBL_PROCESS_STATE " +
+                "               where  PROCESS_ID='" + PowerDeligationApproveManager.PROCESS_POWER_DELIGATION + "'))";
+
+        String _selectQuaryName = " SELECT * FROM HR_POWER_DELIGATION_REQUEST " +
+                "  WHERE DELIGATION_STATUS not like (" + innerQuary + ") " +
+                " AND ( REGISTERED_BY like ? or DELIGATOR_ID like ? or DELEGATEE_ID like ? ) " +
+                " order by TIME_STAMP desc ";
+
+
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_selectQuaryName);
+            _ps.setString(1, loginID);
+            _ps.setString(2, loginID);
+            _ps.setString(3, loginID);
+            _rs = _ps.executeQuery();
+
+            ocrs.populate(_rs);
+            return (ResultSet) ocrs;
+        } finally {
+            releaseResources();
+        }
+    }
+
+    /**
+     * @return  ResultSet of power deligation requsts with the given deligator or deligatee.
+     * It returns the union of result
+     * @param deligatorId ID of employee  who deligates the power
+     * @param deligateeId ID of employee to whom the power is tobe deligated     *
+     * @param userName  the user name of the employee who logged in to the system
+     * @throws SQLException
+     */
+    public ResultSet selectPowerDeligationRequestFromDeligatorIdAndDeligateeId(String deligatorId, String deligateeId, String userName) throws SQLException {
+
+        //select process possible states for that user in the process Power deligation
+        String _innerSelectQuery = "select PROCESS_STATE_ID from BIB.TBL_PROCESS_STATE where PROCESS_STATE_ID" +
+                " in  ( select PROCESS_STATE_ID from BIB.tbl_authorization " +
+                "       where ROLE_NAME in(select ROLE_ID from BIB.TBL_ROLE_USER   " +
+                "           where USER_ID=(select USER_ID from BIB.tbl_users where USER_NAME='" + userName + "')) " +
+                "           and PROCESS_STATE_ID in (select PROCESS_STATE_ID from BIB.TBL_PROCESS_STATE " +
+                "               where  PROCESS_ID='" + PowerDeligationApproveManager.PROCESS_POWER_DELIGATION + "'))";
+
+        String _selectQuery = " SELECT * FROM HR_POWER_DELIGATION_REQUEST WHERE DELIGATOR_ID= '" + deligatorId + "' AND DELEGATEE_ID='" + deligateeId + "'" +
+                " AND DELIGATION_STATUS IN(" + _innerSelectQuery + ")";
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_selectQuery);
+            _rs = _ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(_rs);
+            return (ResultSet) ocrs;
+        } finally {
+            releaseResources();
+        }
+    }
+
+    /**
+     * Inserts PowerDeligationRequest attribute to the database.<br>
+     * The constructor with full argument, must be called before this method
+     */
+    public int insertPowerDeligationRequest(PowerDeligationRequestModel deligationRequest, boolean external) throws SQLException {
+
+        String _insertQuery = "INSERT INTO HR_POWER_DELIGATION_REQUEST " +
+                " (POW_DEL_REQ_ID,START_DATE,       END_DATE,      DELIGATED_POSITION," +
+                " DELIGATION_STATUS, REGISTERED_BY, TIME_STAMP," +
+                " DELIGATION_REASON, DELIGATOR_ID,  " +
+                " DELEGATEE_ID,REQUESTER_ID" +
+                ",EXTERNAL_DELEGATION_STATUS," +
+                " HR_NEWDEPARTMET_NAME," +
+                " HR_NEWDEPARTMENT_POSITION," +
+                " RATE,DOC_REFERANCE)" +
+                " VALUES (HR_POWER_DELIGATION_REQ_SEQ.NEXTVAL,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ";
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_insertQuery);
+            _ps.setString(1, deligationRequest.getStartDate());
+            _ps.setString(2, deligationRequest.getEndDate());
+            _ps.setString(3, deligationRequest.getDeligatedPosition());
+            _ps.setString(4, deligationRequest.getDeligationStatus());
+            _ps.setString(5, deligationRequest.getRegisteredBy());
+            _ps.setString(6, deligationRequest.getRegisteredDate());
+            _ps.setString(7, deligationRequest.getDeligationReason());
+            _ps.setString(8, deligationRequest.getDeligatorId());
+            _ps.setString(9, deligationRequest.getDelegateeId());
+            _ps.setString(10, deligationRequest.getRequesterId());
+            _ps.setString(12, deligationRequest.getNewDepartmentName());
+            _ps.setString(13, deligationRequest.getNewDepartmentPosition());
+            _ps.setInt(14, deligationRequest.getDelegationWieght());
+            _ps.setString(15, deligationRequest.getDocRefeNumber());
+
+
+            if (external) {
+                _ps.setString(11, PowerDeligationApproveManager.INITIAL_OTHER_STATE_POWER_DELIGATION);
+            } else {
+                _ps.setString(11, null);
+            }
+            return _ps.executeUpdate();
+        } finally {
+            releaseResources();
+        }
+    }
+
+    public int insertPowerDeligationTakenHistory(PowerDeligationTakenModel deligationTakenModel) throws SQLException {
+
+        String _insertQuery = "INSERT INTO HR_POWER_DEL_TAKEN_HISTORY " +
+                " (TAKEN_HISTORY_ID, REQUEST_ID,  TAKEN_START_DATE, TAKEN_END_DATE, STATUS , " +
+                " DELIGATEE_PREV_POSITION, USER_NAME, TIME_STAMP)" +
+                " VALUES (HR_POWER_DEL_TAKEN_HISTORY_SEQ.NEXTVAL,?,?,?,?,?,?,?) ";
+
+        String _upDateQuery = " UPDATE HR_POWER_DELIGATION_REQUEST " +
+                " SET DELIGATION_STATUS=? WHERE POW_DEL_REQ_ID=? ";
+
+        try {
+
+            _con = getConnection();
+            _ps = _con.prepareStatement(_insertQuery);
+            _ps.setInt(1, deligationTakenModel.getRequestId());
+            _ps.setString(2, deligationTakenModel.getTakenStartDate());
+            _ps.setString(3, deligationTakenModel.getTakenEndDate());
+            _ps.setString(4, deligationTakenModel.getStatus());
+            _ps.setString(5, deligationTakenModel.getDeligateePrevPosition());
+            _ps.setString(6, deligationTakenModel.getUserName());
+            _ps.setString(7, deligationTakenModel.getTimeStamp());
+            _ps = _con.prepareStatement(_upDateQuery);
+            _ps.setString(1, deligationTakenModel.getStatus());
+            _ps.setInt(2, deligationTakenModel.getRequestId());
+            return _ps.executeUpdate();
+
+        } finally {
+            releaseResources();
+        }
+    }
+
+    public ResultSet selectPowerDeligationTakenHistory(int requestId) throws SQLException {
+
+        String _selectQuery = " SELECT * FROM HR_POWER_DEL_TAKEN_HISTORY " +
+                " WHERE REQUEST_ID = ?";
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_selectQuery);
+            _ps.setInt(1, requestId);
+            _rs = _ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(_rs);
+            return (ResultSet) ocrs;
+        } finally {
+            releaseResources();
+        }
+    }
+
+    public int updatePowerDeligationTakenHistory(PowerDeligationTakenModel deligationTakenModel) throws SQLException {
+
+        String _insertQuery = " UPDATE HR_POWER_DEL_TAKEN_HISTORY  SET " +
+                "  TAKEN_START_DATE = ? , TAKEN_END_DATE = ?, STATUS = ? , " +
+                "  USER_NAME  = ?, TIME_STAMP = ? " +
+                "  WHERE TAKEN_HISTORY_ID = ? ";
+
+        String _upDateQuery = " UPDATE HR_POWER_DELIGATION_REQUEST " +
+                " SET START_DATE= ?, END_DATE= ? WHERE POW_DEL_REQ_ID=? ";
+
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_insertQuery);
+            _ps.setString(1, deligationTakenModel.getTakenStartDate());
+            _ps.setString(2, deligationTakenModel.getTakenEndDate());
+            _ps.setString(3, deligationTakenModel.getStatus());
+            _ps.setString(4, deligationTakenModel.getUserName());
+            _ps.setString(5, deligationTakenModel.getTimeStamp());
+            _ps.setInt(6, deligationTakenModel.getTakenHistoryId());
+            _ps = _con.prepareStatement(_upDateQuery);
+            _ps.setString(1, deligationTakenModel.getTakenStartDate());
+            _ps.setString(2, deligationTakenModel.getTakenEndDate());
+            _ps.setInt(3, deligationTakenModel.getRequestId());
+             
+            return _ps.executeUpdate();
+        } finally {
+            releaseResources();
+        }
+    }
+
+    /**
+     * Updates PowerDeligationRequest attribute  the database.<br>
+     * The constructor with full argument must be called before this method
+     * @see
+     * @throws  SQLException
+     */
+    public int updatePowerDeligationRequest(PowerDeligationRequestModel deligationRequest) throws SQLException {
+        String _insertQuery = " UPDATE HR_POWER_DELIGATION_REQUEST " +
+                " SET START_DATE=?,       END_DATE=?,      DELIGATED_POSITION=?," +
+                " DELIGATION_STATUS=?, REGISTERED_BY=?, TIME_STAMP=?," +
+                " DELIGATION_REASON=?, DELIGATOR_ID=?,  DELEGATEE_ID=?, REQUESTER_ID=?, DOC_REFERANCE=? " +
+                " WHERE POW_DEL_REQ_ID=?";
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_insertQuery);
+            _ps.setString(1, deligationRequest.getStartDate());
+            _ps.setString(2, deligationRequest.getEndDate());
+            _ps.setString(3, deligationRequest.getDeligatedPosition());
+            _ps.setString(4, deligationRequest.getDeligationStatus());
+            _ps.setString(5, deligationRequest.getRegisteredBy());
+            _ps.setString(6, deligationRequest.getRegisteredDate());
+            _ps.setString(7, deligationRequest.getDeligationReason());
+            _ps.setString(8, deligationRequest.getDeligatorId());
+            _ps.setString(9, deligationRequest.getDelegateeId());
+            _ps.setString(10, deligationRequest.getRequesterId());
+            _ps.setString(11, deligationRequest.getDocRefeNumber());
+            _ps.setInt(12, deligationRequest.getPowDelReqId());
+            return _ps.executeUpdate();
+        } finally {
+            releaseResources();
+        }
+    }
+
+    /**
+     * Deletes PowerDeligationRequest from  the database.<br>
+     * @return boolean true upon successful excution
+     * @param  requestId the primary key of the request
+     * @throws SQLException
+     */
+    public boolean deletePowerDeligationRequest(int requestId) throws SQLException {
+        String _deleteQuery = " DELETE HR_POWER_DELIGATION_REQUEST  WHERE POW_DEL_REQ_ID=?";
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_deleteQuery);
+            _ps.setInt(1, requestId);
+            _ps.executeUpdate();
+            return true;
+        } finally {
+            releaseResources();
+        }
+    }
+
+    public boolean checkDelegator(String delegator_id) throws SQLException {
+        ResultSet _rs2 = null;
+        String _select = "SELECT hr_employee_info.job_code " +
+                " FROM hr_employee_info, " +
+                "  hr_lu_job_type " +
+                " WHERE EMP_ID =?" +
+                " AND hr_lu_job_type.job_code   =hr_employee_info.job_code " +
+                " AND hr_lu_job_type.job_level IN " +
+                "  (SELECT level_id FROM hr_lu_jobtype_levels WHERE rank<=14" +
+                "  )";
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_select);
+            _ps.setString(1, delegator_id);
+            _rs2 = _ps.executeQuery();
+            if (_rs2.next()) {
+                return true;
+            } else {
+                return false;
+            }
+
+        } finally {
+            releaseResources();
+        }
+    }
+
+    public boolean checkDelegateeDept(String dept_id, String delegateeDept) throws SQLException {
+        ResultSet _rs2 = null;
+        ResultSet _rs3 = null;
+        PreparedStatement _ps1 = null;
+        boolean checker = true;
+        String _select = "SELECT DEPT_ID, " +
+                "  DEP_DESCRIPTION, " +
+                "  sys_connect_by_path(tbl_department.DEP_DESCRIPTION,'=>') AS PATH " +
+                "FROM TBL_DEPARTMENT " +
+                "  START WITH DEPT_ID       = ? " +
+                "  CONNECT BY Prior Dept_Id = Branch_Id " +
+                "ORDER SIBLINGS BY DEPT_ID";
+        String _select2 = "SELECT DEPT_ID, " +
+                "  BRANCH_ID " +
+                "FROM TBL_DEPARTMENT " +
+                "  START WITH DEPT_ID       = ? " +
+                "  CONNECT BY PRIOR DEPT_ID = BRANCH_ID";
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_select);
+            _ps.setString(1, dept_id);
+            _rs2 = _ps.executeQuery();
+            _ps1 = _con.prepareStatement(_select2);
+            _ps1.setString(1, dept_id);
+            _rs3 = _ps.executeQuery();
+
+            while (_rs2.next()) {
+                if (_rs2.getString("DEPT_ID").equalsIgnoreCase(delegateeDept)) {
+                    checker = false;
+                }
+            }
+            while (_rs3.next()) {
+                if (_rs3.getString("DEPT_ID").equalsIgnoreCase(delegateeDept)) {
+                    checker = false;
+                }
+            }
+            return checker;
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return false;
+
+
+        } finally {
+            releaseResources();
+        }
+    }
+
+    public boolean checkRole(String userName) throws SQLException {
+        ResultSet _rs3 = null;
+        try {
+            String _select = "SELECT User_Id FROM BIB.Tbl_Users WHERE User_Name='" + userName + "'";
+            _con = getConnection();
+            _ps = _con.prepareStatement(_select);
+            _rs3 = _ps.executeQuery();
+            if (_rs3.next()) {
+                String _select2 = "SELECT role_id " +
+                        " FROM BIB.tbl_role_user " +
+                        " WHERE USER_ID='" + _rs3.getString("User_Id") + "'" +
+                        " AND ROLE_ID IN " +
+                        "  (SELECT ROLE_NAME " +
+                        "  FROM BIB.tbl_authorization " +
+                        "  WHERE Process_State_Id IN " +
+                        "    (SELECT Process_State_Id FROM BIB.Tbl_Process_State WHERE Process_Id='25' " +
+                        "    ) " +
+                        "  )";
+
+                _con = getConnection();
+                _ps = _con.prepareStatement(_select2);
+                _rs3 = _ps.executeQuery();
+            }
+            if (_rs3.next()) {
+                return true;
+            } else {
+                return false;
+            }
+
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return false;
+
+        } finally {
+            releaseResources();
+        }
+    }
+
+    public boolean checkEmployeeRank(String delegator_Id) throws SQLException {
+
+        boolean condition = false;
+        try {
+            String _select = "SELECT hr_employee_info.RANK_ID " +
+                    " FROM hr_employee_info  WHERE EMP_ID='" + delegator_Id + "'";
+            _con = getConnection();
+            _ps = _con.prepareStatement(_select);
+            _rs = _ps.executeQuery();
+            while (_rs.next()) {
+
+                if (Integer.parseInt(_rs.getString("RANK_ID")) >= 14) {
+                    condition = true;
+
+                } else {
+
+                    condition = false;
+                }
+
+
+            }
+            return condition;
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return false;
+
+        } finally {
+            releaseResources();
+        }
+    }
+
+    public int getEmployeeRank(String delegator_Id) throws SQLException {
+
+        int result = 0;
+        try {
+            String _select = "SELECT hr_employee_info.RANK_ID " +
+                    " FROM hr_employee_info  WHERE EMP_ID='" + delegator_Id + "'";
+            _con = getConnection();
+            _ps = _con.prepareStatement(_select);
+            _rs = _ps.executeQuery();
+            while (_rs.next()) {
+
+                result = Integer.parseInt(_rs.getString("RANK_ID"));
+            }
+            return result;
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return 0;
+
+        } finally {
+            releaseResources();
+        }
+    }
+
+    public int getWieghtOfPosition(int delegationWeight) throws SQLException {
+        int result = 0;
+        try {
+            String _select = " SELECT HR_LU_DELEGATION_WEIGHT.WEIGHT " +
+                    " FROM HR_LU_DELEGATION_WEIGHT  WHERE POSITION_ID='" + delegationWeight + "'";
+            _con = getConnection();
+            _ps = _con.prepareStatement(_select);
+            _rs = _ps.executeQuery();
+            while (_rs.next()) {
+
+                result = _rs.getInt("WEIGHT");
+            }
+            return result;
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return 0;
+
+        } finally {
+            releaseResources();
+        }
+    }
+
+    public int delegatedEmployeLevel(String employeeId) throws SQLException {
+
+        String stm = "SELECT * " +
+                "FROM HR_POWER_DELIGATION_REQUEST, " +
+                "  hr_lu_job_type " +
+                "WHERE HR_POWER_DELIGATION_REQUEST.DELEGATEE_ID  ='" + employeeId + "' " +
+                "AND hr_lu_job_type.job_code    =HR_POWER_DELIGATION_REQUEST.DELIGATED_POSITION " +
+                "AND HR_POWER_DELIGATION_REQUEST.DELIGATION_STATUS LIKE 'App%' " +
+                "AND ( hr_lu_job_type.job_level ='TM' " +
+                "OR hr_lu_job_type.job_level    ='DR' " +
+                "OR hr_lu_job_type.job_level    ='CE' " +
+                "OR hr_lu_job_type.job_level    ='PR')";
+
+        try {
+            Connection conn = getConnection();
+            PreparedStatement ps = conn.prepareStatement(stm);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs != null) {
+
+                if (rs.next()) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            }
+        } finally {
+            releaseResources();
+        }
+        return 0;
+
+    }
+}

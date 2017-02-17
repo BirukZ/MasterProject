@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/MUGHERPROJECT/!svn/ver/2656/src/java/manager/questionnaire
+END
+QuestionnaireAnswerManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/MUGHERPROJECT/!svn/ver/199/src/java/manager/questionnaire/QuestionnaireAnswerManager.java
+END
+QuestionnaireManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/MUGHERPROJECT/!svn/ver/2656/src/java/manager/questionnaire/QuestionnaireManager.java
+END
+DynamicFiledList.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/MUGHERPROJECT/!svn/ver/199/src/java/manager/questionnaire/DynamicFiledList.java
+END
+QuestionnaireCommentManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/MUGHERPROJECT/!svn/ver/199/src/java/manager/questionnaire/QuestionnaireCommentManager.java
+END
+DynamicField.java
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/MUGHERPROJECT/!svn/ver/199/src/java/manager/questionnaire/DynamicField.java
+END
+DefineQuestionnaireManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/MUGHERPROJECT/!svn/ver/1467/src/java/manager/questionnaire/DefineQuestionnaireManager.java
+END
+AllQuestionsManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/MUGHERPROJECT/!svn/ver/199/src/java/manager/questionnaire/AllQuestionsManager.java
+END
+QuestionOptionsManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/MUGHERPROJECT/!svn/ver/199/src/java/manager/questionnaire/QuestionOptionsManager.java
+END

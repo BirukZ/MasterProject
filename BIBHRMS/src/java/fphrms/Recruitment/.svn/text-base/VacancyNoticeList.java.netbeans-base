@@ -1,0 +1,669 @@
+/*
+ * VacancyNoticeList.java
+ *
+ * Created on May 26, 2010, 4:18:41 AM
+ * Copyright Administrator
+ */
+package fphrms.Recruitment;
+
+import com.icesoft.faces.component.ext.HtmlCommandButton;
+import com.icesoft.faces.component.ext.HtmlInputText;
+import com.icesoft.faces.component.ext.HtmlOutputLabel;
+import com.icesoft.faces.component.ext.RowSelector;
+import com.icesoft.faces.component.ext.RowSelectorEvent;
+import com.icesoft.faces.component.jsfcl.data.DefaultSelectedData;
+import com.icesoft.faces.component.jsfcl.data.DefaultSelectionItems;
+import com.icesoft.faces.component.jsfcl.data.DefaultTableDataModel;
+import com.icesoft.faces.component.panelpopup.PanelPopup;
+import com.icesoft.faces.context.effects.JavascriptContext;
+import com.sun.rave.web.ui.appbase.AbstractPageBean;
+import java.util.HashMap;
+import javax.faces.FacesException;
+import javax.faces.component.html.HtmlSelectBooleanCheckbox;
+import manager.recruitmentManager.AdvertisementManager;
+import fphrms.SessionBean1;
+import fphrms.ApplicationBean1;
+import fphrms.RequestBean1;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import javax.faces.context.FacesContext;
+import com.sun.webui.jsf.model.Option;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import manager.employeeHistoryManager.PromotionManager;
+import manager.employeeManager.EmployeeManage;
+import manager.globalUseManager.StringDateManipulation;
+import manager.promotionManager.PromotionRequestManager;
+import manager.promotionManager.PromotionRequestManager.EmployeeExperienceHistroyModel;
+import manager.recruitmentManager.RecruitmentManager;
+import manager.recruitmentManager.VacancyNoticeListManager;
+
+/**
+ * <p>Page bean that corresponds to a similarly named JSP page.  This
+ * class contains component definitions (and initialization code) for
+ * all components that you have defined on this page, as well as
+ * lifecycle methods and event handlers where you may add behavior
+ * to respond to incoming events.</p>
+ */
+public class VacancyNoticeList extends AbstractPageBean {
+
+    VacancyNoticeListManager vacancyNoticeListManager = new VacancyNoticeListManager();
+    PromotionRequestManager promotionRequestManager = new PromotionRequestManager();
+    AdvertisementManager advertisementManager = new AdvertisementManager();
+    RecruitmentManager recruitmentManager = new RecruitmentManager();
+    EmployeeManage employeeManage = new EmployeeManage();
+    public List vacancyList = new ArrayList<AdvertisementManager>();
+    public List vacancyListRequestPromo = new ArrayList<VacancyNoticeListManager>();
+    private PanelPopup pnMessage = new PanelPopup();
+    private Option[] noneResponsedVacancies = recruitmentManager.noneResponsedVacancies();
+    private PromotionManager promotionManager = new PromotionManager();
+
+    public Option[] getNoneResponsedVacancies() {
+        return noneResponsedVacancies;
+    }
+
+    public void setNoneResponsedVacancies(Option[] noneResponsedVacancies) {
+        this.noneResponsedVacancies = noneResponsedVacancies;
+    }
+
+    public PanelPopup getPnMessage() {
+        return pnMessage;
+    }
+
+    public void setPnMessage(PanelPopup pp) {
+        this.pnMessage = pp;
+    }
+    private HtmlOutputLabel lblFormMessage1 = new HtmlOutputLabel();
+
+    public HtmlOutputLabel getLblFormMessage1() {
+        return lblFormMessage1;
+    }
+
+    public void setLblFormMessage1(HtmlOutputLabel hol) {
+        this.lblFormMessage1 = hol;
+    }
+
+    public List getVacancyList() {
+        return vacancyList;
+    }
+
+    public void setVacancyList(List vacancyList) {
+        this.vacancyList = vacancyList;
+    }
+    // <editor-fold defaultstate="collapsed" desc="Managed Component Definition">
+    private int __placeholder;
+
+    private int ExperianceEntity(String experiance) {
+        ArrayList<EmployeeExperienceHistroyModel> empExpHistroy = new ArrayList<EmployeeExperienceHistroyModel>();
+        empExpHistroy = promotionRequestManager.getEmpExperienceForReq(txtRequester.getValue().toString());
+        int lengthOfList = empExpHistroy.size();
+        int date=0;
+        for (int counter = 0; counter < lengthOfList; counter++) {
+             date += StringDateManipulation.compareDateDifference(empExpHistroy.get(counter).getStartDate(), empExpHistroy.get(counter).getEndDate());
+            empExpHistroy.get(counter).getStartDate();
+            empExpHistroy.get(counter).getEndDate();
+        }
+return date/365;
+    }
+
+    /**
+     * <p>Automatically managed component initialization.  <strong>WARNING:</strong>
+     * This method is automatically generated, so any user-specified code inserted
+     * here is subject to being replaced.</p>
+     */
+    private void _init() throws Exception {
+    }
+    private DefaultTableDataModel dataTable1Model = new DefaultTableDataModel();
+
+    public DefaultTableDataModel getDataTable1Model() {
+        return dataTable1Model;
+    }
+
+    public void setDataTable1Model(DefaultTableDataModel dtdm) {
+        this.dataTable1Model = dtdm;
+    }
+    private HtmlCommandButton button1 = new HtmlCommandButton();
+
+    public HtmlCommandButton getButton1() {
+        return button1;
+    }
+
+    public void setButton1(HtmlCommandButton hcb) {
+        this.button1 = hcb;
+    }
+    private RowSelector rowSelectorVacancyNoticeList = new RowSelector();
+
+    public RowSelector getRowSelectorVacancyNoticeList() {
+        return rowSelectorVacancyNoticeList;
+    }
+
+    public void setRowSelectorVacancyNoticeList(RowSelector rs) {
+        this.rowSelectorVacancyNoticeList = rs;
+    }
+    private HtmlCommandButton btnRequest = new HtmlCommandButton();
+
+    public HtmlCommandButton getBtnRequest() {
+        return btnRequest;
+    }
+
+    public void setBtnRequest(HtmlCommandButton hcb) {
+        this.btnRequest = hcb;
+    }
+    private HtmlInputText txtRequester = new HtmlInputText();
+
+    public HtmlInputText getTxtRequester() {
+        return txtRequester;
+    }
+
+    public void setTxtRequester(HtmlInputText hit) {
+        this.txtRequester = hit;
+    }
+    private HtmlSelectBooleanCheckbox checkbox1RequestPromotion = new HtmlSelectBooleanCheckbox();
+
+    public HtmlSelectBooleanCheckbox getCheckbox1RequestPromotion() {
+        return checkbox1RequestPromotion;
+    }
+
+    public void setCheckbox1RequestPromotion(HtmlSelectBooleanCheckbox hsbc) {
+        this.checkbox1RequestPromotion = hsbc;
+    }
+    private HtmlInputText inputTextEmpEducID = new HtmlInputText();
+
+    public HtmlInputText getInputTextEmpEducID() {
+        return inputTextEmpEducID;
+    }
+
+    public void setInputTextEmpEducID(HtmlInputText hit) {
+        this.inputTextEmpEducID = hit;
+    }
+    private DefaultSelectedData selectBooleanCheckbox1Bean = new DefaultSelectedData();
+
+    public DefaultSelectedData getSelectBooleanCheckbox1Bean() {
+        return selectBooleanCheckbox1Bean;
+    }
+
+    public void setSelectBooleanCheckbox1Bean(DefaultSelectedData dsd) {
+        this.selectBooleanCheckbox1Bean = dsd;
+    }
+    private DefaultSelectedData selectBooleanCheckbox2Bean = new DefaultSelectedData();
+
+    public DefaultSelectedData getSelectBooleanCheckbox2Bean() {
+        return selectBooleanCheckbox2Bean;
+    }
+
+    public void setSelectBooleanCheckbox2Bean(DefaultSelectedData dsd) {
+        this.selectBooleanCheckbox2Bean = dsd;
+    }
+    private com.icesoft.faces.component.ext.HtmlSelectBooleanCheckbox selectBooleanCheckboxCivil = new com.icesoft.faces.component.ext.HtmlSelectBooleanCheckbox();
+
+    public com.icesoft.faces.component.ext.HtmlSelectBooleanCheckbox getSelectBooleanCheckboxCivil() {
+        return selectBooleanCheckboxCivil;
+    }
+
+    public void setSelectBooleanCheckboxCivil(com.icesoft.faces.component.ext.HtmlSelectBooleanCheckbox hsbc) {
+        this.selectBooleanCheckboxCivil = hsbc;
+    }
+    private com.icesoft.faces.component.ext.HtmlSelectBooleanCheckbox selectBooleanCheckboxMilitary = new com.icesoft.faces.component.ext.HtmlSelectBooleanCheckbox();
+
+    public com.icesoft.faces.component.ext.HtmlSelectBooleanCheckbox getSelectBooleanCheckboxMilitary() {
+        return selectBooleanCheckboxMilitary;
+    }
+
+    public void setSelectBooleanCheckboxMilitary(com.icesoft.faces.component.ext.HtmlSelectBooleanCheckbox hsbc) {
+        this.selectBooleanCheckboxMilitary = hsbc;
+    }
+    private DefaultSelectedData selectOneListbox1Bean = new DefaultSelectedData();
+
+    public DefaultSelectedData getSelectOneListbox1Bean() {
+        return selectOneListbox1Bean;
+    }
+
+    public void setSelectOneListbox1Bean(DefaultSelectedData dsd) {
+        this.selectOneListbox1Bean = dsd;
+    }
+    private DefaultSelectionItems selectOneListbox1DefaultItems = new DefaultSelectionItems();
+
+    public DefaultSelectionItems getSelectOneListbox1DefaultItems() {
+        return selectOneListbox1DefaultItems;
+    }
+
+    public void setSelectOneListbox1DefaultItems(DefaultSelectionItems dsi) {
+        this.selectOneListbox1DefaultItems = dsi;
+    }
+
+    // </editor-fold>
+    /**
+     * <p>Construct a new Page bean instance.</p>
+     */
+    public VacancyNoticeList() {
+    }
+
+    protected RequestBean1 getRequestBean1() {
+        return (RequestBean1) getBean("RequestBean1");
+    }
+
+    /**
+     * <p>Return a reference to the scoped data bean.</p>
+     *
+     * @return reference to the scoped data bean
+     */
+    protected SessionBean1 getSessionBean1() {
+        return (SessionBean1) getBean("SessionBean1");
+    }
+
+    /**
+     * <p>Return a reference to the scoped data bean.</p>
+     *
+     * @return reference to the scoped data bean
+     */
+    protected ApplicationBean1 getApplicationBean1() {
+        return (ApplicationBean1) getBean("ApplicationBean1");
+    }
+
+    /**
+     * <p>Callback method that is called whenever a page is navigated to,
+     * either directly via a URL, or indirectly via page navigation.
+     * Customize this method to acquire resources that will be needed
+     * for event handlers and lifecycle methods, whether or not this
+     * page is performing post back processing.</p>
+     *
+     * <p>Note that, if the current request is a postback, the property
+     * values of the components do <strong>not</strong> represent any
+     * values submitted with this request.  Instead, they represent the
+     * property values that were saved for this view when it was rendered.</p>
+     */
+    @Override
+    public void init() {
+        // Perform initializations inherited from our superclass
+        super.init();
+        populateTable();
+        // Perform application initialization that must complete
+        // *before* managed components are initialized
+        // TODO - add your own initialiation code here
+
+        // <editor-fold defaultstate="collapsed" desc="Managed Component Initialization">
+        // Initialize automatically managed components
+        // *Note* - this logic should NOT be modified
+        try {
+            _init();
+        } catch (Exception e) {
+            log("Page2 Initialization Failure", e);
+            throw e instanceof FacesException ? (FacesException) e : new FacesException(e);
+        }
+
+    // </editor-fold>
+    // Perform application initialization that must complete
+    // *after* managed components are initialized
+    // TODO - add your own initialization code here
+    }
+
+    /**
+     * <p>Callback method that is called after the component tree has been
+     * restored, but before any event processing takes place.  This method
+     * will <strong>only</strong> be called on a postback request that
+     * is processing a form submit.  Customize this method to allocate
+     * resources that will be required in your event handlers.</p>
+     */
+    @Override
+    public void preprocess() {
+    }
+
+    /**
+     * <p>Callback method that is called just before rendering takes place.
+     * This method will <strong>only</strong> be called for the page that
+     * will actually be rendered (and not, for example, on a page that
+     * handled a postback and then navigated to a different page).  Customize
+     * this method to allocate resources that will be required for rendering
+     * this page.</p>
+     */
+    @Override
+    public void prerender() {
+    }
+
+    /**
+     * <p>Callback method that is called after rendering is completed for
+     * this request, if <code>init()</code> was called (regardless of whether
+     * or not this was the page that was actually rendered).  Customize this
+     * method to release resources acquired in the <code>init()</code>,
+     * <code>preprocess()</code>, or <code>prerender()</code> methods (or
+     * acquired during execution of an event handler).</p>
+     */
+    @Override
+    public void destroy() {
+    }
+
+    public String cmdRecruitmentRequest_action() {
+        //return null means stay on the same page
+        return "RequirementRequest";
+    }
+
+    public String cmdrecApproval_action() {
+        //return null means stay on the same page
+        return "ApprovedRecruitmentList";
+    }
+
+    public String cmdvacNotice_action() {
+        //return null means stay on the same page
+        return "MaintainAdvertisement";
+    }
+
+    public String cmdRegisterCandidate_action() {
+        //return null means stay on the same page
+        return "CandidatesPage";
+    }
+
+    public String cmdfilterCandidate_action() {
+        //return null means stay on the same page
+        return "FilterCandidates";
+    }
+
+    public void showSuccessOrFailureMessage(boolean success, String messageToDisplay) {
+        lblFormMessage1.setStyle(success ? "color: green; font-size: 14px; font-weight: bold;text-align: center; vertical-align: middle" : "color: red; font-size: 14px; font-weight: bold;text-align: center; vertical-align: middle");
+        lblFormMessage1.setValue(messageToDisplay);
+        lblFormMessage1.setRendered(true);
+        pnMessage.setAutoCentre(true);
+        pnMessage.setRendered(true);
+        String val = "message";
+        String fadeTime = (success ? "15000" : "15000");
+        String javaScriptText = "$j(document).ready(function(){ $j('." + val + "').show();" +
+                " $j('." + val + "').fadeOut(" + fadeTime + ");" +
+                "});";
+        JavascriptContext.addJavascriptCall(FacesContext.getCurrentInstance(), javaScriptText);
+    }
+
+    public String modalPnlCloseMesssage_action() {
+        pnMessage.setRendered(false);
+        return null;
+    }
+
+    public String idFormatChecker(String requesterID) {
+        return "match";
+    }
+
+    public String[] requestJobCodeChecker(String requesterID) {
+        return advertisementManager.readRequesterJobCode(requesterID);
+    }
+
+    private int compareTwoYears(String year) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String currDate = dateFormat.format(new Date());
+        int dateDiffrence = StringDateManipulation.calculateYearDifferenceBetweenTwoDates(year, currDate);
+
+        return dateDiffrence;
+    }
+
+    public String educLevelExpChecker(String jobCode, String requesterID,int experexter) {
+        int educLevelIndic = 0;
+        int educLevelIndic1 = 0;
+        int expIndic = 0;
+        int expIndic1 = 0;
+        int qualificationIndic = 0;
+        int qualificationIndic1 = 0;
+        String empEducID = null;
+        HashMap[] list1 = requestValidationChecker(jobCode);
+        HashMap[] list2 = requesterEducHistory(requesterID);
+        if (list1.length > 0) {
+            if (list2.length > 0) {
+                for (int j = 0; j < list2.length; j++) {
+                    for (int i = 0; i < list1.length; i++) {
+                        if (Integer.valueOf(list2[j].get("RANK").toString()) >= Integer.valueOf(list1[i].get("RANK").toString())) {
+                            educLevelIndic = -1;
+                            break;
+                        } else {
+                            educLevelIndic = j;
+                            educLevelIndic1 = i;
+                        }
+                    }
+                    if (educLevelIndic == -1) {
+                        break;
+                    }
+                }
+                if (educLevelIndic == -1) {
+                    int exp = -1;
+                    for (int j = 0; j < list2.length; j++) {
+                        exp = compareTwoYears(list2[j].get("HIRE_DATE").toString())+experexter;
+                        for (int i = 0; i < list1.length; i++) {
+                            if ((list1[i].get("EDUCATION_LEVEL").toString().equals(list2[j].get("DESCRIPTION").toString())) &&
+                                    ((exp) >= Integer.valueOf(list1[i].get("MIN_EXPERIENCE").toString()))) {
+                                expIndic = -1;
+                                break;
+                            } else {
+                                expIndic = j;
+                                expIndic1 = i;
+                            }
+                        }
+
+                        if (expIndic == -1) {
+                            break;
+                        }
+                    }
+                    if (expIndic == -1) {
+                        for (int j = 0; j < list2.length; j++) {
+
+                            for (int i = 0; i < list1.length; i++) {
+                                if ((list1[i].get("QUALIFICATION").toString().
+                                        equals(list2[j].get("Educ_DESCRIPTION").toString())) && (list1[i].get("EDUCATION_LEVEL").toString().equals(list2[j].get("DESCRIPTION").toString())) &&
+                                        ((exp) >= Integer.valueOf(list1[i].get("MIN_EXPERIENCE").toString()))) {
+                                    empEducID = list2[j].get("ID").toString();
+                                    qualificationIndic = -1;
+                                    break;
+                                } else {
+                                    qualificationIndic = j;
+                                    qualificationIndic1 = i;
+                                }
+                            }
+
+                            if (qualificationIndic == -1) {
+                                break;
+                            }
+                        }
+
+                        if (qualificationIndic == -1) {
+                            this.inputTextEmpEducID.setValue(empEducID);
+                            return "true";
+                        } else {
+                            return "You have " + list2[qualificationIndic].get("DESCRIPTION").toString() + " in " + list2[qualificationIndic].get("Educ_DESCRIPTION").toString() + " with " + exp + " year(s) experience, but " + list1[qualificationIndic1].get("EDUCATION_LEVEL").toString() + " in " + list1[qualificationIndic1].get("QUALIFICATION").toString() + " with " + list1[qualificationIndic1].get("MIN_EXPERIENCE").toString() + " year(s) of experience required!!!";
+                        }
+                    } else {
+                        return "You have only " + exp + " year(s) of experience in " + list2[expIndic].get("DESCRIPTION").toString() + ", but " + list1[expIndic1].get("MIN_EXPERIENCE").toString() + " year(s) experience in " + list1[expIndic1].get("EDUCATION_LEVEL").toString() + " required!!! ";
+                    }
+                } else {
+                    return "Your Educational Level is " + list2[educLevelIndic].get("EDUC_LEVEL_CODE").toString() + ", but " + list1[educLevelIndic1].get("EDUCATION_LEVEL").toString() + " Level of Education required!!!";
+                }
+            } else {
+                return "You are not Qualifiedd for this post!!!";
+            }
+        } else {
+            return "true";
+        }
+
+
+    }
+
+    public HashMap[] requestValidationChecker(String jobCode) {
+        HashMap[] list = null;
+        try {
+
+            list = advertisementManager.readVacancyForValidation(jobCode);
+            if (list.length > 0) {
+                for (int i = 0; i < list.length; i++) {
+                    list[i].get("JOB_DESCRIPTION").toString();
+                    list[i].get("MIN_EXPERIENCE").toString();
+                    list[i].get("QUALIFICATION").toString();
+                    list[i].get("EDUCATION_LEVEL").toString();
+                    list[i].get("JOB_CODE").toString();
+                    list[i].get("EDUC_LEVEL_CODE").toString();
+                    list[i].get("RANK").toString();
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        return list;
+
+    }
+
+    public HashMap[] requesterEducHistory(String requesterID) {
+        HashMap[] list = null;
+        try {
+            list = advertisementManager.readPersonEducHist(requesterID);
+            if (list.length > 0) {
+                for (int i = 0; i < list.length; i++) {
+                    list[i].get("EDUC_LEVEL_CODE").toString();
+                    list[i].get("EDUCATION_TYPE").toString();
+                    list[i].get("STARTING_DATE").toString();
+                    list[i].get("COMPLETION_DATE").toString();
+                    list[i].get("HIRE_DATE").toString();
+                    list[i].get("TRUECODE").toString();
+                    list[i].get("ID").toString();
+                    list[i].get("RANK").toString();
+                    list[i].get("DESCRIPTION").toString();
+                    list[i].get("Educ_DESCRIPTION").toString();
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return list;
+    }
+
+    public void populateTable() {
+        try {
+            this.vacancyList.clear();
+            HashMap[] list = advertisementManager.readVacancyList();
+            if (list != null) {
+                if (list.length > 0) {
+
+                    for (int i = 0; i < list.length; i++) {
+                        AdvertisementManager addToTable = new AdvertisementManager(
+                                list[i].get("advert_date_from").toString(),
+                                list[i].get("advert_date_to").toString(),
+                                list[i].get("recruit_batch_code").toString(),
+                                list[i].get("JOB_DESCRIPTION").toString(),
+                                list[i].get("RECRUIT_REQUEST_ID").toString(),
+                                list[i].get("RECRUIT_REQUEST_TYPE").toString(),
+                                list[i].get("NUM_OF_EMPS_APPROVED").toString(),
+                                list[i].get("MIN_EXPERIENCE").toString(),
+                                list[i].get("ADVERT_ID").toString(),
+                                list[i].get("QUALIFICATION").toString(),
+                                list[i].get("EDUCATION_LEVEL").toString(),
+                                list[i].get("JOB_CODE").toString(), 0, 0, list[i].get("RANK_ID").toString());
+                        this.vacancyList.add(addToTable);
+                    }
+                }
+            } else {
+                this.showSuccessOrFailureMessage(false, "No Vacancy Available.");
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+    }
+
+    public void rowSelectorVacancyNoticeList_processMyEvent(RowSelectorEvent rse) {
+    }
+
+    public String btnRequest_action() {
+//        EmployeeManage employeeManage = new EmployeeManage();
+        int checkSave = 0;
+        int indicator = 0;
+        int externalExperience=0;
+
+        externalExperience=ExperianceEntity(txtRequester.getValue().toString());
+        String employeeEducation = "0";
+        if (!txtRequester.getValue().toString().equals("") && txtRequester.getValue() != null) {
+            String ID = idFormatChecker(txtRequester.getValue().toString());
+            if (ID.equals("match")) {
+                try {
+                    if (employeeManage.calculateEmployeeServiceMonth(txtRequester.getValue().toString()) > 12) {
+                        Iterator<AdvertisementManager> ittVacancyList = this.vacancyList.iterator();
+                        while (ittVacancyList.hasNext()) {
+                            AdvertisementManager recmanSingleVal = ittVacancyList.next();
+                            if (recmanSingleVal.isRequestPromotion() == true) {
+                                indicator++;
+                            }
+                        }
+                        if (indicator == 1) {
+                            ittVacancyList = this.vacancyList.iterator();
+                            while (ittVacancyList.hasNext()) {
+                                AdvertisementManager recmanSingleVal = ittVacancyList.next();
+                                if (recmanSingleVal.isRequestPromotion() == true) {
+                                    if (promotionManager.checkLastTimeExamResult(txtRequester.getValue().toString())) {
+//                                if (requestJobCodeChecker(txtRequester.getValue().toString())[0].equals(recmanSingleVal.getJobCode().toString())) {
+                                        if (educLevelExpChecker(recmanSingleVal.getJobCode().toString(), txtRequester.getValue().toString(),externalExperience).equals("true")) {
+
+                                            if (advertisementManager.checkRequestFPromotion(recmanSingleVal.getAdvertID().toString(), this.txtRequester.getValue().toString()) == false) {
+                                                if (inputTextEmpEducID.getValue() != null) {
+                                                    employeeEducation = inputTextEmpEducID.getValue().toString();
+                                                }
+                                                checkSave = vacancyNoticeListManager.addNewRequestPromotion(
+                                                        recmanSingleVal.getAdvertID(),
+                                                        txtRequester.getValue().toString(),
+                                                        recmanSingleVal.getEducLevelId());
+                                                if (checkSave == 1) {
+                                                    promotionRequestManager.getEmpExperienceHistory(txtRequester.getValue().toString());
+                                                    this.showSuccessOrFailureMessage(true, "Saved Successfuly.");
+                                                    txtRequester.setValue("");
+                                                    checkbox1RequestPromotion.resetValue();
+                                                    checkbox1RequestPromotion.setValue(false);
+                                                    advertisementManager.setRequestPromotion(false);
+                                                    populateTable();
+
+                                                } else {
+                                                    this.showSuccessOrFailureMessage(false, "Error Occured While Saving.");
+                                                }
+
+                                            } else {
+                                                this.showSuccessOrFailureMessage(false, "You have had already applied for this post!!!");
+                                            }
+                                        } else {
+                                            this.showSuccessOrFailureMessage(false, educLevelExpChecker(recmanSingleVal.getJobCode().toString(), txtRequester.getValue().toString(),externalExperience));
+                                        }
+
+//                                } else {
+//
+//                                    this.showSuccessOrFailureMessage(false, "You are in " + requestJobCodeChecker(txtRequester.getValue().toString())[1] + " You can't apply for " + recmanSingleVal.getJobType());
+//                                }
+//                                requesterEducHistory(txtRequester.getValue().toString());
+//                                requestValidationChecker(recmanSingleVal.getJobCode());
+                                    } else {
+                                        this.showSuccessOrFailureMessage(false, "You Can’t Apply for This Vacancy Because Of " +
+                                                "  Your Last Time Exam Result Less Than 50%." +
+                                                " You Must Wait until Riche 6 Month after the Exam!");
+                                    }
+                                }
+                            }
+                        } else if (indicator > 1) {
+                            this.showSuccessOrFailureMessage(false, "You Can't apply for more than one Post!!!");
+
+
+                        } else {
+                            this.showSuccessOrFailureMessage(false, "You have to select atleast one vacancy to request from the above list.");
+                        }
+                    } else {
+                        this.showSuccessOrFailureMessage(false, "You Can't apply with this expriance!");
+                    }
+
+
+
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+
+            } else {
+                this.showSuccessOrFailureMessage(false, ID);
+            }
+        } else {
+            this.showSuccessOrFailureMessage(false, "You have to insert your ID.");
+        }
+//        //return null means stay on the same page
+        return null;
+    }
+
+    public String cmdRecruitment_action() {
+        return "RequirementRequest";
+    }
+}
+

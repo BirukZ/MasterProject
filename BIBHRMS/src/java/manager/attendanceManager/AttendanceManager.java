@@ -1,0 +1,516 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package manager.attendanceManager;
+
+import com.sun.webui.jsf.model.Option;
+import entity.attendanceEntity.Absentee;
+import entity.attendanceEntity.Attendance;
+import entity.attendanceEntity.AttendanceEntity;
+import fphrms.SessionBean1;
+import java.sql.ResultSet;
+import java.text.DateFormat;
+import java.text.DateFormatSymbols;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
+import javax.faces.model.SelectItem;
+
+import manager.globalUseManager.ErrorLogWriter;
+import manager.globalUseManager.JodanTimeCalender;
+import manager.leaveManager.LeaveControl;
+
+/**
+ *
+ * @author DPClone
+ */
+public class AttendanceManager {
+
+    AttendanceEntity emp = new AttendanceEntity();
+    Attendance attendance = new Attendance();
+    Absentee absentee = new Absentee();
+    SessionBean1 sessionBean1 = new SessionBean1();
+    private Attendance attendanceAbcence = null;
+    private LeaveControl leaveControl = new LeaveControl();
+
+    public ArrayList<SelectItem> stateTypes() {
+        ArrayList<SelectItem> stateTypes = new ArrayList<SelectItem>();
+        stateTypes.add(new Option(null, "Select Absence Value"));
+        stateTypes.add(new Option("1", "1"));
+        stateTypes.add(new Option("1/2", "1/2"));
+        return stateTypes;
+    }
+
+    public ArrayList<SelectItem> absentTypes() {
+        ArrayList<SelectItem> stateTypes = new ArrayList<SelectItem>();
+        stateTypes.add(new Option(null, "Select Absence Value"));
+        stateTypes.add(new Option("1", "Annual "));
+        stateTypes.add(new Option("1/2", "1/2"));
+        return stateTypes;
+    }
+
+    public ArrayList<SelectItem> getLeveTypes() {
+        ArrayList<SelectItem> leaveTypeList = new ArrayList<SelectItem>();
+        leaveTypeList.add(new SelectItem("EX", "EXAM LEAVE"));
+        leaveTypeList.add(new SelectItem("DR", "DEATH OF RELATIVE"));
+        leaveTypeList.add(new SelectItem("AL", "ACCIDENT LEAVE"));
+        leaveTypeList.add(new SelectItem("DF", "DEATH OF FAMILY"));
+        leaveTypeList.add(new SelectItem("AL", "ANUAL LEAVE"));
+        leaveTypeList.add(new SelectItem("ML", "MATERNITY LEAVE"));
+        leaveTypeList.add(new SelectItem("PL", "PRENATAL LEAVE"));
+        leaveTypeList.add(new SelectItem("P0", "POSTNATAL LEAVE"));
+        leaveTypeList.add(new SelectItem("PA", "PATERNITY LEAVE"));
+        leaveTypeList.add(new SelectItem("SL", "SICK LEAVE"));
+        leaveTypeList.add(new SelectItem("TL", "TRAINING LEAVE"));
+        leaveTypeList.add(new SelectItem("SWP", "SPECIAL LEAVE WITH PAY"));
+        leaveTypeList.add(new SelectItem("WP", "SPECIAL LEAVE WITHOUT PAY"));
+        leaveTypeList.add(new SelectItem("W", "WEEDDING"));
+        leaveTypeList.add(new SelectItem("O", "OTHER"));
+        leaveTypeList.add(0, new SelectItem(-1, " SELECT LEAVE TYPE "));
+        return leaveTypeList;
+    }
+
+    public String getListOfLeaveType(String leaveCode) {
+        for (SelectItem si : getLeveTypes()) {
+            if (si.getValue().toString().equals(leaveCode)) {
+                return si.getLabel();
+            }
+        }
+        return null;
+    }
+
+    public ArrayList<SelectItem> getMonthList() {
+
+        ArrayList<SelectItem> monthList = new ArrayList<SelectItem>();
+        DateFormatSymbols dfs = new DateFormatSymbols();
+        String[] months = dfs.getMonths();
+        monthList.add(new SelectItem(null, " Select Month "));
+        for (int i = 0; i < 12; i++) {
+            monthList.add(new SelectItem(months[i].toUpperCase(), months[i].toUpperCase()));
+        }
+
+        return monthList;
+    }
+
+    /**
+     * The method calls insertAbsentees() and checks if successfull insertion
+     * is made
+     * @param attendanceId the unique attendance identifier
+     * @param absenceId the absentee's employee id
+     * @param empId the reporters employee id
+     * @param status the status of the attendance
+     * @return true upon successfull insertion, false otherwise.
+     */
+    public boolean addAbsentee(String attendanceId, String empId, String status) throws Exception {
+        boolean flag = false;
+        Absentee absentee = new Absentee(attendanceId, empId, status);//new absentee
+        int totalAbsentees = 0;
+        try {
+            totalAbsentees = absentee.insertAbsentees();
+            if (totalAbsentees != 0) {
+                flag = true;
+            }
+            return flag;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return flag;
+        }
+    }
+
+    /**
+     * The method calls the entity method insertAttendance()
+     * @param attendanceID the attendance identifier
+     * @param absenteeReportedBy the employee who reported the attendance
+     * @param absenteeDate the date the attendance is taken
+     * @param absenteeDescription the description
+     * @param recordedBy the employee who made the record
+     * @param recordedDate the date the record is made
+     * @return true upon successfull deletion, false otherwise.
+     */
+    public boolean saveAttendance(Set<HashMap> absenteeList, String attendanceReportedBy, String attendanceDate,
+            String attendanceDescription, String recordedBy, String recordedDate, String approvedBy, String approvedDate, String certifiedBy, String certifiedDate, String forDepartment, String approveStatus, String certifyStatus) throws Exception, Exception, Exception, Exception {
+        boolean flag = false;
+        String attendanceId = null;
+        Attendance attendanceObj = new Attendance(attendanceReportedBy, attendanceDate, attendanceDescription, recordedBy, recordedDate, approvedBy, approvedDate, certifiedBy, certifiedDate, forDepartment, approveStatus, certifyStatus);
+        try {
+            ResultSet rs = attendanceObj.insertAttendance();
+            while (rs.next()) {
+                attendanceId = rs.getString("ATTENDANCE_ID");
+            }
+            for (HashMap hm : absenteeList) {
+                if (this.addAbsentee(attendanceId, hm.get("empSelected").toString(), hm.get("status").toString()) == true) {
+                    flag = true;
+                } else {
+                    flag = false;
+                }
+            }
+            return flag;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return flag;
+        }
+    }
+
+    /**
+     * The method reasd all employees from the database and uses the ResultSet object to
+     * Concatenate the employee name to construct the full name and places the
+     * result into an object of <code>ArrayList</code> of type <code>Option</code>
+     * @param type
+     * @return an object of type <code>ArrayList</code> of type <code>Option</code>
+     */
+    public ArrayList<SelectItem> readEmployeeResultInList(String type, String dept) throws Exception {// type determines what the list should contain
+        try {
+            ArrayList<SelectItem> employee = new ArrayList<SelectItem>();
+            emp.setDeptId(dept);
+
+            ResultSet rsEmployee = emp.readEmployee();
+            while (rsEmployee.next()) {
+                String employeeId = rsEmployee.getString("emp_Id");
+                String employeeName = rsEmployee.getString("first_Name") + " " +
+                        rsEmployee.getString("middle_Name") + " " +
+                        rsEmployee.getString("last_Name");
+                if (type.equals("1")) {
+                    employee.add(new SelectItem(employeeId, employeeId));
+                } else {
+                    employee.add(new SelectItem(employeeId, employeeName));
+                }
+            }
+            return employee;
+        } catch (Exception ex) {
+            ErrorLogWriter.writeError(ex);
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
+    public Set<HashMap> ReadEmployeeFromDepartment(String departmentID) {
+        ResultSet _rs = null;
+        Set<HashMap> _list = new HashSet<HashMap>();
+        try {
+            _rs = attendance.ReadEmployeeFromDepartment(departmentID);
+            if (_rs != null) {
+                while (_rs.next()) {
+                    HashMap data = new HashMap();
+                    data.put("employeeID", _rs.getString("EMP_ID"));
+                    data.put("employeeFullName", _rs.getString("FIRST_NAME") + " " + _rs.getString("MIDDLE_NAME") + " " + _rs.getString("LAST_NAME"));
+                    data.put("employeeTitle", _rs.getString("TITLE_DESCRIPTION"));
+                    data.put("employeeRank", _rs.getString("RANK_DESCRIPTION"));
+                    data.put("employeePosition", _rs.getString("JOB_DESCRIPTION"));
+                    _list.add(data);
+                }
+                return _list;
+            } else {
+                HashMap data = new HashMap();
+                data.put("employeeID", "");
+                data.put("employeeFullName", "");
+                data.put("employeeTitle", "");
+                data.put("employeeRank", "");
+                data.put("employeePosition", "");
+                _list.add(data);
+                return _list;
+            }
+
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    public ArrayList<HashMap> readAbsenceEmployee(String attendanceTakenDate, String requestId) {
+        try {
+            return attendance.readAbsenceEmployee(attendanceTakenDate, requestId);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
+    public HashMap ReadEmployee(String value) throws Exception {
+        try {
+            ResultSet rs = emp.readEmployee(value);
+            if (rs.next()) {
+                HashMap data = new HashMap();
+                data.put("status", rs.getString("emp_Status"));
+                data.put("fname", rs.getString("first_Name"));
+                data.put("mname", rs.getString("middle_Name"));
+                data.put("lname", rs.getString("last_Name"));
+                return data;
+            } else {
+                HashMap data = new HashMap();
+                data.put("status", "");
+                data.put("fname", "");
+                data.put("mname", "");
+                data.put("lname", "");
+                return data;
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return null;
+        }
+    }
+
+    public HashMap SearchAttendance(String val1, String val2) {
+        try {
+            ResultSet rs = null;
+            rs = attendance.readAttendanceByDateAndDepartment(val1, val2);
+            if (rs.next()) {
+                HashMap data = new HashMap();
+                data.put("attendaceID", rs.getString("ATTENDANCE_ID"));
+                data.put("absenteeDescription", rs.getString("ABSENTEE_DESCRIPTION"));
+                data.put("absenteeReportedBY", rs.getString("ABSENTEE_REPORTED_BY"));
+                data.put("absenteeDate", rs.getString("ABSENTEE_DATE"));
+                data.put("absenteeRecordedBY", rs.getString("RECORDED_BY"));
+                data.put("absenteeRecordedDate", rs.getString("RECORDED_DATE"));
+                data.put("absenteeApprovedBy", rs.getString("APPROVEDBY"));
+                data.put("absenteeApprovedDate", rs.getString("APPROVEDDATE"));
+                data.put("absenteeCertifyBy", rs.getString("CERTIFYBY"));
+                data.put("absenteeCertifyDate", rs.getString("CERTIFYDATE"));
+                data.put("absenteeForDepartment", rs.getString("FOR_DEPARTMENT"));
+                data.put("approveStatus", rs.getString("APPROVE_STATUS"));
+                data.put("certifyStatus", rs.getString("CERTIFY_STATUS"));
+                return data;
+            } else {
+                HashMap data = new HashMap();
+                data.put("attendaceID", "");
+                data.put("absenteeDescription", "");
+                data.put("absenteeReportedBY", "");
+                data.put("absenteeDate", "");
+                data.put("absenteeRecordedBY", "");
+                data.put("absenteeRecordedDate", "");
+                data.put("absenteeApprovedBy", "");
+                data.put("absenteeApprovedDate", "");
+                data.put("absenteeCertifyBy", "");
+                data.put("absenteeCertifyDate", "");
+                data.put("absenteeForDepartment", "");
+                data.put("approveStatus", "");
+                data.put("certifyStatus", "");
+                return data;
+            }
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    public ArrayList<HashMap> loadAttendanceCheck() {
+        try {
+            ResultSet rs = null;
+            ArrayList<HashMap> attendanceLists = new ArrayList<HashMap>();
+            rs = attendance.readAttendanceCheck();
+            if (rs.next()) {
+                do {
+                    HashMap datum = new HashMap();
+                    datum.put("attendanceDate", rs.getString("ABSENTEE_DATE"));
+                    datum.put("attendanceDepartment", rs.getString("FOR_DEPARTMENT"));
+                    attendanceLists.add(datum);
+                } while (rs.next());
+                return attendanceLists;
+            } else {
+                HashMap datum = new HashMap();
+                datum.put("attendanceDate", "");
+                datum.put("attendanceDepartment", "");
+                attendanceLists.add(datum);
+                return attendanceLists;
+            }
+
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    public HashMap readAbsentees(String val) {
+        try {
+            ResultSet rsAbs = null;
+            rsAbs = absentee.readAbsentee(val);
+            if (rsAbs.next()) {
+                HashMap datum = new HashMap();
+                datum.put("employeeId", rsAbs.getString("EMP_ID"));
+                datum.put("attendanceState", rsAbs.getString("STATUS"));
+                return datum;
+            } else {
+                HashMap datum = new HashMap();
+                datum.put("employeeId", "");
+                datum.put("attendanceState", "");
+                return datum;
+            }
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    /**
+     *
+     * @param absenteeUpdate
+     * @param timeKeeperId
+     * @return
+     */
+    public boolean updateAttendance(HashMap absenteeInfo, String timeKeeperId) {
+        boolean flag = false;
+        try {
+            checkObject();
+            return attendanceAbcence.updateAttendance(absenteeInfo, timeKeeperId);
+
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return flag;
+        }
+    }
+
+    public boolean approveAttendance(String attendanceId, String attendanceApprovedBy, String attendanceApprovedDate, String attednanceStatus) throws Exception {
+        boolean flag = false;
+        Attendance attendanceObj = new Attendance(attendanceId, attendanceApprovedBy, attendanceApprovedDate, attednanceStatus);
+        try {
+            if (attendanceObj.approveAttendance() != 0) {
+                flag = true;
+            }
+            return flag;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return flag;
+        }
+    }
+
+    public boolean certifyAttendance(String attendanceId, String attendanceApprovedBy, String attendanceApprovedDate, String attednanceStatus) throws Exception {
+        boolean flag = false;
+        Attendance attendanceObj = new Attendance(attendanceId, attendanceApprovedBy, attendanceApprovedDate, attednanceStatus);
+        try {
+            if (attendanceObj.certifyAttendance() != 0) {
+                flag = true;
+            }
+            return flag;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return flag;
+        }
+    }
+
+    public Option[] loadAttendanceDayliyRequests() {
+
+        Attendance attendanceAbcence = new Attendance();
+        Option[] attendanceList = null;
+        ArrayList<Attendance> resignationRequests = attendanceAbcence.readAttendanceRequests();
+        attendanceList = new Option[resignationRequests.size()];
+        for (int i = 0; i < resignationRequests.size(); i++) {
+            attendanceAbcence = resignationRequests.get(i);
+            Option absence = new Option(attendanceAbcence.getVal1() + " -- " + attendanceAbcence.getVal2(), attendanceAbcence.getVal3() + " -- " + attendanceAbcence.getVal4());
+            attendanceList[i] = absence;
+        }
+        return attendanceList;
+    }
+
+    public Option[] loadAttendanceDayliyProcessed() {
+
+        Attendance attendanceAbcence = new Attendance();
+        Option[] attendanceList = null;
+        ArrayList<Attendance> resignationRequests = attendanceAbcence.readAttendanceProcessed();
+        attendanceList = new Option[resignationRequests.size()];
+        for (int i = 0; i < resignationRequests.size(); i++) {
+            attendanceAbcence = resignationRequests.get(i);
+            Option absence = new Option(attendanceAbcence.getVal1() + " -- " + attendanceAbcence.getVal2(), attendanceAbcence.getVal3() + " -- " + attendanceAbcence.getVal4());
+            attendanceList[i] = absence;
+        }
+        return attendanceList;
+    }
+
+    public boolean saveLongAttendanc(HashMap listOfInfo, String timeKeeper) {
+        try {
+            ArrayList<HashMap> listOfAbsent = new ArrayList<HashMap>();
+            DateFormat formatter;
+            Date startDate;
+            Date endDate;
+            formatter = new SimpleDateFormat("yyyy-MM-dd");
+            startDate = (Date) formatter.parse(listOfInfo.get("StartDate").toString());
+            endDate = (Date) formatter.parse(listOfInfo.get("endDate").toString());
+            Calendar startCal = Calendar.getInstance();
+            Calendar endCal = Calendar.getInstance();
+            startCal.setTime(startDate);
+            endCal.setTime(endDate);
+            String strDate;
+            do {
+                strDate=formatter.format(startCal.getTime());
+                if (startCal.get(Calendar.SUNDAY) != Calendar.SUNDAY && !leaveControl.getHoliday(
+                       strDate)) {
+                    HashMap hm = new HashMap();
+                    hm.put("employeeId", listOfInfo.get("employeeId").toString());
+                    hm.put("AbsentAmout", listOfInfo.get("AbsentAmout").toString());
+                    hm.put("DayDescription", listOfInfo.get("DayDescription").toString());
+                    hm.put("AbsentType", listOfInfo.get("AbsentType").toString());
+                    hm.put("absentDate", formatter.format(startCal.getTime()));
+                    listOfAbsent.add(hm);
+                }
+                startCal.add(Calendar.DAY_OF_MONTH, 1);
+
+            } while (startCal.getTimeInMillis() <= endCal.getTimeInMillis());//         startCal.after(endDate)) ;
+            checkObject();
+            return attendanceAbcence.saveAttendance(listOfAbsent, timeKeeper);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+    }
+
+    public boolean saveAttendance(ArrayList<HashMap> listOfAbsent, String timeKeeper) {
+        try {
+            checkObject();
+            return attendanceAbcence.saveAttendance(listOfAbsent, timeKeeper);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+    }
+
+    public boolean saveMonthlyWorkingDate(String month, String startDate,
+            String endDate) {
+
+        try {
+            checkObject();
+            return attendanceAbcence.saveMonthlyWorkingDate(month, startDate, endDate);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean deleteAttendance(int attendanceid) {
+        try {
+            checkObject();
+            return attendanceAbcence.deleteAttendance(Integer.toString(attendanceid));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+    }
+
+    private void checkObject() {
+        if (attendanceAbcence == null) {
+            attendanceAbcence = new Attendance();
+        }
+    }
+
+    String getMonthForInt(int m) {
+        String month = "invalid";
+        DateFormatSymbols dfs = new DateFormatSymbols();
+        String[] months = dfs.getMonths();
+        if (m >= 0 && m <= 11) {
+            month = months[m];
+        }
+        return month;
+    }
+
+ 
+}

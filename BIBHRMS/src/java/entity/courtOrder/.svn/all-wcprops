@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/MUGHERPROJECT/!svn/ver/3710/src/java/entity/courtOrder
+END
+EarningDeduction.java
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/MUGHERPROJECT/!svn/ver/3710/src/java/entity/courtOrder/EarningDeduction.java
+END
+CourtOrderPaymentEntity.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/MUGHERPROJECT/!svn/ver/3710/src/java/entity/courtOrder/CourtOrderPaymentEntity.java
+END
+EarningDeductionConstant.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/MUGHERPROJECT/!svn/ver/3710/src/java/entity/courtOrder/EarningDeductionConstant.java
+END

@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/MUGHERPROJECT/!svn/ver/3685/src/java/manager/benefitManager
+END
+BenefitRequestManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/MUGHERPROJECT/!svn/ver/3685/src/java/manager/benefitManager/BenefitRequestManager.java
+END
+PositionBenefitTypesManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/MUGHERPROJECT/!svn/ver/3237/src/java/manager/benefitManager/PositionBenefitTypesManager.java
+END
+SubsidyIndividualManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/MUGHERPROJECT/!svn/ver/3156/src/java/manager/benefitManager/SubsidyIndividualManager.java
+END
+benefitManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/MUGHERPROJECT/!svn/ver/2624/src/java/manager/benefitManager/benefitManager.java
+END
+BenefitTypesManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/MUGHERPROJECT/!svn/ver/3237/src/java/manager/benefitManager/BenefitTypesManager.java
+END
+benefitModel.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/MUGHERPROJECT/!svn/ver/2624/src/java/manager/benefitManager/benefitModel.java
+END
+BenefitREquestApproveManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/MUGHERPROJECT/!svn/ver/3421/src/java/manager/benefitManager/BenefitREquestApproveManager.java
+END

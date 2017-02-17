@@ -1,0 +1,65 @@
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/MUGHERPROJECT/!svn/ver/3789/src/java/manager/overTimeManager
+END
+OverTimeReportManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/MUGHERPROJECT/!svn/ver/2656/src/java/manager/overTimeManager/OverTimeReportManager.java
+END
+OverTimeApproveManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/MUGHERPROJECT/!svn/ver/2911/src/java/manager/overTimeManager/OverTimeApproveManager.java
+END
+ShiftRegistrationManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/MUGHERPROJECT/!svn/ver/3736/src/java/manager/overTimeManager/ShiftRegistrationManager.java
+END
+MgrEmployeeShiftViewer.java
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/MUGHERPROJECT/!svn/ver/3143/src/java/manager/overTimeManager/MgrEmployeeShiftViewer.java
+END
+ShiftTimeRegManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/MUGHERPROJECT/!svn/ver/2188/src/java/manager/overTimeManager/ShiftTimeRegManager.java
+END
+OverTimeReportModel.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/MUGHERPROJECT/!svn/ver/2255/src/java/manager/overTimeManager/OverTimeReportModel.java
+END
+EmployeeShiftManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/MUGHERPROJECT/!svn/ver/3789/src/java/manager/overTimeManager/EmployeeShiftManager.java
+END
+OverTimeAttendanceApproveManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/MUGHERPROJECT/!svn/ver/1/src/java/manager/overTimeManager/OverTimeAttendanceApproveManager.java
+END
+OverTimeAttendanceManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/MUGHERPROJECT/!svn/ver/2912/src/java/manager/overTimeManager/OverTimeAttendanceManager.java
+END
+OverTimeRequestManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/MUGHERPROJECT/!svn/ver/3144/src/java/manager/overTimeManager/OverTimeRequestManager.java
+END

@@ -1,0 +1,156 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package manager.leaveManager;
+
+import entity.leaveEntity.LeaveReportEntity;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import javax.faces.model.SelectItem;
+import manager.globalUseManager.LookUpManager;
+import oracle.jdbc.rowset.OracleCachedRowSet;
+
+/**
+ *
+ * @author Administrator
+ */
+public class LeaveReportManager {
+
+    private LeaveReportEntity leaveReportEntity = null;
+    private LookUpManager lookUpManager = null;
+
+    public Collection getEmployeeRemainingLeave(String departemntId) {
+        ArrayList<HashMap> results = null;
+        results = new ArrayList<HashMap>();
+        try {
+            cheackObject();
+            ResultSet data = null;
+            int rowCounter = 1;
+            data = leaveReportEntity.getEmployeeRemainingLeave(departemntId);
+            while (data.next()) {
+                HashMap hm = new HashMap();
+                hm.put("EMPLOYEEID", data.getString("EMP_ID"));
+                hm.put("EMPFULLNAME", data.getString("FULLNAME"));
+                hm.put("FIRSTYEAR", data.getFloat("Transferamount"));
+                hm.put("SECONDYEAR", data.getFloat("PREVIOUSLEAVEGAMOUNT"));
+                hm.put("LASTYEAR", data.getFloat("REMAININGAMOUNT"));
+                hm.put("ROWCOUNTER", rowCounter);
+                rowCounter++;
+                results.add(hm);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        return results;
+
+    }
+
+    public OracleCachedRowSet getEmployeeRemainingLeaveList(String departemntId) {
+        try {
+            cheackObject();
+            return leaveReportEntity.getEmployeeRemainingLeave(departemntId);
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
+
+
+
+    }
+
+    public ArrayList<HashMap> getLeaveSecadule(String departemntId) {
+        cheackObject();
+        try {
+            return leaveReportEntity.getLeaveSecaduleReport(departemntId);
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        return null;
+
+    }
+
+    public Collection getLeaveStatsticReport() {
+        ArrayList<HashMap> results = null;
+        results = new ArrayList<HashMap>();
+        try {
+            cheackObject();
+            ResultSet data = null;
+            int sum = 0;
+            data = leaveReportEntity.getLeaveStaticReport();
+            while (data.next()) {
+                HashMap hm = new HashMap();
+                hm.put("LEAVETYPE", data.getString("LEAVETYPE"));
+                sum = data.getInt("SUMOFUSEDLEAVE");
+                if (sum < 0) {
+                    sum *= -1;
+
+                }
+                hm.put("USEDLEAVEAMOUNT", sum);
+                results.add(hm);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        return results;
+
+    }
+
+    public OracleCachedRowSet getLeaveStatsticReportSum() {
+        try {
+            cheackObject();
+
+            return leaveReportEntity.getLeaveStaticReportSum();
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
+
+
+
+    }
+
+    public OracleCachedRowSet getFullName() {
+        try {
+            cheackObject();
+
+            return leaveReportEntity.getFullName();
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
+
+
+
+    }
+
+    public ArrayList<SelectItem> getReportType() {
+        ArrayList<SelectItem> listOfReportType = new ArrayList<SelectItem>();
+        listOfReportType.add(new SelectItem(null, "Select Report Type"));
+        listOfReportType.add(new SelectItem("AVAILABLEANNUALLEAVE", "AVAILABLE ANNUAL LEAVE REPORT"));
+        listOfReportType.add(new SelectItem("LEAVESTASTIC", "LEAVE STASTICS REPORT"));
+        listOfReportType.add(new SelectItem("LEAVESCHEDDULE", "LEAVE SCHEDDULE"));
+        return listOfReportType;
+
+    }
+
+    private void cheackObject() {
+        if (leaveReportEntity == null) {
+            leaveReportEntity = new LeaveReportEntity();
+        }
+        if (lookUpManager == null) {
+            lookUpManager = new LookUpManager();
+        }
+    }
+
+
+}

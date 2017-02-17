@@ -1,0 +1,412 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package manager.powerDeligationManager;
+
+import entity.powerDeligationEntity.PowerDelegationReportEntity;
+import java.util.ArrayList;
+import java.util.HashMap;
+import manager.ReportCritera.ReportCriteraManager;
+import oracle.jdbc.rowset.OracleCachedRowSet;
+
+/**
+ *author
+ * @author Biruk
+ */
+public class PowerDelegationReportManager {
+
+    PowerDelegationReportEntity powerReportEntity = new PowerDelegationReportEntity();
+
+    public ArrayList<HashMap> getReportList() {
+        try {
+            ArrayList<HashMap> powerDelegationApproveReportList = new ArrayList<HashMap>();
+            OracleCachedRowSet ocrs = powerReportEntity.readAllPowerDelegationApproved();
+            while (ocrs.next()) {
+                HashMap resultInfo = new HashMap();
+                resultInfo.put("start_date", ocrs.getString("start_date"));
+                resultInfo.put("end_date", ocrs.getString("end_date"));
+                resultInfo.put("Delegator_JobTitle", ocrs.getString("Delegator_JobTitle"));
+                resultInfo.put("deligation_reason", ocrs.getString("deligation_reason"));
+                resultInfo.put("DelegatorRank", ocrs.getString("DelegatorRank"));
+                resultInfo.put("APPROVEDDATE", ocrs.getString("APPROVEDDATE"));
+                resultInfo.put("DelegatorID", ocrs.getString("DelegatorID"));
+                resultInfo.put("DelegatorFirst_Name", ocrs.getString("DelegatorFirst_Name"));
+                resultInfo.put("Delegator_Middle_Name", ocrs.getString("Delegator_Middle_Name"));
+                resultInfo.put("Delegator_last_Name", ocrs.getString("Delegator_last_Name"));
+                resultInfo.put("DELEGATOR_DEPARTMENT", ocrs.getString("DELEGATOR_DEPARTMENT"));
+                resultInfo.put("Delegator_JobTitle", ocrs.getString("Delegator_JobTitle"));
+                resultInfo.put("DelegatorRank", ocrs.getString("DelegatorRank"));
+                resultInfo.put("delegateID", ocrs.getString("delegateID"));
+                resultInfo.put("Delegate_First_Name", ocrs.getString("Delegate_First_Name"));
+                resultInfo.put("Delegate_Middle_Name", ocrs.getString("Delegate_Middle_Name"));
+                resultInfo.put("Delegate_Last_Name", ocrs.getString("Delegate_Last_Name"));
+                resultInfo.put("delegete_Department", ocrs.getString("delegete_Department"));
+                resultInfo.put("delegete_position", ocrs.getString("delegete_position"));
+                resultInfo.put("requester_ID", ocrs.getString("requester_ID"));
+                resultInfo.put("requester_first_name", ocrs.getString("requester_first_name"));
+                resultInfo.put("requester_midleName", ocrs.getString("requester_midleName"));
+                resultInfo.put("requester_last_name", ocrs.getString("requester_last_name"));
+                resultInfo.put("requester_job", ocrs.getString("requester_job"));
+                resultInfo.put("requester_department_Name", ocrs.getString("requester_department_Name"));
+                resultInfo.put("requester_rank", ocrs.getString("requester_rank"));
+                resultInfo.put("ApproverID", ocrs.getString("ApproverID"));
+                resultInfo.put("approverFirstName", ocrs.getString("approverFirstName"));
+                resultInfo.put("approverMiddleName", ocrs.getString("approverMiddleName"));
+                resultInfo.put("approverLastName", ocrs.getString("approverLastName"));
+                resultInfo.put("approverJobPosition", ocrs.getString("approverJobPosition"));
+                resultInfo.put("departmentName", ocrs.getString("departmentName"));
+                resultInfo.put("recorded_date", ocrs.getString("recorded_date"));
+                powerDelegationApproveReportList.add(resultInfo);
+            }
+            return powerDelegationApproveReportList;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        } finally {
+            try {
+            } catch (Exception ex) {
+            }
+        }
+    }
+   
+    public ArrayList<HashMap> getRequestReportBasedOnDepartmentList(String empID) {
+        try {
+            ArrayList<HashMap> powerDelegationApproveReportList = new ArrayList<HashMap>();
+            
+            OracleCachedRowSet ocrs = powerReportEntity.readAllPowerDelegationApprovedBasdOnDepartment(empID);
+            while (ocrs.next()) {
+                HashMap resultInfo = new HashMap();
+                resultInfo.put("start_date", ocrs.getString("start_date"));
+                resultInfo.put("end_date", ocrs.getString("end_date"));
+                resultInfo.put("DelegatedPosition", ocrs.getString("DelegatedPosition"));
+                resultInfo.put("deligation_reason", ocrs.getString("deligation_reason"));
+                resultInfo.put("delegatorRank", ocrs.getString("delegatorRank"));
+                resultInfo.put("approvedDate", ocrs.getString("approvedDate"));
+                resultInfo.put("DelegatorID", ocrs.getString("DelegatorID"));
+                resultInfo.put("DelegatorFirst_Name", ocrs.getString("DelegatorFirst_Name"));
+                resultInfo.put("Delegator_Middle_Name", ocrs.getString("Delegator_Middle_Name"));
+                resultInfo.put("Delegator_last_Name", ocrs.getString("Delegator_last_Name"));
+                resultInfo.put("Delegator_Department", ocrs.getString("Delegator_Department"));
+                resultInfo.put("Delegator_JobTitle", ocrs.getString("Delegator_JobTitle"));
+                resultInfo.put("delegatorRank", ocrs.getString("delegatorRank"));
+                resultInfo.put("delegateID", ocrs.getString("delegateID"));
+                resultInfo.put("Delegate_First_Name", ocrs.getString("Delegate_First_Name"));
+                resultInfo.put("Delegate_Middle_Name", ocrs.getString("Delegate_Middle_Name"));
+                resultInfo.put("Delegate_Last_Name", ocrs.getString("Delegate_Last_Name"));
+                resultInfo.put("delegete_Department", ocrs.getString("delegete_Department"));
+                resultInfo.put("delegete_position", ocrs.getString("delegete_position"));
+                resultInfo.put("delegateRank", ocrs.getString("delegateRank"));
+                resultInfo.put("requester_ID", ocrs.getString("requester_ID"));
+                resultInfo.put("requester_first_name", ocrs.getString("requester_first_name"));
+                resultInfo.put("requester_midleName", ocrs.getString("requester_midleName"));
+                resultInfo.put("requester_last_name", ocrs.getString("requester_last_name"));
+                resultInfo.put("requester_job", ocrs.getString("requester_job"));
+                resultInfo.put("requester_department_Name", ocrs.getString("requester_department_Name"));
+                resultInfo.put("RequesterRank", ocrs.getString("RequesterRank"));
+                resultInfo.put("delegateRank", ocrs.getString("delegateRank"));
+                resultInfo.put("ApproverID", ocrs.getString("ApproverID"));
+                resultInfo.put("approverFirstName", ocrs.getString("approverFirstName"));
+                resultInfo.put("approverMiddleName", ocrs.getString("approverMiddleName"));
+                resultInfo.put("approverLastName", ocrs.getString("approverLastName"));
+                resultInfo.put("approverJobPosition", ocrs.getString("approverJobPosition"));
+                resultInfo.put("departmentName", ocrs.getString("departmentName"));
+                resultInfo.put("recorded_date", ocrs.getString("recorded_date"));
+                powerDelegationApproveReportList.add(resultInfo);
+            }
+            return powerDelegationApproveReportList;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        } finally {
+            try {
+            } catch (Exception ex) {
+            }
+        }
+    }
+
+
+    //=====================================================================================================================================
+    public ArrayList<HashMap> getRequestReportList() {
+
+        ArrayList<HashMap> powerDelegationApproveReportList = new ArrayList<HashMap>();
+        if (ReportCriteraManager.getParametrsForDay().get("selectedCodition").toString().equalsIgnoreCase("Monthly")) {
+
+            try {
+
+                OracleCachedRowSet ocrs = powerReportEntity.readAllPowerDelegationApprovedMonthly(ReportCriteraManager.getParametrsForDay());
+                while (ocrs.next()) {
+                    HashMap resultInfo = new HashMap();
+                    resultInfo.put("start_date", ocrs.getString("start_date"));
+                    resultInfo.put("end_date", ocrs.getString("end_date"));
+                    resultInfo.put("DelegatedPosition", ocrs.getString("DelegatedPosition"));
+                    resultInfo.put("deligation_reason", ocrs.getString("deligation_reason"));
+                    resultInfo.put("delegatorRank", ocrs.getString("delegatorRank"));
+                    resultInfo.put("approvedDate", ocrs.getString("approvedDate"));
+                    resultInfo.put("DelegatorID", ocrs.getString("DelegatorID"));
+                    resultInfo.put("DelegatorFirst_Name", ocrs.getString("DelegatorFirst_Name"));
+                    resultInfo.put("Delegator_Middle_Name", ocrs.getString("Delegator_Middle_Name"));
+                    resultInfo.put("Delegator_last_Name", ocrs.getString("Delegator_last_Name"));
+                    resultInfo.put("Delegator_Department", ocrs.getString("Delegator_Department"));
+                    resultInfo.put("Delegator_JobTitle", ocrs.getString("Delegator_JobTitle"));
+                    resultInfo.put("delegatorRank", ocrs.getString("delegatorRank"));
+                    resultInfo.put("delegateID", ocrs.getString("delegateID"));
+                    resultInfo.put("Delegate_First_Name", ocrs.getString("Delegate_First_Name"));
+                    resultInfo.put("Delegate_Middle_Name", ocrs.getString("Delegate_Middle_Name"));
+                    resultInfo.put("Delegate_Last_Name", ocrs.getString("Delegate_Last_Name"));
+                    resultInfo.put("delegete_Department", ocrs.getString("delegete_Department"));
+                    resultInfo.put("delegete_position", ocrs.getString("delegete_position"));
+                    resultInfo.put("delegateRank", ocrs.getString("delegateRank"));
+                    resultInfo.put("requester_ID", ocrs.getString("requester_ID"));
+                    resultInfo.put("requester_first_name", ocrs.getString("requester_first_name"));
+                    resultInfo.put("requester_midleName", ocrs.getString("requester_midleName"));
+                    resultInfo.put("requester_last_name", ocrs.getString("requester_last_name"));
+                    resultInfo.put("requester_job", ocrs.getString("requester_job"));
+                    resultInfo.put("requester_department_Name", ocrs.getString("requester_department_Name"));
+                    resultInfo.put("requester_rank", ocrs.getString("requester_rank"));
+                    resultInfo.put("delegateRank", ocrs.getString("delegateRank"));
+                    resultInfo.put("delegateRank", ocrs.getString("delegateRank"));
+                    resultInfo.put("ApproverID", ocrs.getString("ApproverID"));
+                    resultInfo.put("approverFirstName", ocrs.getString("approverFirstName"));
+                    resultInfo.put("approverMiddleName", ocrs.getString("approverMiddleName"));
+                    resultInfo.put("approverLastName", ocrs.getString("approverLastName"));
+                    resultInfo.put("approverJobPosition", ocrs.getString("approverJobPosition"));
+                    resultInfo.put("departmentName", ocrs.getString("departmentName"));
+                    resultInfo.put("recorded_date", ocrs.getString("recorded_date"));
+                    powerDelegationApproveReportList.add(resultInfo);
+                }
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                return null;
+            } finally {
+                try {
+                } catch (Exception ex) {
+                }
+            }
+        } else if (ReportCriteraManager.getParametrsForDay().get("selectedCodition").toString().equalsIgnoreCase("Quarterly")) {
+            try {
+
+                OracleCachedRowSet ocrs = powerReportEntity.readAllPowerDelegationApprovedQuarterly(ReportCriteraManager.getParametrsForDay());
+                while (ocrs.next()) {
+                    HashMap resultInfo = new HashMap();
+                    resultInfo.put("start_date", ocrs.getString("start_date"));
+                    resultInfo.put("end_date", ocrs.getString("end_date"));
+                    resultInfo.put("DelegatedPosition", ocrs.getString("DelegatedPosition"));
+                    resultInfo.put("deligation_reason", ocrs.getString("deligation_reason"));
+                    resultInfo.put("delegatorRank", ocrs.getString("delegatorRank"));
+                    resultInfo.put("approvedDate", ocrs.getString("approvedDate"));
+                    resultInfo.put("DelegatorID", ocrs.getString("DelegatorID"));
+                    resultInfo.put("DelegatorFirst_Name", ocrs.getString("DelegatorFirst_Name"));
+                    resultInfo.put("Delegator_Middle_Name", ocrs.getString("Delegator_Middle_Name"));
+                    resultInfo.put("Delegator_last_Name", ocrs.getString("Delegator_last_Name"));
+                    resultInfo.put("Delegator_Department", ocrs.getString("Delegator_Department"));
+                    resultInfo.put("Delegator_JobTitle", ocrs.getString("Delegator_JobTitle"));
+                    resultInfo.put("delegatorRank", ocrs.getString("delegatorRank"));
+                    resultInfo.put("delegateID", ocrs.getString("delegateID"));
+                    resultInfo.put("Delegate_First_Name", ocrs.getString("Delegate_First_Name"));
+                    resultInfo.put("Delegate_Middle_Name", ocrs.getString("Delegate_Middle_Name"));
+                    resultInfo.put("Delegate_Last_Name", ocrs.getString("Delegate_Last_Name"));
+                    resultInfo.put("delegete_Department", ocrs.getString("delegete_Department"));
+                    resultInfo.put("delegete_position", ocrs.getString("delegete_position"));
+                    resultInfo.put("delegateRank", ocrs.getString("delegateRank"));
+                    resultInfo.put("requester_ID", ocrs.getString("requester_ID"));
+                    resultInfo.put("requester_first_name", ocrs.getString("requester_first_name"));
+                    resultInfo.put("requester_midleName", ocrs.getString("requester_midleName"));
+                    resultInfo.put("requester_last_name", ocrs.getString("requester_last_name"));
+                    resultInfo.put("requester_job", ocrs.getString("requester_job"));
+                    resultInfo.put("requester_department_Name", ocrs.getString("requester_department_Name"));
+                    resultInfo.put("requester_rank", ocrs.getString("requester_rank"));
+                    resultInfo.put("delegateRank", ocrs.getString("delegateRank"));
+                    resultInfo.put("delegateRank", ocrs.getString("delegateRank"));
+                    resultInfo.put("ApproverID", ocrs.getString("ApproverID"));
+                    resultInfo.put("approverFirstName", ocrs.getString("approverFirstName"));
+                    resultInfo.put("approverMiddleName", ocrs.getString("approverMiddleName"));
+                    resultInfo.put("approverLastName", ocrs.getString("approverLastName"));
+                    resultInfo.put("approverJobPosition", ocrs.getString("approverJobPosition"));
+                    resultInfo.put("departmentName", ocrs.getString("departmentName"));
+                    resultInfo.put("recorded_date", ocrs.getString("recorded_date"));
+                    powerDelegationApproveReportList.add(resultInfo);
+                }
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                return null;
+            } finally {
+                try {
+                } catch (Exception ex) {
+                }
+            }
+
+
+        } else if (ReportCriteraManager.getParametrsForDay().get("selectedCodition").toString().equalsIgnoreCase("Semiannually")) {
+
+            try {
+
+                OracleCachedRowSet ocrs = powerReportEntity.readAllPowerDelegationApprovedSimiannualy(ReportCriteraManager.getParametrsForDay());
+                while (ocrs.next()) {
+                    HashMap resultInfo = new HashMap();
+                    resultInfo.put("start_date", ocrs.getString("start_date"));
+                    resultInfo.put("end_date", ocrs.getString("end_date"));
+                    resultInfo.put("DelegatedPosition", ocrs.getString("DelegatedPosition"));
+                    resultInfo.put("deligation_reason", ocrs.getString("deligation_reason"));
+                    resultInfo.put("delegatorRank", ocrs.getString("delegatorRank"));
+                    resultInfo.put("approvedDate", ocrs.getString("approvedDate"));
+                    resultInfo.put("DelegatorID", ocrs.getString("DelegatorID"));
+                    resultInfo.put("DelegatorFirst_Name", ocrs.getString("DelegatorFirst_Name"));
+                    resultInfo.put("Delegator_Middle_Name", ocrs.getString("Delegator_Middle_Name"));
+                    resultInfo.put("Delegator_last_Name", ocrs.getString("Delegator_last_Name"));
+                    resultInfo.put("Delegator_Department", ocrs.getString("Delegator_Department"));
+                    resultInfo.put("Delegator_JobTitle", ocrs.getString("Delegator_JobTitle"));
+                    resultInfo.put("delegatorRank", ocrs.getString("delegatorRank"));
+                    resultInfo.put("delegateID", ocrs.getString("delegateID"));
+                    resultInfo.put("Delegate_First_Name", ocrs.getString("Delegate_First_Name"));
+                    resultInfo.put("Delegate_Middle_Name", ocrs.getString("Delegate_Middle_Name"));
+                    resultInfo.put("Delegate_Last_Name", ocrs.getString("Delegate_Last_Name"));
+                    resultInfo.put("delegete_Department", ocrs.getString("delegete_Department"));
+                    resultInfo.put("delegete_position", ocrs.getString("delegete_position"));
+                    resultInfo.put("delegateRank", ocrs.getString("delegateRank"));
+                    resultInfo.put("requester_ID", ocrs.getString("requester_ID"));
+                    resultInfo.put("requester_first_name", ocrs.getString("requester_first_name"));
+                    resultInfo.put("requester_midleName", ocrs.getString("requester_midleName"));
+                    resultInfo.put("requester_last_name", ocrs.getString("requester_last_name"));
+                    resultInfo.put("requester_job", ocrs.getString("requester_job"));
+                    resultInfo.put("requester_department_Name", ocrs.getString("requester_department_Name"));
+                    resultInfo.put("requester_rank", ocrs.getString("requester_rank"));
+                    resultInfo.put("delegateRank", ocrs.getString("delegateRank"));
+                    resultInfo.put("delegateRank", ocrs.getString("delegateRank"));
+                    resultInfo.put("ApproverID", ocrs.getString("ApproverID"));
+                    resultInfo.put("approverFirstName", ocrs.getString("approverFirstName"));
+                    resultInfo.put("approverMiddleName", ocrs.getString("approverMiddleName"));
+                    resultInfo.put("approverLastName", ocrs.getString("approverLastName"));
+                    resultInfo.put("approverJobPosition", ocrs.getString("approverJobPosition"));
+                    resultInfo.put("departmentName", ocrs.getString("departmentName"));
+                    resultInfo.put("recorded_date", ocrs.getString("recorded_date"));
+                    powerDelegationApproveReportList.add(resultInfo);
+                }
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                return null;
+            } finally {
+                try {
+                } catch (Exception ex) {
+                }
+            }
+
+        } else if (ReportCriteraManager.getParametrsForDay().get("selectedCodition").toString().equalsIgnoreCase("Annually")) {
+            try {
+                
+
+                OracleCachedRowSet ocrs = powerReportEntity.readAllPowerDelegationApprovedAnuulay(ReportCriteraManager.getParametrsForDay());
+                while (ocrs.next()) {
+                    HashMap resultInfo = new HashMap();
+
+                    resultInfo.put("start_date", ocrs.getString("start_date"));
+                    resultInfo.put("end_date", ocrs.getString("end_date"));
+                    resultInfo.put("DelegatedPosition", ocrs.getString("DelegatedPosition"));
+                    resultInfo.put("deligation_reason", ocrs.getString("deligation_reason"));
+                    resultInfo.put("delegatorRank", ocrs.getString("delegatorRank"));
+                    resultInfo.put("approvedDate", ocrs.getString("approvedDate"));
+                    resultInfo.put("DelegatorID", ocrs.getString("DelegatorID"));
+                    resultInfo.put("DelegatorFirst_Name", ocrs.getString("DelegatorFirst_Name"));
+                    resultInfo.put("Delegator_Middle_Name", ocrs.getString("Delegator_Middle_Name"));
+                    resultInfo.put("Delegator_last_Name", ocrs.getString("Delegator_last_Name"));
+                    resultInfo.put("Delegator_Department", ocrs.getString("Delegator_Department"));
+                    resultInfo.put("Delegator_JobTitle", ocrs.getString("Delegator_JobTitle"));
+                    resultInfo.put("delegatorRank", ocrs.getString("delegatorRank"));
+                    resultInfo.put("delegateID", ocrs.getString("delegateID"));
+                    resultInfo.put("Delegate_First_Name", ocrs.getString("Delegate_First_Name"));
+                    resultInfo.put("Delegate_Middle_Name", ocrs.getString("Delegate_Middle_Name"));
+                    resultInfo.put("Delegate_Last_Name", ocrs.getString("Delegate_Last_Name"));
+                    resultInfo.put("delegete_Department", ocrs.getString("delegete_Department"));
+                    resultInfo.put("delegete_position", ocrs.getString("delegete_position"));
+                    resultInfo.put("delegateRank", ocrs.getString("delegateRank"));
+                    resultInfo.put("requester_ID", ocrs.getString("requester_ID"));
+                    resultInfo.put("requester_first_name", ocrs.getString("requester_first_name"));
+                    resultInfo.put("requester_midleName", ocrs.getString("requester_midleName"));
+                    resultInfo.put("requester_last_name", ocrs.getString("requester_last_name"));
+                    resultInfo.put("requester_job", ocrs.getString("requester_job"));
+                    resultInfo.put("requester_department_Name", ocrs.getString("requester_department_Name"));
+                    resultInfo.put("requester_rank", ocrs.getString("requester_rank"));
+                    resultInfo.put("delegateRank", ocrs.getString("delegateRank"));
+                    resultInfo.put("delegateRank", ocrs.getString("delegateRank"));
+                    resultInfo.put("ApproverID", ocrs.getString("ApproverID"));
+                    resultInfo.put("approverFirstName", ocrs.getString("approverFirstName"));
+                    resultInfo.put("approverMiddleName", ocrs.getString("approverMiddleName"));
+                    resultInfo.put("approverLastName", ocrs.getString("approverLastName"));
+                    resultInfo.put("approverJobPosition", ocrs.getString("approverJobPosition"));
+                    resultInfo.put("departmentName", ocrs.getString("departmentName"));
+                    resultInfo.put("recorded_date", ocrs.getString("recorded_date"));
+                    powerDelegationApproveReportList.add(resultInfo);
+                    
+                }
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                return null;
+            } finally {
+                try {
+                } catch (Exception ex) {
+                }
+            }
+
+        } else if (ReportCriteraManager.getParametrsForDay().get("selectedCodition").toString().equalsIgnoreCase("Daily")) {
+            try {
+
+                OracleCachedRowSet ocrs = powerReportEntity.readAllPowerDelegationApprovedDaily(ReportCriteraManager.getParametrsForDay());
+                while (ocrs.next()) {
+                    HashMap resultInfo = new HashMap();
+                    resultInfo.put("start_date", ocrs.getString("start_date"));
+                    resultInfo.put("end_date", ocrs.getString("end_date"));
+                    resultInfo.put("DelegatedPosition", ocrs.getString("DelegatedPosition"));
+                    resultInfo.put("deligation_reason", ocrs.getString("deligation_reason"));
+                    resultInfo.put("delegatorRank", ocrs.getString("delegatorRank"));
+                    resultInfo.put("approvedDate", ocrs.getString("approvedDate"));
+                    resultInfo.put("DelegatorID", ocrs.getString("DelegatorID"));
+                    resultInfo.put("DelegatorFirst_Name", ocrs.getString("DelegatorFirst_Name"));
+                    resultInfo.put("Delegator_Middle_Name", ocrs.getString("Delegator_Middle_Name"));
+                    resultInfo.put("Delegator_last_Name", ocrs.getString("Delegator_last_Name"));
+                    resultInfo.put("Delegator_Department", ocrs.getString("Delegator_Department"));
+                    resultInfo.put("Delegator_JobTitle", ocrs.getString("Delegator_JobTitle"));
+                    resultInfo.put("delegatorRank", ocrs.getString("delegatorRank"));
+                    resultInfo.put("delegateID", ocrs.getString("delegateID"));
+                    resultInfo.put("Delegate_First_Name", ocrs.getString("Delegate_First_Name"));
+                    resultInfo.put("Delegate_Middle_Name", ocrs.getString("Delegate_Middle_Name"));
+                    resultInfo.put("Delegate_Last_Name", ocrs.getString("Delegate_Last_Name"));
+                    resultInfo.put("delegete_Department", ocrs.getString("delegete_Department"));
+                    resultInfo.put("delegete_position", ocrs.getString("delegete_position"));
+                    resultInfo.put("delegateRank", ocrs.getString("delegateRank"));
+                    resultInfo.put("requester_ID", ocrs.getString("requester_ID"));
+                    resultInfo.put("requester_first_name", ocrs.getString("requester_first_name"));
+                    resultInfo.put("requester_midleName", ocrs.getString("requester_midleName"));
+                    resultInfo.put("requester_last_name", ocrs.getString("requester_last_name"));
+                    resultInfo.put("requester_job", ocrs.getString("requester_job"));
+                    resultInfo.put("requester_department_Name", ocrs.getString("requester_department_Name"));
+                    resultInfo.put("requester_rank", ocrs.getString("requester_rank"));
+                    resultInfo.put("delegateRank", ocrs.getString("delegateRank"));
+                    resultInfo.put("delegateRank", ocrs.getString("delegateRank"));
+                    resultInfo.put("ApproverID", ocrs.getString("ApproverID"));
+                    resultInfo.put("approverFirstName", ocrs.getString("approverFirstName"));
+                    resultInfo.put("approverMiddleName", ocrs.getString("approverMiddleName"));
+                    resultInfo.put("approverLastName", ocrs.getString("approverLastName"));
+                    resultInfo.put("approverJobPosition", ocrs.getString("approverJobPosition"));
+                    resultInfo.put("departmentName", ocrs.getString("departmentName"));
+                    resultInfo.put("recorded_date", ocrs.getString("recorded_date"));
+                    powerDelegationApproveReportList.add(resultInfo);
+
+                }
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                return null;
+            } finally {
+                try {
+                } catch (Exception ex) {
+                }
+            }
+
+        }
+        return powerDelegationApproveReportList;
+    }
+}

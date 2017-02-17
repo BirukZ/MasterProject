@@ -1,0 +1,204 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package manager.educationManager;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import oracle.jdbc.rowset.OracleCachedRowSet;
+import entity.educationEntity.ReportEntity;
+import manager.ReportCritera.ReportCriteraManager;
+
+/**
+ *
+ * @author Admin
+ */
+public class ReportManager {
+
+    ReportEntity reportEntity = new ReportEntity();
+
+    public ArrayList<HashMap> getCourseInfo() {
+
+        ArrayList<HashMap> IntSuccLists = new ArrayList<HashMap>();
+
+        if (ReportCriteraManager.getParametrsForDay().get("selectedCodition").toString().equalsIgnoreCase("Monthly")) {
+            try {
+
+                // OracleCachedRowSet ocrs = reportEntity.readAllCourse();
+                OracleCachedRowSet ocrs = reportEntity.readAllCourseByMonth(ReportCriteraManager.getParametrsForDay());
+                while (ocrs.next()) {
+                    HashMap resultInfo = new HashMap();
+                    resultInfo.put("emp_id", ocrs.getString("emp_id"));
+                    resultInfo.put("FullName", ocrs.getString("FullName"));
+                    resultInfo.put("AGE", ocrs.getString("AGE"));
+                    resultInfo.put("sex", ocrs.getString("sex"));
+                    resultInfo.put("hire_date", ocrs.getString("hire_date"));
+                    resultInfo.put("job_description", ocrs.getString("job_description"));
+                    resultInfo.put("department_path", ocrs.getString("department_path"));
+                    resultInfo.put("EducationProgram", ocrs.getString("EducationProgram"));
+                    resultInfo.put("description", ocrs.getString("description"));
+                    resultInfo.put("result", ocrs.getString("result"));
+                    resultInfo.put("education_program_name", ocrs.getString("education_program_name"));
+                    resultInfo.put("education_level_category", ocrs.getString("education_level_category"));
+                    resultInfo.put("institution_name", ocrs.getString("institution_name"));
+                    resultInfo.put("applied_date", ocrs.getString("applied_date"));
+                    resultInfo.put("accredited_or_not", ocrs.getString("accredited_or_not"));
+                    resultInfo.put("EDUCATION_SHIFT_CATEGORY", ocrs.getString("EDUCATION_SHIFT_CATEGORY"));
+                    IntSuccLists.add(resultInfo);
+                }
+            // return IntSuccLists;
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                return null;
+            } finally {
+                try {
+                } catch (Exception ex) {
+                }
+            }
+        } else if (ReportCriteraManager.getParametrsForDay().get("selectedCodition").toString().equalsIgnoreCase("Quarterly")) {
+            try {
+
+                //OracleCachedRowSet ocrs = reportEntity.readAllCourse();
+                OracleCachedRowSet ocrs = reportEntity.readAllCourseByQuarterly(ReportCriteraManager.getParametrsForDay());
+                while (ocrs.next()) {
+                    HashMap resultInfo = new HashMap();
+                    resultInfo.put("emp_id", ocrs.getString("emp_id"));
+                    resultInfo.put("FullName", ocrs.getString("FullName"));
+                    resultInfo.put("AGE", ocrs.getString("AGE"));
+                    resultInfo.put("sex", ocrs.getString("sex"));
+                    resultInfo.put("hire_date", ocrs.getString("hire_date"));
+                    resultInfo.put("job_description", ocrs.getString("job_description"));
+                    resultInfo.put("department_path", ocrs.getString("department_path"));
+                    resultInfo.put("EducationProgram", ocrs.getString("EducationProgram"));
+                    resultInfo.put("description", ocrs.getString("description"));
+                    resultInfo.put("result", ocrs.getString("result"));
+                    resultInfo.put("education_program_name", ocrs.getString("education_program_name"));
+                    resultInfo.put("education_level_category", ocrs.getString("education_level_category"));
+                    resultInfo.put("institution_name", ocrs.getString("institution_name"));
+                    resultInfo.put("applied_date", ocrs.getString("applied_date"));
+                    resultInfo.put("accredited_or_not", ocrs.getString("accredited_or_not"));
+                    resultInfo.put("EDUCATION_SHIFT_CATEGORY", ocrs.getString("EDUCATION_SHIFT_CATEGORY"));
+                    IntSuccLists.add(resultInfo);
+                }
+            // return IntSuccLists;
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                return null;
+            } finally {
+                try {
+                } catch (Exception ex) {
+                }
+            }
+        } else if (ReportCriteraManager.getParametrsForDay().get("selectedCodition").toString().equalsIgnoreCase("Semiannually")) {
+            try {
+
+                //OracleCachedRowSet ocrs = reportEntity.readAllCourse();
+                OracleCachedRowSet ocrs = reportEntity.readAllCourseBySemiAnnuly(ReportCriteraManager.getParametrsForDay());
+                while (ocrs.next()) {
+                    HashMap resultInfo = new HashMap();
+                    resultInfo.put("emp_id", ocrs.getString("emp_id"));
+                    resultInfo.put("FullName", ocrs.getString("FullName"));
+                    resultInfo.put("AGE", ocrs.getString("AGE"));
+                    resultInfo.put("sex", ocrs.getString("sex"));
+                    resultInfo.put("hire_date", ocrs.getString("hire_date"));
+                    resultInfo.put("job_description", ocrs.getString("job_description"));
+                    resultInfo.put("department_path", ocrs.getString("department_path"));
+                    resultInfo.put("EducationProgram", ocrs.getString("EducationProgram"));
+                    resultInfo.put("description", ocrs.getString("description"));
+                    resultInfo.put("result", ocrs.getString("result"));
+                    resultInfo.put("education_program_name", ocrs.getString("education_program_name"));
+                    resultInfo.put("education_level_category", ocrs.getString("education_level_category"));
+                    resultInfo.put("institution_name", ocrs.getString("institution_name"));
+                    resultInfo.put("applied_date", ocrs.getString("applied_date"));
+                    resultInfo.put("accredited_or_not", ocrs.getString("accredited_or_not"));
+                    resultInfo.put("EDUCATION_SHIFT_CATEGORY", ocrs.getString("EDUCATION_SHIFT_CATEGORY"));
+                    IntSuccLists.add(resultInfo);
+                }
+            //return IntSuccLists;
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                return null;
+            } finally {
+                try {
+                } catch (Exception ex) {
+                }
+            }
+        } else if (ReportCriteraManager.getParametrsForDay().get("selectedCodition").toString().equalsIgnoreCase("Annually")) {
+            try {
+
+                //OracleCachedRowSet ocrs = reportEntity.readAllCourse();
+                OracleCachedRowSet ocrs = reportEntity.readAllCourseByAnnuly(ReportCriteraManager.getParametrsForDay());
+                while (ocrs.next()) {
+                    HashMap resultInfo = new HashMap();
+                    resultInfo.put("emp_id", ocrs.getString("emp_id"));
+                    resultInfo.put("FullName", ocrs.getString("FullName"));
+                    resultInfo.put("AGE", ocrs.getString("AGE"));
+                    resultInfo.put("sex", ocrs.getString("sex"));
+                    resultInfo.put("hire_date", ocrs.getString("hire_date"));
+                    resultInfo.put("job_description", ocrs.getString("job_description"));
+                    resultInfo.put("department_path", ocrs.getString("department_path"));
+                    resultInfo.put("EducationProgram", ocrs.getString("EducationProgram"));
+                    resultInfo.put("description", ocrs.getString("description"));
+                    resultInfo.put("result", ocrs.getString("result"));
+                    resultInfo.put("education_program_name", ocrs.getString("education_program_name"));
+                    resultInfo.put("education_level_category", ocrs.getString("education_level_category"));
+                    resultInfo.put("institution_name", ocrs.getString("institution_name"));
+                    resultInfo.put("applied_date", ocrs.getString("applied_date"));
+                   // 
+                    resultInfo.put("accredited_or_not", ocrs.getString("accredited_or_not"));
+                    resultInfo.put("EDUCATION_SHIFT_CATEGORY", ocrs.getString("EDUCATION_SHIFT_CATEGORY"));
+                    IntSuccLists.add(resultInfo);
+                }
+            //return IntSuccLists;
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                return null;
+            } finally {
+                try {
+                } catch (Exception ex) {
+                }
+            }
+        } else if (ReportCriteraManager.getParametrsForDay().get("selectedCodition").toString().equalsIgnoreCase("Daily")) {
+            try {
+
+                //OracleCachedRowSet ocrs = reportEntity.readAllCourse();
+                OracleCachedRowSet ocrs = reportEntity.readAllCourseByDays(ReportCriteraManager.getParametrsForDay());
+                while (ocrs.next()) {
+                    HashMap resultInfo = new HashMap();
+                    resultInfo.put("emp_id", ocrs.getString("emp_id"));
+                    resultInfo.put("FullName", ocrs.getString("FullName"));
+                    resultInfo.put("AGE", ocrs.getString("AGE"));
+                    resultInfo.put("sex", ocrs.getString("sex"));
+                    resultInfo.put("hire_date", ocrs.getString("hire_date"));
+                    resultInfo.put("job_description", ocrs.getString("job_description"));
+                    resultInfo.put("department_path", ocrs.getString("department_path"));
+                    resultInfo.put("EducationProgram", ocrs.getString("EducationProgram"));
+                    resultInfo.put("description", ocrs.getString("description"));
+                    resultInfo.put("result", ocrs.getString("result"));
+                    resultInfo.put("education_program_name", ocrs.getString("education_program_name"));
+                    resultInfo.put("education_level_category", ocrs.getString("education_level_category"));
+                    resultInfo.put("institution_name", ocrs.getString("institution_name"));
+                    resultInfo.put("applied_date", ocrs.getString("applied_date"));
+                   resultInfo.put("accredited_or_not", ocrs.getString("accredited_or_not"));
+                    resultInfo.put("EDUCATION_SHIFT_CATEGORY", ocrs.getString("EDUCATION_SHIFT_CATEGORY"));
+                    IntSuccLists.add(resultInfo);
+                }
+            //return IntSuccLists;
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                return null;
+            } finally {
+                try {
+                } catch (Exception ex) {
+                }
+            }
+        }
+        return IntSuccLists;
+    }
+//===================================================ForApprovedEducation Monthly==================================================
+
+    
+
+    
+    }

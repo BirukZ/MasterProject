@@ -1,0 +1,380 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Document   : Page1
+    Created on : Feb 26, 2010, 7:48:31 AM
+    Author     : mekete
+-->
+<jsp:root version="2.0" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:ice="http://www.icesoft.com/icefaces/component"
+    xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:webuijsf="http://www.sun.com/webui/webuijsf">
+    <jsp:directive.page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"/>
+    <f:view>
+        <f:loadBundle basename="Localization.HR_Localization_Training" var="msgTraining"/>
+        <html id="outputHtml1">
+            <head id="outputHead1">
+                <title></title>
+                <ice:outputStyle href="../resources/stylesheet.css" id="outputStyle1"/>
+                <ice:outputStyle href="../resources/TempCSS.css"/>
+                <ice:outputStyle href="../xmlhttp/css/rime/rime.css"/>
+                <ice:outputStyle href="../resources/TempCSS.css"/>
+                <script src="../Script/Ethiopian_Calendar.js"></script>
+                <script src="../Script/jquery-1.3.2.min.js"></script>
+                <style type="text/css">
+                    .message {
+                        display: none;
+                        margin: 0 0 13px 0;
+                        background-color:#EFA;
+                        padding: 13px 13px 13px 52px;
+                        background-position: 13px 5px;
+                        border: solid 1px #BD8;                                                                                                                                                border: solid 1px #BD8;
+                    }
+                    .message2 {
+                        display: none;
+                        margin: 0 0 13px 0;
+                        background-color:#EFA;
+                        padding: 13px 13px 13px 52px;
+                        background-position: 13px 5px;
+                        border: solid 1px #BD8;                                                                                                                                                border: solid 1px #BD8;
+                    }
+                    .success{
+                        color: #336600;
+                        font-size: 12px;
+                        font-weight: bold;
+                        text-align: center;
+                        vertical-align: middle;
+                        top:5px;left: 0px;
+                        position: absolute;
+                        width: 100%
+                    }
+                    .error{
+                        color: red;
+                        font-size: 12px;
+                        font-weight: bold;
+                        text-align: center;
+                        vertical-align: middle;
+                        top:5px;left: 0px;
+                        position: absolute;
+                        width: 100%
+                    }
+                    .success1{
+                        color: #336600;
+                        font-size: 11px;
+                        font-weight: bold;
+                        height: 16px;
+                        left: 5px;
+                        top: 2px;
+                        position: absolute;
+                        text-align: left;
+                        width: 391px
+                    }
+                    .error1{
+                        color: red;
+                        font-size: 11px;
+                        font-weight: bold;
+                        height: 16px;
+                        left: 5px;
+                        top: 2px;
+                        position: absolute;
+                        text-align: left;
+                        width: 391px
+                    }
+                </style>
+                <script language="javascript" type="text/javascript">
+                    var $j=jQuery.noConflict();
+                    function TrainingProgressPage(field){
+
+                        if (field.defaultValue == field.value) field.value = '';
+                        else if (field.value == '') field.value = field.defaultValue;
+
+                    }
+                </script>
+            </head>
+            <body id="outputBody1" style="-rave-layout: grid">
+                <ice:form id="form1">
+                    <div>
+                        <ice:panelBorder id="whole_page" renderCenter="#{Training$TrainingProgressPage.panelBorder1Bean.renderCenter}"
+                            renderEast="#{Training$TrainingProgressPage.panelBorder1Bean.renderEast}"
+                            renderNorth="#{Training$TrainingProgressPage.panelBorder1Bean.renderNorth}"
+                            renderSouth="#{Training$TrainingProgressPage.panelBorder1Bean.renderSouth}"
+                            renderWest="#{Training$TrainingProgressPage.panelBorder1Bean.renderEast}" style="top: 0px; position: relative"
+                            styleClass="whole_page" width="1024">
+                            <f:facet name="north">
+                                <ice:panelGroup id="page_header" style="height: 117px">
+                                    <!-- Begin Header -->
+                                    <ice:panelLayout id="header" layout="flow"
+                                        style="height: 129px; left: 0px; position: relative; width: 100%z; -rave-layout: grid" styleClass="header" visible="true">
+                                        <jsp:directive.include file="/Header.jspf"/>
+                                    </ice:panelLayout>
+                                    <!-- End Header -->
+                                </ice:panelGroup>
+                            </f:facet>
+                            <f:facet name="west">
+                                <ice:panelGroup id="menu_left" style="border:none; height:370px;">
+                                    <ice:panelLayout id="left_menu1" layout="flow"
+                                        style="height:370px;top:15px left: 0px; position: relative; width: 100%; -rave-layout: grid" styleClass="left_menu">
+                                        <ice:panelLayout id="list_menu2" style="height:370px; left: -4px; position: absolute; width: 213px" styleClass="left_menu">
+                                            <ice:panelCollapsible expanded="true" id="pnl_col_Search" style="border:none">
+                                                <f:facet name="header">
+                                                    <ice:panelGroup id="search_Group_Header">
+                                                        <ice:outputText id="lblSearchArea" value="Search Area"/>
+                                                    </ice:panelGroup>
+                                                </f:facet>
+                                                <ice:panelGrid id="search_panelGrid" width="100%">
+                                                    <ice:panelGroup id="btnSearchEmployeeState" style="left:-5px;margin: -5px -5px -5px -10px;padding: 7px; background:transparent;;border:none;display: block;float:left;height: 55px; width: 100%">
+                                                        <ice:outputText id="outputText19" value=""/>
+                                                    </ice:panelGroup>
+                                                </ice:panelGrid>
+                                            </ice:panelCollapsible>
+                                            <ice:panelCollapsible expanded="true" id="pnl_col_Common_Tasks" style="border:none">
+                                                <f:facet name="header">
+                                                    <ice:panelGroup id="commonTasksGroup_header">
+                                                        <ice:outputText id="lblCommonTasks" value="Common Tasks"/>
+                                                    </ice:panelGroup>
+                                                </f:facet>
+                                                <ice:panelGrid id="commonTasksGroup_Grid11" width="100%">
+                                                    <ice:panelGroup id="commonTasksGroup_Group22" style="width:100%"/>
+                                                    <ul style="list-style-type: none; list-style-image: none; list-style-position: outside; line-height: 174%;">
+                                                        <li></li>
+                                                    </ul>
+                                                </ice:panelGrid>
+                                            </ice:panelCollapsible>
+                                            <ice:panelCollapsible expanded="true" id="pnl_col_Status" style="border:none">
+                                                <f:facet name="header">
+                                                    <ice:panelGroup id="status_Group_Header">
+                                                        <ice:outputText id="lblStatus" value="Pending"/>
+                                                    </ice:panelGroup>
+                                                </f:facet>
+                                                <ice:panelGrid id="StatusBoard" width="100%">
+                                                    <ice:panelGroup id="status_Group" style="left:-5px;margin: -5px -5px -5px -10px;padding: 7px; background:transparent;border:none;display: block;float:left;height:190px; width: 100%">
+                                                        <ice:panelLayout id="StatusContainer" style="height: 185px; position: absolute; width: 214px">
+                                                            <ice:selectOneListbox binding="#{Training$TrainingProgressPage.selectMyRequestLists}"
+                                                                id="selectMyRequestLists" partialSubmit="true" size="6" style="height: 180px; width: 190px"
+                                                                value="#{Training$TrainingProgressPage.selectedRequestFromMyRequestList.selectedObject}" valueChangeListener="#{Training$TrainingProgressPage.selectMyRequestLists_processValueChange}">
+                                                                <f:selectItems id="selectOneListboxRequestListsToBeApproved" value="#{Training$TrainingProgressPage.pendingRequestList}"/>
+                                                            </ice:selectOneListbox>
+                                                        </ice:panelLayout>
+                                                    </ice:panelGroup>
+                                                </ice:panelGrid>
+                                            </ice:panelCollapsible>
+                                            <ice:panelCollapsible expanded="true" id="pnl_col_history" style="border:none">
+                                                <f:facet name="header">
+                                                    <ice:panelGroup id="history_Group_Header">
+                                                        <ice:outputText id="lblHistoryStatus" value="History"/>
+                                                    </ice:panelGroup>
+                                                </f:facet>
+                                                <ice:panelGrid id="HistoryStatusBoard" width="100%"/>
+                                            </ice:panelCollapsible>
+                                        </ice:panelLayout>
+                                    </ice:panelLayout>
+                                </ice:panelGroup>
+                            </f:facet>
+                            <f:facet name="center">
+                                <ice:panelGroup id="page_display" style="height: 539px">
+                                    <ice:panelLayout id="container" layout="flow"
+                                        style="height: 509px; left: 0px; position: relative; width: 100%; -rave-layout: grid" styleClass="page_display">
+                                        <fieldset class="filedset_css" style="height: 560px;">
+                                            <legend class="legend_css">
+                                                <ice:outputLabel value="Manage Training Progress by Batch"/>
+                                            </legend>
+                                            <ice:panelLayout id="pnProfile" style="height: 503px; left: 0px; top: 20px; position: absolute; width: 100%">
+                                                <ice:panelGroup id="RetirementApproval" style="height: 475px" styleClass="filedset_border">
+                                                    <ice:panelLayout id="panelLayoutMain" style="height: 476px; left: 11px; top: 0px; position: absolute; width: 733px">
+                                                        <ice:panelLayout id="pnlLayputRequest"
+                                                            style="height: 449px; margin-left: 12px; left: -7px; top: 14px; overflow: auto; position: absolute; width: 720px" styleClass="insideContainerMain">
+                                                            <ice:outputLabel id="lblProgress" style="left: 436px; top: 14px; position: absolute" value="#{msgTraining.Progress}"/>
+                                                            <ice:outputLabel id="lblBatch" style="left: 31px; top: 95px; position: absolute" value="#{msgTraining.Batch}"/>
+                                                            <ice:outputLabel id="lblBudjetYear" style="left: 29px; top: 20px; position: absolute" value="#{msgTraining.BudjeYear}"/>
+                                                            <ice:outputLabel id="lblTraining" style="left: 29px; top: 53px; position: absolute" value="#{msgTraining.Training}"/>
+                                                            <ice:outputLabel id="lblStartDate" style="left: 434px; top: 43px; position: absolute" value="#{msgTraining.StartDate}"/>
+                                                            <ice:outputLabel id="lblEndDate" style="left: 435px; top: 71px; position: absolute" value="#{msgTraining.EndDate}"/>
+                                                            <ice:commandButton action="#{Training$TrainingProgressPage.btnRemoveAllFromGroup_action}"
+                                                                id="btnRemoveAllFromGroup" style="left: 315px; top: 285px; position: absolute; width: 95px" value="&lt;&lt;Remove All"/>
+                                                            <ice:commandButton action="#{Training$TrainingProgressPage.btnAddAllToGroup_action}"
+                                                                id="btnAddAllToGroup" style="left: 314px; top: 243px; position: absolute; width: 95px" value="Add all&gt;&gt;"/>
+                                                            <ice:commandButton action="#{Training$TrainingProgressPage.btnRemoveFromGroup_action}"
+                                                                id="btnRemoveFromGroup" style="left: 315px; top: 202px; position: absolute; width: 95px" value="&lt; Remove"/>
+                                                            <ice:commandButton action="#{Training$TrainingProgressPage.btnAddToGroup_action}" id="btnAddToGroup"
+                                                                style="left: 314px; top: 161px; position: absolute; width: 95px" value="Add &gt;"/>
+                                                            <ice:selectManyListbox binding="#{Training$TrainingProgressPage.selManyNotTrainnedEmployees}"
+                                                                id="selManyNotTrainnedEmployees" partialSubmit="true"
+                                                                style="height: 261px; left: 23px; top: 132px; position: absolute; width: 251px"
+                                                                value="#{Training$TrainingProgressPage.selectedEmployeesFromNotTrainnedList.selectedItems}" valueChangeListener="#{Training$TrainingProgressPage.selManyNotTrainnedEmployees_processValueChange}">
+                                                                <f:selectItems id="selectManyListbox1selectItems" value="#{Training$TrainingProgressPage.notTrainedEmployeesList}"/>
+                                                            </ice:selectManyListbox>
+                                                            <ice:selectManyListbox binding="#{Training$TrainingProgressPage.selManTrainnedEmployees}"
+                                                                id="selManTrainnedEmployees" partialSubmit="true"
+                                                                style="height: 255px; left: 435px; top: 130px; position: absolute; width: 249px" value="#{Training$TrainingProgressPage.selectedEmployeesFromTrainnedList.selectedItems}">
+                                                                <f:selectItems id="selectManyListbox2selectItems" value="#{Training$TrainingProgressPage.trainnedEmployeesList}"/>
+                                                            </ice:selectManyListbox>
+                                                            <ice:selectOneMenu binding="#{Training$TrainingProgressPage.drlProgressStatus}"
+                                                                id="drlProgressStatus" immediate="true" partialSubmit="true"
+                                                                style="left: 545px; top: 17px; position: absolute; width: 136px"
+                                                                value="#{Training$TrainingProgressPage.selectedRequestFromProgressList.selectedObject}" valueChangeListener="#{Training$TrainingProgressPage.drlProgressStatus_processValueChange}">
+                                                                <f:selectItems id="selectOneMenuProgress" value="#{Training$TrainingProgressPage.progressList}"/>
+                                                            </ice:selectOneMenu>
+                                                            <ice:selectOneMenu binding="#{Training$TrainingProgressPage.drlTrainingBatch}" id="drlTrainingBatch"
+                                                                partialSubmit="true" style="left: 118px; top: 94px; position: absolute; width: 154px"
+                                                                value="#{Training$TrainingProgressPage.selectedRequestFromBatchList.selectedObject}" valueChangeListener="#{Training$TrainingProgressPage.drlTrainingBatch_processValueChange}">
+                                                                <f:selectItems id="selectOneMenu1selectItems" value="#{Training$TrainingProgressPage.batchList}"/>
+                                                            </ice:selectOneMenu>
+                                                            <ice:selectOneMenu id="drlBudjetYear" partialSubmit="true"
+                                                                style="left: 118px; top: 21px; position: absolute; width: 151px"
+                                                                value="#{Training$TrainingProgressPage.selectedRequestFromMyBudjetYearList.selectedObject}" valueChangeListener="#{Training$TrainingProgressPage.drlBudjetYear_processValueChange}">
+                                                                <f:selectItems id="selectOneMenuBudjetYear" value="#{Training$TrainingProgressPage.budjetYearList}"/>
+                                                            </ice:selectOneMenu>
+                                                            <ice:selectOneMenu binding="#{Training$TrainingProgressPage.drlTrainning}" id="drlTrainning"
+                                                                partialSubmit="true" style="left: 118px; top: 58px; position: absolute; width: 152px"
+                                                                value="#{Training$TrainingProgressPage.selectedRequestFromTrainnerTypeList.selectedObject}" valueChangeListener="#{Training$TrainingProgressPage.drlTrainning_processValueChange}">
+                                                                <f:selectItems id="selectOneMenuTrainnerCategory" value="#{Training$TrainingProgressPage.trainingsList}"/>
+                                                            </ice:selectOneMenu>
+                                                            <ice:commandButton action="#{Training$TrainingProgressPage.btnSaveTrainnedEmployees_action}"
+                                                                id="btnSaveTrainnedEmployees" style="left: 266px; top: 400px; position: absolute; width: 177px" value="Save Changes"/>
+                                                            <ice:inputText action="#{Training$TrainingProgressPage.txtStartDate_action}"
+                                                                binding="#{Training$TrainingProgressPage.txtStartDate}" disabled="true" id="txtStartDate" style="left: 544px; top: 45px; position: absolute; width: 113px"/>
+                                                            <ice:inputText binding="#{Training$TrainingProgressPage.txtEndDate}" disabled="true" id="txtEndDate" style="left: 543px; top: 72px; position: absolute; width: 112px"/>
+                                                            <ice:commandButton action="#{Training$TrainingProgressPage.btnCalStartDate_action}"
+                                                                binding="#{Training$TrainingProgressPage.btnCalStartDate}" id="btnCalStartDate"
+                                                                image="/resources/images/cal_icon.JPG" immediate="true"
+                                                                style="left: 659px; top: 45px; position: absolute" value="submit"/>
+                                                            <ice:commandButton action="#{Training$TrainingProgressPage.btnCalEndDate_action}"
+                                                                binding="#{Training$TrainingProgressPage.btnCalEndDate}" id="btnCalEndDate"
+                                                                image="/resources/images/cal_icon.JPG" immediate="true"
+                                                                style="left: 660px; top: 72px; position: absolute" value="submit"/>
+                                                            <ice:selectInputDate binding="#{Training$TrainingProgressPage.calStartDate}" id="calStartDate"
+                                                                rendered="false" style="left: 500px; top: 16px; position: absolute; height:212px; width: 190px"
+                                                                value="#{Training$TrainingProgressPage.selectInputDateBean2.date1}" valueChangeListener="#{Training$TrainingProgressPage.calStartDate_processValueChange}"/>
+                                                            <ice:selectInputDate binding="#{Training$TrainingProgressPage.calEndDate}" id="calEndDate"
+                                                                rendered="false" style="left: 500px; top: 16px; position: absolute; height:212px; width: 190px"
+                                                                value="#{Training$TrainingProgressPage.selectInputDateBean3.date1}" valueChangeListener="#{Training$TrainingProgressPage.calEndDate_processValueChange}"/>
+                                                            <ice:outputLabel id="lblNoOfDays" style="left: 435px; top: 97px; position: absolute" value="#{msgTraining.NoOfDays}"/>
+                                                            <ice:inputText binding="#{Training$TrainingProgressPage.txtNoOfDays}" disabled="true"
+                                                                id="txtNoOfDays" style="left: 543px; top: 99px; position: absolute; width: 62px"/>
+                                                        </ice:panelLayout>
+                                                    </ice:panelLayout>
+                                                </ice:panelGroup>
+                                            </ice:panelLayout>
+                                        </fieldset>
+                                    </ice:panelLayout>
+                                </ice:panelGroup>
+                            </f:facet>
+                            <f:facet name="south">
+                                <ice:panelGroup id="page_footer">
+                                    <ice:panelLayout id="footer" layout="flow" style="height: 21px; left: 0px; position: relative; -rave-layout: grid" styleClass="page_footer">
+                                        <label
+                                                style="margin-left:10px;color:white;font-weight:bold;font-family:Cambria">Copyright © 2005-2006 Ethiopian Calander | <a
+                                                href="http://www.bunnabanksc.com" style="text-decoration:none;color:orange">Bunna International Bank |Information System Department |Software Division.</a> |</label>
+                                    </ice:panelLayout>
+                                </ice:panelGroup>
+                            </f:facet>
+                        </ice:panelBorder>
+                        <ice:panelPopup autoCentre="true" binding="#{Training$TrainingProgressPage.pnlPopupSuccessOrFailure}" clientOnly="true"
+                            draggable="false" id="pnlPopupSuccessOrFailure" modal="false" rendered="false"
+                            style="border-style: none; background-color: transparent; display: block; height: 106px; left: 63px; top: 800px; position: absolute; width: 751px" styleClass="message">
+                            <f:facet name="header">
+                                <ice:panelGroup id="pnlgridpnMessage" style="background-color:#306682; height: 20px; padding-top: 8px; width: 672px">
+                                    <ice:outputText id="pnMessageTitle"
+                                        style="color: white; margin-top: 8px; top: 10px; text-align: left; vertical-align: middle; width: 500px" value="Bunna Human Resource Management System:Message"/>
+                                    <ice:commandLink action="#{Training$TrainingProgressPage.btnClosePopupSuccessOrFailure_action}"
+                                        id="btnClosePopupSuccessOrFailure" immediate="true"
+                                        style="background-image: url(../resources/close_icon.gif); height: 19px; left: 740px; top: 20px; position: absolute; width: 19px"
+                                        styleClass="popupHeaderImage" title="Close Popup"/>
+                                </ice:panelGroup>
+                            </f:facet>
+                            <f:facet name="body">
+                                <ice:panelGroup binding="#{Training$TrainingProgressPage.panelGroupMessage}" id="panelGroupMessage"
+                                    style="display: block; height: 50px; position: relative; width: 638px" styleClass="icePnlGrp iceDatTblColHdr">
+                                    <ice:panelLayout binding="#{Training$TrainingProgressPage.pnlMessageBody}" id="pnlMessageBody" layout="flow"
+                                        style="background-color: rgb(245, 245, 245); display: block; height: 23px; position: relative; width: 572px; -rave-layout: grid" styleClass="message">
+                                        <h:outputLabel binding="#{Training$TrainingProgressPage.lblSuccessOrErrorMessage}" id="lblSuccessOrErrorMessage" style="background-color: #F5F5F5;"/>
+                                    </ice:panelLayout>
+                                </ice:panelGroup>
+                            </f:facet>
+                        </ice:panelPopup>
+                        <ice:panelPopup autoCentre="true" binding="#{Training$TrainingProgressPage.pnlPopupConfirmDelete}" draggable="true"
+                            id="pnlPopupConfirmDelete" modal="true" rendered="false" style="height: 115; left: 419px; top: 246px; position: absolute; width: 418px">
+                            <f:facet name="header">
+                                <ice:panelGrid id="panelGrid1" style="display:block;width:380px;height:20px;">
+                                    <ice:outputText id="otxtConfirmDeletePopupHeader" value=" BUNNA HRMS"/>
+                                </ice:panelGrid>
+                            </f:facet>
+                            <f:facet name="body">
+                                <ice:panelGrid id="pnlGrdPopupConfirmDeleteBody" style=" top:20px; display:block;width:380px;height:30px;">
+                                    <ice:panelLayout id="pnlLayoutPopupConfirmDeleteBody">
+                                        <ice:outputText binding="#{Training$TrainingProgressPage.outputTextConfirmDelete}" id="outputTextConfirmDelete"
+                                            style="left: 20px; top: 0px; position: absolute; width: 360px" value="AreYouSureYouWantToDelete"/>
+                                        <ice:commandButton action="#{Training$TrainingProgressPage.btnPopupOkDelete_action}" id="btnPopupOkDelete"
+                                            style="left: 96px; top: 35px; position: absolute; width: 88px" value="Ok"/>
+                                        <ice:commandButton action="#{Training$TrainingProgressPage.btnPopupCancelDelete_action}" id="btnPopupCancelDelete"
+                                            style="left: 192px; top: 35px; position: absolute; width: 96px" value="No"/>
+                                    </ice:panelLayout>
+                                </ice:panelGrid>
+                            </f:facet>
+                        </ice:panelPopup>
+                        <ice:panelPopup autoCentre="true" binding="#{Training$TrainingProgressPage.pnlPopupCostRegistration}" draggable="true"
+                            id="pnlPopupCostRegistration" modal="true" rendered="false" style="height: 505px; left: 408px; top: 240px; position: absolute; width: 882px">
+                            <f:facet name="header">
+                                <ice:panelGrid id="panelGridPopupViewPrevieousDecisions" style="display: block; height: 20px; text-align: left" width="872">
+                                    <ice:outputText dir="left" id="otxtViewPrevieousDecisionsPopupHeader"
+                                        style="display: block; height: 20px; text-align: right" value="BUNNA HRMS - View request status "/>
+                                    <ice:commandLink action="#{Training$TrainingProgressPage.btnCloseViewPreviesDecisions_action}"
+                                        id="btnClosePopupViewPrevieousDecisions" style="background-image: url(../resources/close_icon.gif); height: 19px; left: 740px; left: 855px; top: 0px; position: absolute; width: 19px"/>
+                                </ice:panelGrid>
+                            </f:facet>
+                            <f:facet name="body">
+                                <ice:panelLayout id="pnlLayoutViewPrevieousDecisions" style="border-width: 1px; border-style: solid; border-color: rgb(204, 204, 204) rgb(204, 204, 204) rgb(204, 204, 204) rgb(204, 204, 204); height: 398px; margin-left: 15px; left: -10px; top: 50px; overflow: auto; position: absolute; width: 866px">
+                                    <ice:panelLayout id="pnlCostAttributes"
+                                        style="height: 157px; margin-left: 15px; left: -1px; top: 16px; overflow: auto; position: absolute; width: 832px" styleClass="insideContainerMain">
+                                        <ice:outputLabel id="lblReceptNumber" style="left: 400px; top: 04px; position: absolute" value="Recept No : "/>
+                                        <ice:outputLabel id="lblCostName" style="left: 401px; top: 28px; position: absolute" value="Name : "/>
+                                        <ice:outputLabel id="lblFactor" style="left: 399px; top: 53px; position: absolute" value="Factor"/>
+                                        <ice:inputText binding="#{Training$TrainingProgressPage.txtRecieptNumber}" disabled="true" id="txtRecieptNumber" style="left: 472px; top: 05px; position: absolute; width: 131px"/>
+                                        <ice:inputText binding="#{Training$TrainingProgressPage.txtCostName}" disabled="true" id="txtCostName" style="left: 473px; top: 30px; position: absolute; width: 131px"/>
+                                        <ice:inputText binding="#{Training$TrainingProgressPage.txtPaymentDate}" disabled="true" id="txtPaymentDate" style="left: 474px; top: 84px; position: absolute; width: 133px"/>
+                                        <ice:inputText binding="#{Training$TrainingProgressPage.txtFactor}" disabled="true" id="txtFactor" style="left: 473px; top: 55px; position: absolute; width: 66px"/>
+                                        <ice:outputLabel id="lblCostCategory" style="left: 43px; top: 05px; position: absolute" value="Cost Category"/>
+                                        <ice:outputLabel id="lblUnitCost" style="left: 43px; top: 35px; position: absolute" value="Unit Cost"/>
+                                        <ice:outputLabel id="lblTotalCost" style="left: 42px; top: 61px; position: absolute" value="Total Cost"/>
+                                        <ice:inputText action="#{Training$ActionPlanCost.txtUnitCost_action}"
+                                            binding="#{Training$TrainingProgressPage.txtUnitCost}" id="txtUnitCost" style="left: 117px; top: 37px; position: absolute; width: 62px"/>
+                                        <ice:inputText binding="#{Training$TrainingProgressPage.txtTotalCost}" disabled="true" id="txtTotalCost"
+                                            style="left: 114px; top: 63px; position: absolute; width: 63px" value="0.00"/>
+                                        <ice:selectOneMenu binding="#{Training$TrainingProgressPage.drlCostCategories}" id="drlCostCategories"
+                                            partialSubmit="true" style="left: 120px; top: 10px; position: absolute; width: 144px" value="#{Training$ActionPlanCost.defaultSelectedData7.selectedObject}">
+                                            <f:selectItems id="selectOneMenu1selectItems1" value="#{Training$TrainingProgressPage.costCategoryList}"/>
+                                        </ice:selectOneMenu>
+                                        <ice:outputLabel id="lblRemark" style="left: 42px; top: 84px; position: absolute" value="Remark"/>
+                                        <ice:inputTextarea binding="#{Training$TrainingProgressPage.txtaRemark}" id="txtaRemark" style="height: 36px; left: 114px; top: 92px; position: absolute; width: 290px"/>
+                                        <ice:commandButton action="#{Training$TrainingProgressPage.btnAddToTable_action}" id="btnAddToTable"
+                                            style="left: 476px; top: 93px; position: absolute" value="Add to table"/>
+                                        <ice:commandButton action="#{Training$TrainingProgressPage.btnCalPaymentDate_action}" id="btnCalPaymentDate"
+                                            image="/resources/images/cal_icon.JPG" style="left: 609px; top: 83px; position: absolute"/>
+                                    </ice:panelLayout>
+                                    <ice:panelLayout id="pnlLayputCostTypes"
+                                        style="height: 90px; margin-left: 15px; left: -4px; top: 193px; overflow: auto; position: absolute; width: 839px" styleClass="insideContainerMain">
+                                        <ice:dataTable id="dataTableCostTypes" style="height: 8px; left: 11px; top: 9px; position: absolute"
+                                            value="#{Training$ActionPlanCost.trainingParticipantsList}" var="currentRow" width="663">
+                                            <ice:column id="colEmployeeId" style="width: 643px">
+                                                <ice:outputText id="optTxtForColumnEmployeeId" value="#{currentRow['fullName']}"/>
+                                                <f:facet name="header">
+                                                    <ice:outputText id="headerTextEmployeeId" value="Full Name"/>
+                                                </f:facet>
+                                            </ice:column>
+                                        </ice:dataTable>
+                                    </ice:panelLayout>
+                                    <ice:panelLayout id="pnlLayoutButtons" style="height: 54px; left: 12px; top: 288px; position: absolute; width: 833px" styleClass="insideContainerMain">
+                                        <ice:commandButton action="#{Training$TrainingProgressPage.btnSaveCost_action}" id="btnSaveCost"
+                                            style="left: 216px; top: 0px; position: absolute; width: 71px" value="Save"/>
+                                        <ice:commandButton action="#{Training$TrainingProgressPage.btnResetCost_action}" id="btnResetCost"
+                                            style="left: 336px; top: 0px; position: absolute; width: 71px" value="Reset"/>
+                                    </ice:panelLayout>
+                                    <ice:selectInputDate binding="#{Training$TrainingProgressPage.calPaymentDate}" id="calPaymentDate" rendered="false"
+                                        style="left: 24px; top: 16px; position: absolute; height:212px; width: 190px"
+                                        value="#{Training$TrainingProgressPage.selectInputDate1Bean.date1}" valueChangeListener="#{Training$TrainingProgressPage.calPaymentDate_processValueChange}"/>
+                                </ice:panelLayout>
+                            </f:facet>
+                        </ice:panelPopup>
+                    </div>
+                </ice:form>
+            </body>
+        </html>
+    </f:view>
+</jsp:root>

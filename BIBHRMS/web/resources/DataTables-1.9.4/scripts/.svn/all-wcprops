@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/MUGHERPROJECT/!svn/ver/2969/web/resources/DataTables-1.9.4/scripts
+END
+jshint.config
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/MUGHERPROJECT/!svn/ver/2969/web/resources/DataTables-1.9.4/scripts/jshint.config
+END
+make.sh
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/MUGHERPROJECT/!svn/ver/2969/web/resources/DataTables-1.9.4/scripts/make.sh
+END
+unit_tests.sh
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/MUGHERPROJECT/!svn/ver/2969/web/resources/DataTables-1.9.4/scripts/unit_tests.sh
+END

@@ -1,0 +1,158 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package manager.trainingManager;
+
+import entity.trainingEntity.ActionPlanCostEntity;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import manager.educationManager.EducationCostModel;
+import manager.globalUseManager.ErrorLogWriter;
+
+/**
+ *
+ * @author Mugher
+ */
+public class ActionPlanCostManager {
+
+    ActionPlanCostEntity actionPlanCostEntity = new ActionPlanCostEntity();
+
+    public ArrayList<EducationCostModel> getTrainingCostPlans(String budjetYear, int institutionId, int trainingId) {
+        ArrayList<EducationCostModel> costLists = new ArrayList<EducationCostModel>();
+        try {
+            ResultSet _rs = actionPlanCostEntity.selectTrainingCostPlans(budjetYear, institutionId, trainingId);
+            while (_rs.next()) {
+
+                String costTypeId = _rs.getString("TRAINING_COST_ID");
+                String costTypeCategory = _rs.getString("COST_CATEGORY_ID");
+                String costTypeName = _rs.getString("COST_NAME");
+                int quantityOrAmount = _rs.getInt("FACTOR");
+                double unitCost = _rs.getDouble("UNIT_COST");
+                double totalCost = unitCost * quantityOrAmount;
+                String documentReferenceNumber = _rs.getString("DOC_REF_NUMBER");
+                String databaseStatus = "Edited";
+                EducationCostModel educationCostModel = new EducationCostModel(costTypeId, costTypeCategory, costTypeName, budjetYear, trainingId, quantityOrAmount, unitCost, totalCost, documentReferenceNumber, databaseStatus);
+                costLists.add(educationCostModel);
+            }
+            _rs.close();
+            return costLists;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return null;
+        }
+    }
+
+    public ArrayList<EducationCostModel> getStationaryCosts() {
+        ArrayList<EducationCostModel> costLists = new ArrayList<EducationCostModel>();
+        try {
+            ResultSet _rs = actionPlanCostEntity.selectStationaryCosts();
+            while (_rs.next()) {
+                String stationaryName = _rs.getString("DESCRIPTION");
+                double price = _rs.getDouble("PRICE");
+                EducationCostModel educationCostModel = new EducationCostModel(stationaryName, price);
+                costLists.add(educationCostModel);
+            }
+            _rs.close();
+            return costLists;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return null;
+        }
+    }
+
+    public ArrayList<EducationCostModel> getAllowance(ArrayList<TrainingParticipantModel> trainingParticipantList) {
+        ArrayList<EducationCostModel> costLists = new ArrayList<EducationCostModel>();
+        try {
+            for(TrainingParticipantModel obj:trainingParticipantList){
+            ResultSet _rs = actionPlanCostEntity.selectAllowance(obj.getEmployeeId());
+            while (_rs.next()) {
+                String rankId = _rs.getString("RANK_ID");
+                double salary = _rs.getDouble("SALARY");
+                EducationCostModel educationCostModel = new EducationCostModel(rankId, salary);
+                costLists.add(educationCostModel);
+            }
+            _rs.close();
+            }
+            return costLists;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return null;
+        }
+    }
+
+    public double getRate(double salary) {
+        ArrayList<EducationCostModel> costLists = new ArrayList<EducationCostModel>();
+        double allowance = 0.0;
+        try {
+//            for(TrainingParticipantModel obj:trainingParticipantList){
+            ResultSet _rs = actionPlanCostEntity.selectRate();
+            while (_rs.next()) {
+                double bigenSalary = _rs.getDouble("BEGIN_SALARY");
+                double endSalary = _rs.getDouble("END_SALARY");
+                double rate = _rs.getDouble("RATE");
+                if((salary >=bigenSalary) && (salary <=endSalary)) {
+                    allowance = rate;
+                }
+//                EducationCostModel educationCostModel = new EducationCostModel(fullName, salary);
+//                costLists.add(educationCostModel);
+            }
+            _rs.close();
+//            }
+            return allowance;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return 0.0;
+        }
+    }
+
+    public double getRateByRank(String rankId) {
+        try {
+            double rate = 0.0;
+//            for(TrainingParticipantModel obj:trainingParticipantList){
+            ResultSet _rs = actionPlanCostEntity.selectRateByRank(rankId);
+            while (_rs.next()) {
+                rate = _rs.getDouble("RATE");
+//                EducationCostModel educationCostModel = new EducationCostModel(fullName, salary);
+//                costLists.add(educationCostModel);
+            }
+            _rs.close();
+//            }
+            return rate;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return 0.0;
+        }
+    }
+
+    public boolean saveTrainingCosts(ArrayList<EducationCostModel> trainingCostList) {
+        ArrayList<EducationCostModel> toBeInserted = new ArrayList<EducationCostModel>();
+        ArrayList<EducationCostModel> toBeUpdated = new ArrayList<EducationCostModel>();
+        ArrayList<EducationCostModel> toBeDeleted = new ArrayList<EducationCostModel>();
+        try {
+            for (EducationCostModel currentCost : trainingCostList) {
+                if (currentCost.getDatabaseStatus().equalsIgnoreCase("New")) {
+                    toBeInserted.add(currentCost);
+                } else if (currentCost.getDatabaseStatus().equalsIgnoreCase("Edited")) {
+                    toBeUpdated.add(currentCost);
+                } else if (currentCost.getDatabaseStatus().equalsIgnoreCase("Deleted")) {
+                    toBeDeleted.add(currentCost);
+                }
+           
+            }
+                actionPlanCostEntity.insertTrainingCosts(toBeInserted);
+                actionPlanCostEntity.updateTrainingCosts(toBeUpdated);
+                actionPlanCostEntity.deleteTrainingCosts(toBeDeleted);
+            return true;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return false;
+        }
+    }
+}

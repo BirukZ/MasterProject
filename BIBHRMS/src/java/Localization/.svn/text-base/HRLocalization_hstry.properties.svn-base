@@ -1,0 +1,49 @@
+# To change this template, choose Tools | Templates
+# and open the template in the editor.
+######################Promotion Page####################################
+id = Employee Id
+fullName = Full Name
+title = Title
+dept = Department
+job = Job Position
+age = Age
+sex = Sex
+address = Address
+region = Region
+zone = Zone/ Sub City
+woreda = Woreda
+kebelle = Kebelle
+houseNo = House Number
+phoneNo = Phone Number
+poBox = P.O.BOX
+criteriaCode = Criteria Coad :
+criteriaName = Criteria Name :
+criteriaDescription = Criteria Description :
+######################Leave Page####################################
+totalDays = Total Days
+fiscalYr = Fiscal Year
+leaveTo = To Date
+leaveFrom = From Date
+leaveType = Leave Type
+leaveRequest = Leave Request
+leaveApproval = Leave Approval
+leaveRecord = Leave Record
+######################Complaint Page####################################
+issueComplaint = Issue Complaint
+resolveComplaint = Resolve Complaint
+complaintRecord = ComplaintRecord
+complaintIssue = Main Issue of Complaint
+complaintDate = Complaint Date
+complaintPlace = Complaint Place
+complainOn = Complain On
+complain = The source and reasons of complaint
+evidence = Evidence, if any
+demandedResolution = Demanded Resolution
+findings = Findings
+decision = Decisions of Complaint Team
+complaintTeam = Complaint Team
+######################Transfer Page####################################
+deptFrom = From Department
+deptTo = To Department
+date = Date
+reasonTrans = Transfer Reason

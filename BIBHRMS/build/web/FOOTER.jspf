@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+    Document   : FOOTER
+    Created on : Apr 12, 2010, 12:16:35 AM
+    Author     : DPClone
+-->
+
+<div style="-rave-layout: grid; width: 400px; height: 200px" xmlns:f="http://java.sun.com/jsf/core" >
+  <f:subview id="FOOTER">
+  </f:subview>
+</div>

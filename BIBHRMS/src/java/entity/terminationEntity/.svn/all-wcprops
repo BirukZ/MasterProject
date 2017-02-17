@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/MUGHERPROJECT/!svn/ver/3665/src/java/entity/terminationEntity
+END
+TerminationRequestEntity.java
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/MUGHERPROJECT/!svn/ver/3618/src/java/entity/terminationEntity/TerminationRequestEntity.java
+END
+TransferEntity.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/MUGHERPROJECT/!svn/ver/452/src/java/entity/terminationEntity/TransferEntity.java
+END
+TerminationApproveEntity.java
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/MUGHERPROJECT/!svn/ver/2769/src/java/entity/terminationEntity/TerminationApproveEntity.java
+END
+TerminationEntity.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/MUGHERPROJECT/!svn/ver/1/src/java/entity/terminationEntity/TerminationEntity.java
+END
+RetirmentEntity.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/MUGHERPROJECT/!svn/ver/3665/src/java/entity/terminationEntity/RetirmentEntity.java
+END
+terminReportEntity.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/MUGHERPROJECT/!svn/ver/2135/src/java/entity/terminationEntity/terminReportEntity.java
+END
+ClearanceReport.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/MUGHERPROJECT/!svn/ver/3466/src/java/entity/terminationEntity/ClearanceReport.java
+END
+TransferApproveEntity.java
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/MUGHERPROJECT/!svn/ver/1731/src/java/entity/terminationEntity/TransferApproveEntity.java
+END

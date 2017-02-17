@@ -1,0 +1,165 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package entity.leaveEntity;
+
+import connectionProvider.ConnectionManager;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+/**
+ *
+ * @author ONEJAVA
+ */
+public class HolidayEntity extends ConnectionManager {
+
+    private String holidayId;
+    private String holidayName;
+    private String holidayDate;
+
+    public String getHolidayDate() {
+        return holidayDate;
+    }
+
+    public void setHolidayDate(String holidayDate) {
+        this.holidayDate = holidayDate;
+    }
+
+    public String getHolidayId() {
+        return holidayId;
+    }
+
+    public void setHolidayId(String holidayId) {
+        this.holidayId = holidayId;
+    }
+
+    public String getHolidayName() {
+        return holidayName;
+    }
+
+    public void setHolidayName(String holidayName) {
+        this.holidayName = holidayName;
+    }
+
+    public HolidayEntity(String holidayId, String holidayName, String holidayDate) {
+        this.holidayId = holidayId;
+        this.holidayName = holidayName;
+        this.holidayDate = holidayDate;
+    }
+
+    public HolidayEntity() {
+    }
+
+    public ArrayList<HolidayEntity> readAll(String forYear) {
+        HolidayEntity holidaySelect = null;
+        ArrayList<HolidayEntity> holidaysList = new ArrayList<HolidayEntity>();
+        try {
+            String sql = "SELECT * " +
+                    "FROM HR_LU_HOLIDAYS " +
+                    "WHERE SUBSTR(DATEOFHOLIDAYS,1,4) = SUBSTR('" + forYear + "',1,4)";
+            PreparedStatement ps = null;
+            ResultSet rs = null;
+            Connection con = getConnection();
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                holidaySelect = new HolidayEntity(rs.getString("Id"),
+                        rs.getString("DATEOFHOLIDAYS"),
+                        rs.getString("NAMEOFHOLIDAYS"));
+                holidaysList.add(holidaySelect);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return holidaysList;
+    }
+
+    public ArrayList<OrganizationCalendarEntity> readAll() {
+        ArrayList<OrganizationCalendarEntity> organizationCalendarList = new ArrayList<OrganizationCalendarEntity>();
+        OrganizationCalendarEntity organizationCalendar = null;
+        try {
+            Connection con = getConnection();
+            PreparedStatement st = con.prepareStatement("SELECT * FROM HR_LU_HOLIDAYS ");
+            ResultSet rs = st.executeQuery();
+            if (rs == null) {
+                //"No value is fetched from DB");
+            } else {
+
+                while (rs.next()) {
+                    organizationCalendar = new OrganizationCalendarEntity(rs.getString("Id"),
+                            rs.getString("NAMEOFHOLIDAYS"),
+                            rs.getString("DATEOFHOLIDAYS"));
+                    organizationCalendarList.add(organizationCalendar);
+
+                }
+
+            }
+        } catch (Exception ex) {
+        }
+        return organizationCalendarList;
+    }
+
+    public ArrayList<HashMap> holidayList(String startDate, String endDate) {
+        try {
+            String select = "SELECT * " +
+                    " FROM HR_LU_HOLIDAYS " +
+                    " WHERE DATEOFHOLIDAYS BETWEEN '" + startDate + "' AND '" + endDate + "'";
+            Connection con = null;
+            con = getConnection();
+            PreparedStatement ps = con.prepareStatement(select);
+            ResultSet rs = ps.executeQuery();
+            ArrayList<HashMap> holiday = new ArrayList<HashMap>();
+            while (rs.next()) {
+                HashMap hm = new HashMap();
+                hm.put("holidayDate", rs.getString("DATEOFHOLIDAYS"));
+                hm.put("description", rs.getString("NAMEOFHOLIDAYS"));
+                holiday.add(hm);
+            }
+            return holiday;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public HashMap getHolidayList() {
+        try {
+            String select = "SELECT * " +
+                    " FROM HR_LU_HOLIDAYS ";
+
+            Connection con = null;
+            con = getConnection();
+            PreparedStatement ps = con.prepareStatement(select);
+            ResultSet rs = ps.executeQuery();
+            ArrayList<HashMap> holiday = new ArrayList<HashMap>();
+            HashMap hm = new HashMap();
+            while (rs.next()) {
+                hm.put(rs.getString("GREGORIANDATE"), rs.getString("GREGORIANDATE"));
+            }
+            return hm;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public boolean isEquale(String datef) {
+        try {
+
+            HashMap hm = getHolidayList();
+            if (hm.get(datef).equals(datef)) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+
+}

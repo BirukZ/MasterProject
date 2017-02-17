@@ -1,0 +1,152 @@
+    .dynamicDiv
+    {
+        border:solid 2px rgb(115, 179, 206);
+        background-color:White;
+        /*width:240px;*/
+        font-size:11px;
+        font-family:verdan;
+        color:#000;
+        display:block;
+        position:absolute;
+        z-index:1;
+    }
+
+
+
+
+    .divheader
+    {
+        background-color:rgb(115, 179, 206);/*#2851B0;*/
+        text-align:center;
+        font-size:15px;/* x-large;  font-weight:bolder;*/
+
+        color:white/*#669933*/;
+        border:2px solid white;
+    }
+
+    #toprow
+    {
+        color:#333333/*navy#669933*/;
+        font-weight:normal;
+        font-size:80%;
+    }
+    /*.tbl
+    {
+    width:238px;
+    }*/
+    .tt
+    {
+        /*width:20px;*/
+        font-size:8px;
+        cursor:auto;
+    }
+
+    .btns
+    {
+        margin:0 auto;
+        width:26px;
+        font-size:120%;
+        text-align:center;
+        display:block;
+        background-color:white;
+        color:#333333;/*#6699cc;*/
+        font-weight:bold;
+    }
+
+    .btns:hover
+    {
+        background-color:black;/*#669933;*/
+        color:White;
+         cursor:pointer;
+    }
+
+    .btnempty
+    {
+        background-color:White;
+        display:none;
+    }
+
+    .tt:hover
+    {
+        background-color:red;/*#ffe284;*/
+    }
+
+    .lists
+    {
+        margin-left:3px;
+        color:Navy;
+        /*font-size:110%;
+        border:1px solid navy;*/
+        font-family:Visual Geez Unicode;
+    }
+    .txt
+    {
+        z-index:1;
+    }
+    .close
+    {
+        width:10px;
+        height:13px;
+        margin-left:225px;
+        margin-top:5px;
+        border:1px solid black;
+        background-color:Red;
+
+    }
+
+    #div3
+    {
+        color:white;
+        background-color:rgb(115, 179, 206);
+        border:2px solid white;
+    }
+    #btn7,#btn14,#btn21,#btn28,#btn35{color:#7D9EC0;/*#63B8FF;*/}
+    #btn7:hover{background-color:rgb(115, 179, 206);color:White;}
+    #btn14:hover{background-color:rgb(115, 179, 206);color:White;}
+    #btn21:hover{background-color:rgb(115, 179, 206);color:White;}
+    #btn28:hover{background-color:rgb(115, 179, 206);color:White;}
+    #btn35:hover{background-color:rgb(115, 179, 206);color:White;}
+
+    .btns:hover{background-color:rgb(115, 179, 206);color:White;}
+
+
+
+    #toolTip{
+        width:auto;
+        height:25px;
+        border:solid 1px rgb(115, 179, 206);
+        background-color:white;
+        font-size:11px;
+        text-align: left;
+        color:#333333;
+        font-weight:lighter;
+        position:absolute;
+        z-index:100;
+        font-family:Visual Geez Unicode;
+    }
+    #month_list
+    {
+        margin-left:3px;
+        color:#333333;
+        min-width:10px;
+        /*font-size:110%;
+        border:1px solid navy;*/
+        font-family:Visual Geez Unicode;
+    }
+    #year_list{
+        margin-left:3px;
+        color:#333333;
+        min-width:10px;
+        /*font-size:110%;
+        border:1px solid navy;*/
+        font-family:Visual Geez Unicode;
+    }
+    #choice_list{
+        margin-left:3px;
+        color:#333333;
+        min-width:7px;
+        /*font-size:110%;
+        border:1px solid navy;*/
+        font-family:Visual Geez Unicode;
+
+    }

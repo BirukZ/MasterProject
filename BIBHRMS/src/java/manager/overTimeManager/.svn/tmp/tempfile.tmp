@@ -1,0 +1,409 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+package manager.overTimeManager;
+import entity.overTimeEntity.OverTimeReportEntity;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import manager.ReportCritera.ReportCriteraManager;
+import manager.globalUseManager.ErrorLogWriter;
+
+/**
+ *
+ * @author Mugher
+ */
+public class OverTimeReportManager {
+
+    OverTimeReportEntity overTimeReportEntity = new OverTimeReportEntity();
+
+    public ArrayList<OverTimeReportModel> getOverTimeRequests() {
+        ArrayList<OverTimeReportModel> overTimeRequestLists = new ArrayList<OverTimeReportModel>();
+        if (ReportCriteraManager.getParametrsForDay().get("selectedCodition").toString().equalsIgnoreCase("Monthly"))
+               {
+        try {
+<<<<<<< .mine
+            ResultSet _rs = null;////overTimeReportEntity.readAllOverTimeRequestsByMonth(ReportCriteraManager.getParametrsForDay());
+=======
+            ResultSet _rs = overTimeReportEntity.readAllOverTimeRequestsByMonth(ReportCriteraManager.getParametrsForDay(), ReportCriteraManager.getEmployeeId(), ReportCriteraManager.isAllEmployee());
+>>>>>>> .r1934
+            while (_rs.next()) {
+                String requesterId = _rs.getString("REQUESTER_ID");
+                String requesterFullName = _rs.getString("REQUESTER_FULL_NAME");
+                String requesterDeptPath = _rs.getString("REQUESTER_DEPT_PATH");
+                String requesterJobDesc = _rs.getString("REQUESTER_JOB_DESC");
+                String appliedDate = _rs.getString("APPLIED_DATE");
+                String startDate = _rs.getString("START_DATE");
+                String endDate = _rs.getString("END_DATE");
+                String startTime = _rs.getString("START_TIME");
+                String endTime = _rs.getString("END_TIME");
+                String reason = _rs.getString("REASON");
+                String employeeId = _rs.getString("EMPLOYEE_ID");
+                String employeeFullName = _rs.getString("EMPLOYEE_FULL_NAME");
+                String employeeDeptPath = _rs.getString("EMPLOYEE_DEPT_PATH");
+                String employeeJobDesc = _rs.getString("EMPLOYEE_JOB_DESC");
+                String officeOrShift = _rs.getString("OFFICE_OR_SHIFT");
+                
+                OverTimeReportModel overTimeRequestModel = new OverTimeReportModel(requesterId,requesterFullName, requesterDeptPath, requesterJobDesc, appliedDate, startDate, endDate,
+                        startTime, endTime, reason, employeeId, employeeFullName, employeeDeptPath,employeeJobDesc,officeOrShift);
+                overTimeRequestLists.add(overTimeRequestModel);
+            }
+            _rs.close();
+            
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return null;
+        }
+       } else if (ReportCriteraManager.getParametrsForDay().get("selectedCodition").toString().equalsIgnoreCase("Quarterly"))
+               {
+        try {
+            ResultSet _rs = overTimeReportEntity.readAllOverTimeRequestsByQuarter(ReportCriteraManager.getParametrsForDay(), ReportCriteraManager.getEmployeeId(), ReportCriteraManager.isAllEmployee());
+            while (_rs.next()) {
+                String requesterId = _rs.getString("REQUESTER_ID");
+                String requesterFullName = _rs.getString("REQUESTER_FULL_NAME");
+                String requesterDeptPath = _rs.getString("REQUESTER_DEPT_PATH");
+                String requesterJobDesc = _rs.getString("REQUESTER_JOB_DESC");
+                String appliedDate = _rs.getString("APPLIED_DATE");
+                String startDate = _rs.getString("START_DATE");
+                String endDate = _rs.getString("END_DATE");
+                String startTime = _rs.getString("START_TIME");
+                String endTime = _rs.getString("END_TIME");
+                String reason = _rs.getString("REASON");
+                String employeeId = _rs.getString("EMPLOYEE_ID");
+                String employeeFullName = _rs.getString("EMPLOYEE_FULL_NAME");
+                String employeeDeptPath = _rs.getString("EMPLOYEE_DEPT_PATH");
+                String employeeJobDesc = _rs.getString("EMPLOYEE_JOB_DESC");
+                String officeOrShift = _rs.getString("OFFICE_OR_SHIFT");
+
+                OverTimeReportModel overTimeRequestModel = new OverTimeReportModel(requesterId,requesterFullName, requesterDeptPath, requesterJobDesc, appliedDate, startDate, endDate,
+                        startTime, endTime, reason, employeeId, employeeFullName, employeeDeptPath,employeeJobDesc,officeOrShift);
+                overTimeRequestLists.add(overTimeRequestModel);
+            }
+            _rs.close();
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return null;
+        }
+       } else if (ReportCriteraManager.getParametrsForDay().get("selectedCodition").toString().equalsIgnoreCase("Semiannually"))
+               {
+        try {
+<<<<<<< .mine
+            ResultSet _rs =null; //overTimeReportEntity.readAllOverTimeRequestsBySimiannual(ReportCriteraManager.getParametrsForDay());
+=======
+            ResultSet _rs = overTimeReportEntity.readAllOverTimeRequestsBySimiannual(ReportCriteraManager.getParametrsForDay(), ReportCriteraManager.getEmployeeId(), ReportCriteraManager.isAllEmployee());
+>>>>>>> .r1934
+            while (_rs.next()) {
+                String requesterId = _rs.getString("REQUESTER_ID");
+                String requesterFullName = _rs.getString("REQUESTER_FULL_NAME");
+                String requesterDeptPath = _rs.getString("REQUESTER_DEPT_PATH");
+                String requesterJobDesc = _rs.getString("REQUESTER_JOB_DESC");
+                String appliedDate = _rs.getString("APPLIED_DATE");
+                String startDate = _rs.getString("START_DATE");
+                String endDate = _rs.getString("END_DATE");
+                String startTime = _rs.getString("START_TIME");
+                String endTime = _rs.getString("END_TIME");
+                String reason = _rs.getString("REASON");
+                String employeeId = _rs.getString("EMPLOYEE_ID");
+                String employeeFullName = _rs.getString("EMPLOYEE_FULL_NAME");
+                String employeeDeptPath = _rs.getString("EMPLOYEE_DEPT_PATH");
+                String employeeJobDesc = _rs.getString("EMPLOYEE_JOB_DESC");
+                String officeOrShift = _rs.getString("OFFICE_OR_SHIFT");
+
+                OverTimeReportModel overTimeRequestModel = new OverTimeReportModel(requesterId,requesterFullName, requesterDeptPath, requesterJobDesc, appliedDate, startDate, endDate,
+                        startTime, endTime, reason, employeeId, employeeFullName, employeeDeptPath,employeeJobDesc,officeOrShift);
+                overTimeRequestLists.add(overTimeRequestModel);
+            }
+            _rs.close();
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return null;
+        }
+       } else if (ReportCriteraManager.getParametrsForDay().get("selectedCodition").toString().equalsIgnoreCase("Annually"))
+               {
+        try {
+<<<<<<< .mine
+            ResultSet _rs =null; // overTimeReportEntity.readAllOverTimeRequestsByAnnual(ReportCriteraManager.getParametrsForDay());
+=======
+            ResultSet _rs = overTimeReportEntity.readAllOverTimeRequestsByAnnual(ReportCriteraManager.getParametrsForDay(), ReportCriteraManager.getEmployeeId(), ReportCriteraManager.isAllEmployee());
+>>>>>>> .r1934
+            while (_rs.next()) {
+                String requesterId = _rs.getString("REQUESTER_ID");
+                String requesterFullName = _rs.getString("REQUESTER_FULL_NAME");
+                String requesterDeptPath = _rs.getString("REQUESTER_DEPT_PATH");
+                String requesterJobDesc = _rs.getString("REQUESTER_JOB_DESC");
+                String appliedDate = _rs.getString("APPLIED_DATE");
+                String startDate = _rs.getString("START_DATE");
+                String endDate = _rs.getString("END_DATE");
+                String startTime = _rs.getString("START_TIME");
+                String endTime = _rs.getString("END_TIME");
+                String reason = _rs.getString("REASON");
+                String employeeId = _rs.getString("EMPLOYEE_ID");
+                String employeeFullName = _rs.getString("EMPLOYEE_FULL_NAME");
+                String employeeDeptPath = _rs.getString("EMPLOYEE_DEPT_PATH");
+                String employeeJobDesc = _rs.getString("EMPLOYEE_JOB_DESC");
+                String officeOrShift = _rs.getString("OFFICE_OR_SHIFT");
+
+                OverTimeReportModel overTimeRequestModel = new OverTimeReportModel(requesterId,requesterFullName, requesterDeptPath, requesterJobDesc, appliedDate, startDate, endDate,
+                        startTime, endTime, reason, employeeId, employeeFullName, employeeDeptPath,employeeJobDesc,officeOrShift);
+                overTimeRequestLists.add(overTimeRequestModel);
+            }
+            _rs.close();
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return null;
+        }
+       } else if (ReportCriteraManager.getParametrsForDay().get("selectedCodition").toString().equalsIgnoreCase("Daily"))
+               {
+        try {
+<<<<<<< .mine
+            ResultSet _rs = null; //overTimeReportEntity.readAllOverTimeRequestsByDays(ReportCriteraManager.getParametrsForDay());
+=======
+            ResultSet _rs = overTimeReportEntity.readAllOverTimeRequestsByDays(ReportCriteraManager.getParametrsForDay(), ReportCriteraManager.getEmployeeId(), ReportCriteraManager.isAllEmployee());
+>>>>>>> .r1934
+            while (_rs.next()) {
+                String requesterId = _rs.getString("REQUESTER_ID");
+                String requesterFullName = _rs.getString("REQUESTER_FULL_NAME");
+                String requesterDeptPath = _rs.getString("REQUESTER_DEPT_PATH");
+                String requesterJobDesc = _rs.getString("REQUESTER_JOB_DESC");
+                String appliedDate = _rs.getString("APPLIED_DATE");
+                String startDate = _rs.getString("START_DATE");
+                String endDate = _rs.getString("END_DATE");
+                String startTime = _rs.getString("START_TIME");
+                String endTime = _rs.getString("END_TIME");
+                String reason = _rs.getString("REASON");
+                String employeeId = _rs.getString("EMPLOYEE_ID");
+                String employeeFullName = _rs.getString("EMPLOYEE_FULL_NAME");
+                String employeeDeptPath = _rs.getString("EMPLOYEE_DEPT_PATH");
+                String employeeJobDesc = _rs.getString("EMPLOYEE_JOB_DESC");
+                String officeOrShift = _rs.getString("OFFICE_OR_SHIFT");
+
+                OverTimeReportModel overTimeRequestModel = new OverTimeReportModel(requesterId,requesterFullName, requesterDeptPath, requesterJobDesc, appliedDate, startDate, endDate,
+                        startTime, endTime, reason, employeeId, employeeFullName, employeeDeptPath,employeeJobDesc,officeOrShift);
+                overTimeRequestLists.add(overTimeRequestModel);
+            }
+            _rs.close();
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return null;
+        }
+       }
+        return overTimeRequestLists;
+    }
+
+    public ArrayList<OverTimeReportModel> getOverTimeApproved() {
+        ArrayList<OverTimeReportModel> overTimeRequestLists = new ArrayList<OverTimeReportModel>();
+        if (ReportCriteraManager.getParametrsForDay().get("selectedCodition").toString().equalsIgnoreCase("Monthly"))
+               {
+        try {
+<<<<<<< .mine
+            ResultSet _rs =null; // overTimeReportEntity.readAllOverTimeApprovedByMonth(ReportCriteraManager.getParametrsForDay());
+=======
+            ResultSet _rs = overTimeReportEntity.readAllOverTimeApprovedByMonth(ReportCriteraManager.getParametrsForDay(), ReportCriteraManager.getEmployeeId(), ReportCriteraManager.isAllEmployee());
+>>>>>>> .r1934
+            while (_rs.next()) {
+                String requesterId = _rs.getString("REQUESTER_ID");
+                String requesterFullName = _rs.getString("REQUESTER_FULL_NAME");
+                String requesterDeptPath = _rs.getString("REQUESTER_DEPT_PATH");
+                String requesterJobDesc = _rs.getString("REQUESTER_JOB_DESC");
+                String appliedDate = _rs.getString("APPLIED_DATE");
+                String startDate = _rs.getString("START_DATE");
+                String endDate = _rs.getString("END_DATE");
+                String startTime = _rs.getString("START_TIME");
+                String endTime = _rs.getString("END_TIME");
+                String reason = _rs.getString("REASON");
+                String employeeId = _rs.getString("EMPLOYEE_ID");
+                String employeeFullName = _rs.getString("EMPLOYEE_FULL_NAME");
+                String employeeDeptPath = _rs.getString("EMPLOYEE_DEPT_PATH");
+                String employeeJobDesc = _rs.getString("EMPLOYEE_JOB_DESC");
+                String officeOrShift = _rs.getString("OFFICE_OR_SHIFT");
+                String deciderId = _rs.getString("PROCESSED_BY");
+                String deciderFullName = _rs.getString("DECIDER_FULL_NAME");
+                String deciderDeptPath = _rs.getString("DECIDER_DEPT_PATH");
+                String deciderJobDesc = _rs.getString("DECIDER_JOB_DESC");
+                String timeStamp = _rs.getString("TIME_STAMP");
+                OverTimeReportModel overTimeRequestModel = new OverTimeReportModel(requesterId,requesterFullName, requesterDeptPath, requesterJobDesc, appliedDate, startDate, endDate,
+                        startTime, endTime, reason, employeeId, employeeFullName, employeeDeptPath,employeeJobDesc,officeOrShift,deciderId,deciderFullName,deciderDeptPath,deciderJobDesc,timeStamp);
+                overTimeRequestLists.add(overTimeRequestModel);
+            }
+            _rs.close();
+            
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return null;
+        }
+       } else if (ReportCriteraManager.getParametrsForDay().get("selectedCodition").toString().equalsIgnoreCase("Quarterly"))
+               {
+        try {
+<<<<<<< .mine
+            ResultSet _rs = null; //overTimeReportEntity.readAllOverTimeApprovedByQuarter(ReportCriteraManager.getParametrsForDay());
+=======
+            ResultSet _rs = overTimeReportEntity.readAllOverTimeApprovedByQuarter(ReportCriteraManager.getParametrsForDay(), ReportCriteraManager.getEmployeeId(), ReportCriteraManager.isAllEmployee());
+>>>>>>> .r1934
+            while (_rs.next()) {
+                String requesterId = _rs.getString("REQUESTER_ID");
+                String requesterFullName = _rs.getString("REQUESTER_FULL_NAME");
+                String requesterDeptPath = _rs.getString("REQUESTER_DEPT_PATH");
+                String requesterJobDesc = _rs.getString("REQUESTER_JOB_DESC");
+                String appliedDate = _rs.getString("APPLIED_DATE");
+                String startDate = _rs.getString("START_DATE");
+                String endDate = _rs.getString("END_DATE");
+                String startTime = _rs.getString("START_TIME");
+                String endTime = _rs.getString("END_TIME");
+                String reason = _rs.getString("REASON");
+                String employeeId = _rs.getString("EMPLOYEE_ID");
+                String employeeFullName = _rs.getString("EMPLOYEE_FULL_NAME");
+                String employeeDeptPath = _rs.getString("EMPLOYEE_DEPT_PATH");
+                String employeeJobDesc = _rs.getString("EMPLOYEE_JOB_DESC");
+                String officeOrShift = _rs.getString("OFFICE_OR_SHIFT");
+                String deciderId = _rs.getString("PROCESSED_BY");
+                String deciderFullName = _rs.getString("DECIDER_FULL_NAME");
+                String deciderDeptPath = _rs.getString("DECIDER_DEPT_PATH");
+                String deciderJobDesc = _rs.getString("DECIDER_JOB_DESC");
+                String timeStamp = _rs.getString("TIME_STAMP");
+                OverTimeReportModel overTimeRequestModel = new OverTimeReportModel(requesterId,requesterFullName, requesterDeptPath, requesterJobDesc, appliedDate, startDate, endDate,
+                        startTime, endTime, reason, employeeId, employeeFullName, employeeDeptPath,employeeJobDesc,officeOrShift,deciderId,deciderFullName,deciderDeptPath,deciderJobDesc,timeStamp);
+                overTimeRequestLists.add(overTimeRequestModel);
+            }
+            _rs.close();
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return null;
+        }
+       } else if (ReportCriteraManager.getParametrsForDay().get("selectedCodition").toString().equalsIgnoreCase("Semiannually"))
+               {
+        try {
+<<<<<<< .mine
+            ResultSet _rs =null; // overTimeReportEntity.readAllOverTimeApprovedBySimiannual(ReportCriteraManager.getParametrsForDay());
+=======
+            ResultSet _rs = overTimeReportEntity.readAllOverTimeApprovedBySimiannual(ReportCriteraManager.getParametrsForDay(), ReportCriteraManager.getEmployeeId(), ReportCriteraManager.isAllEmployee());
+>>>>>>> .r1934
+            while (_rs.next()) {
+                String requesterId = _rs.getString("REQUESTER_ID");
+                String requesterFullName = _rs.getString("REQUESTER_FULL_NAME");
+                String requesterDeptPath = _rs.getString("REQUESTER_DEPT_PATH");
+                String requesterJobDesc = _rs.getString("REQUESTER_JOB_DESC");
+                String appliedDate = _rs.getString("APPLIED_DATE");
+                String startDate = _rs.getString("START_DATE");
+                String endDate = _rs.getString("END_DATE");
+                String startTime = _rs.getString("START_TIME");
+                String endTime = _rs.getString("END_TIME");
+                String reason = _rs.getString("REASON");
+                String employeeId = _rs.getString("EMPLOYEE_ID");
+                String employeeFullName = _rs.getString("EMPLOYEE_FULL_NAME");
+                String employeeDeptPath = _rs.getString("EMPLOYEE_DEPT_PATH");
+                String employeeJobDesc = _rs.getString("EMPLOYEE_JOB_DESC");
+                String officeOrShift = _rs.getString("OFFICE_OR_SHIFT");
+                String deciderId = _rs.getString("PROCESSED_BY");
+                String deciderFullName = _rs.getString("DECIDER_FULL_NAME");
+                String deciderDeptPath = _rs.getString("DECIDER_DEPT_PATH");
+                String deciderJobDesc = _rs.getString("DECIDER_JOB_DESC");
+                String timeStamp = _rs.getString("TIME_STAMP");
+                OverTimeReportModel overTimeRequestModel = new OverTimeReportModel(requesterId,requesterFullName, requesterDeptPath, requesterJobDesc, appliedDate, startDate, endDate,
+                        startTime, endTime, reason, employeeId, employeeFullName, employeeDeptPath,employeeJobDesc,officeOrShift,deciderId,deciderFullName,deciderDeptPath,deciderJobDesc,timeStamp);
+                overTimeRequestLists.add(overTimeRequestModel);
+            }
+            _rs.close();
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return null;
+        }
+       } else if (ReportCriteraManager.getParametrsForDay().get("selectedCodition").toString().equalsIgnoreCase("Annually"))
+               {
+        try {
+<<<<<<< .mine
+            ResultSet _rs = null; //overTimeReportEntity.readAllOverTimeApprovedByAnnual(ReportCriteraManager.getParametrsForDay());
+=======
+            ResultSet _rs = overTimeReportEntity.readAllOverTimeApprovedByAnnual(ReportCriteraManager.getParametrsForDay(), ReportCriteraManager.getEmployeeId(), ReportCriteraManager.isAllEmployee());
+>>>>>>> .r1934
+            while (_rs.next()) {
+                String requesterId = _rs.getString("REQUESTER_ID");
+                String requesterFullName = _rs.getString("REQUESTER_FULL_NAME");
+                String requesterDeptPath = _rs.getString("REQUESTER_DEPT_PATH");
+                String requesterJobDesc = _rs.getString("REQUESTER_JOB_DESC");
+                String appliedDate = _rs.getString("APPLIED_DATE");
+                String startDate = _rs.getString("START_DATE");
+                String endDate = _rs.getString("END_DATE");
+                String startTime = _rs.getString("START_TIME");
+                String endTime = _rs.getString("END_TIME");
+                String reason = _rs.getString("REASON");
+                String employeeId = _rs.getString("EMPLOYEE_ID");
+                String employeeFullName = _rs.getString("EMPLOYEE_FULL_NAME");
+                String employeeDeptPath = _rs.getString("EMPLOYEE_DEPT_PATH");
+                String employeeJobDesc = _rs.getString("EMPLOYEE_JOB_DESC");
+                String officeOrShift = _rs.getString("OFFICE_OR_SHIFT");
+                String deciderId = _rs.getString("PROCESSED_BY");
+                String deciderFullName = _rs.getString("DECIDER_FULL_NAME");
+                String deciderDeptPath = _rs.getString("DECIDER_DEPT_PATH");
+                String deciderJobDesc = _rs.getString("DECIDER_JOB_DESC");
+                String timeStamp = _rs.getString("TIME_STAMP");
+                OverTimeReportModel overTimeRequestModel = new OverTimeReportModel(requesterId,requesterFullName, requesterDeptPath, requesterJobDesc, appliedDate, startDate, endDate,
+                        startTime, endTime, reason, employeeId, employeeFullName, employeeDeptPath,employeeJobDesc,officeOrShift,deciderId,deciderFullName,deciderDeptPath,deciderJobDesc,timeStamp);
+                overTimeRequestLists.add(overTimeRequestModel);
+            }
+            _rs.close();
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return null;
+        }
+       } else if (ReportCriteraManager.getParametrsForDay().get("selectedCodition").toString().equalsIgnoreCase("Daily"))
+               {
+        try {
+<<<<<<< .mine
+            ResultSet _rs = null; //overTimeReportEntity.readAllOverTimeApprovedByDays(ReportCriteraManager.getParametrsForDay());
+=======
+            ResultSet _rs = overTimeReportEntity.readAllOverTimeApprovedByDays(ReportCriteraManager.getParametrsForDay(), ReportCriteraManager.getEmployeeId(), ReportCriteraManager.isAllEmployee());
+>>>>>>> .r1934
+            while (_rs.next()) {
+                String requesterId = _rs.getString("REQUESTER_ID");
+                String requesterFullName = _rs.getString("REQUESTER_FULL_NAME");
+                String requesterDeptPath = _rs.getString("REQUESTER_DEPT_PATH");
+                String requesterJobDesc = _rs.getString("REQUESTER_JOB_DESC");
+                String appliedDate = _rs.getString("APPLIED_DATE");
+                String startDate = _rs.getString("START_DATE");
+                String endDate = _rs.getString("END_DATE");
+                String startTime = _rs.getString("START_TIME");
+                String endTime = _rs.getString("END_TIME");
+                String reason = _rs.getString("REASON");
+                String employeeId = _rs.getString("EMPLOYEE_ID");
+                String employeeFullName = _rs.getString("EMPLOYEE_FULL_NAME");
+                String employeeDeptPath = _rs.getString("EMPLOYEE_DEPT_PATH");
+                String employeeJobDesc = _rs.getString("EMPLOYEE_JOB_DESC");
+                String officeOrShift = _rs.getString("OFFICE_OR_SHIFT");
+                String deciderId = _rs.getString("PROCESSED_BY");
+                String deciderFullName = _rs.getString("DECIDER_FULL_NAME");
+                String deciderDeptPath = _rs.getString("DECIDER_DEPT_PATH");
+                String deciderJobDesc = _rs.getString("DECIDER_JOB_DESC");
+                String timeStamp = _rs.getString("TIME_STAMP");
+                OverTimeReportModel overTimeRequestModel = new OverTimeReportModel(requesterId,requesterFullName, requesterDeptPath, requesterJobDesc, appliedDate, startDate, endDate,
+                        startTime, endTime, reason, employeeId, employeeFullName, employeeDeptPath,employeeJobDesc,officeOrShift,deciderId,deciderFullName,deciderDeptPath,deciderJobDesc,timeStamp);
+                overTimeRequestLists.add(overTimeRequestModel);
+            }
+            _rs.close();
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return null;
+        }
+       }
+        return overTimeRequestLists;
+    }
+
+}

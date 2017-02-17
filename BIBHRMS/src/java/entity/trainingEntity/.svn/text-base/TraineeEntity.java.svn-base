@@ -1,0 +1,879 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package entity.trainingEntity;
+
+import connectionProvider.ConnectionManager;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Set;
+import manager.globalUseManager.ErrorLogWriter;
+import oracle.jdbc.rowset.OracleCachedRowSet;
+
+/**
+ *
+ * @author DPClone
+ */
+public class TraineeEntity extends ConnectionManager {
+
+    Connection _con = null;
+    PreparedStatement _ps = null;
+    ResultSet _rs = null;
+
+    public void releaseResources() throws SQLException {
+        if (_rs != null) {
+            _rs.close();
+        }
+        if (_ps != null) {
+            _ps.close();
+        }
+        if (_con != null) {
+            closePooledConnections(_con);
+        }
+    }
+    private String trainingId;
+    //******************************************************************Local Variables for Training Request**************************************************
+    int trainingTypeID;
+    String fromDate;
+    String toDate;
+    int trainingTearm;
+    int trainingInstitutionID;
+    String requestRemark;
+    int numEmp;
+    String requesterID;
+    int priority;
+    String forDepartment;
+    String requestDate;
+    double costPerPerson;
+    double total;
+
+    public double getCostPerPerson() {
+        return costPerPerson;
+    }
+
+    public void setCostPerPerson(double costPerPerson) {
+        this.costPerPerson = costPerPerson;
+    }
+
+    public String getForDepartment() {
+        return forDepartment;
+    }
+
+    public void setForDepartment(String forDepartment) {
+        this.forDepartment = forDepartment;
+    }
+
+    public String getFromDate() {
+        return fromDate;
+    }
+
+    public void setFromDate(String fromDate) {
+        this.fromDate = fromDate;
+    }
+
+    public int getNumEmp() {
+        return numEmp;
+    }
+
+    public void setNumEmp(int numEmp) {
+        this.numEmp = numEmp;
+    }
+
+    public int getPriority() {
+        return priority;
+    }
+
+    public void setPriority(int priority) {
+        this.priority = priority;
+    }
+
+    public String getRequestDate() {
+        return requestDate;
+    }
+
+    public void setRequestDate(String requestDate) {
+        this.requestDate = requestDate;
+    }
+
+    public String getRequestRemark() {
+        return requestRemark;
+    }
+
+    public void setRequestRemark(String requestRemark) {
+        this.requestRemark = requestRemark;
+    }
+
+    public String getRequesterID() {
+        return requesterID;
+    }
+
+    public void setRequesterID(String requesterID) {
+        this.requesterID = requesterID;
+    }
+
+    public String getToDate() {
+        return toDate;
+    }
+
+    public void setToDate(String toDate) {
+        this.toDate = toDate;
+    }
+
+    public double getTotal() {
+        return total;
+    }
+
+    public void setTotal(double total) {
+        this.total = total;
+    }
+
+    public int getTrainingInstitutionID() {
+        return trainingInstitutionID;
+    }
+
+    public void setTrainingInstitutionID(int trainingInstitutionID) {
+        this.trainingInstitutionID = trainingInstitutionID;
+    }
+
+    public int getTrainingTearm() {
+        return trainingTearm;
+    }
+
+    public void setTrainingTearm(int trainingTearm) {
+        this.trainingTearm = trainingTearm;
+    }
+
+    public int getTrainingTypeID() {
+        return trainingTypeID;
+    }
+
+    public void setTrainingTypeID(int trainingTypeID) {
+        this.trainingTypeID = trainingTypeID;
+    }
+    //*******************************************End Of Local Variables for Training Request************************************************************
+
+    /**
+     *
+     * @return
+     */
+    public String getTrainingConfirmedBy() {
+        return trainingConfirmedBy;
+    }
+
+    /**
+     *
+     * @param trainingConfirmedBy
+     */
+    public void setTrainingConfirmedBy(String trainingConfirmedBy) {
+        this.trainingConfirmedBy = trainingConfirmedBy;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getTrainingId() {
+        return trainingId;
+    }
+
+    /**
+     *
+     * @param trainingId
+     */
+    public void setTrainingId(String trainingId) {
+        this.trainingId = trainingId;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getTrainingPreparedBy() {
+        return trainingPreparedBy;
+    }
+
+    /**
+     *
+     * @param trainingPreparedBy
+     */
+    public void setTrainingPreparedBy(String trainingPreparedBy) {
+        this.trainingPreparedBy = trainingPreparedBy;
+    }
+
+    /**
+     *
+     * @param date
+     * @param trainingPreparedBy
+     * @param trainingConfirmedBy
+     */
+    public TraineeEntity(int trainingTypeID, String fromDate, String toDate, int trainingTearm, int trainingInstitutionID, String requestRemark, int numEmp, String requesterID, int priority, String forDepartment, String requestDate, double costPerPerson, double total) {
+        this.trainingTypeID = trainingTypeID;
+        this.fromDate = fromDate;
+        this.toDate = toDate;
+        this.trainingTearm = trainingTearm;
+        this.trainingInstitutionID = trainingInstitutionID;
+        this.requestRemark = requestRemark;
+        this.numEmp = numEmp;
+        this.requesterID = requesterID;
+        this.priority = priority;
+        this.forDepartment = forDepartment;
+        this.requestDate = requestDate;
+        this.costPerPerson = costPerPerson;
+        this.total = total;
+
+    }
+    private String trainingPreparedBy;
+    private String trainingConfirmedBy;
+    private String trainingPreparedDate;
+    private String trainingConfirmedDate;
+
+    /**
+     *
+     * @return
+     */
+    public String getTrainingConfirmedDate() {
+        return trainingConfirmedDate;
+    }
+
+    /**
+     *
+     * @param trainingConfirmedDate
+     */
+    public void setTrainingConfirmedDate(String trainingConfirmedDate) {
+        this.trainingConfirmedDate = trainingConfirmedDate;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getTrainingPreparedDate() {
+        return trainingPreparedDate;
+    }
+
+    /**
+     *
+     * @param trainingPreparedDate
+     */
+    public void setTrainingPreparedDate(String trainingPreparedDate) {
+        this.trainingPreparedDate = trainingPreparedDate;
+    }
+    private String traineeNo;
+    private String trainingCost;
+    private String trainingPriority;
+    private String trainingType;
+    private String trainingCategory;
+    private String trainingInstitution;
+    private String trainingFrom;
+    private String trainingTo;
+    private String remark;
+
+    /**
+     *
+     * @return
+     */
+    public String getRemark() {
+        return remark;
+    }
+
+    /**
+     *
+     * @param remark
+     */
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    /**
+     * The default constructor
+     */
+    public TraineeEntity() {
+    }
+
+    /**
+     *
+     * @param traineeNo
+     * @param trainingCost
+     * @param trainingPriority
+     * @param trainingType
+     * @param trainingInstitution
+     * @param trainingFrom
+     * @param trainingTo
+     * @param remark
+     */
+    public TraineeEntity(String traineeNo, String trainingCost, String trainingPriority, String trainingType, String trainingInstitution, String trainingFrom, String trainingTo, String remark) {
+        this.traineeNo = traineeNo;
+        this.trainingCost = trainingCost;
+        this.trainingPriority = trainingPriority;
+        this.trainingType = trainingType;
+        this.trainingInstitution = trainingInstitution;
+        this.trainingFrom = trainingFrom;
+        this.trainingTo = trainingTo;
+        this.remark = remark;
+    }
+
+    /**
+     *
+     * @param traineeNo
+     * @param traineeCost
+     * @param trainingPriority
+     * @param trainingType
+     * @param trainingTo
+     * @param trainingCategory
+     * @param trainingFrom
+     * @param trainingInstitution
+     * @param remark
+     */
+    public TraineeEntity(String traineeNo, String traineeCost, String trainingPriority,
+            String trainingType, String trainingCategory, String trainingInstitution, String trainingFrom, String trainingTo, String remark) {
+        this.traineeNo = traineeNo;
+        this.trainingCost = traineeCost;
+        this.trainingPriority = trainingPriority;
+        this.trainingType = trainingType;
+        this.trainingCategory = trainingCategory;
+        this.trainingInstitution = trainingInstitution;
+        this.trainingFrom = trainingFrom;
+        this.trainingTo = trainingTo;
+        this.remark = remark;
+    }
+
+    /**
+     *
+     */
+    public void delete() {
+        this.delete(this);
+    }
+
+    /**
+     *
+     * @return
+     * @throws java.sql.SQLException
+     */
+    public ArrayList<TraineeEntity> readAllTrainee() throws SQLException {
+        ResultSet rs = null;
+        _con = getConnection();
+        ArrayList<TraineeEntity> trainees = new ArrayList<TraineeEntity>();
+        String selectTrainee = "SELECT t.`trainee_id`, t.`remark`, e.`first_Name`, " +
+                "e.`middle_Name`, e.`last_Name`, d.`description`, tr.  " +
+                "`training_reques_id`, e.`sex` " +
+                "FROM tbl_trainee t, hr_employee_info e, tbl_department d, tbl_training_request tr " +
+                "WHERE t.`trainee_id` =e.`emp_Id` AND e.`department_id` = d.`department_id` " +
+                "AND t.`training_reques_id` = tr.`requesterId`";
+        PreparedStatement ps = _con.prepareStatement(selectTrainee);
+        rs = ps.executeQuery();
+
+        while (rs.next()) {
+            TraineeEntity trainee = new TraineeEntity(rs.getString("trainee_id"), rs.getString("first_name"),
+                    rs.getString("middle_name"), rs.getString("last_name"), rs.getString("sex"),
+                    rs.getString("birth_date"), rs.getString("place_id"), rs.getString("remark"));
+            trainees.add(trainee);
+        }
+        rs.close();
+        return trainees;
+    }
+
+    /**
+     *
+     * @param trainingRequestId
+     * @return
+     * @throws java.sql.SQLException
+     */
+    public ResultSet readTrainee(String trainingRequestId) throws SQLException {
+        ResultSet rs = null;
+        _con = getConnection();
+        String selectTrainee = "SELECT t.`trainee_id`, t.`remark`, e.`first_Name`, " +
+                "e.`middle_Name`, e.`last_Name`, d.`description`, tr.  " +
+                "`training_reques_id`, e.`sex` " +
+                "FROM tbl_trainee t, hr_employee_info e, tbl_department d, tbl_training_request tr " +
+                "WHERE t.`trainee_id` =e.`emp_Id` AND e.`department_id` = d.`department_id` " +
+                "AND t.`training_reques_id`  = '" + trainingRequestId + "'";
+        PreparedStatement ps = _con.prepareStatement(selectTrainee);
+        rs = ps.executeQuery();
+        return rs;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public TraineeEntity readTrainee() {
+        ResultSet rs = null;
+        TraineeEntity trainee = null;
+        try {
+            _con = getConnection();
+            String selectTrainee = "SELECT t.`trainee_id`, t.`first_name`, t.`middle_name`, " +
+                    "t.`last_name`, t.`sex`, t.`birth_date`, t.`place_id`, t.`remark` " +
+                    "FROM tbl_trainee t WHERE t.`trainee_id` = '" + this.getTraineeNo() + "'";
+            PreparedStatement ps = _con.prepareStatement(selectTrainee);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                TraineeEntity traineeEntiry = new TraineeEntity(rs.getString("trainee_id"), rs.getString("first_name"),
+                        rs.getString("middle_name"), rs.getString("last_name"), rs.getString("sex"),
+                        rs.getString("birth_date"), rs.getString("place_id"), rs.getString("remark"));
+                trainee = traineeEntiry;
+            }
+            return trainee;
+        } catch (Exception ex) {
+            ErrorLogWriter.writeError(ex);
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return null;
+        } finally {
+            try {
+                releaseResources();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * The method inserts a row od training need data into the hr_training_need
+     * table and returns the training_need_id of the last row iserted
+     * @param trainee TraineeEntity object
+     * @return a <code>ResultSet</code> object rs with the
+     * @throws java.sql.SQLException if a database access error occurs
+     * or this method is called on a closed connection
+     */
+    public int insert(TraineeEntity trainee) throws SQLException {
+        String str = "INSERT INTO TBL_TRAINING_REQUEST " +
+                " (TRAINING_REQUES_ID,TRAINING_TYPE_ID, FROM_DATE, TO_DATE, TRAINING_TEARM_ID, INSTITUTION_ID, REMARK, NO_OF_TRAINEES, REQUESTER_ID, PRIORITY_ID, FOR_DEPARTMENT_ID, REQUEST_DATE, COAST_PER_PERSON, TOTAL_COAST) " +
+                " VALUES (tbl_training_request_seq.nextval,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
+        try {
+            _con = getConnection();
+            PreparedStatement ps = _con.prepareStatement(str);
+            ps.setInt(1, trainee.getTrainingTypeID());
+            ps.setString(2, trainee.getFromDate());
+            ps.setString(3, trainee.getToDate());
+            ps.setInt(4, trainee.getTrainingTearm());
+            ps.setInt(5, trainee.getTrainingInstitutionID());
+            ps.setString(6, trainee.getRequestRemark());
+            ps.setInt(7, trainee.getNumEmp());
+            ps.setString(8, trainee.getRequesterID());
+            ps.setInt(9, trainee.getPriority());
+            ps.setString(10, trainee.getForDepartment());
+            ps.setString(11, trainee.getRequestDate());
+            ps.setDouble(12, trainee.getCostPerPerson());
+            ps.setDouble(13, trainee.getTotal());
+            return ps.executeUpdate();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return 0;
+        }
+    }
+
+    public int UpdateCandidate(TraineeEntity trainee, String requestID) {
+        String str = "UPDATE TBL_TRAINING_REQUEST SET TRAINING_TYPE_ID=? , FROM_DATE=? , " +
+                " TO_DATE=? , TRAINING_TEARM_ID=?, INSTITUTION_ID=?, " +
+                " REMARK=?, NO_OF_TRAINEES=?, REQUESTER_ID=?, " +
+                " PRIORITY_ID=?, FOR_DEPARTMENT_ID=?, REQUEST_DATE=?," +
+                " COAST_PER_PERSON=?, " +
+                " TOTAL_COAST=? WHERE TRAINING_REQUES_ID='" + requestID + "'";
+        try {
+            _con = getConnection();
+            PreparedStatement ps = _con.prepareStatement(str);
+            ps.setInt(1, trainee.getTrainingTypeID());
+            ps.setString(2, trainee.getFromDate());
+            ps.setString(3, trainee.getToDate());
+            ps.setInt(4, trainee.getTrainingTearm());
+            ps.setInt(5, trainee.getTrainingInstitutionID());
+            ps.setString(6, trainee.getRequestRemark());
+            ps.setInt(7, trainee.getNumEmp());
+            ps.setString(8, trainee.getRequesterID());
+            ps.setInt(9, trainee.getPriority());
+            ps.setString(10, trainee.getForDepartment());
+            ps.setString(11, trainee.getRequestDate());
+            ps.setDouble(12, trainee.getCostPerPerson());
+            ps.setDouble(13, trainee.getTotal());
+            return ps.executeUpdate();
+        } catch (Exception ex) {
+            return 0;
+        } finally {
+            try {
+                releaseResources();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
+    public boolean DeleteTrainingNeed(Set<HashMap> trainingNeedListDelete) {
+        try {
+            return true;
+        } catch (Exception ex) {
+            return false;
+        } finally {
+            try {
+                releaseResources();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
+    public ResultSet LastRowTrainingRequestID() throws SQLException {
+        String str = "   SELECT TRAINING_REQUES_ID FROM  TBL_TRAINING_REQUEST  " +
+                "        WHERE TRAINING_REQUES_ID = (SELECT max(TRAINING_REQUES_ID) FROM  TBL_TRAINING_REQUEST )";
+        _con = getConnection();
+        _ps = _con.prepareStatement(str);
+        _rs = _ps.executeQuery();
+        OracleCachedRowSet ocrs = new OracleCachedRowSet();
+        ocrs.populate(_rs);
+        return (ResultSet) ocrs;
+    }
+
+    public ResultSet LoadTrainingRequestsList() {
+        try {
+
+
+            _con = getConnection();
+            String qry = "SELECT " +
+                    "  TRAINING_REQUES_ID," +
+                    "  FOR_DEPARTMENT_ID," +
+                    "  REQUEST_DATE," +
+                    "  DEP_DESCRIPTION" +
+                    "  FROM VW_TRAINING_REQUEST_LIST ";
+            _ps = _con.prepareStatement(qry);
+            _rs = _ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(_rs);
+            return (ResultSet) ocrs;
+        } catch (Exception ex) {
+            return null;
+        } finally {
+            try {
+                releaseResources();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+
+    }
+
+    public ResultSet LoadTrainingRequestsList(String requestedDate, String forDepartment) {
+        try {
+
+
+            _con = getConnection();
+            String qry = "SELECT " +
+                    "  TRAINING_REQUES_ID," +
+                    "  FOR_DEPARTMENT_ID," +
+                    "  REQUEST_DATE," +
+                    "  DEP_DESCRIPTION" +
+                    "  FROM VW_TRAINING_REQUEST_LIST WHERE REQUEST_DATE='" + requestedDate + "' AND FOR_DEPARTMENT_ID='" + forDepartment + "'";
+            _ps = _con.prepareStatement(qry);
+            _rs = _ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(_rs);
+            return (ResultSet) ocrs;
+        } catch (Exception ex) {
+            return null;
+        } finally {
+            try {
+                releaseResources();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+
+    }
+
+    public ResultSet LoadTrainingRequests(String requestedID) {
+        try {
+
+
+            _con = getConnection();
+            String qry = "SELECT " +
+                    "  TRAINING_REQUES_ID," +
+                    "  TRAINING_TYPE_ID," +
+                    "  FROM_DATE," +
+                    "  TO_DATE," +
+                    "  TRAINING_TEARM_ID," +
+                    "  INSTITUTION_ID," +
+                    "  REMARK," +
+                    "  NO_OF_TRAINEES," +
+                    "  REQUESTER_ID," +
+                    "  PRIORITY_ID," +
+                    "  FOR_DEPARTMENT_ID," +
+                    "  REQUEST_DATE," +
+                    "  COAST_PER_PERSON," +
+                    "  TOTAL_COAST," +
+                    "  FIRST_NAME ," +
+                    "  LAST_NAME ," +
+                    "  MIDDLE_NAME ," +
+                    "  DEP_DESCRIPTION ," +
+                    "  JOB_DESCRIPTION " +
+                    "  FROM VW_EMPLOYEE_TRAINING WHERE TRAINING_REQUES_ID='" + requestedID + "'";
+
+
+
+            _ps = _con.prepareStatement(qry);
+            _rs = _ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(_rs);
+            return (ResultSet) ocrs;
+        } catch (Exception ex) {
+            return null;
+        } finally {
+            try {
+                releaseResources();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+
+    }
+
+    public ResultSet LoadTrainingCandidate(String requestedID) {
+        try {
+
+
+            _con = getConnection();
+            String qry = "SELECT " +
+                    "  CANDIDATE_ID," +
+                    "  EMPLOYEE_ID," +
+                    " REQUEST_ID " +
+                    "  FROM TBL_TRAINING_CANDIDATES WHERE REQUEST_ID='" + requestedID + "'";
+            _ps = _con.prepareStatement(qry);
+            _rs = _ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(_rs);
+            return (ResultSet) ocrs;
+        } catch (Exception ex) {
+            return null;
+        } finally {
+            try {
+                releaseResources();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+
+    }
+
+   public OracleCachedRowSet trainerInformation() {
+        ResultSet _rs = null;
+        PreparedStatement _ps = null;
+        String qry = "SELECT *FROM TBL_TRAINER";
+        try {
+            _con = getConnection();
+            _ps = _con.prepareCall(qry);
+            _rs = _ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(_rs);
+            _rs.close();
+            _ps.close();
+            closePooledConnections(_con);
+            return ocrs;
+        } catch (Exception e) {
+            return null;
+        }
+
+    }
+
+    private void update(TraineeEntity trainee) {
+        String str = "UPDATE tbl_trainee SET trainee_id = ?, first_name = ?, middle_name = ?, " +
+                "last_name = ?, sex = ?, birth_date = ?, place_id = ?, remark =  ? " +
+                "WHERE trainee_id = ?";
+        try {
+            _con = getConnection();
+            PreparedStatement ps = _con.prepareStatement(str);
+            ps.setString(1, trainee.getTraineeNo());
+            ps.setString(2, trainee.getTrainingCost());
+            ps.setString(3, trainee.getTrainingPriority());
+            ps.setString(4, trainee.getTrainingType());
+            ps.setString(5, trainee.getTrainingInstitution());
+            ps.setString(6, trainee.getTrainingFrom());
+            ps.setString(7, trainee.getTrainingTo());
+            ps.setString(8, trainee.getRemark());
+
+            ps.executeUpdate();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+        } finally {
+            try {
+                releaseResources();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+
+    }
+
+    private void delete(TraineeEntity trainee) {
+
+        String str = "DELETE FROM tbl_trainee WHERE trainee_id=?";
+
+        try {
+            _con = getConnection();
+            PreparedStatement ps = _con.prepareStatement(str);
+            ps.setString(1, trainee.getTraineeNo());
+
+            ps.executeUpdate();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+        } finally {
+            try {
+                releaseResources();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+
+    }
+
+    public ResultSet searchTrainerNametoAuto() throws SQLException {
+        String qry = "SELECT NAME,TRAINER_ID FROM TBL_TRAINER";
+        try {
+            _con = getConnection();
+            _ps = _con.prepareCall(qry);
+            _rs = _ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(_rs);
+            return (ResultSet) ocrs;
+        } finally {
+            try {
+                releaseResources();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+
+    }
+
+    /**
+     * @return the traineeNo
+     */
+    public String getTraineeNo() {
+        return traineeNo;
+    }
+
+    /**
+     * @param traineeNo the traineeNo to set
+     */
+    public void setTraineeNo(String traineeNo) {
+        this.traineeNo = traineeNo;
+    }
+
+    /**
+     * @return the trainingCost
+     */
+    public String getTrainingCost() {
+        return trainingCost;
+    }
+
+    /**
+     * @param trainingCost the trainingCost to set
+     */
+    public void setTrainingCost(String trainingCost) {
+        this.trainingCost = trainingCost;
+    }
+
+    /**
+     * @return the trainingPriority
+     */
+    public String getTrainingPriority() {
+        return trainingPriority;
+    }
+
+    /**
+     * @param trainingPriority the trainingPriority to set
+     */
+    public void setTrainingPriority(String trainingPriority) {
+        this.trainingPriority = trainingPriority;
+    }
+
+    /**
+     * @return the trainingType
+     */
+    public String getTrainingType() {
+        return trainingType;
+    }
+
+    /**
+     * @param trainingType the trainingType to set
+     */
+    public void setTrainingType(String trainingType) {
+        this.trainingType = trainingType;
+    }
+
+    /**
+     * @return the trainingCategory
+     */
+    public String getTrainingCategory() {
+        return trainingCategory;
+    }
+
+    /**
+     * @param trainingCategory the trainingCategory to set
+     */
+    public void setTrainingCategory(String trainingCategory) {
+        this.trainingCategory = trainingCategory;
+    }
+
+    /**
+     * @return the trainingInstitution
+     */
+    public String getTrainingInstitution() {
+        return trainingInstitution;
+    }
+
+    /**
+     * @param trainingInstitution the trainingInstitution to set
+     */
+    public void setTrainingInstitution(String trainingInstitution) {
+        this.trainingInstitution = trainingInstitution;
+    }
+
+    /**
+     * @return the trainingFrom
+     */
+    public String getTrainingFrom() {
+        return trainingFrom;
+    }
+
+    /**
+     * @param trainingFrom the trainingFrom to set
+     */
+    public void setTrainingFrom(String trainingFrom) {
+        this.trainingFrom = trainingFrom;
+    }
+
+    /**
+     * @return the trainingTo
+     */
+    public String getTrainingTo() {
+        return trainingTo;
+    }
+
+    /**
+     * @param trainingTo the trainingTo to set
+     */
+    public void setTrainingTo(String trainingTo) {
+        this.trainingTo = trainingTo;
+    }
+
+    /**
+     * @return the traineeRemark
+     */
+    public String getTraineeRemark() {
+        return remark;
+    }
+
+    /**
+     * @param traineeRemark the traineeRemark to set
+     */
+    public void setTraineeRemark(String traineeRemark) {
+        this.remark = traineeRemark;
+    }
+    /**
+     * @return the traineeId
+     */
+}

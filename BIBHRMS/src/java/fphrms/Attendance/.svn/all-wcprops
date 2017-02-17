@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/MUGHERPROJECT/!svn/ver/3135/src/java/fphrms/Attendance
+END
+AttendanceReportPage.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/MUGHERPROJECT/!svn/ver/3559/src/java/fphrms/Attendance/AttendanceReportPage.java
+END
+AttendanceApprovePage.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/MUGHERPROJECT/!svn/ver/3261/src/java/fphrms/Attendance/AttendanceApprovePage.java
+END
+AssignEmployeePage.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/MUGHERPROJECT/!svn/ver/3559/src/java/fphrms/Attendance/AssignEmployeePage.java
+END
+Attendance_Page.java
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/MUGHERPROJECT/!svn/ver/3135/src/java/fphrms/Attendance/Attendance_Page.java
+END
+AttendancePage.java
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/MUGHERPROJECT/!svn/ver/3261/src/java/fphrms/Attendance/AttendancePage.java
+END
+TakeAttendancePage.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/MUGHERPROJECT/!svn/ver/3092/src/java/fphrms/Attendance/TakeAttendancePage.java
+END
+AttendanceCertifyPage.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/MUGHERPROJECT/!svn/ver/3261/src/java/fphrms/Attendance/AttendanceCertifyPage.java
+END

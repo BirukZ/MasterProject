@@ -1,0 +1,594 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package manager.recruitmentManager;
+
+import com.sun.webui.jsf.model.Option;
+import manager.globalUseManager.ErrorLogWriter;
+import entity.recruitmentEntity.CandidateEntity;
+import fphrms.EmployeeList;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.HashMap;
+import javax.faces.model.SelectItem;
+
+/**
+ *
+ * @author kibrom
+ */
+public class CandidateManager {
+
+    public CandidateManager() {
+    }
+    CandidateEntity candidateEntity = new CandidateEntity();
+    String date;
+    String approved;
+    String certified;
+    boolean certifedCandidate;
+    private boolean selectedCandidate;
+    String levelOfEducation;
+
+    public boolean isSelectedCandidate() {
+        return selectedCandidate;
+    }
+
+    public void setSelectedCandidate(boolean selectedCandidate) {
+        this.selectedCandidate = selectedCandidate;
+    }
+
+    public CandidateEntity getCandidateEntity() {
+        return candidateEntity;
+    }
+
+    public void setCandidateEntity(CandidateEntity candidateEntity) {
+        this.candidateEntity = candidateEntity;
+    }
+
+    public boolean isCertifedCandidate() {
+        return certifedCandidate;
+    }
+
+    public void setCertifedCandidate(boolean certifedCandidate) {
+        this.certifedCandidate = certifedCandidate;
+    }
+
+    public String getApproved() {
+        return approved;
+    }
+
+    public void setApproved(String approved) {
+        this.approved = approved;
+    }
+
+    public String getCertified() {
+        return certified;
+    }
+
+    public void setCertified(String certified) {
+        this.certified = certified;
+    }
+
+    public String getBatchCode() {
+        return batchCode;
+    }
+
+    public void setBatchCode(String batchCode) {
+        this.batchCode = batchCode;
+    }
+
+    public String getCandidateType() {
+        return candidateType;
+    }
+
+    public void setCandidateType(String candidateType) {
+        this.candidateType = candidateType;
+    }
+
+    public String getCanidateId() {
+        return canidateId;
+    }
+
+    public void setCanidateId(String canidateId) {
+        this.canidateId = canidateId;
+    }
+
+    public String getCgpa() {
+        return cgpa;
+    }
+
+    public void setCgpa(String cgpa) {
+        this.cgpa = cgpa;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(String dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getExperience() {
+        return experience;
+    }
+
+    public void setExperience(String experience) {
+        this.experience = experience;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public String getInterview() {
+        return interview;
+    }
+
+    public void setInterview(String interview) {
+        this.interview = interview;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getLevelOfEducation() {
+        return levelOfEducation;
+    }
+
+    public void setLevelOfEducation(String levelOfEducation) {
+        this.levelOfEducation = levelOfEducation;
+    }
+
+    public String getMidelName() {
+        return midelName;
+    }
+
+    public void setMidelName(String midelName) {
+        this.midelName = midelName;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
+    public String getNoPage() {
+        return noPage;
+    }
+
+    public void setNoPage(String noPage) {
+        this.noPage = noPage;
+    }
+
+    public String getOficeTelephone() {
+        return oficeTelephone;
+    }
+
+    public void setOficeTelephone(String oficeTelephone) {
+        this.oficeTelephone = oficeTelephone;
+    }
+
+    public String getOther() {
+        return other;
+    }
+
+    public void setOther(String other) {
+        this.other = other;
+    }
+
+    public String getPractical() {
+        return practical;
+    }
+
+    public void setPractical(String practical) {
+        this.practical = practical;
+    }
+
+    public String getRecommendation() {
+        return recommendation;
+    }
+
+    public void setRecommendation(String recommendation) {
+        this.recommendation = recommendation;
+    }
+
+    public String getSatus() {
+        return satus;
+    }
+
+    public void setSatus(String satus) {
+        this.satus = satus;
+    }
+
+    public String getTelResidence() {
+        return telResidence;
+    }
+
+    public void setTelResidence(String telResidence) {
+        this.telResidence = telResidence;
+    }
+
+    public String getWrittenExam() {
+        return writtenExam;
+    }
+
+    public void setWrittenExam(String writtenExam) {
+        this.writtenExam = writtenExam;
+    }
+    String dateOfBirth;
+    String email;
+    String experience;
+    String firstName;
+    String interview;
+    String lastName;
+    String midelName;
+    String mobile;
+    String oficeTelephone;
+    String practical;
+    String recommendation;
+    String telResidence;
+    String batchCode;
+    String gender;
+    String candidateType;
+    String other;
+    String noPage;
+    String writtenExam;
+    String cgpa;
+    String canidateId;
+    String satus;
+    float total;
+    int age;
+    int count;
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public float getTotal() {
+        return total;
+    }
+
+    public void setTotal(float total) {
+        this.total = total;
+    }
+
+    public CandidateManager(String date,
+            String dateOfBirth,
+            String email,
+            String experience,
+            String firstName,
+            String interview,
+            String lastName,
+            String levelOfEducation,
+            String midelName,
+            String mobile,
+            String oficeTelephone,
+            String practical,
+            String recommendation,
+            String telResidence,
+            String batchCode,
+            String gender,
+            String candidateType,
+            String other,
+            String noPage,
+            String writtenExam,
+            String cgpa,
+            String canidateId,
+            String satus) {
+        this.date = date;
+        this.dateOfBirth = dateOfBirth;
+        this.email = email;
+        this.experience = experience;
+        this.firstName = firstName;
+        this.interview = interview;
+        this.lastName = lastName;
+        this.levelOfEducation = levelOfEducation;
+        this.midelName = midelName;
+        this.mobile = mobile;
+        this.oficeTelephone = oficeTelephone;
+        this.practical = practical;
+        this.recommendation = recommendation;
+        this.telResidence = telResidence;
+        this.batchCode = batchCode;
+        this.gender = gender;
+        this.candidateType = candidateType;
+        this.other = other;
+        this.noPage = noPage;
+        this.writtenExam = writtenExam;
+        this.cgpa = cgpa;
+        this.canidateId = canidateId;
+        this.satus = satus;
+
+    }
+    public boolean selected;
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
+
+    /**
+     * <b>CandidateManager</b> It holds list of  candidate result
+     * @param writtenExamResult
+     * @param interviewExamResult
+     * @param practicalExamResult
+     * @param total
+     * @param cgpa
+     * @param experience
+     * @param canId
+     * @param gender
+     * @param age
+     * @param selected
+     */
+    public CandidateManager(int count, String levelOfEducation, String writtenExamResult, String interviewExamResult, String practicalExamResult, float total, String cgpa, String experience, String canId, String gender, int age, boolean selected, String status, String approve, String certifie, boolean certifedCandidate) {
+        this.count = count;
+        this.writtenExam = writtenExamResult;
+        this.practical = practicalExamResult;
+        this.interview = interviewExamResult;
+        this.total = total;
+        this.cgpa = cgpa;
+        this.experience = experience;
+        this.canidateId = canId;
+        this.gender = gender;
+        this.age = age;
+        this.certifedCandidate = certifedCandidate;
+        this.selected = selected;
+        this.satus = status;
+        this.approved = approve;
+        this.certified = certifie;
+        this.levelOfEducation = levelOfEducation;
+    }
+
+    public CandidateManager(String levelOfEducation, String writtenExamResult, String interviewExamResult, String practicalExamResult, float total, String cgpa, String experience, String canId, String gender, int age, boolean selected, String status, String approve, String certifie, boolean certifedCandidate) {
+        this.writtenExam = writtenExamResult;
+        this.practical = practicalExamResult;
+        this.interview = interviewExamResult;
+        this.total = total;
+        this.cgpa = cgpa;
+        this.experience = experience;
+        this.canidateId = canId;
+        this.gender = gender;
+        this.age = age;
+        this.certifedCandidate = certifedCandidate;
+        this.selected = selected;
+        this.satus = status;
+        this.approved = approve;
+        this.certified = certifie;
+        this.levelOfEducation = levelOfEducation;
+    }
+
+    public CandidateManager(String levelOfEducation, String cgpa, String experience, String canId, String gender, int age, String certifie, boolean certifedCandidate) {
+
+        this.cgpa = cgpa;
+        this.experience = experience;
+        this.canidateId = canId;
+        this.gender = gender;
+        this.age = age;
+        this.selected = certifedCandidate;
+        this.certified = certifie;
+        this.levelOfEducation = levelOfEducation;
+    }
+
+    public CandidateManager(int count, String levelOfEducation, String cgpa, String experience, String canId, String gender, int age, String certifie, boolean certifedCandidate) {
+        this.count = count;
+        this.cgpa = cgpa;
+        this.experience = experience;
+        this.canidateId = canId;
+        this.gender = gender;
+        this.age = age;
+        this.selected = certifedCandidate;
+        this.certified = certifie;
+        this.levelOfEducation = levelOfEducation;
+    }
+
+    public int grantCandidate(String candidateId) {
+        return candidateEntity.selectCandidateInf(candidateId);
+    }
+
+    public boolean approveCandidate(ArrayList<HashMap> candidateInfo, String approvedBy) {
+        return candidateEntity.approveCadidateInfo(candidateInfo, approvedBy);
+    }
+
+    public boolean selectCandidate(ArrayList<HashMap> candidateInfo, String approvedBy, int recruitmentRequestId) {
+
+        if (candidateEntity.selectCadidateInfo(candidateInfo, approvedBy)) {
+            candidateEntity.updateRequestStatus(recruitmentRequestId);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean certifyCandidate(ArrayList<HashMap> candidateInfo, String certifyBy) {
+        return candidateEntity.certifyCadidateInfo(candidateInfo, certifyBy);
+    }
+
+    public int UpdateCandidateInformation(HashMap updateList) {
+//        CandidateEntity saveCandiate = new CandidateEntity(candidateManager.getDate(),
+//                candidateManager.getDateOfBirth(),
+//                candidateManager.getEmail(),
+//                candidateManager.getExperience(),
+//                candidateManager.getFirstName(),
+//                candidateManager.getInterview(),
+//                candidateManager.getLastName(),
+//                candidateManager.getLevelOfEducation(),
+//                candidateManager.getMidelName(),
+//                candidateManager.getMobile(),
+//                candidateManager.getOficeTelephone(),
+//                candidateManager.getPractical(),
+//                candidateManager.getRecommendation(),
+//                candidateManager.getTelResidence(),
+//                candidateManager.getBatchCode(),
+//                candidateManager.getGender(),
+//                candidateManager.getCandidateType(),
+//                candidateManager.getOther(),
+//                candidateManager.getNoPage(),
+//                candidateManager.getWrittenExam(),
+//                candidateManager.getCgpa(),
+//                candidateManager.getCanidateId(),
+//                candidateManager.getSatus());
+//        if (perform == 1) {
+//            return 0;// candidateEntity.insertCandidateInfo(saveCandiate);
+//        } else {
+        return candidateEntity.updateCandidateInfo(updateList);
+
+
+    }
+
+    public int updateCandidate(String candidateId, String employeeID) {
+        return candidateEntity.updateCandidate(candidateId, employeeID);
+    }
+
+    public int deleteCandidate(String candidateId) {
+        return candidateEntity.deleteCandidate(candidateId);
+    }
+
+    public HashMap selectCandidate(String Id) {
+        return candidateEntity.selectCandidate(Id);
+    }
+
+    public HashMap readCandidateForRegistration(String id) {
+        return candidateEntity.readCandidateForRegistration(id);
+    }
+
+    public ArrayList<EmployeeList> EmployeeNametoAutoList() {
+
+        try {
+            byte[] bytePicture = null;
+            ResultSet rs = candidateEntity.searchEmployeeNametoAuto();
+            ArrayList<EmployeeList> proformaoption = new ArrayList<EmployeeList>();
+            while (rs.next()) {
+                EmployeeList empMgt = new EmployeeList(rs.getString("CANDIDATE_F_NAME") + " " + rs.getString("CANDIDATE_M_NAME") + " " + rs.getString("CANDIDATE_L_NAME"), rs.getString("CANDIDATE_ID"));
+                proformaoption.add(empMgt);
+
+            }
+            return proformaoption;
+        } catch (Exception ex) {
+
+            ErrorLogWriter.writeError(ex);
+
+        }
+        return null;
+    }
+
+    public HashMap[] readCandidateList(String bachCodeId, String sql) {
+        return candidateEntity.readCandidateList(bachCodeId, sql);
+    }
+
+    public HashMap[] readCandidateForExam(String bachCodeId, String reqId, String sql) {
+        return candidateEntity.readCandidateListForExame(bachCodeId, reqId, sql);
+    }
+
+    public HashMap readCandidateExamResult(String candidateID) {
+        return candidateEntity.readCandidateExamResult(candidateID);
+    }
+
+    public int counrtCandidate(String bachCoudeId, String sql) {
+        return candidateEntity.countCandidate(bachCoudeId, sql);
+    }
+
+    public int saveCandidateInformation(HashMap candidateInformation) {
+        return candidateEntity.insertCandidateInfo(candidateInformation);
+    }
+
+    public ArrayList<SelectItem> readJobType(String batchCode) {
+        ArrayList<CandidateEntity> jobTypeList = candidateEntity.selectJobType(batchCode);
+        ArrayList<SelectItem> jobList = new ArrayList<SelectItem>();
+        for (int i = 0; i < jobTypeList.size(); i++) {
+            candidateEntity = jobTypeList.get(i);
+            jobList.add(new Option(String.valueOf(candidateEntity.getCode()),
+                    String.valueOf(candidateEntity.getDescription())));
+        }
+        jobList.add(0, new Option(null, "Select Job Type"));
+        return jobList;
+
+    }
+
+    public int saveCandidateExameResult(HashMap examResult) {
+        return candidateEntity.saveCandidateExamResult(examResult);
+
+    }
+
+    public boolean insertRecrutmentAssessmentPrecentage(HashMap recAssessmentPercentage) {
+        return candidateEntity.insertExamPresentage(recAssessmentPercentage);
+    }
+
+
+//    public int saveExamPercentage(HashMap examPercentage) {
+//        return candidateEntity.insertExamPresentage(examPercentage);
+//
+//    }
+    public HashMap selectExamPresentage(String batchCode) {
+        return candidateEntity.selectExamPresentage(batchCode);
+    }
+
+    public int updateExamPercentage(HashMap examPercentage) {
+        return candidateEntity.updateExamPresentage(examPercentage);
+
+    }
+
+    public int deleteExamPercentage(String batchCode) {
+        return candidateEntity.deleteExamPresentage(batchCode);//deleteExamPresentage(examPercentage);
+
+    }
+
+    public float maximumeCandidateGpa(String bachCode, String sql) {
+        return candidateEntity.maximumeCandidateGpa(bachCode, sql);
+    }
+
+    public HashMap[] readCandidateForExam(String bachCodeId, String sql) {
+        return candidateEntity.readCandidateListForExame(bachCodeId, sql);
+    }
+}

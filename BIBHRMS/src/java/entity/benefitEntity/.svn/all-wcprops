@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/MUGHERPROJECT/!svn/ver/3678/src/java/entity/benefitEntity
+END
+BenefitRequestApproveEntity.java
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/MUGHERPROJECT/!svn/ver/3291/src/java/entity/benefitEntity/BenefitRequestApproveEntity.java
+END
+PositionBenefitTypeEntity.java
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/MUGHERPROJECT/!svn/ver/3235/src/java/entity/benefitEntity/PositionBenefitTypeEntity.java
+END
+BenefitRequestEntity.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/MUGHERPROJECT/!svn/ver/3678/src/java/entity/benefitEntity/BenefitRequestEntity.java
+END
+benefitReport.java
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/MUGHERPROJECT/!svn/ver/2622/src/java/entity/benefitEntity/benefitReport.java
+END
+SubsidyIndividualEntity.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/MUGHERPROJECT/!svn/ver/3151/src/java/entity/benefitEntity/SubsidyIndividualEntity.java
+END
+BenefitTypeEntity.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/MUGHERPROJECT/!svn/ver/3235/src/java/entity/benefitEntity/BenefitTypeEntity.java
+END

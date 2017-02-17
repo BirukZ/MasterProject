@@ -1,0 +1,129 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package entity.leaveEntity;
+
+import connectionProvider.ConnectionManager;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.HashMap;
+
+/**
+ *
+ * @author PROJECT
+ */
+public class RequesttoReturnFromAnnualLeaveEntity extends ConnectionManager {
+
+    Connection con = null;
+    PreparedStatement ps = null;
+    ResultSet rs = null;
+
+    public RequesttoReturnFromAnnualLeaveEntity() {
+    }
+
+    public HashMap readEmployeeLeaveWithProfile(String employeeId) {
+        try {
+            HashMap hm = new HashMap();
+            String sqlStatment = "SELECT EMF.FIRST_NAME " +
+                    "  || ' ' " +
+                    "  || EMF.MIDDLE_NAME " +
+                    "  || '' " +
+                    "  || EMF.LAST_NAME AS FULLNAME, " +
+                    "  EMF.EMP_ID, " +
+                    "  EMF.JOB_CODE, " +
+                    "  EMF.SEX, " +
+                    "  EMF.PHOTO, " +
+                    "  EMF.DEPARTMENT_ID, " +
+                    "  JT.JOB_DESCRIPTION, " +
+                    "  LR.LEAVE_DAYS,    " +
+                    "  LR.REQUESTED_FROM_DATE, " +
+                    "  LR.REQUESTED_TO_DATE, " +
+                    "  LR.REQUESTING_REASON , " +
+                    "  LT.DESCRIPTION " +
+                    "FROM HR_EMPLOYEE_INFO EMF, " +
+                    "  HR_EMP_LEAVE LR, " +
+                    "  HR_LU_LEAVE_TYPE LT, " +
+                    "  HR_LU_JOB_TYPE JT " +
+                    "WHERE EMF.EMP_ID =LR.EMP_ID " +
+                    "AND LR.LEAVE_TYPE=LT.LEAVE_TYPE " +
+                    "AND EMF.JOB_CODE =JT.JOB_CODE " +
+                    "AND EMF.EMP_ID   =?";
+            con = getConnection();
+            ps = con.prepareStatement(sqlStatment);
+            ps.setString(1, employeeId);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                hm.put("FULLNAME", rs.getString("FULLNAME"));
+                hm.put("EMP_ID", rs.getString("EMP_ID"));
+                hm.put("JOB_CODE", rs.getString("JOB_CODE"));
+                hm.put("SEX", rs.getString("SEX"));
+                hm.put("DEPARTMENT_ID", rs.getString("DEPARTMENT_ID"));
+                hm.put("JOB_DESCRIPTION", rs.getString("JOB_DESCRIPTION"));
+                hm.put("REQUESTED_FROM_DATE", rs.getString("REQUESTED_FROM_DATE"));
+                hm.put("REQUESTED_TO_DATE", rs.getString("REQUESTED_TO_DATE"));
+                hm.put("REQUESTING_REASON", rs.getString("REQUESTING_REASON"));
+                hm.put("DESCRIPTION", rs.getString("DESCRIPTION"));
+                hm.put("LEAVE_DAYS", rs.getString("LEAVE_DAYS"));
+
+
+
+
+                return hm;
+            } else {
+                return null;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+
+    public boolean saveRequest(HashMap listOfRequest) {
+        try {
+            HashMap hm = new HashMap();
+            String sqlStatment = "SELECT EMF.FIRST_NAME " +
+                    "  || ' ' " +
+                    "  || EMF.MIDDLE_NAME " +
+                    "  || '' " +
+                    "  || EMF.LAST_NAME AS FULLNAME, " +
+                    "  EMF.EMP_ID, " +
+                    "  EMF.JOB_CODE, " +
+                    "  EMF.SEX, " +
+                    "  EMF.PHOTO, " +
+                    "  EMF.DEPARTMENT_ID, " +
+                    "  JT.JOB_DESCRIPTION, " +
+                    "  LR.LEAVE_DAYS,    " +
+                    "  LR.REQUESTED_FROM_DATE, " +
+                    "  LR.REQUESTED_TO_DATE, " +
+                    "  LR.REQUESTING_REASON , " +
+                    "  LT.DESCRIPTION " +
+                    "FROM HR_EMPLOYEE_INFO EMF, " +
+                    "  HR_EMP_LEAVE LR, " +
+                    "  HR_LU_LEAVE_TYPE LT, " +
+                    "  HR_LU_JOB_TYPE JT " +
+                    "WHERE EMF.EMP_ID =LR.EMP_ID " +
+                    "AND LR.LEAVE_TYPE=LT.LEAVE_TYPE " +
+                    "AND EMF.JOB_CODE =JT.JOB_CODE " +
+                    "AND EMF.EMP_ID   =?";
+            con = getConnection();
+            ps = con.prepareStatement(sqlStatment);
+            ps.setString(1, listOfRequest.get("").toString());
+            ps.setString(2, listOfRequest.get("").toString());
+            if (ps.executeUpdate() > 0) {
+
+
+                return true;
+            } else {
+                return false;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+}

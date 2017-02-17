@@ -1,0 +1,802 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package manager.trainingManager;
+
+import entity.trainingEntity.TrainingNeedAssessementRequestEntity;
+import java.sql.ResultSet;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import javax.faces.model.SelectItem;
+import manager.educationManager.InstitutionRegistrationManager;
+import manager.globalUseManager.ErrorLogWriter;
+
+/**
+ *
+ * @author mekete
+ */
+public class TrainingNeedAssessementRequestManager {
+
+    TrainingNeedAssessementRequestEntity trainingNeedAssessementRequestEntity = new TrainingNeedAssessementRequestEntity();
+    String userName;
+    String loggedInEmployeeId;
+    String trainingReason;
+    String trainingDescription;
+    String trainingreasonId;
+    String status;
+    private boolean selected;
+    String institution;
+    String institutionDescription;
+    int institutionId;
+    String locationCategory;
+    String educOrTrain;
+
+    public TrainingNeedAssessementRequestManager() {
+    }
+
+    public TrainingNeedAssessementRequestManager(String trainingReason, String trainingDescription) {
+        this.trainingReason = trainingReason;
+        this.trainingDescription = trainingDescription;
+    }
+
+    public TrainingNeedAssessementRequestManager(String trainingReasonId, String trainingReason, String trainingDescription, String status) {
+        this.status = status;
+        this.trainingReason = trainingReason;
+        this.trainingDescription = trainingDescription;
+        this.trainingreasonId = trainingReasonId;
+
+    }
+    public TrainingNeedAssessementRequestManager(int institutionId, String institution, String institutionDescription, String status) {
+        this.status = status;
+        this.institution = institution;
+        this.institutionDescription = institutionDescription;
+        this.institutionId = institutionId;
+
+    }
+
+     public TrainingNeedAssessementRequestManager(String trainingReasonId, String trainingReason, String trainingDescription) {
+        this.trainingReason = trainingReason;
+        this.trainingDescription = trainingDescription;
+        this.trainingreasonId = trainingReasonId;
+
+    }
+
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
+
+    public String getTrainingDescription() {
+        return trainingDescription;
+    }
+
+    public void setTrainingDescription(String trainingDescription) {
+        this.trainingDescription = trainingDescription;
+    }
+
+    public String getTrainingReason() {
+        return trainingReason;
+    }
+
+    public void setTrainingReason(String trainingReason) {
+        this.trainingReason = trainingReason;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getTrainingreasonId() {
+        return trainingreasonId;
+    }
+
+    public void setTrainingreasonId(String trainingreasonId) {
+        this.trainingreasonId = trainingreasonId;
+    }
+
+    public String getInstitution() {
+        return institution;
+    }
+
+    public void setInstitution(String institution) {
+        this.institution = institution;
+    }
+
+    public String getInstitutionDescription() {
+        return institutionDescription;
+    }
+
+    public void setInstitutionDescription(String institutionDescription) {
+        this.institutionDescription = institutionDescription;
+    }
+
+    public int getInstitutionId() {
+        return institutionId;
+    }
+
+    public void setInstitutionId(int institutionId) {
+        this.institutionId = institutionId;
+    }
+
+    public String getEducOrTrain() {
+        return educOrTrain;
+    }
+
+    public void setEducOrTrain(String educOrTrain) {
+        this.educOrTrain = educOrTrain;
+    }
+
+    public String getLocationCategory() {
+        return locationCategory;
+    }
+
+    public void setLocationCategory(String locationCategory) {
+        this.locationCategory = locationCategory;
+    }
+
+
+    public ArrayList<TrainingNeedAssessementModel> getRequestedTrainingLists(int requestId) {
+        ArrayList<TrainingNeedAssessementModel> trainingList = new ArrayList<TrainingNeedAssessementModel>();
+        try {
+            ResultSet _rs = trainingNeedAssessementRequestEntity.selectTrainingsLists(requestId);
+            while (_rs.next()) {
+
+                TrainingNeedAssessementModel currentTraining = new TrainingNeedAssessementModel();
+                currentTraining.setTrainingNeedAttributesId(_rs.getInt("TRAINING_NEED_ATTRIBUTES_ID"));//
+                currentTraining.setTrainingCategory(_rs.getString("TRAINING_CATEGORY"));//
+                currentTraining.setTrainingId(_rs.getString("TRAINING_TITLE"));//
+                currentTraining.setTrainingName(_rs.getString("TRAINING_NAME"));
+                currentTraining.setGeneralComment(_rs.getString("DESCRIPTION"));
+                currentTraining.setTrainerType(_rs.getString("TRAINER_TYPE"));//
+                currentTraining.setInstitutionOrPlace(_rs.getString("INSTITUTION_OR_PLACE"));//
+                currentTraining.setDurationCategory(_rs.getString("DURATION_CATEGORY"));//
+                currentTraining.setTentativeStartDate(_rs.getString("TENTATIVE_START_DATE"));//
+                currentTraining.setTentativeEndDate(_rs.getString("TENTATIVE_END_DATE"));//
+                currentTraining.setNeedSource(_rs.getString("NEED_SOURCE"));//
+                currentTraining.setPriorityCategory(_rs.getString("PRIORITY_CATEGORY"));//
+                currentTraining.setCostPerPerson(_rs.getDouble("COST_PER_PERSON"));//
+                currentTraining.setOtherEstimatedCosts(_rs.getDouble("OTHER_ESTIMATED_COSTS"));//
+                trainingList.add(currentTraining);
+            }
+            _rs.close();
+            return trainingList;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return null;
+        }
+    }
+
+    public ArrayList<TrainingParticipantModel> getParticipantEmployeesList(int requestId) {
+        ArrayList<TrainingParticipantModel> participantList = new ArrayList<TrainingParticipantModel>();
+        try {
+            ResultSet _rs = trainingNeedAssessementRequestEntity.selectTrainingParticipantsList(requestId);
+
+            while (_rs.next()) {
+                TrainingParticipantModel currentTraining = new TrainingParticipantModel();
+                currentTraining.setTrainingParticipantId(_rs.getInt("TRAIN_NEED_ASSESS_EMP_LIST_ID"));//
+                currentTraining.setTrainingNeedRequestId(requestId);//
+                currentTraining.setEmployeeId(_rs.getString("EMPLOYEE_ID"));//
+                currentTraining.setDepartmentName(_rs.getString("DEPARTMENT_NAME"));//
+                currentTraining.setFullName(_rs.getString("FIRST_NAME") + "" + _rs.getString("MIDDLE_NAME") + "" + _rs.getString("LAST_NAME"));
+                currentTraining.setJobTitleName(_rs.getString("JOB_DESCRIPTION"));
+                currentTraining.setBatchCode(_rs.getString("BATCH"));//
+               // currentTraining.setSelected(_rs.getString("SELECTED_OR_NOT").equals("YES")) ;//
+                 currentTraining.setSelected(_rs.getString("SELECTED_OR_NOT").equals("YES") ? true : false) ;//
+                currentTraining.setDatabaseStatus("Old");//
+                participantList.add(currentTraining);
+            }
+
+
+
+            _rs.close();
+            return participantList;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return null;
+        }
+    }
+
+    public ArrayList<TrainingParticipantModel> getParticipantEmployeesListForTraining(int trainingId) {
+        ArrayList<TrainingParticipantModel> participantList = new ArrayList<TrainingParticipantModel>();
+        try {
+            ResultSet _rs = trainingNeedAssessementRequestEntity.selectTrainingParticipantsListByTraining(trainingId);
+            while (_rs.next()) {
+                TrainingParticipantModel currentTraining = new TrainingParticipantModel();
+                currentTraining.setTrainingParticipantId(_rs.getInt("TRAIN_NEED_ASSESS_EMP_LIST_ID"));//
+                currentTraining.setTrainingNeedRequestId(trainingId);//
+                currentTraining.setEmployeeId(_rs.getString("EMPLOYEE_ID"));//
+                currentTraining.setFullName(_rs.getString("FIRST_NAME") + "" + _rs.getString("MIDDLE_NAME") + "" + _rs.getString("LAST_NAME"));
+                currentTraining.setJobTitleName(_rs.getString("JOB_DESCRIPTION"));
+                currentTraining.setBatchCode(_rs.getString("BATCH"));//
+                currentTraining.setSelected(_rs.getString("SELECTED_OR_NOT").equals("YES"));//
+                participantList.add(currentTraining);
+            }
+            _rs.close();
+            return participantList;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return null;
+        }
+    }
+
+    public TrainingNeedAssessementModel getRequestAttributes(int requestId) {
+        TrainingNeedAssessementModel currentTraining = new TrainingNeedAssessementModel();
+        try {
+            ResultSet _rs = trainingNeedAssessementRequestEntity.selectTrainingsLists(requestId);
+            if (_rs.next()) {
+                currentTraining.setTrainingNeedAttributesId(requestId);//
+                currentTraining.setTrainingCategory(_rs.getString("TRAINING_CATEGORY"));//
+                currentTraining.setBudjetYear(_rs.getString("BUDJET_YEAR"));//
+                currentTraining.setTrainingId(_rs.getString("TRAINING_ID"));//
+                currentTraining.setTrainingName(_rs.getString("TRAINING_NAME"));
+                currentTraining.setGeneralComment(_rs.getString("GENERAL_COMMENT"));
+                currentTraining.setTrainerType(_rs.getString("TRAINER_TYPE"));//
+                currentTraining.setInstitutionOrPlace(_rs.getString("PROPOSED_INSTITUTION_OR_PLACE"));//
+                currentTraining.setDurationCategory(_rs.getString("DURATION_CATEGORY"));//
+                currentTraining.setAppliedDate(_rs.getString("APPLIED_DATE"));//
+                currentTraining.setTentativeStartDate(_rs.getString("TENTATIVE_START_DATE"));//
+                currentTraining.setTentativeEndDate(_rs.getString("TENTATIVE_END_DATE"));//
+                currentTraining.setNeedSource(_rs.getString("NEED_SOURCE"));//
+                currentTraining.setPriorityCategory(_rs.getString("PRIORITY"));//
+                currentTraining.setCostPerPerson(_rs.getDouble("COST_PER_PERSON"));//
+                currentTraining.setOtherEstimatedCosts(_rs.getDouble("OTHER_ESTIMATED_COSTS"));//
+                currentTraining.setPlanedOrUnplanned(_rs.getString("PLANNED_OR_UNPLANNED"));//
+                currentTraining.setNumberOfEmployees(_rs.getInt("NUMBER_OF_EMPLOYEES"));//
+                currentTraining.setDatabaseStatus("Old");//
+                currentTraining.setNoOfDays(_rs.getString("NO_OF_DAYS"));//
+                currentTraining.setAward(_rs.getString("AWARD"));//
+                currentTraining.setTrainerName(_rs.getString("TRAINER_NAME"));//
+                currentTraining.setTrainerProfession(_rs.getString("TRAINER_PROFESSION"));//
+            } else {
+                currentTraining.setTrainingNeedAttributesId(-1);//
+            }
+            _rs.close();
+            return currentTraining;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return null;
+        }
+    }
+
+    public String gettrainingReasonName(String trainingReasonId) {
+        String currentTraining = new String();
+        try {
+            ResultSet _rs = trainingNeedAssessementRequestEntity.selectTrainingReasonName(trainingReasonId);
+            if (_rs.next()) {
+
+                currentTraining = _rs.getString("TRAINING_REASON");//
+
+            } else {
+                currentTraining = "NONE";//
+            }
+            _rs.close();
+            return currentTraining;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return null;
+        }
+    }
+
+
+    public boolean saveNewTrainingNeed(TrainingNeedAssessementModel requestAttributes, ArrayList<TrainingParticipantModel> trainingLists, String loginId) {
+        try {
+            String recorededDateAndTime = new Timestamp((new Date()).getTime()).toString();
+            requestAttributes.setUserName(userName);
+            requestAttributes.setRecordedDateAndTime(recorededDateAndTime);
+            requestAttributes.setRequestStatus(TrainingNeedAssessementApproveManager.INITIAL_STATE_TRAINING_NEED_ASSESSEMENT);
+            trainingNeedAssessementRequestEntity.insertNewTrainingsNeedRequest(requestAttributes, trainingLists, loginId);
+            return true;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return false;
+        }
+    }
+
+    /**
+     * will be excuted if update button is clicked
+     */
+    public boolean updateTrainingNeedChanges(TrainingNeedAssessementModel trainingAttributes, ArrayList<TrainingParticipantModel> trainingLists) {
+        ArrayList<TrainingParticipantModel> toBeInserted = new ArrayList<TrainingParticipantModel>();
+        ArrayList<TrainingParticipantModel> toBeUpdated = new ArrayList<TrainingParticipantModel>();
+        ArrayList<TrainingParticipantModel> toBeDeleted = new ArrayList<TrainingParticipantModel>();
+        try {
+            String recorededDateAndTime = new Timestamp((new Date()).getTime()).toString();
+            trainingAttributes.setUserName(userName);
+            trainingAttributes.setRecordedDateAndTime(recorededDateAndTime);
+            trainingAttributes.setRequestStatus(TrainingNeedAssessementApproveManager.INITIAL_STATE_TRAINING_NEED_ASSESSEMENT);
+
+            for (TrainingParticipantModel currentCommittee : trainingLists) {
+                if (currentCommittee.getDatabaseStatus().equalsIgnoreCase("New")) {
+                    toBeInserted.add(currentCommittee);
+                } else if (currentCommittee.getDatabaseStatus().equalsIgnoreCase("Old")) {
+                    toBeUpdated.add(currentCommittee);
+                } else if (currentCommittee.getDatabaseStatus().equalsIgnoreCase("Deleted")) {
+                    toBeDeleted.add(currentCommittee);
+                }
+            }
+            //continue only if common attributes are updated
+            if (trainingNeedAssessementRequestEntity.updateTrainingAttributes(trainingAttributes)) {
+                if (toBeInserted.size() > 0) {
+                    trainingNeedAssessementRequestEntity.insertTrainingParticipantsList(toBeInserted, trainingAttributes);//(toBeInserted, trainingAttributes.getTrainingNeedAttributesId());
+                }
+                if (toBeUpdated.size() > 0) {
+//                    trainingNeedAssessementRequestEntity.updateTrainingParticipantsList(toBeUpdated);
+                }
+                if (toBeDeleted.size() > 0) {
+                    trainingNeedAssessementRequestEntity.deleteTrainingParticipantsList(toBeDeleted);
+                }
+            }
+            return true;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return false;
+        }
+    }
+
+
+        public boolean updateTrainingReasonChanges(ArrayList<TrainingNeedAssessementRequestManager> trainingReasonLists) {
+        ArrayList<TrainingNeedAssessementRequestManager> toBeInserted = new ArrayList<TrainingNeedAssessementRequestManager>();
+        ArrayList<TrainingNeedAssessementRequestManager> toBeUpdated = new ArrayList<TrainingNeedAssessementRequestManager>();
+        ArrayList<TrainingNeedAssessementRequestManager> toBeDeleted = new ArrayList<TrainingNeedAssessementRequestManager>();
+        try {
+//            String recorededDateAndTime = new Timestamp((new Date()).getTime()).toString();
+//            trainingAttributes.setUserName(userName);
+//            trainingAttributes.setRecordedDateAndTime(recorededDateAndTime);
+//            trainingAttributes.setRequestStatus(TrainingNeedAssessementApproveManager.INITIAL_STATE_TRAINING_NEED_ASSESSEMENT);
+
+            for (TrainingNeedAssessementRequestManager currentTrainingReason : trainingReasonLists) {
+                if (currentTrainingReason.getStatus().equalsIgnoreCase("New")) {
+                    toBeInserted.add(currentTrainingReason);
+                } else if (currentTrainingReason.getStatus().equalsIgnoreCase("Old")) {
+                    toBeUpdated.add(currentTrainingReason);
+                } else if (currentTrainingReason.getStatus().equalsIgnoreCase("Deleted")) {
+                    toBeDeleted.add(currentTrainingReason);
+                }
+            }
+            //continue only if common attributes are updated
+//            if (trainingNeedAssessementRequestEntity.updateTrainingAttributes(trainingAttributes)) {
+                if (toBeInserted.size() > 0) {
+                    trainingNeedAssessementRequestEntity.insertTrainingReasonList(toBeInserted);//(toBeInserted, trainingAttributes.getTrainingNeedAttributesId());
+                }
+                if (toBeUpdated.size() > 0) {
+//                    trainingNeedAssessementRequestEntity.updateTrainingReasonList(toBeUpdated);
+                }
+                if (toBeDeleted.size() > 0) {
+                    trainingNeedAssessementRequestEntity.deleteTrainingReasonList(toBeDeleted);
+                }
+//            }
+            return true;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return false;
+        }
+    }
+
+    public boolean updateInstitutionChanges(ArrayList<TrainingNeedAssessementRequestManager> institutionLists, String trainer, String institutionType) {
+        ArrayList<TrainingNeedAssessementRequestManager> toBeInserted = new ArrayList<TrainingNeedAssessementRequestManager>();
+        ArrayList<TrainingNeedAssessementRequestManager> toBeUpdated = new ArrayList<TrainingNeedAssessementRequestManager>();
+        ArrayList<TrainingNeedAssessementRequestManager> toBeDeleted = new ArrayList<TrainingNeedAssessementRequestManager>();
+        try {
+//            String recorededDateAndTime = new Timestamp((new Date()).getTime()).toString();
+//            trainingAttributes.setUserName(userName);
+//            trainingAttributes.setRecordedDateAndTime(recorededDateAndTime);
+//            trainingAttributes.setRequestStatus(TrainingNeedAssessementApproveManager.INITIAL_STATE_TRAINING_NEED_ASSESSEMENT);
+
+            for (TrainingNeedAssessementRequestManager currentInstitution : institutionLists) {
+                if (currentInstitution.getStatus().equalsIgnoreCase("New")) {
+                    toBeInserted.add(currentInstitution);
+                } else if (currentInstitution.getStatus().equalsIgnoreCase("Old")) {
+                    toBeUpdated.add(currentInstitution);
+                } else if (currentInstitution.getStatus().equalsIgnoreCase("Deleted")) {
+                    toBeDeleted.add(currentInstitution);
+                }
+            }
+            //continue only if common attributes are updated
+//            if (trainingNeedAssessementRequestEntity.updateTrainingAttributes(trainingAttributes)) {
+                if (toBeInserted.size() > 0) {
+                    trainingNeedAssessementRequestEntity.insertInstitutionList(toBeInserted, trainer, institutionType);//(toBeInserted, trainingAttributes.getTrainingNeedAttributesId());
+                }
+                if (toBeUpdated.size() > 0) {
+//                    trainingNeedAssessementRequestEntity.updateTrainingReasonList(toBeUpdated);
+                }
+                if (toBeDeleted.size() > 0) {
+                    trainingNeedAssessementRequestEntity.deleteInstitutionList(toBeDeleted);
+                }
+//            }
+            return true;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return false;
+        }
+    }
+
+
+    public ArrayList<SelectItem> getApprovedNeedRequests(String budjetYear) {
+        ArrayList<SelectItem> requestLists = new ArrayList<SelectItem>();
+        try {
+            ResultSet _rs = trainingNeedAssessementRequestEntity.selectApprovedNeedRequests(budjetYear);
+            while (_rs.next()) {
+                SelectItem currentRequest = new SelectItem(_rs.getString("NEED_ASSESSEMENT_REQUEST_ID"), _rs.getString("APPLIED_DATE"));
+                requestLists.add(currentRequest);
+            }
+            _rs.close();
+            return requestLists;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return null;
+        }
+    }
+
+    public ArrayList<SelectItem> getPendingRequests() {
+        ArrayList<SelectItem> requestLists = new ArrayList<SelectItem>();
+        try {
+            ResultSet _rs = trainingNeedAssessementRequestEntity.selectPendingRequests(loggedInEmployeeId);
+            while (_rs.next()) {
+                SelectItem currentRequest = new SelectItem(_rs.getString("NEED_ASSESSEMENT_REQUEST_ID") + "--" + _rs.getString("REQUESTER_ID") + "--" + _rs.getString("REQUEST_STATUS"), _rs.getString("REQUESTER_ID") + " ON " + _rs.getString("APPLIED_DATE"));
+                requestLists.add(currentRequest);
+            }
+            _rs.close();
+            return requestLists;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return null;
+        }
+    }
+//SelectItem currentRequest = new SelectItem(_rs.getString("NEED_ASSESSEMENT_REQUEST_ID") + "--" + _rs.getString("REQUESTER_ID") + "--" + _rs.getString("REQUEST_STATUS"), _rs.getString("REQUESTER_ID") + " ON " + _rs.getString("APPLIED_DATE")+ " --"+ _rs.getString("REQUEST_STATUS"));
+    public ArrayList<SelectItem> getMyRequestsHistory() {
+        ArrayList<SelectItem> requestLists = new ArrayList<SelectItem>();
+        try {
+            ResultSet _rs = trainingNeedAssessementRequestEntity.selectMyRequestsHistory(userName);//loggedInEmployeeId
+            while (_rs.next()) {
+                String temp = _rs.getString("REQUEST_STATUS");
+                if (temp.contains("App")){
+                SelectItem currentRequest = new SelectItem(_rs.getString("NEED_ASSESSEMENT_REQUEST_ID") + "--" + _rs.getString("REQUESTER_ID") + "--" + _rs.getString("REQUEST_STATUS"), _rs.getString("REQUESTER_ID") + " ON " + _rs.getString("APPLIED_DATE")+ " --"+ "Approved");
+                requestLists.add(currentRequest);
+                } else {
+                SelectItem currentRequest = new SelectItem(_rs.getString("NEED_ASSESSEMENT_REQUEST_ID") + "--" + _rs.getString("REQUESTER_ID") + "--" + _rs.getString("REQUEST_STATUS"), _rs.getString("REQUESTER_ID") + " ON " + _rs.getString("APPLIED_DATE")+ " --"+ "Rejected");
+                requestLists.add(currentRequest);
+                }
+            }
+            _rs.close();
+            return requestLists;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return null;
+        }
+    }
+
+    public ArrayList<TrainingParticipantModel> getApprovedParticipantsOfTraining(String budjetYear, int trainingType) {
+        ArrayList<TrainingParticipantModel> participantsLists = new ArrayList<TrainingParticipantModel>();
+        try {
+            ResultSet _rs = trainingNeedAssessementRequestEntity.selectApprovedParticipantsOfTrainings(budjetYear, trainingType);
+            while (_rs.next()) {
+                TrainingParticipantModel currentParticipant = new TrainingParticipantModel();
+                currentParticipant.setFullName(_rs.getString("FIRST_NAME") + "  " + _rs.getString("MIDDLE_NAME") + "  " + _rs.getString("LAST_NAME"));
+                currentParticipant.setEmployeeId(_rs.getString("EMP_ID"));
+                currentParticipant.setJobTitleName(_rs.getString("JOB_DESCRIPTION"));
+                currentParticipant.setDepartmentName(_rs.getString("DEPARTMENT_NAME"));
+                currentParticipant.setDatabaseStatus("Old");
+                participantsLists.add(currentParticipant);
+            }
+            _rs.close();
+            return participantsLists;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return null;
+        }
+    }
+
+    public String getOnOrOffWork(String budjetYear, int trainingType, int institutionId) {
+        String onOrOffWork = null;
+        try {
+            ResultSet _rs = trainingNeedAssessementRequestEntity.selectOnOrOffWork(budjetYear, trainingType, institutionId);
+            while (_rs.next()) {
+                               
+                onOrOffWork=_rs.getString("ON_OFF_WORK");
+                
+            }
+            _rs.close();
+            return onOrOffWork;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return null;
+        }
+    }
+
+    public String getStartDate(String budjetYear, int trainingType, int institutionId) {
+        String onOrOffWork = null;
+        try {
+            ResultSet _rs = trainingNeedAssessementRequestEntity.selectStartDate(budjetYear, trainingType, institutionId);
+            while (_rs.next()) {
+
+                onOrOffWork=_rs.getString("TENTATIVE_START_DATE");
+
+            }
+            _rs.close();
+            return onOrOffWork;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return null;
+        }
+    }
+
+    public String getEndDate(String budjetYear, int trainingType, int institutionId) {
+        String onOrOffWork = null;
+        try {
+            ResultSet _rs = trainingNeedAssessementRequestEntity.selectEndDate(budjetYear, trainingType, institutionId);
+            while (_rs.next()) {
+
+                onOrOffWork=_rs.getString("TENTATIVE_END_DATE");
+
+            }
+            _rs.close();
+            return onOrOffWork;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return null;
+        }
+    }
+//trainingType
+
+    public ArrayList<TrainingParticipantModel> getApprovedParticipantsOfTraining(String budjetYear, int trainingType, String batchCode) {
+        ArrayList<TrainingParticipantModel> participantsLists = new ArrayList<TrainingParticipantModel>();
+        try {
+            ResultSet _rs = trainingNeedAssessementRequestEntity.selectApprovedParticipantsOfTrainings(budjetYear, trainingType, batchCode);
+            while (_rs.next()) {
+                TrainingParticipantModel currentParticipant = new TrainingParticipantModel();
+                currentParticipant.setFullName(_rs.getString("FIRST_NAME") + "  " + _rs.getString("MIDDLE_NAME") + "  " + _rs.getString("LAST_NAME"));
+                currentParticipant.setEmployeeId(_rs.getString("EMP_ID"));
+                currentParticipant.setJobTitleName(_rs.getString("JOB_DESCRIPTION"));
+                currentParticipant.setDepartmentName(_rs.getString("DEPARTMENT_NAME"));
+                currentParticipant.setDatabaseStatus("Old");
+                participantsLists.add(currentParticipant);
+            }
+
+            _rs.close();
+            return participantsLists;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return null;
+        }
+    }
+    public String getAssignedInstitutionId(String budjetYear, int trainingType){
+        String assignedInstitutionId = null;
+        try {
+        ResultSet _rs = trainingNeedAssessementRequestEntity.getAssignedInstitutionId(budjetYear, trainingType);
+        while (_rs.next()) {
+            assignedInstitutionId = _rs.getString("ASSIGNED_INSTITUTION");
+        }
+        _rs.close();
+        return assignedInstitutionId;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return null;
+        }
+    }
+
+    public ArrayList<SelectItem> getAllInstitutions() {
+        try {
+            ArrayList<SelectItem> institutionList = (ArrayList<SelectItem>) (new InstitutionRegistrationManager()).getAllEducationInstitutions();
+            institutionList.add(new SelectItem("-1", "--SELECT--"));
+            return institutionList;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return null;
+        }
+    }
+
+    public ArrayList<SelectItem> getAssignedInstitutionsForTrainings(String budjetYear) {
+        ArrayList<SelectItem> requestLists = new ArrayList<SelectItem>();
+        try {
+            ResultSet _rs = trainingNeedAssessementRequestEntity.selectAssignedInstitutionsForTrainings(budjetYear);
+            while (_rs.next()) {
+                SelectItem currentRequest = new SelectItem(_rs.getString("INSTITUTION_ID"), _rs.getString("INSTITUTION_NAME"));
+                requestLists.add(currentRequest);
+            }
+            _rs.close();
+            return requestLists;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return null;
+        }
+    }
+
+//     ArrayList<HashMap> educationList = new ArrayList<HashMap>();
+//        try {
+//
+//            ResultSet ocrs = educationEntity.selectEmployeeEducation(employeeID);
+//            while (ocrs.next()) {
+//                HashMap currentEducation = new HashMap();
+//                currentEducation = new HashMap();
+//                if (ocrs.getString("INSTITUTION") != null) {
+//                    currentEducation.put("INSTITUTION", ocrs.getString("INSTITUTION"));
+//                } else {
+//                    currentEducation.put("INSTITUTION", "Unknown");
+//                }
+//                if (ocrs.getString("STARTING_DATE") != null) {
+//                    currentEducation.put("STARTING_DATE", ocrs.getString("STARTING_DATE"));
+//                } else {
+//                    currentEducation.put("STARTING_DATE", "Unknown");
+//                }
+//                if (ocrs.getString("COMPLETION_DATE") != null) {
+//                    currentEducation.put("COMPLETION_DATE", ocrs.getString("COMPLETION_DATE"));
+//                } else {
+//                    currentEducation.put("COMPLETION_DATE", "Unknown");
+//                }
+//
+//                if (ocrs.getString("AWARD") != null) {
+//                    currentEducation.put("AWARD", ocrs.getString("AWARD"));
+//                } else {
+//                    currentEducation.put("AWARD", "Unknown");
+//                }
+//
+//                if (ocrs.getString("RESULT") != null) {
+//                    currentEducation.put("RESULT", ocrs.getString("RESULT"));
+//                } else {
+//                    currentEducation.put("RESULT", "Unknown");
+//                }
+//
+//                if (ocrs.getString("EDUC_LEVEL_CODE") != null) {
+//                    currentEducation.put("EDUC_LEVEL_CODE", ocrs.getString("EDUC_LEVEL_CODE"));
+//                } else {
+//                    currentEducation.put("EDUC_LEVEL_CODE", "Unknown");
+//                }
+//
+//                if (ocrs.getString("EDUCATION_TYPE") != null) {
+//                    currentEducation.put("EDUCATION_TYPE", ocrs.getString("EDUCATION_TYPE"));
+//                } else {
+//                    currentEducation.put("EDUCATION_TYPE", "Unknown");
+//                }
+//
+//                if (ocrs.getString("EDUC_TYPE") != null) {
+//                    currentEducation.put("EDUC_TYPE", ocrs.getString("EDUC_TYPE"));
+//                } else {
+//                    currentEducation.put("EDUC_TYPE", "Unknown");
+//                }
+//
+//                if (ocrs.getString("EMP_ID") != null) {
+//                    currentEducation.put("EMP_ID", ocrs.getString("EMP_ID"));
+//                } else {
+//                    currentEducation.put("EMP_ID", "Unknown");
+//                }
+//                if (ocrs.getString("ID") != null) {
+//                    currentEducation.put("ID", ocrs.getString("ID"));
+//                } else {
+//                    currentEducation.put("ID", "Unknown");
+//                }
+//                if (ocrs.getString("educ_level") != null) {
+//                    currentEducation.put("educ_level", ocrs.getString("educ_level"));
+//                } else {
+//                    currentEducation.put("educ_level", "Unknown");
+//                }
+//                if (ocrs.getString("GRADING_SYSTEM") != null) {
+//                    currentEducation.put("GRADING_SYSTEM", ocrs.getString("GRADING_SYSTEM"));
+//                } else {
+//                    currentEducation.put("GRADING_SYSTEM", "0");
+//                }
+//                currentEducation.put("databaseStatus", old_not_cahanged);
+//                educationList.add(currentEducation);
+//            }
+//            return educationList;
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//            return educationList;
+//        }
+    public ArrayList<String> getTrainingTaken(String participantId) {
+        ArrayList<String> trainingTaken = new ArrayList<String>();
+
+        try {
+            ResultSet _rs = trainingNeedAssessementRequestEntity.readAllTrainingTaken(participantId);
+            while (_rs.next()) {
+//                String currentRequest = _rs.getString("TrainingorCourse_Name");
+                trainingTaken.add(_rs.getString("TRAININGORCOURSE_NAME"));
+            }
+            _rs.close();
+            return trainingTaken;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return null;
+        }
+
+    }
+
+    public ArrayList<SelectItem> getDefaultInstitutionOrPlace() {
+        try {
+            ArrayList<SelectItem> institutionList = (ArrayList<SelectItem>) (new InstitutionRegistrationManager()).getAllEducationInstitutions();
+            institutionList.add(0, new SelectItem("UK", "Unknown"));
+            return institutionList;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return null;
+        }
+    }
+
+    public String getLoginId(int needAssessmentRequestId) {
+        String LoginId = null;
+        try {
+            ResultSet _rs = trainingNeedAssessementRequestEntity.selectLoginId(needAssessmentRequestId);
+            while (_rs.next()) {
+                LoginId = _rs.getString("LOGIN_PERSON_ID");
+
+
+
+            }
+            _rs.close();
+            return LoginId;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return null;
+        }
+    }
+
+    public String getLoggedInEmployeeId() {
+        return loggedInEmployeeId;
+    }
+
+    public void setLoggedInEmployeeId(String loggedInEmployeeId) {
+        this.loggedInEmployeeId = loggedInEmployeeId;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+   public int addNewTrainingReason(String trainingReason, String trainingDescription) {
+        return trainingNeedAssessementRequestEntity.addNewTrainingReason(trainingReason, trainingDescription);
+    }
+   public int addNewInstitution(String institution, String institutionDescription, String trainer, String institutionType) {
+        return trainingNeedAssessementRequestEntity.addNewInstitution(institution, institutionDescription, trainer, institutionType);
+    }
+
+   public int countTrainingReason() {
+        return trainingNeedAssessementRequestEntity.countTrainingReason();
+    }
+
+   public int countInstitution() {
+        return trainingNeedAssessementRequestEntity.countInstitution();
+    }
+   public HashMap[] readTrainingReason() {
+        return trainingNeedAssessementRequestEntity.readTrainingReason();
+    }
+   public ArrayList<HashMap> readInstitution() {
+        return trainingNeedAssessementRequestEntity.readInstitution();
+    }
+    //
+}

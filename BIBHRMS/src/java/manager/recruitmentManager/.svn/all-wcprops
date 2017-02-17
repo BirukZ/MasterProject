@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/MUGHERPROJECT/!svn/ver/3794/src/java/manager/recruitmentManager
+END
+CandidateExperienceManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/MUGHERPROJECT/!svn/ver/1228/src/java/manager/recruitmentManager/CandidateExperienceManager.java
+END
+InitiateManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/MUGHERPROJECT/!svn/ver/2356/src/java/manager/recruitmentManager/InitiateManager.java
+END
+AdvertisementManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/MUGHERPROJECT/!svn/ver/2791/src/java/manager/recruitmentManager/AdvertisementManager.java
+END
+CandidateManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/MUGHERPROJECT/!svn/ver/3794/src/java/manager/recruitmentManager/CandidateManager.java
+END
+RecruitmentApproveManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/MUGHERPROJECT/!svn/ver/245/src/java/manager/recruitmentManager/RecruitmentApproveManager.java
+END
+RecruitmentManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/MUGHERPROJECT/!svn/ver/3492/src/java/manager/recruitmentManager/RecruitmentManager.java
+END
+VacancyNoticeListManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/MUGHERPROJECT/!svn/ver/2759/src/java/manager/recruitmentManager/VacancyNoticeListManager.java
+END
+RecruitmentReport.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/MUGHERPROJECT/!svn/ver/3488/src/java/manager/recruitmentManager/RecruitmentReport.java
+END

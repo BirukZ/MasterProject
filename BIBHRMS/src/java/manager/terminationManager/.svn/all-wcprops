@@ -1,0 +1,77 @@
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/MUGHERPROJECT/!svn/ver/3699/src/java/manager/terminationManager
+END
+TransferManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/MUGHERPROJECT/!svn/ver/400/src/java/manager/terminationManager/TransferManager.java
+END
+TerminationApproveManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/MUGHERPROJECT/!svn/ver/2814/src/java/manager/terminationManager/TerminationApproveManager.java
+END
+CleranceReportManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/MUGHERPROJECT/!svn/ver/1629/src/java/manager/terminationManager/CleranceReportManager.java
+END
+TerminationManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/MUGHERPROJECT/!svn/ver/440/src/java/manager/terminationManager/TerminationManager.java
+END
+RetirmentManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/MUGHERPROJECT/!svn/ver/3658/src/java/manager/terminationManager/RetirmentManager.java
+END
+terminReportManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/MUGHERPROJECT/!svn/ver/2263/src/java/manager/terminationManager/terminReportManager.java
+END
+cleranceReportModel.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/MUGHERPROJECT/!svn/ver/914/src/java/manager/terminationManager/cleranceReportModel.java
+END
+SearchCriterias.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/MUGHERPROJECT/!svn/ver/1/src/java/manager/terminationManager/SearchCriterias.java
+END
+SearchStateCriterias.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/MUGHERPROJECT/!svn/ver/1/src/java/manager/terminationManager/SearchStateCriterias.java
+END
+TransferApproveManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/MUGHERPROJECT/!svn/ver/1/src/java/manager/terminationManager/TransferApproveManager.java
+END
+TerminationRequestManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/MUGHERPROJECT/!svn/ver/3699/src/java/manager/terminationManager/TerminationRequestManager.java
+END
+TermiReportModel.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/MUGHERPROJECT/!svn/ver/820/src/java/manager/terminationManager/TermiReportModel.java
+END

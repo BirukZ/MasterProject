@@ -1,0 +1,255 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package entity.documentEntity;
+
+import connectionProvider.ConnectionManager;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import manager.documentRequestManager.DocumentApproveManager;
+import manager.documentRequestManager.DocumentRequestManager.DocumentRequestModel;
+import oracle.jdbc.rowset.OracleCachedRowSet;
+
+/**
+ *
+ * @author mekete
+ */
+public class DocumentRequestEntity extends ConnectionManager {
+
+    Connection _con = null;
+    PreparedStatement _ps = null;
+    ResultSet _rs = null;
+
+    public void releaseResources() throws SQLException {
+        if (_rs != null) {
+            _rs.close();
+        }
+        if (_ps != null) {
+            _ps.close();
+        }
+        if (_con != null) {
+            closePooledConnections(_con);
+        }
+    }
+
+    public boolean insertDocumentRequest(DocumentRequestModel requestModel) throws SQLException {
+        String _insertQuery = "INSERT INTO HR_DOCUMENT_REQUEST " +
+                " (DOCUMENT_REQUEST_ID,REQUESTER_ID, DOCUMENT_CATAGORY," +
+                "  DESCRIPTION, REASON,APPLIED_DATE, ISSUE_DATE," +
+                "  DOC_REFERENCE_NUMBER,  STATUS, USER_NAME,TIME_STAMP, " +
+                "  REQUESTER_TYPE, REQ_ORG_ID, REQ_ORG_NAME, REQ_ORG_DEP, " +
+                "  REQ_ORG_LETTER_PURPOSE, REQ_ORG_LETTER_NO, REQ_ORG_LETTER_DATE)" +
+                "  VALUES (HR_DOCUMENT_REQUEST_SEQ.NEXTVAL,?,?,?,?,?,?,?,?,?,?," +
+                "  ?,?,?,?,?,?,?) ";
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_insertQuery);
+            _ps.setString(1, requestModel.getRequesterId());
+            _ps.setString(2, requestModel.getDocumentCatagory());
+            _ps.setString(3, requestModel.getDescription());
+            _ps.setString(4, requestModel.getReason());
+            _ps.setString(5, requestModel.getAppliedDate());
+            _ps.setString(6, requestModel.getIssueDate());
+            _ps.setString(7, requestModel.getDocReferenceNumber());
+            _ps.setString(8, requestModel.getStatus());
+            _ps.setString(9, requestModel.getUserName());
+            _ps.setString(10, requestModel.getTimeStamp());
+            _ps.setString(11, requestModel.getReq_type());
+            _ps.setString(12, requestModel.getReqOrgId());
+            _ps.setString(13, requestModel.getReqOrgName());
+            _ps.setString(14, requestModel.getReqOrgDept());
+            _ps.setString(15, requestModel.getReqOrgAddress());
+            _ps.setString(16, requestModel.getReqOrgLetterNo());
+            _ps.setString(17, requestModel.getReqOrgLetterDate());
+            _ps.executeUpdate();
+            return true;
+        } finally {
+            releaseResources();
+        }
+    }
+
+    public boolean updateDocumentRequest(DocumentRequestModel requestModel) throws SQLException {
+        String _insertQuery = "UPDATE HR_DOCUMENT_REQUEST " +
+                " set  REQUESTER_ID =?, DOCUMENT_CATAGORY =?, " +
+                " DESCRIPTION =?, REASON =?,APPLIED_DATE =?, ISSUE_DATE =?, " +
+                " DOC_REFERENCE_NUMBER =?,  STATUS =?, USER_NAME =? , TIME_STAMP =?, " +
+                " REQUESTER_TYPE = ?, REQ_ORG_ID = ?, REQ_ORG_NAME = ?, REQ_ORG_DEP = ?, " +
+                " REQ_ORG_LETTER_PURPOSE = ?, REQ_ORG_LETTER_NO = ?, REQ_ORG_LETTER_DATE= ? " +
+                " WHERE DOCUMENT_REQUEST_ID= ?";
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_insertQuery);
+            _ps.setString(1, requestModel.getRequesterId());
+            _ps.setString(2, requestModel.getDocumentCatagory());
+            _ps.setString(3, requestModel.getDescription());
+            _ps.setString(4, requestModel.getReason());
+            _ps.setString(5, requestModel.getAppliedDate());
+            _ps.setString(6, requestModel.getIssueDate());
+            _ps.setString(7, requestModel.getDocReferenceNumber());
+            _ps.setString(8, requestModel.getStatus());
+            _ps.setString(9, requestModel.getUserName());
+            _ps.setString(10, requestModel.getTimeStamp());
+            _ps.setString(11, requestModel.getReq_type());
+            _ps.setString(12, requestModel.getReqOrgId());
+            _ps.setString(13, requestModel.getReqOrgName());
+            _ps.setString(14, requestModel.getReqOrgDept());
+            _ps.setString(15, requestModel.getReqOrgAddress());
+            _ps.setString(16, requestModel.getReqOrgLetterNo());
+            _ps.setString(17, requestModel.getReqOrgLetterDate());
+            _ps.setInt(18, requestModel.getDocumentRequestId());
+            _ps.executeUpdate();
+            return true;
+        } finally {
+            releaseResources();
+        }
+    }
+
+    public boolean deleteDocumentRequest(DocumentRequestModel requestModel) throws SQLException {
+        String _deleteQuery = "DELETE HR_DOCUMENT_REQUEST " +
+                " where DOCUMENT_REQUEST_ID= ?";
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_deleteQuery);
+            _ps.setInt(1, requestModel.getDocumentRequestId());
+            _ps.executeUpdate();
+            return true;
+        } finally {
+            releaseResources();
+        }
+    }
+
+    public ResultSet selectDocumentRequest(int documentRequestId) throws SQLException {
+        String _selectQuery = " SELECT * FROM HR_DOCUMENT_REQUEST" +
+                " WHERE DOCUMENT_REQUEST_ID= " + documentRequestId;
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_selectQuery);
+            _rs = _ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(_rs);
+            return (ResultSet) ocrs;
+        } finally {
+            releaseResources();
+        }
+    }
+
+    public ResultSet selectMyPendingDocumentRequests(String loggedInEmplyeeId, String userName) throws SQLException {
+        String _innerSelectQuery = "    SELECT " +
+                "      PROCESS_STATE_ID " +
+                "    FROM " +
+                "      MUGHER.TBL_PROCESS_STATE " +
+                "    WHERE " +
+                "      PROCESS_STATE_ID IN " +
+                "      ( " +
+                "        SELECT " +
+                "          PROCESS_STATE_ID " +
+                "        FROM " +
+                "          mugher.tbl_authorization " +
+                "        WHERE " +
+                "          ROLE_NAME IN " +
+                "          ( " +
+                "            SELECT " +
+                "              ROLE_ID " +
+                "            FROM " +
+                "              mugher.tbl_role_user " +
+                "            WHERE " +
+                "              USER_ID= " +
+                "              ( " +
+                "                SELECT " +
+                "                  USER_ID " +
+                "                FROM " +
+                "                  mugher.tbl_users " +
+                "                WHERE " +
+                "                  USER_NAME='" + userName + "' " +
+                "              ) " +
+                "          ) " +
+                "        AND PROCESS_STATE_ID IN " +
+                "          ( " +
+                "            SELECT " +
+                "              PROCESS_STATE_ID " +
+                "            FROM " +
+                "              MUGHER.TBL_PROCESS_STATE " +
+                "            WHERE " +
+                "              PROCESS_ID='" + DocumentApproveManager.PROCESS_DOCUMENT + "' " +
+                "          ) " +
+                "      ) ";
+
+//
+//        String _selectQuery = "SELECT * " +
+//                "FROM HR_DOCUMENT_REQUEST " +
+//                "WHERE STATUS   = ? " +
+//                "AND (requester_id=? or USER_NAME = ?) " +
+//                "ORDER BY TIME_STAMP DESC";
+
+
+
+        String _selectQuery =
+                "SELECT " +
+                "  DOCUMENT_REQUEST_ID, " +
+                "  REQUESTER_ID, " +
+                "  APPLIED_DATE, " +
+                "  STATUS " +
+                "FROM " +
+                "  HR_DOCUMENT_REQUEST " +
+                "WHERE " +
+                "  STATUS IN " +
+                "  ( " + _innerSelectQuery + ") " +
+                "ORDER BY " +
+                "  APPLIED_DATE DESC";
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_selectQuery);
+//            _ps.setString(1, DocumentApproveManager.INITIAL_STATE_DOCUMENTREQUEST);
+//            _ps.setString(2, loggedInEmplyeeId);
+//            _ps.setString(3, userName);
+            _rs = _ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(_rs);
+            return (ResultSet) ocrs;
+        } finally {
+            releaseResources();
+        }
+    }
+
+    public ResultSet selectMyDocumentRequestHistory(String loggedInEmplyeeId, String userName) throws SQLException {
+        String _selectQuery = "SELECT * " +
+                "FROM HR_DOCUMENT_REQUEST " +
+                "WHERE STATUS  <> ? " +
+                "AND (requester_id =? or USER_NAME = ?) " +
+                "ORDER BY TIME_STAMP DESC";
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_selectQuery);
+            _ps.setString(1, DocumentApproveManager.INITIAL_STATE_DOCUMENTREQUEST);
+            _ps.setString(2, loggedInEmplyeeId);
+            _ps.setString(3, userName);
+            _rs = _ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(_rs);
+            return (ResultSet) ocrs;
+        } finally {
+            releaseResources();
+        }
+    }
+
+    public ResultSet selectEmpDocumentRequestHistory(String reqterId) throws SQLException {
+        String _selectQuery = "SELECT * " +
+                "FROM HR_DOCUMENT_REQUEST " +
+                "WHERE DOCUMENT_CATAGORY = '3' AND requester_id =? " +
+                "ORDER BY TIME_STAMP ASC";
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_selectQuery);
+            _ps.setString(1, reqterId);
+            _rs = _ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(_rs);
+            return (ResultSet) ocrs;
+        } finally {
+            releaseResources();
+        }
+    }
+}

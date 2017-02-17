@@ -1,0 +1,772 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package entity.terminationEntity;
+
+import connectionProvider.ConnectionManager;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.HashMap;
+import manager.ReportCritera.ReportCriteraManager;
+import oracle.jdbc.rowset.OracleCachedRowSet;
+
+/**
+ *
+ * @author Admin
+ */
+public class terminReportEntity extends ConnectionManager {
+
+    Connection _con = null;
+    PreparedStatement _ps = null;
+    ResultSet _rs = null;
+    PreparedStatement _ps2 = null;
+    ResultSet _rs2 = null;
+    Connection _con2 = null;
+
+    public void releaseResources() throws SQLException {
+        if (_rs != null) {
+            _rs.close();
+            _rs = null;
+        }
+        if (_ps != null) {
+            _ps.close();
+            _ps = null;
+        }
+        if (_con != null) {
+            _con.close();
+            closePooledConnections(_con);
+        }
+    }
+
+    public OracleCachedRowSet readAllTermination() throws SQLException {
+
+
+        String select = "SELECT epf.EMP_ID AS ReqID, " +
+                "  epf.title_description " +
+                "  || epf.FIRST_NAME " +
+                "  || epf.MIDDLE_NAME " +
+                "  || epf.LAST_NAME    AS Requester_Name, " +
+                "  epf.department_name AS Requester_Department, " +
+                "  epf.job_description AS Requester_JobTitle, " +
+                "  empinfo.EMP_ID      AS TermID, " +
+                "  req.applied_date    AS requester_appdate, " +
+                "  bk.title_description " +
+                "  || empinfo.FIRST_NAME " +
+                "  || empinfo.MIDDLE_NAME " +
+                "  || empinfo.LAST_NAME AS Terminator_Name, " +
+                "  bk.department_name   AS Terminator_Department, " +
+                "  bk.job_description   AS Terminator_JobTitle, " +
+                "  empinfo.sex, " +
+                "  empinfo.salary, " +
+                "  empinfo.hire_date, " +
+                "  TO_CHAR(sysdate, 'YYYY') - SUBSTR(empinfo.date_of_birth,1,4)AS AGE, " +
+                "  req.applied_date                                            AS terminatr_appdate, " +
+                "  req.termination_date                                        AS terminationDate, " +
+                "  req.penality_payment, " +
+                "  req.termination_catagory, " +
+                "  req.termination_type, " +
+                "  req.request_status, " +
+                "  bku.emp_id AS approver_id, " +
+                "  bku.title_description " +
+                "  || bku.first_name " +
+                "  || bku.middle_name " +
+                "  || bku.last_name    AS Approver_Last_Name, " +
+                "  bku.job_description AS Approver_Department, " +
+                "  pro.decision, " +
+                "  pro.comment_given, " +
+                "  SUBSTR(pro.time_stamp,1,10) AS ApprovedDate " +
+                "FROM hr_termination_request req " +
+                "INNER JOIN vw_employee_by_department_list epf " +
+                "ON epf.emp_id=req.requester_id " +
+                "INNER JOIN hr_employee_info empinfo " +
+                "ON empinfo.emp_id=req.treminator_id " +
+                "INNER JOIN vw_employee_by_department_bi bk " +
+                "ON bk.EMP_ID =req.treminator_id " +
+                "INNER JOIN hr_termination_processed pro " +
+                "ON pro.request_id =req.termination_request_id " +
+                "INNER JOIN vw_employee_by_department_bku bku " +
+                "ON bku.emp_id=pro.processed_by " +
+                "INNER JOIN hr_emp_education edu " +
+                "ON edu.emp_id=req.treminator_id";
+
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(select);
+            _rs = _ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(_rs);
+            return ocrs;
+        } finally {
+            releaseResources();
+        }
+
+    }
+
+    public OracleCachedRowSet readAllTerminationMonthly(HashMap list) throws SQLException {
+
+
+        String select = null;
+        if (!ReportCriteraManager.allEmployee) {
+            select = "SELECT distinct epf.EMP_ID AS ReqID, " +
+                    "  epf.title_description " +
+                    "  || epf.FIRST_NAME " +
+                    "  || epf.MIDDLE_NAME " +
+                    "  || epf.LAST_NAME    AS Requester_Name, " +
+                    "  epf.department_name AS Requester_Department, " +
+                    "  epf.job_description AS Requester_JobTitle, " +
+                    "  empinfo.EMP_ID      AS TermID, " +
+                    "  req.applied_date    AS requester_appdate, " +
+                    "  bk.title_description " +
+                    "  || empinfo.FIRST_NAME " +
+                    "  || empinfo.MIDDLE_NAME " +
+                    "  || empinfo.LAST_NAME AS Terminator_Name, " +
+                    "  bk.department_name   AS Terminator_Department, " +
+                    "  bk.job_description   AS Terminator_JobTitle, " +
+                    "  empinfo.sex, " +
+                    "  empinfo.salary, " +
+                    "  empinfo.hire_date, " +
+                    "  TO_CHAR(sysdate, 'YYYY') - SUBSTR(empinfo.date_of_birth,1,4)AS AGE, " +
+                    "  req.applied_date                                            AS terminatr_appdate, " +
+                    "  req.termination_date                                        AS terminationDate, " +
+                    "  req.penality_payment, " +
+                    "  req.termination_catagory, " +
+                    "  req.termination_type, " +
+                    "  req.request_status, " +
+                    "  bku.emp_id AS approver_id, " +
+                    "  bku.title_description " +
+                    "  || bku.first_name " +
+                    "  || bku.middle_name " +
+                    "  || bku.last_name    AS Approver_Last_Name, " +
+                    "  bku.job_description AS Approver_Department, " +
+                    "  pro.decision, " +
+                    "  pro.comment_given, " +
+                    "  SUBSTR(pro.time_stamp,1,10) AS ApprovedDate " +
+                    "FROM hr_termination_request req " +
+                    "INNER JOIN vw_employee_by_department_list epf " +
+                    "ON epf.emp_id=req.requester_id " +
+                    "INNER JOIN hr_employee_info empinfo " +
+                    "ON empinfo.emp_id=req.treminator_id " +
+                    "INNER JOIN vw_employee_by_department_bi bk " +
+                    "ON bk.EMP_ID =req.treminator_id " +
+                    "INNER JOIN hr_termination_processed pro " +
+                    "ON pro.request_id =req.termination_request_id " +
+                    "INNER JOIN vw_employee_by_department_bku bku " +
+                    "ON bku.emp_id=pro.processed_by " +
+                    "INNER JOIN hr_emp_education edu " +
+                    "ON edu.emp_id=req.treminator_id where req.applied_date LIKE '" + list.get("year") + "-%" + list.get("month") + "-%'" +
+                    " AND req.requester_id          ='" + ReportCriteraManager.getEmployeeId() + "'" +
+                    " ORDER BY req.requester_id ";
+        } else if (ReportCriteraManager.allEmployee){
+            select = "SELECT epf.EMP_ID AS ReqID, " +
+                    "  epf.title_description " +
+                    "  || epf.FIRST_NAME " +
+                    "  || epf.MIDDLE_NAME " +
+                    "  || epf.LAST_NAME    AS Requester_Name, " +
+                    "  epf.department_name AS Requester_Department, " +
+                    "  epf.job_description AS Requester_JobTitle, " +
+                    "  empinfo.EMP_ID      AS TermID, " +
+                    "  req.applied_date    AS requester_appdate, " +
+                    "  bk.title_description " +
+                    "  || empinfo.FIRST_NAME " +
+                    "  || empinfo.MIDDLE_NAME " +
+                    "  || empinfo.LAST_NAME AS Terminator_Name, " +
+                    "  bk.department_name   AS Terminator_Department, " +
+                    "  bk.job_description   AS Terminator_JobTitle, " +
+                    "  empinfo.sex, " +
+                    "  empinfo.salary, " +
+                    "  empinfo.hire_date, " +
+                    "  TO_CHAR(sysdate, 'YYYY') - SUBSTR(empinfo.date_of_birth,1,4)AS AGE, " +
+                    "  req.applied_date                                            AS terminatr_appdate, " +
+                    "  req.termination_date                                        AS terminationDate, " +
+                    "  req.penality_payment, " +
+                    "  req.termination_catagory, " +
+                    "  req.termination_type, " +
+                    "  req.request_status, " +
+                    "  bku.emp_id AS approver_id, " +
+                    "  bku.title_description " +
+                    "  || bku.first_name " +
+                    "  || bku.middle_name " +
+                    "  || bku.last_name    AS Approver_Last_Name, " +
+                    "  bku.job_description AS Approver_Department, " +
+                    "  pro.decision, " +
+                    "  pro.comment_given, " +
+                    "  SUBSTR(pro.time_stamp,1,10) AS ApprovedDate " +
+                    "FROM hr_termination_request req " +
+                    "INNER JOIN vw_employee_by_department_list epf " +
+                    "ON epf.emp_id=req.requester_id " +
+                    "INNER JOIN hr_employee_info empinfo " +
+                    "ON empinfo.emp_id=req.treminator_id " +
+                    "INNER JOIN vw_employee_by_department_bi bk " +
+                    "ON bk.EMP_ID =req.treminator_id " +
+                    "INNER JOIN hr_termination_processed pro " +
+                    "ON pro.request_id =req.termination_request_id " +
+                    "INNER JOIN vw_employee_by_department_bku bku " +
+                    "ON bku.emp_id=pro.processed_by " +
+                    "INNER JOIN hr_emp_education edu " +
+                    "ON edu.emp_id=req.treminator_id where req.applied_date LIKE '" + list.get("year") + "-%" + list.get("month") + "-%'" +
+                    " ORDER BY req.requester_id  desc";
+        }
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(select);
+            _rs = _ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(_rs);
+            return ocrs;
+        } finally {
+            releaseResources();
+        }
+
+    }
+
+    public OracleCachedRowSet readAllTerminationDaily(HashMap Daylist) throws SQLException {
+
+        String select = null;
+        if (!ReportCriteraManager.allEmployee) {
+            select = "SELECT epf.EMP_ID AS ReqID, " +
+                    "  epf.title_description " +
+                    "  || epf.FIRST_NAME " +
+                    "  || epf.MIDDLE_NAME " +
+                    "  || epf.LAST_NAME    AS Requester_Name, " +
+                    "  epf.department_name AS Requester_Department, " +
+                    "  epf.job_description AS Requester_JobTitle, " +
+                    "  empinfo.EMP_ID      AS TermID, " +
+                    "  req.applied_date    AS requester_appdate, " +
+                    "  bk.title_description " +
+                    "  || empinfo.FIRST_NAME " +
+                    "  || empinfo.MIDDLE_NAME " +
+                    "  || empinfo.LAST_NAME AS Terminator_Name, " +
+                    "  bk.department_name   AS Terminator_Department, " +
+                    "  bk.job_description   AS Terminator_JobTitle, " +
+                    "  empinfo.sex, " +
+                    "  empinfo.salary, " +
+                    "  empinfo.hire_date, " +
+                    "  TO_CHAR(sysdate, 'YYYY') - SUBSTR(empinfo.date_of_birth,1,4)AS AGE, " +
+                    "  req.applied_date                                            AS terminatr_appdate, " +
+                    "  req.termination_date                                        AS terminationDate, " +
+                    "  req.penality_payment, " +
+                    "  req.termination_catagory, " +
+                    "  req.termination_type, " +
+                    "  req.request_status, " +
+                    "  bku.emp_id AS approver_id, " +
+                    "  bku.title_description " +
+                    "  || bku.first_name " +
+                    "  || bku.middle_name " +
+                    "  || bku.last_name    AS Approver_Last_Name, " +
+                    "  bku.job_description AS Approver_Department, " +
+                    "  pro.decision, " +
+                    "  pro.comment_given, " +
+                    "  SUBSTR(pro.time_stamp,1,10) AS ApprovedDate " +
+                    "FROM hr_termination_request req " +
+                    "INNER JOIN vw_employee_by_department_list epf " +
+                    "ON epf.emp_id=req.requester_id " +
+                    "INNER JOIN hr_employee_info empinfo " +
+                    "ON empinfo.emp_id=req.treminator_id " +
+                    "INNER JOIN vw_employee_by_department_bi bk " +
+                    "ON bk.EMP_ID =req.treminator_id " +
+                    "INNER JOIN hr_termination_processed pro " +
+                    "ON pro.request_id =req.termination_request_id " +
+                    "INNER JOIN vw_employee_by_department_bku bku " +
+                    "ON bku.emp_id=pro.processed_by " +
+                    "INNER JOIN hr_emp_education edu " +
+                    "ON edu.emp_id=req.treminator_id where to_date(subStr(req.applied_date,1,10),'YYYY-MM-DD')" +
+                    " BETWEEN TO_DATE(? ,'YYYY-MM-DD') " +
+                    " AND TO_DATE(? ,'YYYY-MM-DD') " +
+                    " AND req.requester_id          ='" + ReportCriteraManager.getEmployeeId() + "'" +
+                    " ORDER BY req.requester_id ";
+        } else if (ReportCriteraManager.allEmployee){
+            select = " SELECT epf.EMP_ID AS ReqID, " +
+                    "  epf.title_description " +
+                    "  || epf.FIRST_NAME " +
+                    "  || epf.MIDDLE_NAME " +
+                    "  || epf.LAST_NAME    AS Requester_Name, " +
+                    "  epf.department_name AS Requester_Department, " +
+                    "  epf.job_description AS Requester_JobTitle, " +
+                    "  empinfo.EMP_ID      AS TermID, " +
+                    "  req.applied_date    AS requester_appdate, " +
+                    "  bk.title_description " +
+                    "  || empinfo.FIRST_NAME " +
+                    "  || empinfo.MIDDLE_NAME " +
+                    "  || empinfo.LAST_NAME AS Terminator_Name, " +
+                    "  bk.department_name   AS Terminator_Department, " +
+                    "  bk.job_description   AS Terminator_JobTitle, " +
+                    "  empinfo.sex, " +
+                    "  empinfo.salary, " +
+                    "  empinfo.hire_date, " +
+                    "  TO_CHAR(sysdate, 'YYYY') - SUBSTR(empinfo.date_of_birth,1,4)AS AGE, " +
+                    "  req.applied_date                                            AS terminatr_appdate, " +
+                    "  req.termination_date                                        AS terminationDate, " +
+                    "  req.penality_payment, " +
+                    "  req.termination_catagory, " +
+                    "  req.termination_type, " +
+                    "  req.request_status, " +
+                    "  bku.emp_id AS approver_id, " +
+                    "  bku.title_description " +
+                    "  || bku.first_name " +
+                    "  || bku.middle_name " +
+                    "  || bku.last_name    AS Approver_Last_Name, " +
+                    "  bku.job_description AS Approver_Department, " +
+                    "  pro.decision, " +
+                    "  pro.comment_given, " +
+                    "  SUBSTR(pro.time_stamp,1,10) AS ApprovedDate " +
+                    "FROM hr_termination_request req " +
+                    "INNER JOIN vw_employee_by_department_list epf " +
+                    "ON epf.emp_id=req.requester_id " +
+                    "INNER JOIN hr_employee_info empinfo " +
+                    "ON empinfo.emp_id=req.treminator_id " +
+                    "INNER JOIN vw_employee_by_department_bi bk " +
+                    "ON bk.EMP_ID =req.treminator_id " +
+                    "INNER JOIN hr_termination_processed pro " +
+                    "ON pro.request_id =req.termination_request_id " +
+                    "INNER JOIN vw_employee_by_department_bku bku " +
+                    "ON bku.emp_id=pro.processed_by " +
+                    "INNER JOIN hr_emp_education edu " +
+                    "ON edu.emp_id=req.treminator_id where to_date(subStr(req.applied_date,1,10),'YYYY-MM-DD')" +
+                    " BETWEEN TO_DATE(? ,'YYYY-MM-DD') " +
+                    " AND TO_DATE(? ,'YYYY-MM-DD') " +
+                    " ORDER BY req.requester_id  desc";
+        }
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(select);
+            _ps.setString(1, Daylist.get("StartDay").toString());
+            _ps.setString(2, Daylist.get("endDate").toString());
+            _rs = _ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(_rs);
+            return ocrs;
+        } finally {
+            releaseResources();
+        }
+    }
+
+    public OracleCachedRowSet readAllTerminationQuarterly(
+            HashMap Daylist) throws SQLException {
+
+
+        String startDay = "";
+        String endDay = "";
+        String year;
+
+        if (Integer.parseInt(Daylist.get("quarterType").toString()) == 1) {
+            year = Daylist.get("year").toString();
+            startDay =
+                    "" + year + "-01-01";
+            endDay =
+                    "" + year + "-03-31";
+        } else if (Integer.parseInt(Daylist.get("quarterType").toString()) == 2) {
+            year = Daylist.get("year").toString();
+            startDay =
+                    "" + year + "-04-01";
+            endDay =
+                    "" + year + "-06-30";
+
+        } else if (Integer.parseInt(Daylist.get("quarterType").toString()) == 3) {
+            year = Daylist.get("year").toString();
+            startDay =
+                    "" + year + "-07-01";
+            endDay =
+                    "" + year + "-09-30";
+        } else if (Integer.parseInt(Daylist.get("quarterType").toString()) == 4) {
+            year = Daylist.get("year").toString();
+            startDay =
+                    "" + year + "-10-01";
+            endDay =
+                    "" + year + "-12-31";
+        }
+
+        String select = null;
+        if (!ReportCriteraManager.allEmployee) {
+            select = "SELECT epf.EMP_ID AS ReqID, " +
+                    "  epf.title_description " +
+                    "  || epf.FIRST_NAME " +
+                    "  || epf.MIDDLE_NAME " +
+                    "  || epf.LAST_NAME    AS Requester_Name, " +
+                    "  epf.department_name AS Requester_Department, " +
+                    "  epf.job_description AS Requester_JobTitle, " +
+                    "  empinfo.EMP_ID      AS TermID, " +
+                    "  req.applied_date    AS requester_appdate, " +
+                    "  bk.title_description " +
+                    "  || empinfo.FIRST_NAME " +
+                    "  || empinfo.MIDDLE_NAME " +
+                    "  || empinfo.LAST_NAME AS Terminator_Name, " +
+                    "  bk.department_name   AS Terminator_Department, " +
+                    "  bk.job_description   AS Terminator_JobTitle, " +
+                    "  empinfo.sex, " +
+                    "  empinfo.salary, " +
+                    "  empinfo.hire_date, " +
+                    "  TO_CHAR(sysdate, 'YYYY') - SUBSTR(empinfo.date_of_birth,1,4)AS AGE, " +
+                    "  req.applied_date                                            AS terminatr_appdate, " +
+                    "  req.termination_date                                        AS terminationDate, " +
+                    "  req.penality_payment, " +
+                    "  req.termination_catagory, " +
+                    "  req.termination_type, " +
+                    "  req.request_status, " +
+                    "  bku.emp_id AS approver_id, " +
+                    "  bku.title_description " +
+                    "  || bku.first_name " +
+                    "  || bku.middle_name " +
+                    "  || bku.last_name    AS Approver_Last_Name, " +
+                    "  bku.job_description AS Approver_Department, " +
+                    "  pro.decision, " +
+                    "  pro.comment_given, " +
+                    "  SUBSTR(pro.time_stamp,1,10) AS ApprovedDate " +
+                    "FROM hr_termination_request req " +
+                    "INNER JOIN vw_employee_by_department_list epf " +
+                    "ON epf.emp_id=req.requester_id " +
+                    "INNER JOIN hr_employee_info empinfo " +
+                    "ON empinfo.emp_id=req.treminator_id " +
+                    "INNER JOIN vw_employee_by_department_bi bk " +
+                    "ON bk.EMP_ID =req.treminator_id " +
+                    "INNER JOIN hr_termination_processed pro " +
+                    "ON pro.request_id =req.termination_request_id " +
+                    "INNER JOIN vw_employee_by_department_bku bku " +
+                    "ON bku.emp_id=pro.processed_by " +
+                    "INNER JOIN hr_emp_education edu " +
+                    "ON edu.emp_id=req.treminator_id where to_date(subStr(req.applied_date,1,10),'YYYY-MM-DD')" +
+                    " BETWEEN TO_DATE(? ,'YYYY-MM-DD') " +
+                    " AND TO_DATE(? ,'YYYY-MM-DD') " +
+                    " AND req.requester_id          ='" + ReportCriteraManager.getEmployeeId() + "'" +
+                    " ORDER BY req.requester_id ";
+        } else if (ReportCriteraManager.allEmployee){
+            select = "SELECT epf.EMP_ID AS ReqID, " +
+                    "  epf.title_description " +
+                    "  || epf.FIRST_NAME " +
+                    "  || epf.MIDDLE_NAME " +
+                    "  || epf.LAST_NAME    AS Requester_Name, " +
+                    "  epf.department_name AS Requester_Department, " +
+                    "  epf.job_description AS Requester_JobTitle, " +
+                    "  empinfo.EMP_ID      AS TermID, " +
+                    "  req.applied_date    AS requester_appdate, " +
+                    "  bk.title_description " +
+                    "  || empinfo.FIRST_NAME " +
+                    "  || empinfo.MIDDLE_NAME " +
+                    "  || empinfo.LAST_NAME AS Terminator_Name, " +
+                    "  bk.department_name   AS Terminator_Department, " +
+                    "  bk.job_description   AS Terminator_JobTitle, " +
+                    "  empinfo.sex, " +
+                    "  empinfo.salary, " +
+                    "  empinfo.hire_date, " +
+                    "  TO_CHAR(sysdate, 'YYYY') - SUBSTR(empinfo.date_of_birth,1,4)AS AGE, " +
+                    "  req.applied_date                                            AS terminatr_appdate, " +
+                    "  req.termination_date                                        AS terminationDate, " +
+                    "  req.penality_payment, " +
+                    "  req.termination_catagory, " +
+                    "  req.termination_type, " +
+                    "  req.request_status, " +
+                    "  bku.emp_id AS approver_id, " +
+                    "  bku.title_description " +
+                    "  || bku.first_name " +
+                    "  || bku.middle_name " +
+                    "  || bku.last_name    AS Approver_Last_Name, " +
+                    "  bku.job_description AS Approver_Department, " +
+                    "  pro.decision, " +
+                    "  pro.comment_given, " +
+                    "  SUBSTR(pro.time_stamp,1,10) AS ApprovedDate " +
+                    "FROM hr_termination_request req " +
+                    "INNER JOIN vw_employee_by_department_list epf " +
+                    "ON epf.emp_id=req.requester_id " +
+                    "INNER JOIN hr_employee_info empinfo " +
+                    "ON empinfo.emp_id=req.treminator_id " +
+                    "INNER JOIN vw_employee_by_department_bi bk " +
+                    "ON bk.EMP_ID =req.treminator_id " +
+                    "INNER JOIN hr_termination_processed pro " +
+                    "ON pro.request_id =req.termination_request_id " +
+                    "INNER JOIN vw_employee_by_department_bku bku " +
+                    "ON bku.emp_id=pro.processed_by " +
+                    "INNER JOIN hr_emp_education edu " +
+                    "ON edu.emp_id=req.treminator_id where to_date(subStr(req.applied_date,1,10),'YYYY-MM-DD')" +
+                    " BETWEEN TO_DATE(? ,'YYYY-MM-DD') " +
+                    " AND TO_DATE(? ,'YYYY-MM-DD') " +
+                    " ORDER BY req.requester_id  desc";
+        }
+
+        try {
+            _con = getConnection();
+            _ps =
+                    _con.prepareStatement(select);
+            _ps.setString(1, startDay);
+            _ps.setString(2, endDay);
+            _rs =
+                    _ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(_rs);
+            return ocrs;
+        } finally {
+            releaseResources();
+        }
+
+    }
+
+    public OracleCachedRowSet readAllTerminationSemiAnnualy(
+            HashMap Daylist) throws SQLException {
+        String startDay = "";
+        String endDay = "";
+        String year = Daylist.get("year").toString();
+        String[] FinalYear = year.split("_");
+        String currentBudjuetYear = FinalYear[0];
+        String nextBudjuetYear = FinalYear[1];
+        if (Integer.parseInt(Daylist.get("simiannualType").toString()) == 1) {
+            year = currentBudjuetYear;
+            startDay =
+                    "" + year + "-07-01";
+            endDay =
+                    "" + year + "-12-31";
+        } else if (Integer.parseInt(Daylist.get("simiannualType").toString()) == 2) {
+            year = nextBudjuetYear;
+            startDay =
+                    "" + year + "-01-01";
+            endDay =
+                    "" + year + "-06-30";
+
+        }
+
+        String select = null;
+        if (!ReportCriteraManager.allEmployee) {
+            select = "SELECT epf.EMP_ID AS ReqID, " +
+                    "  epf.title_description " +
+                    "  || epf.FIRST_NAME " +
+                    "  || epf.MIDDLE_NAME " +
+                    "  || epf.LAST_NAME    AS Requester_Name, " +
+                    "  epf.department_name AS Requester_Department, " +
+                    "  epf.job_description AS Requester_JobTitle, " +
+                    "  empinfo.EMP_ID      AS TermID, " +
+                    "  req.applied_date    AS requester_appdate, " +
+                    "  bk.title_description " +
+                    "  || empinfo.FIRST_NAME " +
+                    "  || empinfo.MIDDLE_NAME " +
+                    "  || empinfo.LAST_NAME AS Terminator_Name, " +
+                    "  bk.department_name   AS Terminator_Department, " +
+                    "  bk.job_description   AS Terminator_JobTitle, " +
+                    "  empinfo.sex, " +
+                    "  empinfo.salary, " +
+                    "  empinfo.hire_date, " +
+                    "  TO_CHAR(sysdate, 'YYYY') - SUBSTR(empinfo.date_of_birth,1,4)AS AGE, " +
+                    "  req.applied_date                                            AS terminatr_appdate, " +
+                    "  req.termination_date                                        AS terminationDate, " +
+                    "  req.penality_payment, " +
+                    "  req.termination_catagory, " +
+                    "  req.termination_type, " +
+                    "  req.request_status, " +
+                    "  bku.emp_id AS approver_id, " +
+                    "  bku.title_description " +
+                    "  || bku.first_name " +
+                    "  || bku.middle_name " +
+                    "  || bku.last_name    AS Approver_Last_Name, " +
+                    "  bku.job_description AS Approver_Department, " +
+                    "  pro.decision, " +
+                    "  pro.comment_given, " +
+                    "  SUBSTR(pro.time_stamp,1,10) AS ApprovedDate " +
+                    "FROM hr_termination_request req " +
+                    "INNER JOIN vw_employee_by_department_list epf " +
+                    "ON epf.emp_id=req.requester_id " +
+                    "INNER JOIN hr_employee_info empinfo " +
+                    "ON empinfo.emp_id=req.treminator_id " +
+                    "INNER JOIN vw_employee_by_department_bi bk " +
+                    "ON bk.EMP_ID =req.treminator_id " +
+                    "INNER JOIN hr_termination_processed pro " +
+                    "ON pro.request_id =req.termination_request_id " +
+                    "INNER JOIN vw_employee_by_department_bku bku " +
+                    "ON bku.emp_id=pro.processed_by " +
+                    "INNER JOIN hr_emp_education edu " +
+                    "ON edu.emp_id=req.treminator_id where to_date(subStr(req.applied_date,1,10),'YYYY-MM-DD')" +
+                    " BETWEEN TO_DATE(? ,'YYYY-MM-DD') " +
+                    " AND TO_DATE(? ,'YYYY-MM-DD') " +
+                    " AND req.requester_id          ='" + ReportCriteraManager.getEmployeeId() + "'" +
+                    " ORDER BY req.requester_id ";
+        } else if (ReportCriteraManager.allEmployee){
+            select = "SELECT epf.EMP_ID AS ReqID, " +
+                    "  epf.title_description " +
+                    "  || epf.FIRST_NAME " +
+                    "  || epf.MIDDLE_NAME " +
+                    "  || epf.LAST_NAME    AS Requester_Name, " +
+                    "  epf.department_name AS Requester_Department, " +
+                    "  epf.job_description AS Requester_JobTitle, " +
+                    "  empinfo.EMP_ID      AS TermID, " +
+                    "  req.applied_date    AS requester_appdate, " +
+                    "  bk.title_description " +
+                    "  || empinfo.FIRST_NAME " +
+                    "  || empinfo.MIDDLE_NAME " +
+                    "  || empinfo.LAST_NAME AS Terminator_Name, " +
+                    "  bk.department_name   AS Terminator_Department, " +
+                    "  bk.job_description   AS Terminator_JobTitle, " +
+                    "  empinfo.sex, " +
+                    "  empinfo.salary, " +
+                    "  empinfo.hire_date, " +
+                    "  TO_CHAR(sysdate, 'YYYY') - SUBSTR(empinfo.date_of_birth,1,4)AS AGE, " +
+                    "  req.applied_date                                            AS terminatr_appdate, " +
+                    "  req.termination_date                                        AS terminationDate, " +
+                    "  req.penality_payment, " +
+                    "  req.termination_catagory, " +
+                    "  req.termination_type, " +
+                    "  req.request_status, " +
+                    "  bku.emp_id AS approver_id, " +
+                    "  bku.title_description " +
+                    "  || bku.first_name " +
+                    "  || bku.middle_name " +
+                    "  || bku.last_name    AS Approver_Last_Name, " +
+                    "  bku.job_description AS Approver_Department, " +
+                    "  pro.decision, " +
+                    "  pro.comment_given, " +
+                    "  SUBSTR(pro.time_stamp,1,10) AS ApprovedDate " +
+                    "FROM hr_termination_request req " +
+                    "INNER JOIN vw_employee_by_department_list epf " +
+                    "ON epf.emp_id=req.requester_id " +
+                    "INNER JOIN hr_employee_info empinfo " +
+                    "ON empinfo.emp_id=req.treminator_id " +
+                    "INNER JOIN vw_employee_by_department_bi bk " +
+                    "ON bk.EMP_ID =req.treminator_id " +
+                    "INNER JOIN hr_termination_processed pro " +
+                    "ON pro.request_id =req.termination_request_id " +
+                    "INNER JOIN vw_employee_by_department_bku bku " +
+                    "ON bku.emp_id=pro.processed_by " +
+                    "INNER JOIN hr_emp_education edu " +
+                    "ON edu.emp_id=req.treminator_id where to_date(subStr(req.applied_date,1,10),'YYYY-MM-DD')" +
+                    " BETWEEN TO_DATE(? ,'YYYY-MM-DD') " +
+                    " AND TO_DATE(? ,'YYYY-MM-DD') " +
+                    " ORDER BY req.requester_id  desc";
+        }
+        try {
+            _con = getConnection();
+            _ps =
+                    _con.prepareStatement(select);
+            _ps.setString(1, startDay);
+            _ps.setString(2, endDay);
+            _rs =
+                    _ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(_rs);
+            return ocrs;
+        } finally {
+            releaseResources();
+        }
+    }
+
+    public OracleCachedRowSet readAllTerminationAnnualy(HashMap Daylist) throws SQLException {
+        String select = null;
+         if (!ReportCriteraManager.allEmployee) {
+        select = "SELECT epf.EMP_ID AS ReqID, " +
+                "  epf.title_description " +
+                "  || epf.FIRST_NAME " +
+                "  || epf.MIDDLE_NAME " +
+                "  || epf.LAST_NAME    AS Requester_Name, " +
+                "  epf.department_name AS Requester_Department, " +
+                "  epf.job_description AS Requester_JobTitle, " +
+                "  empinfo.EMP_ID      AS TermID, " +
+                "  req.applied_date    AS requester_appdate, " +
+                "  bk.title_description " +
+                "  || empinfo.FIRST_NAME " +
+                "  || empinfo.MIDDLE_NAME " +
+                "  || empinfo.LAST_NAME AS Terminator_Name, " +
+                "  bk.department_name   AS Terminator_Department, " +
+                "  bk.job_description   AS Terminator_JobTitle, " +
+                "  empinfo.sex, " +
+                "  empinfo.salary, " +
+                "  empinfo.hire_date, " +
+                "  TO_CHAR(sysdate, 'YYYY') - SUBSTR(empinfo.date_of_birth,1,4)AS AGE, " +
+                "  req.applied_date                                            AS terminatr_appdate, " +
+                "  req.termination_date                                        AS terminationDate, " +
+                "  req.penality_payment, " +
+                "  req.termination_catagory, " +
+                "  req.termination_type, " +
+                "  req.request_status, " +
+                "  bku.emp_id AS approver_id, " +
+                "  bku.title_description " +
+                "  || bku.first_name " +
+                "  || bku.middle_name " +
+                "  || bku.last_name    AS Approver_Last_Name, " +
+                "  bku.job_description AS Approver_Department, " +
+                "  pro.decision, " +
+                "  pro.comment_given, " +
+                "  SUBSTR(pro.time_stamp,1,10) AS ApprovedDate " +
+                "FROM hr_termination_request req " +
+                "INNER JOIN vw_employee_by_department_list epf " +
+                "ON epf.emp_id=req.requester_id " +
+                "INNER JOIN hr_employee_info empinfo " +
+                "ON empinfo.emp_id=req.treminator_id " +
+                "INNER JOIN vw_employee_by_department_bi bk " +
+                "ON bk.EMP_ID =req.treminator_id " +
+                "INNER JOIN hr_termination_processed pro " +
+                "ON pro.request_id =req.termination_request_id " +
+                "INNER JOIN vw_employee_by_department_bku bku " +
+                "ON bku.emp_id=pro.processed_by " +
+                "INNER JOIN hr_emp_education edu " +
+                "ON edu.emp_id=req.treminator_id where req.applied_date LIKE '" + Daylist.get("year") + "-%-%'" +
+                " AND req.requester_id          ='" + ReportCriteraManager.getEmployeeId() + "'" +
+                " ORDER BY req.requester_id ";
+    }
+    else if (ReportCriteraManager.allEmployee){
+        select = "SELECT epf.EMP_ID AS ReqID, " +
+                "  epf.title_description " +
+                "  || epf.FIRST_NAME " +
+                "  || epf.MIDDLE_NAME " +
+                "  || epf.LAST_NAME    AS Requester_Name, " +
+                "  epf.department_name AS Requester_Department, " +
+                "  epf.job_description AS Requester_JobTitle, " +
+                "  empinfo.EMP_ID      AS TermID, " +
+                "  req.applied_date    AS requester_appdate, " +
+                "  bk.title_description " +
+                "  || empinfo.FIRST_NAME " +
+                "  || empinfo.MIDDLE_NAME " +
+                "  || empinfo.LAST_NAME AS Terminator_Name, " +
+                "  bk.department_name   AS Terminator_Department, " +
+                "  bk.job_description   AS Terminator_JobTitle, " +
+                "  empinfo.sex, " +
+                "  empinfo.salary, " +
+                "  empinfo.hire_date, " +
+                "  TO_CHAR(sysdate, 'YYYY') - SUBSTR(empinfo.date_of_birth,1,4)AS AGE, " +
+                "  req.applied_date                                            AS terminatr_appdate, " +
+                "  req.termination_date                                        AS terminationDate, " +
+                "  req.penality_payment, " +
+                "  req.termination_catagory, " +
+                "  req.termination_type, " +
+                "  req.request_status, " +
+                "  bku.emp_id AS approver_id, " +
+                "  bku.title_description " +
+                "  || bku.first_name " +
+                "  || bku.middle_name " +
+                "  || bku.last_name    AS Approver_Last_Name, " +
+                "  bku.job_description AS Approver_Department, " +
+                "  pro.decision, " +
+                "  pro.comment_given, " +
+                "  SUBSTR(pro.time_stamp,1,10) AS ApprovedDate " +
+                "FROM hr_termination_request req " +
+                "INNER JOIN vw_employee_by_department_list epf " +
+                "ON epf.emp_id=req.requester_id " +
+                "INNER JOIN hr_employee_info empinfo " +
+                "ON empinfo.emp_id=req.treminator_id " +
+                "INNER JOIN vw_employee_by_department_bi bk " +
+                "ON bk.EMP_ID =req.treminator_id " +
+                "INNER JOIN hr_termination_processed pro " +
+                "ON pro.request_id =req.termination_request_id " +
+                "INNER JOIN vw_employee_by_department_bku bku " +
+                "ON bku.emp_id=pro.processed_by " +
+                "INNER JOIN hr_emp_education edu " +
+                "ON edu.emp_id=req.treminator_id where req.applied_date LIKE '" + Daylist.get("year") + "-%-%'" +
+                " ORDER BY req.requester_id  desc";
+    }
+    try
+
+
+    {
+        _con = getConnection();
+        _ps =
+                _con.prepareStatement(select);
+        _rs =
+                _ps.executeQuery();
+        OracleCachedRowSet ocrs = new OracleCachedRowSet();
+        ocrs.populate(_rs);
+        return ocrs;
+    }
+    finally
+
+
+    {
+        releaseResources();
+    }
+}
+
+}

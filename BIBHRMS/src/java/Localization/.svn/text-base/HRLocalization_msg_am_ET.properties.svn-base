@@ -1,0 +1,11 @@
+
+nameValidate=Invalid !
+numOnly=Number only !
+dateFormat=Invalid Date !
+requiredMsg=Required !
+rangVal=>5 and <25 !
+telValidate=Invalid !
+salaryValidate=Invalid !
+errorUserName= Invalid User Name !
+errorPassword=Invalid Password !
+ETdateVaild= Invalid !

@@ -1,0 +1,260 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package manager.docReportManager;
+
+import entity.docreport.DocReportEntity;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import manager.ReportCritera.ReportCriteraManager;
+import manager.globalUseManager.ErrorLogWriter;
+import manager.ReportCritera.ReportCriteraManager.ReportGeneration;
+
+/**
+ *
+ * @author Up
+ */
+public class DocReportManger {
+
+    private String requesterId;
+    private String requesterFullName;
+    private String requesterJob;
+    private String requesterDept;
+    private String requestedDocType;
+    private String requestedDate;
+    private String requestedDocNum;
+    private String reason;
+    private String issuedDate;
+    private String approverId;
+    private String approverFullName;
+    private String approverJob;
+    private String approverDept;
+    DocReportEntity docReportEntity = new DocReportEntity();
+
+    /**
+     * @return the requesterId
+     */
+    public String getRequesterId() {
+        return requesterId;
+    }
+
+    /**
+     * @param requesterId the requesterId to set
+     */
+    public void setRequesterId(String requesterId) {
+        this.requesterId = requesterId;
+    }
+
+    /**
+     * @return the requesterFullName
+     */
+    public String getRequesterFullName() {
+        return requesterFullName;
+    }
+
+    /**
+     * @param requesterFullName the requesterFullName to set
+     */
+    public void setRequesterFullName(String requesterFullName) {
+        this.requesterFullName = requesterFullName;
+    }
+
+    /**
+     * @return the requesterJob
+     */
+    public String getRequesterJob() {
+        return requesterJob;
+    }
+
+    /**
+     * @param requesterJob the requesterJob to set
+     */
+    public void setRequesterJob(String requesterJob) {
+        this.requesterJob = requesterJob;
+    }
+
+    /**
+     * @return the requesterDept
+     */
+    public String getRequesterDept() {
+        return requesterDept;
+    }
+
+    /**
+     * @param requesterDept the requesterDept to set
+     */
+    public void setRequesterDept(String requesterDept) {
+        this.requesterDept = requesterDept;
+    }
+
+    /**
+     * @return the requestedDocType
+     */
+    public String getRequestedDocType() {
+        return requestedDocType;
+    }
+
+    /**
+     * @param requestedDocType the requestedDocType to set
+     */
+    public void setRequestedDocType(String requestedDocType) {
+        this.requestedDocType = requestedDocType;
+    }
+
+    /**
+     * @return the requestedDate
+     */
+    public String getRequestedDate() {
+        return requestedDate;
+    }
+
+    /**
+     * @param requestedDate the requestedDate to set
+     */
+    public void setRequestedDate(String requestedDate) {
+        this.requestedDate = requestedDate;
+    }
+
+    /**
+     * @return the requestedDocNum
+     */
+    public String getRequestedDocNum() {
+        return requestedDocNum;
+    }
+
+    /**
+     * @param requestedDocNum the requestedDocNum to set
+     */
+    public void setRequestedDocNum(String requestedDocNum) {
+        this.requestedDocNum = requestedDocNum;
+    }
+
+    /**
+     * @return the reason
+     */
+    public String getReason() {
+        return reason;
+    }
+
+    /**
+     * @param reason the reason to set
+     */
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
+
+    /**
+     * @return the issuedDate
+     */
+    public String getIssuedDate() {
+        return issuedDate;
+    }
+
+    /**
+     * @param issuedDate the issuedDate to set
+     */
+    public void setIssuedDate(String issuedDate) {
+        this.issuedDate = issuedDate;
+    }
+
+    /**
+     * @return the approverId
+     */
+    public String getApproverId() {
+        return approverId;
+    }
+
+    /**
+     * @param approverId the approverId to set
+     */
+    public void setApproverId(String approverId) {
+        this.approverId = approverId;
+    }
+
+    /**
+     * @return the approverFullName
+     */
+    public String getApproverFullName() {
+        return approverFullName;
+    }
+
+    /**
+     * @param approverFullName the approverFullName to set
+     */
+    public void setApproverFullName(String approverFullName) {
+        this.approverFullName = approverFullName;
+    }
+
+    /**
+     * @return the approverJob
+     */
+    public String getApproverJob() {
+        return approverJob;
+    }
+
+    /**
+     * @param approverJob the approverJob to set
+     */
+    public void setApproverJob(String approverJob) {
+        this.approverJob = approverJob;
+    }
+
+    /**
+     * @return the approverDept
+     */
+    public String getApproverDept() {
+        return approverDept;
+    }
+
+    /**
+     * @param approverDept the approverDept to set
+     */
+    public void setApproverDept(String approverDept) {
+        this.approverDept = approverDept;
+    }
+
+    public DocReportManger() {
+    }
+
+    public DocReportManger(String requesterId, String requesterFullName, String requesterJob, String requesterDept, String requestedDocType, String requestedDate, String requestedDocNum, String reason, String issuedDate, String approverId, String approverFullName, String approverJob, String approverDept) {
+        this.requesterId = requesterId;
+        this.requesterFullName = requesterFullName;
+        this.requesterJob = requesterJob;
+        this.requesterDept = requesterDept;
+        this.requestedDocType = requestedDocType;
+        this.requestedDate = requestedDate;
+        this.requestedDocNum = requestedDocNum;
+        this.reason = reason;
+        this.issuedDate = issuedDate;
+        this.approverId = approverId;
+        this.approverFullName = approverFullName;
+        this.approverJob = approverJob;
+        this.approverDept = approverDept;
+    }
+    ReportCriteraManager reportCrtrMgr = new ReportCriteraManager();
+
+    public ArrayList<DocReportManger> getDocRequestReportData() {
+        ArrayList<DocReportManger> docReportManagerList = new ArrayList<DocReportManger>();
+        ArrayList<HashMap> reportParameters = reportCrtrMgr.getReportParameters();
+        try {
+            ArrayList<HashMap> docRequestReportData = docReportEntity.getDocRequesteReportDate(reportParameters);
+            for (HashMap hm : docRequestReportData) {
+                docReportManagerList.add(new DocReportManger(hm.get("requesterId").toString(),
+                        hm.get("requesterFullName").toString(), hm.get("requesterJob").toString(),
+                        hm.get("requesterDept").toString(), hm.get("requestedDocType").toString(),
+                        hm.get("requestedDate").toString(), hm.get("requestedDocNum").toString(),
+                        hm.get("reason").toString(), hm.get("issuedDate").toString(),
+                        hm.get("approverId").toString(), hm.get("approverFullName").toString(),
+                        hm.get("approverJob").toString(), hm.get("approverDept").toString()));
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+        }
+        return docReportManagerList;
+    }
+}

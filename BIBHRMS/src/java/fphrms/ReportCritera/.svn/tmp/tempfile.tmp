@@ -1,0 +1,2089 @@
+<<<<<<< .mine
+/*
+ * Page2.java
+ *
+ * Created on May 26, 2010, 4:18:41 AM
+ * Copyright Administrator
+ */
+package fphrms.ReportCritera;
+
+import com.icesoft.faces.component.ext.HtmlCommandButton;
+import com.icesoft.faces.component.ext.HtmlCommandLink;
+import com.icesoft.faces.component.ext.HtmlInputText;
+import com.icesoft.faces.component.ext.HtmlOutputLabel;
+import com.icesoft.faces.component.ext.HtmlOutputText;
+import com.icesoft.faces.component.ext.HtmlSelectBooleanCheckbox;
+import com.icesoft.faces.component.ext.HtmlSelectOneMenu;
+import com.icesoft.faces.component.jsfcl.data.DefaultSelectedData;
+import com.icesoft.faces.component.jsfcl.data.DefaultSelectionItems;
+import com.icesoft.faces.component.jsfcl.data.SelectInputDateBean;
+import com.icesoft.faces.component.panellayout.PanelLayout;
+import com.icesoft.faces.component.selectinputdate.SelectInputDate;
+import com.sun.rave.faces.data.DefaultSelectItemsArray;
+import com.sun.rave.web.ui.appbase.AbstractPageBean;
+import fphrms.ApplicationBean1;
+import fphrms.RequestBean1;
+import fphrms.SessionBean1;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import javax.faces.FacesException;
+import javax.faces.event.ValueChangeEvent;
+import manager.ReportCritera.ReportCriteraManager;
+import manager.ReportCritera.ReportCriteraManager.ReportPageModle;
+import com.sun.webui.jsf.model.Option;
+import java.util.HashMap;
+import javax.faces.model.SelectItem;
+import javax.swing.JOptionPane;
+
+/**
+ * <p>Page bean that corresponds to a similarly named JSP page.  This
+ * class contains component definitions (and initialization code) for
+ * all components that you have defined on this page, as well as
+ * lifecycle methods and event handlers where you may add behavior
+ * to respond to incoming events.</p>
+ */
+public class ReportCritera extends AbstractPageBean {
+    // <editor-fold defaultstate="collapsed" desc="Managed Component Definition">
+
+    private int __placeholder;
+
+    /**
+     * <p>Automatically managed component initialization.  <strong>WARNING:</strong>
+     * This method is automatically generated, so any user-specified code inserted
+     * here is subject to being replaced.</p>
+     */
+    private void _init() throws Exception {
+    }
+    private PanelLayout pnl_Type = new PanelLayout();
+
+    public PanelLayout getPnl_Type() {
+        return pnl_Type;
+    }
+
+    public void setPnl_Type(PanelLayout pl) {
+        this.pnl_Type = pl;
+    }
+    private PanelLayout pnl_critera = new PanelLayout();
+
+    public PanelLayout getPnl_critera() {
+        return pnl_critera;
+    }
+
+    public void setPnl_critera(PanelLayout pl) {
+        this.pnl_critera = pl;
+    }
+    private PanelLayout pnl_Btn = new PanelLayout();
+
+    public PanelLayout getPnl_Btn() {
+        return pnl_Btn;
+    }
+
+    public void setPnl_Btn(PanelLayout pl) {
+        this.pnl_Btn = pl;
+    }
+    private DefaultSelectedData selectOneMenu1Bean = new DefaultSelectedData();
+
+    public DefaultSelectedData getSelectOneMenu1Bean() {
+        return selectOneMenu1Bean;
+    }
+
+    public void setSelectOneMenu1Bean(DefaultSelectedData dsd) {
+        this.selectOneMenu1Bean = dsd;
+    }
+    private DefaultSelectedData selectOneMenu2Bean = new DefaultSelectedData();
+
+    public DefaultSelectedData getSelectOneMenu2Bean() {
+        return selectOneMenu2Bean;
+    }
+
+    public void setSelectOneMenu2Bean(DefaultSelectedData dsd) {
+        this.selectOneMenu2Bean = dsd;
+    }
+    private DefaultSelectionItems selectOneMenu2DefaultItems = new DefaultSelectionItems();
+
+    public DefaultSelectionItems getSelectOneMenu2DefaultItems() {
+        return selectOneMenu2DefaultItems;
+    }
+
+    public void setSelectOneMenu2DefaultItems(DefaultSelectionItems dsi) {
+        this.selectOneMenu2DefaultItems = dsi;
+    }
+    private DefaultSelectedData selectOneMenu3Bean = new DefaultSelectedData();
+
+    public DefaultSelectedData getSelectOneMenu3Bean() {
+        return selectOneMenu3Bean;
+    }
+
+    public void setSelectOneMenu3Bean(DefaultSelectedData dsd) {
+        this.selectOneMenu3Bean = dsd;
+    }
+    private DefaultSelectionItems selectOneMenu3DefaultItems = new DefaultSelectionItems();
+
+    public DefaultSelectionItems getSelectOneMenu3DefaultItems() {
+        return selectOneMenu3DefaultItems;
+    }
+
+    public void setSelectOneMenu3DefaultItems(DefaultSelectionItems dsi) {
+        this.selectOneMenu3DefaultItems = dsi;
+    }
+    private HtmlSelectOneMenu drl_type = new HtmlSelectOneMenu();
+
+    public HtmlSelectOneMenu getDrl_type() {
+        return drl_type;
+    }
+
+    public void setDrl_type(HtmlSelectOneMenu hsom) {
+        this.drl_type = hsom;
+    }
+    private HtmlSelectOneMenu drl_catagory = new HtmlSelectOneMenu();
+
+    public HtmlSelectOneMenu getDrl_catagory() {
+        return drl_catagory;
+    }
+
+    public void setDrl_catagory(HtmlSelectOneMenu hsom) {
+        this.drl_catagory = hsom;
+    }
+    private HtmlSelectOneMenu drl_report_Name = new HtmlSelectOneMenu();
+
+    public HtmlSelectOneMenu getDrl_report_Name() {
+        return drl_report_Name;
+    }
+
+    public void setDrl_report_Name(HtmlSelectOneMenu hsom) {
+        this.drl_report_Name = hsom;
+    }
+    private HtmlInputText txt_start_day = new HtmlInputText();
+
+    public HtmlInputText getTxt_start_day() {
+        return txt_start_day;
+    }
+
+    public void setTxt_start_day(HtmlInputText hit) {
+        this.txt_start_day = hit;
+    }
+    private HtmlInputText txt_end_date = new HtmlInputText();
+
+    public HtmlInputText getTxt_end_date() {
+        return txt_end_date;
+    }
+
+    public void setTxt_end_date(HtmlInputText hit) {
+        this.txt_end_date = hit;
+    }
+    private DefaultSelectedData selectOneRadio1Bean = new DefaultSelectedData();
+
+    public DefaultSelectedData getSelectOneRadio1Bean() {
+        return selectOneRadio1Bean;
+    }
+
+    public void setSelectOneRadio1Bean(DefaultSelectedData dsd) {
+        this.selectOneRadio1Bean = dsd;
+    }
+    private DefaultSelectionItems selectOneRadio1DefaultItems = new DefaultSelectionItems();
+
+    public DefaultSelectionItems getSelectOneRadio1DefaultItems() {
+        return selectOneRadio1DefaultItems;
+    }
+
+    public void setSelectOneRadio1DefaultItems(DefaultSelectionItems dsi) {
+        this.selectOneRadio1DefaultItems = dsi;
+    }
+    private DefaultSelectedData selectOneRadio2Bean = new DefaultSelectedData();
+
+    public DefaultSelectedData getSelectOneRadio2Bean() {
+        return selectOneRadio2Bean;
+    }
+
+    public void setSelectOneRadio2Bean(DefaultSelectedData dsd) {
+        this.selectOneRadio2Bean = dsd;
+    }
+    private DefaultSelectionItems selectOneRadio2DefaultItems = new DefaultSelectionItems();
+
+    public DefaultSelectionItems getSelectOneRadio2DefaultItems() {
+        return selectOneRadio2DefaultItems;
+    }
+
+    public void setSelectOneRadio2DefaultItems(DefaultSelectionItems dsi) {
+        this.selectOneRadio2DefaultItems = dsi;
+    }
+    private DefaultSelectedData selectOneRadio3Bean = new DefaultSelectedData();
+
+    public DefaultSelectedData getSelectOneRadio3Bean() {
+        return selectOneRadio3Bean;
+    }
+
+    public void setSelectOneRadio3Bean(DefaultSelectedData dsd) {
+        this.selectOneRadio3Bean = dsd;
+    }
+    private DefaultSelectionItems selectOneRadio3DefaultItems = new DefaultSelectionItems();
+
+    public DefaultSelectionItems getSelectOneRadio3DefaultItems() {
+        return selectOneRadio3DefaultItems;
+    }
+
+    public void setSelectOneRadio3DefaultItems(DefaultSelectionItems dsi) {
+        this.selectOneRadio3DefaultItems = dsi;
+    }
+    private DefaultSelectedData selectOneRadio4Bean = new DefaultSelectedData();
+
+    public DefaultSelectedData getSelectOneRadio4Bean() {
+        return selectOneRadio4Bean;
+    }
+
+    public void setSelectOneRadio4Bean(DefaultSelectedData dsd) {
+        this.selectOneRadio4Bean = dsd;
+    }
+    private DefaultSelectionItems selectOneRadio4DefaultItems = new DefaultSelectionItems();
+
+    public DefaultSelectionItems getSelectOneRadio4DefaultItems() {
+        return selectOneRadio4DefaultItems;
+    }
+
+    public void setSelectOneRadio4DefaultItems(DefaultSelectionItems dsi) {
+        this.selectOneRadio4DefaultItems = dsi;
+    }
+    private SelectInputDate calStartDate = new SelectInputDate();
+    private SelectInputDate calEndDate = new SelectInputDate();
+
+    public SelectInputDate getCalEndDate() {
+        return calEndDate;
+    }
+
+    public void setCalEndDate(SelectInputDate calEndDate) {
+        this.calEndDate = calEndDate;
+    }
+
+    public SelectInputDate getCalStartDate() {
+        return calStartDate;
+    }
+
+    public void setCalStartDate(SelectInputDate calStartDate) {
+        this.calStartDate = calStartDate;
+    }
+    private SelectInputDateBean calStartDateBean = new SelectInputDateBean();
+    private SelectInputDateBean calEndDateBean = new SelectInputDateBean();
+
+    public SelectInputDateBean getCalEndDateBean() {
+        return calEndDateBean;
+    }
+
+    public void setCalEndDateBean(SelectInputDateBean calEndDateBean) {
+        this.calEndDateBean = calEndDateBean;
+    }
+
+    public SelectInputDateBean getCalStartDateBean() {
+        return calStartDateBean;
+    }
+
+    public void setCalStartDateBean(SelectInputDateBean calStartDateBean) {
+        this.calStartDateBean = calStartDateBean;
+    }
+    private HtmlCommandButton btn_Reset = new HtmlCommandButton();
+
+    public HtmlCommandButton getBtn_Reset() {
+        return btn_Reset;
+    }
+
+    public void setBtn_Reset(HtmlCommandButton hcb) {
+        this.btn_Reset = hcb;
+    }
+    private HtmlCommandLink cmdReportPageList = new HtmlCommandLink();
+
+    public HtmlCommandLink getCmdReportPageList() {
+        return cmdReportPageList;
+    }
+
+    public void setCmdReportPageList(HtmlCommandLink hcl) {
+        this.cmdReportPageList = hcl;
+    }
+    private HtmlCommandButton btn_NewGenerate = new HtmlCommandButton();
+
+    public HtmlCommandButton getBtn_NewGenerate() {
+        return btn_NewGenerate;
+    }
+
+    public void setBtn_NewGenerate(HtmlCommandButton hcb) {
+        this.btn_NewGenerate = hcb;
+    }
+    private DefaultSelectedData defaultSelectedData1 = new DefaultSelectedData();
+
+    public DefaultSelectedData getDefaultSelectedData1() {
+        return defaultSelectedData1;
+    }
+
+    public void setDefaultSelectedData1(DefaultSelectedData dsd) {
+        this.defaultSelectedData1 = dsd;
+    }
+    private DefaultSelectionItems selectOneMenu1DefaultItems1 = new DefaultSelectionItems();
+
+    public DefaultSelectionItems getSelectOneMenu1DefaultItems1() {
+        return selectOneMenu1DefaultItems1;
+    }
+
+    public void setSelectOneMenu1DefaultItems1(DefaultSelectionItems dsi) {
+        this.selectOneMenu1DefaultItems1 = dsi;
+    }
+    private DefaultSelectItemsArray selectOneMenu1DefaultItems2 = new DefaultSelectItemsArray();
+
+    public DefaultSelectItemsArray getSelectOneMenu1DefaultItems2() {
+        return selectOneMenu1DefaultItems2;
+    }
+
+    public void setSelectOneMenu1DefaultItems2(DefaultSelectItemsArray dsia) {
+        this.selectOneMenu1DefaultItems2 = dsia;
+    }
+    private DefaultSelectItemsArray selectOneMenu1DefaultItems3 = new DefaultSelectItemsArray();
+
+    public DefaultSelectItemsArray getSelectOneMenu1DefaultItems3() {
+        return selectOneMenu1DefaultItems3;
+    }
+
+    public void setSelectOneMenu1DefaultItems3(DefaultSelectItemsArray dsia) {
+        this.selectOneMenu1DefaultItems3 = dsia;
+    }
+    private HtmlSelectOneMenu drl_Month = new HtmlSelectOneMenu();
+
+    public HtmlSelectOneMenu getDrl_Month() {
+        return drl_Month;
+    }
+
+    public void setDrl_Month(HtmlSelectOneMenu hsom) {
+        this.drl_Month = hsom;
+    }
+    private HtmlOutputLabel outputLabel_Month = new HtmlOutputLabel();
+
+    public HtmlOutputLabel getOutputLabel_Month() {
+        return outputLabel_Month;
+    }
+
+    public void setOutputLabel_Month(HtmlOutputLabel hol) {
+        this.outputLabel_Month = hol;
+    }
+    private DefaultSelectedData defaultSelectedData2 = new DefaultSelectedData();
+
+    public DefaultSelectedData getDefaultSelectedData2() {
+        return defaultSelectedData2;
+    }
+
+    public void setDefaultSelectedData2(DefaultSelectedData dsd) {
+        this.defaultSelectedData2 = dsd;
+    }
+    private HtmlSelectOneMenu drl_querterly = new HtmlSelectOneMenu();
+
+    public HtmlSelectOneMenu getDrl_querterly() {
+        return drl_querterly;
+    }
+
+    public void setDrl_querterly(HtmlSelectOneMenu hsom) {
+        this.drl_querterly = hsom;
+    }
+    private DefaultSelectedData defaultSelectedData3 = new DefaultSelectedData();
+
+    public DefaultSelectedData getDefaultSelectedData3() {
+        return defaultSelectedData3;
+    }
+
+    public void setDefaultSelectedData3(DefaultSelectedData dsd) {
+        this.defaultSelectedData3 = dsd;
+    }
+    private DefaultSelectionItems selectOneMenu1DefaultItems4 = new DefaultSelectionItems();
+
+    public DefaultSelectionItems getSelectOneMenu1DefaultItems4() {
+        return selectOneMenu1DefaultItems4;
+    }
+
+    public void setSelectOneMenu1DefaultItems4(DefaultSelectionItems dsi) {
+        this.selectOneMenu1DefaultItems4 = dsi;
+    }
+    private DefaultSelectItemsArray selectOneMenu1DefaultItems5 = new DefaultSelectItemsArray();
+
+    public DefaultSelectItemsArray getSelectOneMenu1DefaultItems5() {
+        return selectOneMenu1DefaultItems5;
+    }
+
+    public void setSelectOneMenu1DefaultItems5(DefaultSelectItemsArray dsia) {
+        this.selectOneMenu1DefaultItems5 = dsia;
+    }
+    private DefaultSelectItemsArray selectOneMenu1DefaultItems6 = new DefaultSelectItemsArray();
+
+    public DefaultSelectItemsArray getSelectOneMenu1DefaultItems6() {
+        return selectOneMenu1DefaultItems6;
+    }
+
+    public void setSelectOneMenu1DefaultItems6(DefaultSelectItemsArray dsia) {
+        this.selectOneMenu1DefaultItems6 = dsia;
+    }
+    private HtmlSelectOneMenu drl_SemiAnnual = new HtmlSelectOneMenu();
+
+    public HtmlSelectOneMenu getDrl_SemiAnnual() {
+        return drl_SemiAnnual;
+    }
+
+    public void setDrl_SemiAnnual(HtmlSelectOneMenu hsom) {
+        this.drl_SemiAnnual = hsom;
+    }
+    private DefaultSelectedData defaultSelectedData4 = new DefaultSelectedData();
+
+    public DefaultSelectedData getDefaultSelectedData4() {
+        return defaultSelectedData4;
+    }
+
+    public void setDefaultSelectedData4(DefaultSelectedData dsd) {
+        this.defaultSelectedData4 = dsd;
+    }
+    private HtmlSelectOneMenu drl_annual_Type = new HtmlSelectOneMenu();
+
+    public HtmlSelectOneMenu getDrl_annual_Type() {
+        return drl_annual_Type;
+    }
+
+    public void setDrl_annual_Type(HtmlSelectOneMenu hsom) {
+        this.drl_annual_Type = hsom;
+    }
+    private HtmlOutputLabel outputLabel_annuale_type = new HtmlOutputLabel();
+
+    public HtmlOutputLabel getOutputLabel_annuale_type() {
+        return outputLabel_annuale_type;
+    }
+
+    public void setOutputLabel_annuale_type(HtmlOutputLabel hol) {
+        this.outputLabel_annuale_type = hol;
+    }
+    private HtmlOutputLabel outputLabel_Quarterly = new HtmlOutputLabel();
+
+    public HtmlOutputLabel getOutputLabel_Quarterly() {
+        return outputLabel_Quarterly;
+    }
+
+    public void setOutputLabel_Quarterly(HtmlOutputLabel hol) {
+        this.outputLabel_Quarterly = hol;
+    }
+    private HtmlOutputLabel outputLabel_Semiannuale = new HtmlOutputLabel();
+
+    public HtmlOutputLabel getOutputLabel_Semiannuale() {
+        return outputLabel_Semiannuale;
+    }
+
+    public void setOutputLabel_Semiannuale(HtmlOutputLabel hol) {
+        this.outputLabel_Semiannuale = hol;
+    }
+    private DefaultSelectedData defaultSelectedData5 = new DefaultSelectedData();
+
+    public DefaultSelectedData getDefaultSelectedData5() {
+        return defaultSelectedData5;
+    }
+
+    public void setDefaultSelectedData5(DefaultSelectedData dsd) {
+        this.defaultSelectedData5 = dsd;
+    }
+    private DefaultSelectionItems selectOneMenu1DefaultItems7 = new DefaultSelectionItems();
+
+    public DefaultSelectionItems getSelectOneMenu1DefaultItems7() {
+        return selectOneMenu1DefaultItems7;
+    }
+
+    public void setSelectOneMenu1DefaultItems7(DefaultSelectionItems dsi) {
+        this.selectOneMenu1DefaultItems7 = dsi;
+    }
+    private DefaultSelectItemsArray selectOneMenu1DefaultItems8 = new DefaultSelectItemsArray();
+
+    public DefaultSelectItemsArray getSelectOneMenu1DefaultItems8() {
+        return selectOneMenu1DefaultItems8;
+    }
+
+    public void setSelectOneMenu1DefaultItems8(DefaultSelectItemsArray dsia) {
+        this.selectOneMenu1DefaultItems8 = dsia;
+    }
+    private DefaultSelectItemsArray selectOneMenu1DefaultItems9 = new DefaultSelectItemsArray();
+
+    public DefaultSelectItemsArray getSelectOneMenu1DefaultItems9() {
+        return selectOneMenu1DefaultItems9;
+    }
+
+    public void setSelectOneMenu1DefaultItems9(DefaultSelectItemsArray dsia) {
+        this.selectOneMenu1DefaultItems9 = dsia;
+    }
+    private HtmlSelectOneMenu drl_BudjetYear = new HtmlSelectOneMenu();
+
+    public HtmlSelectOneMenu getDrl_BudjetYear() {
+        return drl_BudjetYear;
+    }
+
+    public void setDrl_BudjetYear(HtmlSelectOneMenu hsom) {
+        this.drl_BudjetYear = hsom;
+    }
+    private HtmlOutputLabel outputLabel_BudjetYear = new HtmlOutputLabel();
+
+    public HtmlOutputLabel getOutputLabel_BudjetYear() {
+        return outputLabel_BudjetYear;
+    }
+
+    public void setOutputLabel_BudjetYear(HtmlOutputLabel hol) {
+        this.outputLabel_BudjetYear = hol;
+    }
+    private HtmlInputText txtEmployeeId = new HtmlInputText();
+
+    public HtmlInputText getTxtEmployeeId() {
+        return txtEmployeeId;
+    }
+
+    public void setTxtEmployeeId(HtmlInputText hit) {
+        this.txtEmployeeId = hit;
+    }
+    private DefaultSelectedData selectBooleanCheckbox1Bean = new DefaultSelectedData();
+
+    public DefaultSelectedData getSelectBooleanCheckbox1Bean() {
+        return selectBooleanCheckbox1Bean;
+    }
+
+    public void setSelectBooleanCheckbox1Bean(DefaultSelectedData dsd) {
+        this.selectBooleanCheckbox1Bean = dsd;
+    }
+    private DefaultSelectedData selectBooleanCheckbox2Bean = new DefaultSelectedData();
+
+    public DefaultSelectedData getSelectBooleanCheckbox2Bean() {
+        return selectBooleanCheckbox2Bean;
+    }
+
+    public void setSelectBooleanCheckbox2Bean(DefaultSelectedData dsd) {
+        this.selectBooleanCheckbox2Bean = dsd;
+    }
+    private HtmlSelectBooleanCheckbox cholContract = new HtmlSelectBooleanCheckbox();
+
+    public HtmlSelectBooleanCheckbox getCholContract() {
+        return cholContract;
+    }
+
+    public void setCholContract(HtmlSelectBooleanCheckbox hsbc) {
+        this.cholContract = hsbc;
+    }
+    private HtmlSelectBooleanCheckbox choPermanet = new HtmlSelectBooleanCheckbox();
+
+    public HtmlSelectBooleanCheckbox getChoPermanet() {
+        return choPermanet;
+    }
+
+    public void setChoPermanet(HtmlSelectBooleanCheckbox hsbc) {
+        this.choPermanet = hsbc;
+    }
+    private HtmlOutputText lblPermant = new HtmlOutputText();
+
+    public HtmlOutputText getLblPermant() {
+        return lblPermant;
+    }
+
+    public void setLblPermant(HtmlOutputText hot) {
+        this.lblPermant = hot;
+    }
+    private HtmlOutputText lblContrat = new HtmlOutputText();
+
+    public HtmlOutputText getLblContrat() {
+        return lblContrat;
+    }
+
+    public void setLblContrat(HtmlOutputText hot) {
+        this.lblContrat = hot;
+    }
+    private HtmlOutputText lblEmployeeType = new HtmlOutputText();
+
+    public HtmlOutputText getLblEmployeeType() {
+        return lblEmployeeType;
+    }
+
+    public void setLblEmployeeType(HtmlOutputText hot) {
+        this.lblEmployeeType = hot;
+    }
+    private HtmlOutputText lblFemale = new HtmlOutputText();
+
+    public HtmlOutputText getLblFemale() {
+        return lblFemale;
+    }
+
+    public void setLblFemale(HtmlOutputText hot) {
+        this.lblFemale = hot;
+    }
+    private HtmlOutputText lblMale = new HtmlOutputText();
+
+    public HtmlOutputText getLblMale() {
+        return lblMale;
+    }
+
+    public void setLblMale(HtmlOutputText hot) {
+        this.lblMale = hot;
+    }
+    private HtmlOutputText lblSex = new HtmlOutputText();
+
+    public HtmlOutputText getLblSex() {
+        return lblSex;
+    }
+
+    public void setLblSex(HtmlOutputText hot) {
+        this.lblSex = hot;
+    }
+    private DefaultSelectedData defaultSelectedData8 = new DefaultSelectedData();
+
+    public DefaultSelectedData getDefaultSelectedData8() {
+        return defaultSelectedData8;
+    }
+
+    public void setDefaultSelectedData8(DefaultSelectedData dsd) {
+        this.defaultSelectedData8 = dsd;
+    }
+    private DefaultSelectedData defaultSelectedData9 = new DefaultSelectedData();
+
+    public DefaultSelectedData getDefaultSelectedData9() {
+        return defaultSelectedData9;
+    }
+
+    public void setDefaultSelectedData9(DefaultSelectedData dsd) {
+        this.defaultSelectedData9 = dsd;
+    }
+    private HtmlSelectBooleanCheckbox choMale = new HtmlSelectBooleanCheckbox();
+
+    public HtmlSelectBooleanCheckbox getChoMale() {
+        return choMale;
+    }
+
+    public void setChoMale(HtmlSelectBooleanCheckbox hsbc) {
+        this.choMale = hsbc;
+    }
+
+    // </editor-fold>
+    /**
+     * <p>Construct a new Page bean instance.</p>
+     */
+    public ReportCritera() {
+    }
+
+    /**
+     * <p>Callback method that is called whenever a page is navigated to,
+     * either directly via a URL, or indirectly via page navigation.
+     * Customize this method to acquire resources that will be needed
+     * for event handlers and lifecycle methods, whether or not this
+     * page is performing post back processing.</p>
+     * 
+     * <p>Note that, if the current request is a postback, the property
+     * values of the components do <strong>not</strong> represent any
+     * values submitted with this request.  Instead, they represent the
+     * property values that were saved for this view when it was rendered.</p>
+     */
+    @Override
+    public void init() {
+        //reportPageTypes = reportManger.getAllReportTypesPageList(moduleName);
+        reportTypes = reportManger.getReportTypes();
+        reportCatagori = reportManger.getReportCatagori();
+        monthList = reportManger.getMonthList();
+        quaterList = reportManger.getQuertrlyList();
+        simiAnnual = reportManger.getSimiAnnualList();
+
+
+        // Perform initializations inherited from our superclass
+        super.init();
+        // Perform application initialization that must complete
+        // *before* managed components are initialized
+        // TODO - add your own initialiation code here
+
+        // <editor-fold defaultstate="collapsed" desc="Managed Component Initialization">
+        // Initialize automatically managed components
+        // *Note* - this logic should NOT be modified
+        try {
+            _init();
+        } catch (Exception e) {
+            log("Page2 Initialization Failure", e);
+            throw e instanceof FacesException ? (FacesException) e : new FacesException(e);
+        }
+
+    // </editor-fold>
+    // Perform application initialization that must complete
+    // *after* managed components are initialized
+    // TODO - add your own initialization code here
+    }
+
+    /**
+     * <p>Callback method that is called after the component tree has been
+     * restored, but before any event processing takes place.  This method
+     * will <strong>only</strong> be called on a postback request that
+     * is processing a form submit.  Customize this method to allocate
+     * resources that will be required in your event handlers.</p>
+     */
+    @Override
+    public void preprocess() {
+    }
+
+    /**
+     * <p>Callback method that is called just before rendering takes place.
+     * This method will <strong>only</strong> be called for the page that
+     * will actually be rendered (and not, for example, on a page that
+     * handled a postback and then navigated to a different page).  Customize
+     * this method to allocate resources that will be required for rendering
+     * this page.</p>
+     */
+    @Override
+    public void prerender() {
+    }
+
+    /**
+     * <p>Callback method that is called after rendering is completed for
+     * this request, if <code>init()</code> was called (regardless of whether
+     * or not this was the page that was actually rendered).  Customize this
+     * method to release resources acquired in the <code>init()</code>,
+     * <code>preprocess()</code>, or <code>prerender()</code> methods (or
+     * acquired during execution of an event handler).</p>
+     */
+    @Override
+    public void destroy() {
+    }
+
+    /**
+     * <p>Return a reference to the scoped data bean.</p>
+     *
+     * @return reference to the scoped data bean
+     */
+    protected RequestBean1 getRequestBean1() {
+        return (RequestBean1) getBean("RequestBean1");
+    }
+
+    /**
+     * <p>Return a reference to the scoped data bean.</p>
+     *
+     * @return reference to the scoped data bean
+     */
+    protected SessionBean1 getSessionBean1() {
+        return (SessionBean1) getBean("SessionBean1");
+    }
+
+    /**
+     * <p>Return a reference to the scoped data bean.</p>
+     *
+     * @return reference to the scoped data bean
+     */
+    protected ApplicationBean1 getApplicationBean1() {
+        return (ApplicationBean1) getBean("ApplicationBean1");
+    }
+    //budjetYearList =reportManger.getAllBudgetYears();
+    ReportCriteraManager reportManger = new ReportCriteraManager();
+    ArrayList<ReportPageModle> reportPageList = new ArrayList<ReportPageModle>();
+    ArrayList<Option> reportPageTypes = new ArrayList<Option>();
+    ArrayList<Option> reportTypes = new ArrayList<Option>();
+    ArrayList<Option> reportCatagori = new ArrayList<Option>();
+    ArrayList<Option> monthList = new ArrayList<Option>();
+    ArrayList<Option> quaterList = new ArrayList<Option>();
+    ArrayList<Option> simiAnnual = new ArrayList<Option>();
+    ArrayList<SelectItem> reportPage = new ArrayList<SelectItem>();
+    ArrayList<SelectItem> budjetYear = new ArrayList<SelectItem>();
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    ReportCriteraManager criteraManger = new ReportCriteraManager();
+    public String MONTHLY = ReportCriteraManager.MONTHLY;
+    public String Quarterly = ReportCriteraManager.QUARTERLY;
+    public String Semiannually = ReportCriteraManager.SEMIANNUALLY;
+    public String Annually = ReportCriteraManager.ANNUALLY;
+    ArrayList<SelectItem> budjetYearList = reportManger.getAllBudgetYears();
+
+    public ArrayList<Option> getSimiAnnual() {
+        return simiAnnual;
+    }
+
+    public void setSimiAnnual(ArrayList<Option> simiAnnual) {
+        this.simiAnnual = simiAnnual;
+    }
+
+    public ArrayList<SelectItem> getBudjetYearList() {
+        return budjetYearList;
+    }
+
+    public void setBudjetYearList(ArrayList<SelectItem> budjetYearList) {
+        this.budjetYearList = budjetYearList;
+    }
+    public String selectionMonthly;
+    public String selectionQuarterly;
+    public String selectionSeminalannula;
+    public String selectionAnnual;
+    public String starDate;
+    public String endDate;
+    public String selectionCondition;
+    public String selectedCritirea;
+    public String repName;
+    public String reportCagori;
+    public String repType;
+    public String moduleName;
+
+    public ArrayList<SelectItem> getBudjetYear() {
+        return budjetYear;
+    }
+
+    public void setBudjetYear(ArrayList<SelectItem> budjetYear) {
+        this.budjetYear = budjetYear;
+    }
+
+    public ArrayList<Option> getQuaterList() {
+        return quaterList;
+    }
+
+    public void setQuaterList(ArrayList<Option> quaterList) {
+        this.quaterList = quaterList;
+    }
+
+    public ArrayList<Option> getMonthList() {
+        return monthList;
+    }
+
+    public void setMonthList(ArrayList<Option> monthList) {
+        this.monthList = monthList;
+    }
+
+    public ArrayList<SelectItem> getReportPage() {
+        return reportPage;
+    }
+
+    public void setReportPage(ArrayList<SelectItem> reportPage) {
+        this.reportPage = reportPage;
+    }
+    // reportPageTypes = reportManger.getAllReportTypesPageList(moduleName);
+
+    public String getModuleName() {
+        return moduleName;
+    }
+
+    public void setModuleName(String moduleName) {
+        this.moduleName = moduleName;
+    }
+
+    public String getSelectedCritirea() {
+        return selectedCritirea;
+    }
+
+    public void setSelectedCritirea(String selectedCritirea) {
+        this.selectedCritirea = selectedCritirea;
+    }
+
+    public ArrayList<Option> getReportCatagori() {
+        return reportCatagori;
+    }
+
+    public void setReportCatagori(ArrayList<Option> reportCatagori) {
+        this.reportCatagori = reportCatagori;
+    }
+
+    public ArrayList<Option> getReportTypes() {
+        return reportTypes;
+    }
+
+    public void setReportTypes(ArrayList<Option> reportTypes) {
+        this.reportTypes = reportTypes;
+    }
+
+    public ArrayList<Option> getReportPageTypes() {
+        return reportPageTypes;
+    }
+
+    public void setReportPageTypes(ArrayList<Option> reportPageTypes) {
+        this.reportPageTypes = reportPageTypes;
+    }
+
+    public ArrayList<ReportPageModle> getReportPageList() {
+        return reportPageList;
+    }
+
+    public void setReportPageList(ArrayList<ReportPageModle> reportPageList) {
+        this.reportPageList = reportPageList;
+    }
+
+    public String getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
+    }
+
+    public String getStarDate() {
+        return starDate;
+    }
+
+    public void setStarDate(String starDate) {
+        this.starDate = starDate;
+    }
+
+    public String getAnnually() {
+        return Annually;
+    }
+
+    public void setAnnually(String Annually) {
+        this.Annually = Annually;
+    }
+
+    public String getMONTHLY() {
+        return MONTHLY;
+    }
+
+    public void setMONTHLY(String MONTHLY) {
+        this.MONTHLY = MONTHLY;
+    }
+
+    public String getQuarterly() {
+        return Quarterly;
+    }
+
+    public void setQuarterly(String Quarterly) {
+        this.Quarterly = Quarterly;
+    }
+
+    public String getSemiannually() {
+        return Semiannually;
+    }
+
+    public void setSemiannually(String Semiannually) {
+        this.Semiannually = Semiannually;
+    }
+
+    public String getSelectionCondition() {
+        return selectionCondition;
+    }
+
+    public void setSelectionCondition(String selectionCondition) {
+        this.selectionCondition = selectionCondition;
+    }
+
+    public String btn_StartDay_action() {
+        calStartDate.setRendered(true);
+        String startDate = dateFormat.format(calStartDate.getValue());
+        return null;
+    }
+
+    public void calStartDate_processValueChange(ValueChangeEvent vce) {
+        txt_start_day.setValue(dateFormat.format(calStartDate.getValue()));
+        starDate = dateFormat.format(calStartDate.getValue());
+        calStartDate.setRendered(false);
+    }
+
+    public void calEndDate_processValueChange(ValueChangeEvent vce) {
+        txt_end_date.setValue(dateFormat.format(calEndDate.getValue()));
+        String endDay = dateFormat.format(calEndDate.getValue());
+        calEndDate.setRendered(false);
+    }
+
+    public String btn_EndDate_action() {
+        calEndDate.setRendered(true);
+        endDate = dateFormat.format(calEndDate.getValue());
+        return null;
+
+    }
+
+    public String button1_action() {
+        //return null means stay on the same page
+        repName = drl_report_Name.getValue().toString();
+        reportCagori = drl_catagory.getValue().toString();
+        repType = drl_type.getValue().toString();
+        starDate = txt_start_day.getValue().toString();
+        endDate = txt_end_date.getValue().toString();
+        selectedCritirea = selectionCondition;
+
+        return null;
+    }
+
+    public void selectOneRadio_Report_Duration_processValueChange(ValueChangeEvent vce) {
+        if (vce.getNewValue().toString().equalsIgnoreCase(MONTHLY)) {
+            selectionCondition = "Monthly";
+            this.outputLabel_Month.setRendered(true);
+            this.drl_Month.setRendered(true);
+            this.drl_BudjetYear.setRendered(true);
+            this.outputLabel_BudjetYear.setRendered(true);
+            this.outputLabel_Quarterly.setRendered(false);
+            this.drl_querterly.setRendered(false);
+            this.outputLabel_Semiannuale.setRendered(false);
+            this.drl_SemiAnnual.setRendered(false);
+            this.outputLabel_annuale_type.setRendered(false);
+            this.drl_annual_Type.setRendered(false);
+        } else if (vce.getNewValue().toString().equalsIgnoreCase(Quarterly)) {
+            selectionCondition = "Quarterly";
+            this.outputLabel_Quarterly.setRendered(true);
+            this.drl_querterly.setRendered(true);
+            this.outputLabel_BudjetYear.setRendered(true);
+            this.drl_BudjetYear.setRendered(true);
+            this.outputLabel_Semiannuale.setRendered(false);
+            this.drl_SemiAnnual.setRendered(false);
+            this.outputLabel_annuale_type.setRendered(false);
+            this.drl_annual_Type.setRendered(false);
+            this.outputLabel_Month.setRendered(false);
+            this.drl_Month.setRendered(false);
+        } else if (vce.getNewValue().toString().equalsIgnoreCase(Semiannually)) {
+            selectionCondition = "Semiannually";
+            this.outputLabel_Semiannuale.setRendered(true);
+            this.drl_SemiAnnual.setRendered(true);
+            this.outputLabel_BudjetYear.setRendered(true);
+            this.drl_BudjetYear.setRendered(true);
+            this.outputLabel_Quarterly.setRendered(false);
+            this.outputLabel_annuale_type.setRendered(false);
+            this.drl_annual_Type.setRendered(false);
+            this.outputLabel_Month.setRendered(false);
+            this.drl_Month.setRendered(false);
+            this.outputLabel_Quarterly.setRendered(false);
+            this.drl_querterly.setRendered(false);
+        } else if (vce.getNewValue().toString().equalsIgnoreCase(Annually)) {
+            selectionCondition = "Annually";
+            // this.outputLabel_annuale_type.setRendered(true);
+            // this.drl_annual_Type.setRendered(true);
+            this.outputLabel_BudjetYear.setRendered(true);
+            this.outputLabel_Quarterly.setRendered(false);
+            this.outputLabel_Month.setRendered(false);
+            this.drl_Month.setRendered(false);
+            this.outputLabel_Quarterly.setRendered(false);
+            this.drl_querterly.setRendered(false);
+            this.outputLabel_Semiannuale.setRendered(false);
+            this.drl_SemiAnnual.setRendered(false);
+        }
+    }
+
+    public String button2_action() {
+        //return null means stay on the same page
+        txt_start_day.resetValue();
+        txt_end_date.resetValue();
+        drl_catagory.resetValue();
+        drl_report_Name.resetValue();
+        drl_type.resetValue();
+        return null;
+    }
+
+    public String cmdReportPageList_action() {
+        //return null means stay on the same page
+        return "ReportPageRegistration";
+    }
+
+    public String btn_NewGenerate_action() {
+        String category = drl_catagory.getValue().toString();
+        String reportName = drl_report_Name.getValue().toString();
+        String startDate = this.txt_start_day.getValue().toString();
+        String end_Date = this.txt_end_date.getValue().toString();
+        String employeId = txtEmployeeId.getValue().toString();
+        ReportCriteraManager.setEmployeeId("");
+        ReportCriteraManager.setEmployeeId(txtEmployeeId.getValue().toString());
+        //  reportManger.buildReportParametersList(category, reportName, startDate, end_Date);
+        //reportManger.buildLeaveReportParametersList(category, reportName, employeId);
+        return this.displayPage(category, reportName);
+    }
+
+    public void drl_catagory_processValueChange(ValueChangeEvent vce) {
+        if (!vce.getNewValue().equals("-1") && vce.getNewValue() != null) {
+            moduleName = vce.getNewValue().toString();
+
+            reportPage = reportManger.getAllReportTypesPageList(moduleName);
+
+        }
+    }
+
+    private String displayPage(String category, String reportName) {
+        if (category.equalsIgnoreCase("POWER DELEGATION MANAGEMENT") && (reportName.equalsIgnoreCase("powerDelegationRequest"))) {
+            return "PowerDelegationRequestReport";
+        } else if (category.equalsIgnoreCase("POWER DELEGATION MANAGEMENT") && (reportName.equalsIgnoreCase("powerDelegationApprove"))) {
+            return "PowerDelegationApproveReport";
+        } else if (category.equalsIgnoreCase("SALARY DELEGATION MANAGEMENT") && (reportName.equalsIgnoreCase("SalaryDelegation"))) {
+
+            return "SalaryDelegationRequestReport";
+        } else if (category.equalsIgnoreCase("DISCIPLINE MANAGEMENT") && (reportName.equalsIgnoreCase("DisciplineReport"))) {
+            return "DisciplineReport";
+        } else if (category.trim().equalsIgnoreCase("DOCUMENT REQUEST MANAGEMENT".trim()) && (reportName.trim().equalsIgnoreCase("DocumentRequest page ".trim()))) {
+            return "DocumentRequestReport";
+        } else if (category.trim().equalsIgnoreCase("LEAVE MANAGEMENT".trim()) && (reportName.trim().equalsIgnoreCase("Employee Leave Balance".trim()))) {
+            return "EmployeeLeaveBalance";
+        } else if (category.trim().equalsIgnoreCase("LEAVE MANAGEMENT".trim()) && (reportName.trim().equalsIgnoreCase("Employee Leave Report".trim()))) {
+            return "EmployeeLeaveReport";
+        } else if (category.trim().equalsIgnoreCase("LEAVE MANAGEMENT".trim()) && (reportName.trim().equalsIgnoreCase("Employee Leave Report".trim()))) {
+            return "EmployeeLeaveReport";
+        } else if (category.trim().equalsIgnoreCase("EMPLOYEE MANAGEMENT".trim()) && (reportName.trim().equalsIgnoreCase("Employee Familly Report".trim()))) {
+            return "EmployeeFamillyReport";
+        }
+
+        return null;
+    }
+}
+
+   
+=======
+/*
+ * Page2.java
+ *
+ * Created on May 26, 2010, 4:18:41 AM
+ * Copyright Administrator
+ */
+package fphrms.ReportCritera;
+
+import com.icesoft.faces.component.ext.HtmlCommandButton;
+import com.icesoft.faces.component.ext.HtmlCommandLink;
+import com.icesoft.faces.component.ext.HtmlInputText;
+import com.icesoft.faces.component.ext.HtmlOutputLabel;
+import com.icesoft.faces.component.ext.HtmlSelectOneMenu;
+import com.icesoft.faces.component.jsfcl.data.DefaultSelectedData;
+import com.icesoft.faces.component.jsfcl.data.DefaultSelectionItems;
+import com.icesoft.faces.component.jsfcl.data.SelectInputDateBean;
+import com.icesoft.faces.component.panellayout.PanelLayout;
+import com.icesoft.faces.component.selectinputdate.SelectInputDate;
+import com.sun.rave.faces.data.DefaultSelectItemsArray;
+import com.sun.rave.web.ui.appbase.AbstractPageBean;
+import fphrms.ApplicationBean1;
+import fphrms.RequestBean1;
+import fphrms.SessionBean1;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import javax.faces.FacesException;
+import javax.faces.event.ValueChangeEvent;
+import manager.ReportCritera.ReportCriteraManager;
+import manager.ReportCritera.ReportCriteraManager.ReportPageModle;
+import com.sun.webui.jsf.model.Option;
+import fphrms.Discipline.DisciplineReport;
+import java.util.HashMap;
+import javax.faces.model.SelectItem;
+
+/**
+ * <p>Page bean that corresponds to a similarly named JSP page.  This
+ * class contains component definitions (and initialization code) for
+ * all components that you have defined on this page, as well as
+ * lifecycle methods and event handlers where you may add behavior
+ * to respond to incoming events.</p>
+ */
+public class ReportCritera extends AbstractPageBean {
+    // <editor-fold defaultstate="collapsed" desc="Managed Component Definition">
+
+    private int __placeholder;
+
+    /**
+     * <p>Automatically managed component initialization.  <strong>WARNING:</strong>
+     * This method is automatically generated, so any user-specified code inserted
+     * here is subject to being replaced.</p>
+     */
+    private void _init() throws Exception {
+    }
+    private PanelLayout pnl_Type = new PanelLayout();
+
+    public PanelLayout getPnl_Type() {
+        return pnl_Type;
+    }
+
+    public void setPnl_Type(PanelLayout pl) {
+        this.pnl_Type = pl;
+    }
+    private PanelLayout pnl_critera = new PanelLayout();
+
+    public PanelLayout getPnl_critera() {
+        return pnl_critera;
+    }
+
+    public void setPnl_critera(PanelLayout pl) {
+        this.pnl_critera = pl;
+    }
+    private PanelLayout pnl_Other = new PanelLayout();
+
+    public PanelLayout getPnl_Other() {
+        return pnl_Other;
+    }
+
+    public void setPnl_Other(PanelLayout pl) {
+        this.pnl_Other = pl;
+    }
+    private PanelLayout pnl_Btn = new PanelLayout();
+
+    public PanelLayout getPnl_Btn() {
+        return pnl_Btn;
+    }
+
+    public void setPnl_Btn(PanelLayout pl) {
+        this.pnl_Btn = pl;
+    }
+    private DefaultSelectedData selectOneMenu1Bean = new DefaultSelectedData();
+
+    public DefaultSelectedData getSelectOneMenu1Bean() {
+        return selectOneMenu1Bean;
+    }
+
+    public void setSelectOneMenu1Bean(DefaultSelectedData dsd) {
+        this.selectOneMenu1Bean = dsd;
+    }
+    private DefaultSelectedData selectOneMenu2Bean = new DefaultSelectedData();
+
+    public DefaultSelectedData getSelectOneMenu2Bean() {
+        return selectOneMenu2Bean;
+    }
+
+    public void setSelectOneMenu2Bean(DefaultSelectedData dsd) {
+        this.selectOneMenu2Bean = dsd;
+    }
+    private DefaultSelectionItems selectOneMenu2DefaultItems = new DefaultSelectionItems();
+
+    public DefaultSelectionItems getSelectOneMenu2DefaultItems() {
+        return selectOneMenu2DefaultItems;
+    }
+
+    public void setSelectOneMenu2DefaultItems(DefaultSelectionItems dsi) {
+        this.selectOneMenu2DefaultItems = dsi;
+    }
+    private DefaultSelectedData selectOneMenu3Bean = new DefaultSelectedData();
+
+    public DefaultSelectedData getSelectOneMenu3Bean() {
+        return selectOneMenu3Bean;
+    }
+
+    public void setSelectOneMenu3Bean(DefaultSelectedData dsd) {
+        this.selectOneMenu3Bean = dsd;
+    }
+    private DefaultSelectionItems selectOneMenu3DefaultItems = new DefaultSelectionItems();
+
+    public DefaultSelectionItems getSelectOneMenu3DefaultItems() {
+        return selectOneMenu3DefaultItems;
+    }
+
+    public void setSelectOneMenu3DefaultItems(DefaultSelectionItems dsi) {
+        this.selectOneMenu3DefaultItems = dsi;
+    }
+    private HtmlSelectOneMenu drl_type = new HtmlSelectOneMenu();
+
+    public HtmlSelectOneMenu getDrl_type() {
+        return drl_type;
+    }
+
+    public void setDrl_type(HtmlSelectOneMenu hsom) {
+        this.drl_type = hsom;
+    }
+    private HtmlSelectOneMenu drl_catagory = new HtmlSelectOneMenu();
+
+    public HtmlSelectOneMenu getDrl_catagory() {
+        return drl_catagory;
+    }
+
+    public void setDrl_catagory(HtmlSelectOneMenu hsom) {
+        this.drl_catagory = hsom;
+    }
+    private HtmlSelectOneMenu drl_report_Name = new HtmlSelectOneMenu();
+
+    public HtmlSelectOneMenu getDrl_report_Name() {
+        return drl_report_Name;
+    }
+
+    public void setDrl_report_Name(HtmlSelectOneMenu hsom) {
+        this.drl_report_Name = hsom;
+    }
+    private HtmlInputText txt_start_day = new HtmlInputText();
+
+    public HtmlInputText getTxt_start_day() {
+        return txt_start_day;
+    }
+
+    public void setTxt_start_day(HtmlInputText hit) {
+        this.txt_start_day = hit;
+    }
+    private HtmlInputText txt_end_date = new HtmlInputText();
+
+    public HtmlInputText getTxt_end_date() {
+        return txt_end_date;
+    }
+
+    public void setTxt_end_date(HtmlInputText hit) {
+        this.txt_end_date = hit;
+    }
+    private DefaultSelectedData selectOneRadio1Bean = new DefaultSelectedData();
+
+    public DefaultSelectedData getSelectOneRadio1Bean() {
+        return selectOneRadio1Bean;
+    }
+
+    public void setSelectOneRadio1Bean(DefaultSelectedData dsd) {
+        this.selectOneRadio1Bean = dsd;
+    }
+    private DefaultSelectionItems selectOneRadio1DefaultItems = new DefaultSelectionItems();
+
+    public DefaultSelectionItems getSelectOneRadio1DefaultItems() {
+        return selectOneRadio1DefaultItems;
+    }
+
+    public void setSelectOneRadio1DefaultItems(DefaultSelectionItems dsi) {
+        this.selectOneRadio1DefaultItems = dsi;
+    }
+    private DefaultSelectedData selectOneRadio2Bean = new DefaultSelectedData();
+
+    public DefaultSelectedData getSelectOneRadio2Bean() {
+        return selectOneRadio2Bean;
+    }
+
+    public void setSelectOneRadio2Bean(DefaultSelectedData dsd) {
+        this.selectOneRadio2Bean = dsd;
+    }
+    private DefaultSelectionItems selectOneRadio2DefaultItems = new DefaultSelectionItems();
+
+    public DefaultSelectionItems getSelectOneRadio2DefaultItems() {
+        return selectOneRadio2DefaultItems;
+    }
+
+    public void setSelectOneRadio2DefaultItems(DefaultSelectionItems dsi) {
+        this.selectOneRadio2DefaultItems = dsi;
+    }
+    private DefaultSelectedData selectOneRadio3Bean = new DefaultSelectedData();
+
+    public DefaultSelectedData getSelectOneRadio3Bean() {
+        return selectOneRadio3Bean;
+    }
+
+    public void setSelectOneRadio3Bean(DefaultSelectedData dsd) {
+        this.selectOneRadio3Bean = dsd;
+    }
+    private DefaultSelectionItems selectOneRadio3DefaultItems = new DefaultSelectionItems();
+
+    public DefaultSelectionItems getSelectOneRadio3DefaultItems() {
+        return selectOneRadio3DefaultItems;
+    }
+
+    public void setSelectOneRadio3DefaultItems(DefaultSelectionItems dsi) {
+        this.selectOneRadio3DefaultItems = dsi;
+    }
+    private DefaultSelectedData selectOneRadio4Bean = new DefaultSelectedData();
+
+    public DefaultSelectedData getSelectOneRadio4Bean() {
+        return selectOneRadio4Bean;
+    }
+
+    public void setSelectOneRadio4Bean(DefaultSelectedData dsd) {
+        this.selectOneRadio4Bean = dsd;
+    }
+    private DefaultSelectionItems selectOneRadio4DefaultItems = new DefaultSelectionItems();
+
+    public DefaultSelectionItems getSelectOneRadio4DefaultItems() {
+        return selectOneRadio4DefaultItems;
+    }
+
+    public void setSelectOneRadio4DefaultItems(DefaultSelectionItems dsi) {
+        this.selectOneRadio4DefaultItems = dsi;
+    }
+    private SelectInputDate calStartDate = new SelectInputDate();
+    private SelectInputDate calEndDate = new SelectInputDate();
+
+    public SelectInputDate getCalEndDate() {
+        return calEndDate;
+    }
+
+    public void setCalEndDate(SelectInputDate calEndDate) {
+        this.calEndDate = calEndDate;
+    }
+
+    public SelectInputDate getCalStartDate() {
+        return calStartDate;
+    }
+
+    public void setCalStartDate(SelectInputDate calStartDate) {
+        this.calStartDate = calStartDate;
+    }
+    private SelectInputDateBean calStartDateBean = new SelectInputDateBean();
+    private SelectInputDateBean calEndDateBean = new SelectInputDateBean();
+
+    public SelectInputDateBean getCalEndDateBean() {
+        return calEndDateBean;
+    }
+
+    public void setCalEndDateBean(SelectInputDateBean calEndDateBean) {
+        this.calEndDateBean = calEndDateBean;
+    }
+
+    public SelectInputDateBean getCalStartDateBean() {
+        return calStartDateBean;
+    }
+
+    public void setCalStartDateBean(SelectInputDateBean calStartDateBean) {
+        this.calStartDateBean = calStartDateBean;
+    }
+    private HtmlCommandButton btn_Reset = new HtmlCommandButton();
+
+    public HtmlCommandButton getBtn_Reset() {
+        return btn_Reset;
+    }
+
+    public void setBtn_Reset(HtmlCommandButton hcb) {
+        this.btn_Reset = hcb;
+    }
+    private HtmlCommandLink cmdReportPageList = new HtmlCommandLink();
+
+    public HtmlCommandLink getCmdReportPageList() {
+        return cmdReportPageList;
+    }
+
+    public void setCmdReportPageList(HtmlCommandLink hcl) {
+        this.cmdReportPageList = hcl;
+    }
+    private HtmlCommandButton btn_NewGenerate = new HtmlCommandButton();
+
+    public HtmlCommandButton getBtn_NewGenerate() {
+        return btn_NewGenerate;
+    }
+
+    public void setBtn_NewGenerate(HtmlCommandButton hcb) {
+        this.btn_NewGenerate = hcb;
+    }
+    private DefaultSelectedData defaultSelectedData1 = new DefaultSelectedData();
+
+    public DefaultSelectedData getDefaultSelectedData1() {
+        return defaultSelectedData1;
+    }
+
+    public void setDefaultSelectedData1(DefaultSelectedData dsd) {
+        this.defaultSelectedData1 = dsd;
+    }
+    private DefaultSelectionItems selectOneMenu1DefaultItems1 = new DefaultSelectionItems();
+
+    public DefaultSelectionItems getSelectOneMenu1DefaultItems1() {
+        return selectOneMenu1DefaultItems1;
+    }
+
+    public void setSelectOneMenu1DefaultItems1(DefaultSelectionItems dsi) {
+        this.selectOneMenu1DefaultItems1 = dsi;
+    }
+    private DefaultSelectItemsArray selectOneMenu1DefaultItems2 = new DefaultSelectItemsArray();
+
+    public DefaultSelectItemsArray getSelectOneMenu1DefaultItems2() {
+        return selectOneMenu1DefaultItems2;
+    }
+
+    public void setSelectOneMenu1DefaultItems2(DefaultSelectItemsArray dsia) {
+        this.selectOneMenu1DefaultItems2 = dsia;
+    }
+    private DefaultSelectItemsArray selectOneMenu1DefaultItems3 = new DefaultSelectItemsArray();
+
+    public DefaultSelectItemsArray getSelectOneMenu1DefaultItems3() {
+        return selectOneMenu1DefaultItems3;
+    }
+
+    public void setSelectOneMenu1DefaultItems3(DefaultSelectItemsArray dsia) {
+        this.selectOneMenu1DefaultItems3 = dsia;
+    }
+    private HtmlSelectOneMenu drl_Month = new HtmlSelectOneMenu();
+
+    public HtmlSelectOneMenu getDrl_Month() {
+        return drl_Month;
+    }
+
+    public void setDrl_Month(HtmlSelectOneMenu hsom) {
+        this.drl_Month = hsom;
+    }
+    private HtmlOutputLabel outputLabel_Month = new HtmlOutputLabel();
+
+    public HtmlOutputLabel getOutputLabel_Month() {
+        return outputLabel_Month;
+    }
+
+    public void setOutputLabel_Month(HtmlOutputLabel hol) {
+        this.outputLabel_Month = hol;
+    }
+    private DefaultSelectedData defaultSelectedData2 = new DefaultSelectedData();
+
+    public DefaultSelectedData getDefaultSelectedData2() {
+        return defaultSelectedData2;
+    }
+
+    public void setDefaultSelectedData2(DefaultSelectedData dsd) {
+        this.defaultSelectedData2 = dsd;
+    }
+    private HtmlSelectOneMenu drl_querterly = new HtmlSelectOneMenu();
+
+    public HtmlSelectOneMenu getDrl_querterly() {
+        return drl_querterly;
+    }
+
+    public void setDrl_querterly(HtmlSelectOneMenu hsom) {
+        this.drl_querterly = hsom;
+    }
+    private DefaultSelectedData defaultSelectedData3 = new DefaultSelectedData();
+
+    public DefaultSelectedData getDefaultSelectedData3() {
+        return defaultSelectedData3;
+    }
+
+    public void setDefaultSelectedData3(DefaultSelectedData dsd) {
+        this.defaultSelectedData3 = dsd;
+    }
+    private DefaultSelectionItems selectOneMenu1DefaultItems4 = new DefaultSelectionItems();
+
+    public DefaultSelectionItems getSelectOneMenu1DefaultItems4() {
+        return selectOneMenu1DefaultItems4;
+    }
+
+    public void setSelectOneMenu1DefaultItems4(DefaultSelectionItems dsi) {
+        this.selectOneMenu1DefaultItems4 = dsi;
+    }
+    private DefaultSelectItemsArray selectOneMenu1DefaultItems5 = new DefaultSelectItemsArray();
+
+    public DefaultSelectItemsArray getSelectOneMenu1DefaultItems5() {
+        return selectOneMenu1DefaultItems5;
+    }
+
+    public void setSelectOneMenu1DefaultItems5(DefaultSelectItemsArray dsia) {
+        this.selectOneMenu1DefaultItems5 = dsia;
+    }
+    private DefaultSelectItemsArray selectOneMenu1DefaultItems6 = new DefaultSelectItemsArray();
+
+    public DefaultSelectItemsArray getSelectOneMenu1DefaultItems6() {
+        return selectOneMenu1DefaultItems6;
+    }
+
+    public void setSelectOneMenu1DefaultItems6(DefaultSelectItemsArray dsia) {
+        this.selectOneMenu1DefaultItems6 = dsia;
+    }
+    private HtmlSelectOneMenu drl_SemiAnnual = new HtmlSelectOneMenu();
+
+    public HtmlSelectOneMenu getDrl_SemiAnnual() {
+        return drl_SemiAnnual;
+    }
+
+    public void setDrl_SemiAnnual(HtmlSelectOneMenu hsom) {
+        this.drl_SemiAnnual = hsom;
+    }
+    private DefaultSelectedData defaultSelectedData4 = new DefaultSelectedData();
+
+    public DefaultSelectedData getDefaultSelectedData4() {
+        return defaultSelectedData4;
+    }
+
+    public void setDefaultSelectedData4(DefaultSelectedData dsd) {
+        this.defaultSelectedData4 = dsd;
+    }
+    private HtmlSelectOneMenu drl_annual_Type = new HtmlSelectOneMenu();
+
+    public HtmlSelectOneMenu getDrl_annual_Type() {
+        return drl_annual_Type;
+    }
+
+    public void setDrl_annual_Type(HtmlSelectOneMenu hsom) {
+        this.drl_annual_Type = hsom;
+    }
+    private HtmlOutputLabel outputLabel_annuale_type = new HtmlOutputLabel();
+
+    public HtmlOutputLabel getOutputLabel_annuale_type() {
+        return outputLabel_annuale_type;
+    }
+
+    public void setOutputLabel_annuale_type(HtmlOutputLabel hol) {
+        this.outputLabel_annuale_type = hol;
+    }
+    private HtmlOutputLabel outputLabel_Quarterly = new HtmlOutputLabel();
+
+    public HtmlOutputLabel getOutputLabel_Quarterly() {
+        return outputLabel_Quarterly;
+    }
+
+    public void setOutputLabel_Quarterly(HtmlOutputLabel hol) {
+        this.outputLabel_Quarterly = hol;
+    }
+    private HtmlOutputLabel outputLabel_Semiannuale = new HtmlOutputLabel();
+
+    public HtmlOutputLabel getOutputLabel_Semiannuale() {
+        return outputLabel_Semiannuale;
+    }
+
+    public void setOutputLabel_Semiannuale(HtmlOutputLabel hol) {
+        this.outputLabel_Semiannuale = hol;
+    }
+    private DefaultSelectedData defaultSelectedData5 = new DefaultSelectedData();
+
+    public DefaultSelectedData getDefaultSelectedData5() {
+        return defaultSelectedData5;
+    }
+
+    public void setDefaultSelectedData5(DefaultSelectedData dsd) {
+        this.defaultSelectedData5 = dsd;
+    }
+    private DefaultSelectionItems selectOneMenu1DefaultItems7 = new DefaultSelectionItems();
+
+    public DefaultSelectionItems getSelectOneMenu1DefaultItems7() {
+        return selectOneMenu1DefaultItems7;
+    }
+
+    public void setSelectOneMenu1DefaultItems7(DefaultSelectionItems dsi) {
+        this.selectOneMenu1DefaultItems7 = dsi;
+    }
+    private DefaultSelectItemsArray selectOneMenu1DefaultItems8 = new DefaultSelectItemsArray();
+
+    public DefaultSelectItemsArray getSelectOneMenu1DefaultItems8() {
+        return selectOneMenu1DefaultItems8;
+    }
+
+    public void setSelectOneMenu1DefaultItems8(DefaultSelectItemsArray dsia) {
+        this.selectOneMenu1DefaultItems8 = dsia;
+    }
+    private DefaultSelectItemsArray selectOneMenu1DefaultItems9 = new DefaultSelectItemsArray();
+
+    public DefaultSelectItemsArray getSelectOneMenu1DefaultItems9() {
+        return selectOneMenu1DefaultItems9;
+    }
+
+    public void setSelectOneMenu1DefaultItems9(DefaultSelectItemsArray dsia) {
+        this.selectOneMenu1DefaultItems9 = dsia;
+    }
+    private HtmlSelectOneMenu drl_BudjetYear = new HtmlSelectOneMenu();
+
+    public HtmlSelectOneMenu getDrl_BudjetYear() {
+        return drl_BudjetYear;
+    }
+
+    public void setDrl_BudjetYear(HtmlSelectOneMenu hsom) {
+        this.drl_BudjetYear = hsom;
+    }
+    private HtmlOutputLabel outputLabel_BudjetYear = new HtmlOutputLabel();
+
+    public HtmlOutputLabel getOutputLabel_BudjetYear() {
+        return outputLabel_BudjetYear;
+    }
+
+    public void setOutputLabel_BudjetYear(HtmlOutputLabel hol) {
+        this.outputLabel_BudjetYear = hol;
+    }
+    private HtmlInputText txtEmployeeId = new HtmlInputText();
+
+    public HtmlInputText getTxtEmployeeId() {
+        return txtEmployeeId;
+    }
+
+    public void setTxtEmployeeId(HtmlInputText hit) {
+        this.txtEmployeeId = hit;
+    }
+
+    // </editor-fold>
+    /**
+     * <p>Construct a new Page bean instance.</p>
+     */
+    public ReportCritera() {
+    }
+
+    /**
+     * <p>Callback method that is called whenever a page is navigated to,
+     * either directly via a URL, or indirectly via page navigation.
+     * Customize this method to acquire resources that will be needed
+     * for event handlers and lifecycle methods, whether or not this
+     * page is performing post back processing.</p>
+     * 
+     * <p>Note that, if the current request is a postback, the property
+     * values of the components do <strong>not</strong> represent any
+     * values submitted with this request.  Instead, they represent the
+     * property values that were saved for this view when it was rendered.</p>
+     */
+    @Override
+    public void init() {
+        //reportPageTypes = reportManger.getAllReportTypesPageList(moduleName);
+        reportTypes = reportManger.getReportTypes();
+        reportCatagori = reportManger.getReportCatagori();
+        monthList = reportManger.getMonthList();
+        quaterList = reportManger.getQuertrlyList();
+        simiAnnual = reportManger.getSimiAnnualList();
+
+
+        // Perform initializations inherited from our superclass
+        super.init();
+        // Perform application initialization that must complete
+        // *before* managed components are initialized
+        // TODO - add your own initialiation code here
+
+        // <editor-fold defaultstate="collapsed" desc="Managed Component Initialization">
+        // Initialize automatically managed components
+        // *Note* - this logic should NOT be modified
+        try {
+            _init();
+        } catch (Exception e) {
+            log("Page2 Initialization Failure", e);
+            throw e instanceof FacesException ? (FacesException) e : new FacesException(e);
+        }
+
+    // </editor-fold>
+    // Perform application initialization that must complete
+    // *after* managed components are initialized
+    // TODO - add your own initialization code here
+    }
+
+    /**
+     * <p>Callback method that is called after the component tree has been
+     * restored, but before any event processing takes place.  This method
+     * will <strong>only</strong> be called on a postback request that
+     * is processing a form submit.  Customize this method to allocate
+     * resources that will be required in your event handlers.</p>
+     */
+    @Override
+    public void preprocess() {
+    }
+
+    /**
+     * <p>Callback method that is called just before rendering takes place.
+     * This method will <strong>only</strong> be called for the page that
+     * will actually be rendered (and not, for example, on a page that
+     * handled a postback and then navigated to a different page).  Customize
+     * this method to allocate resources that will be required for rendering
+     * this page.</p>
+     */
+    @Override
+    public void prerender() {
+    }
+
+    /**
+     * <p>Callback method that is called after rendering is completed for
+     * this request, if <code>init()</code> was called (regardless of whether
+     * or not this was the page that was actually rendered).  Customize this
+     * method to release resources acquired in the <code>init()</code>,
+     * <code>preprocess()</code>, or <code>prerender()</code> methods (or
+     * acquired during execution of an event handler).</p>
+     */
+    @Override
+    public void destroy() {
+    }
+
+    /**
+     * <p>Return a reference to the scoped data bean.</p>
+     *
+     * @return reference to the scoped data bean
+     */
+    protected RequestBean1 getRequestBean1() {
+        return (RequestBean1) getBean("RequestBean1");
+    }
+
+    /**
+     * <p>Return a reference to the scoped data bean.</p>
+     *
+     * @return reference to the scoped data bean
+     */
+    protected SessionBean1 getSessionBean1() {
+        return (SessionBean1) getBean("SessionBean1");
+    }
+
+    /**
+     * <p>Return a reference to the scoped data bean.</p>
+     *
+     * @return reference to the scoped data bean
+     */
+    protected ApplicationBean1 getApplicationBean1() {
+        return (ApplicationBean1) getBean("ApplicationBean1");
+    }
+    //budjetYearList =reportManger.getAllBudgetYears();
+    DisciplineReport report = new DisciplineReport();
+    ReportCriteraManager reportManger = new ReportCriteraManager();
+    ArrayList<ReportPageModle> reportPageList = new ArrayList<ReportPageModle>();
+    ArrayList<Option> reportPageTypes = new ArrayList<Option>();
+    ArrayList<Option> reportTypes = new ArrayList<Option>();
+    ArrayList<Option> reportCatagori = new ArrayList<Option>();
+    ArrayList<Option> monthList = new ArrayList<Option>();
+    ArrayList<Option> quaterList = new ArrayList<Option>();
+    ArrayList<Option> simiAnnual = new ArrayList<Option>();
+    ArrayList<SelectItem> reportPage = new ArrayList<SelectItem>();
+    ArrayList<SelectItem> budjetYear = new ArrayList<SelectItem>();
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    ReportCriteraManager criteraManger = new ReportCriteraManager();
+    public String MONTHLY = ReportCriteraManager.MONTHLY;
+    public String Quarterly = ReportCriteraManager.QUARTERLY;
+    public String Semiannually = ReportCriteraManager.SEMIANNUALLY;
+    public String Annually = ReportCriteraManager.ANNUALLY;
+    ArrayList<SelectItem> budjetYearList = reportManger.getAllBudgetYears();
+
+    public ArrayList<Option> getSimiAnnual() {
+        return simiAnnual;
+    }
+
+    public void setSimiAnnual(ArrayList<Option> simiAnnual) {
+        this.simiAnnual = simiAnnual;
+    }
+
+    public ArrayList<SelectItem> getBudjetYearList() {
+        return budjetYearList;
+    }
+
+    public void setBudjetYearList(ArrayList<SelectItem> budjetYearList) {
+        this.budjetYearList = budjetYearList;
+    }
+    public String selectionMonthly;
+    public String selectionQuarterly;
+    public String selectionSeminalannula;
+    public String selectionAnnual;
+    public String starDate;
+    public String endDate;
+    public String selectionCondition;
+    public String selectedCritirea;
+    public String repName;
+    public String reportCagori;
+    public String repType;
+    public String moduleName;
+
+    public ArrayList<SelectItem> getBudjetYear() {
+        return budjetYear;
+    }
+
+    public void setBudjetYear(ArrayList<SelectItem> budjetYear) {
+        this.budjetYear = budjetYear;
+    }
+
+    public ArrayList<Option> getQuaterList() {
+        return quaterList;
+    }
+
+    public void setQuaterList(ArrayList<Option> quaterList) {
+        this.quaterList = quaterList;
+    }
+
+    public ArrayList<Option> getMonthList() {
+        return monthList;
+    }
+
+    public void setMonthList(ArrayList<Option> monthList) {
+        this.monthList = monthList;
+    }
+
+    public ArrayList<SelectItem> getReportPage() {
+        return reportPage;
+    }
+
+    public void setReportPage(ArrayList<SelectItem> reportPage) {
+        this.reportPage = reportPage;
+    }
+    // reportPageTypes = reportManger.getAllReportTypesPageList(moduleName);
+
+    public String getModuleName() {
+        return moduleName;
+    }
+
+    public void setModuleName(String moduleName) {
+        this.moduleName = moduleName;
+    }
+
+    public String getSelectedCritirea() {
+        return selectedCritirea;
+    }
+
+    public void setSelectedCritirea(String selectedCritirea) {
+        this.selectedCritirea = selectedCritirea;
+    }
+
+    public ArrayList<Option> getReportCatagori() {
+        return reportCatagori;
+    }
+
+    public void setReportCatagori(ArrayList<Option> reportCatagori) {
+        this.reportCatagori = reportCatagori;
+    }
+
+    public ArrayList<Option> getReportTypes() {
+        return reportTypes;
+    }
+
+    public void setReportTypes(ArrayList<Option> reportTypes) {
+        this.reportTypes = reportTypes;
+    }
+
+    public ArrayList<Option> getReportPageTypes() {
+        return reportPageTypes;
+    }
+
+    public void setReportPageTypes(ArrayList<Option> reportPageTypes) {
+        this.reportPageTypes = reportPageTypes;
+    }
+
+    public ArrayList<ReportPageModle> getReportPageList() {
+        return reportPageList;
+    }
+
+    public void setReportPageList(ArrayList<ReportPageModle> reportPageList) {
+        this.reportPageList = reportPageList;
+    }
+
+    public String getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
+    }
+
+    public String getStarDate() {
+        return starDate;
+    }
+
+    public void setStarDate(String starDate) {
+        this.starDate = starDate;
+    }
+
+    public String getAnnually() {
+        return Annually;
+    }
+
+    public void setAnnually(String Annually) {
+        this.Annually = Annually;
+    }
+
+    public String getMONTHLY() {
+        return MONTHLY;
+    }
+
+    public void setMONTHLY(String MONTHLY) {
+        this.MONTHLY = MONTHLY;
+    }
+
+    public String getQuarterly() {
+        return Quarterly;
+    }
+
+    public void setQuarterly(String Quarterly) {
+        this.Quarterly = Quarterly;
+    }
+
+    public String getSemiannually() {
+        return Semiannually;
+    }
+
+    public void setSemiannually(String Semiannually) {
+        this.Semiannually = Semiannually;
+    }
+
+    public String getSelectionCondition() {
+        return selectionCondition;
+    }
+
+    public void setSelectionCondition(String selectionCondition) {
+        this.selectionCondition = selectionCondition;
+    }
+
+    public String btn_StartDay_action() {
+        calStartDate.setRendered(true);
+        String startDate = dateFormat.format(calStartDate.getValue());
+        return null;
+    }
+
+    public void calStartDate_processValueChange(ValueChangeEvent vce) {
+        txt_start_day.setValue(dateFormat.format(calStartDate.getValue()));
+        starDate = dateFormat.format(calStartDate.getValue());
+        calStartDate.setRendered(false);
+    }
+
+    public void calEndDate_processValueChange(ValueChangeEvent vce) {
+        txt_end_date.setValue(dateFormat.format(calEndDate.getValue()));
+        String endDay = dateFormat.format(calEndDate.getValue());
+        calEndDate.setRendered(false);
+    }
+
+    public String btn_EndDate_action() {
+        calEndDate.setRendered(true);
+        endDate = dateFormat.format(calEndDate.getValue());
+        return null;
+
+    }
+
+    public String button1_action() {
+        //return null means stay on the same page
+        repName = drl_report_Name.getValue().toString();
+        reportCagori = drl_catagory.getValue().toString();
+        repType = drl_type.getValue().toString();
+        starDate = txt_start_day.getValue().toString();
+        endDate = txt_end_date.getValue().toString();
+        selectedCritirea = selectionCondition;
+
+        return null;
+    }
+
+    public void selectOneRadio_Report_Duration_processValueChange(ValueChangeEvent vce) {
+        if (vce.getNewValue().toString().equalsIgnoreCase(MONTHLY)) {
+            selectionCondition = "Monthly";
+            this.outputLabel_Month.setRendered(true);
+            this.drl_Month.setRendered(true);
+            this.drl_BudjetYear.setRendered(true);
+            this.outputLabel_BudjetYear.setRendered(true);
+            this.outputLabel_Quarterly.setRendered(false);
+            this.drl_querterly.setRendered(false);
+            this.outputLabel_Semiannuale.setRendered(false);
+            this.drl_SemiAnnual.setRendered(false);
+            this.outputLabel_annuale_type.setRendered(false);
+            this.drl_annual_Type.setRendered(false);
+        } else if (vce.getNewValue().toString().equalsIgnoreCase(Quarterly)) {
+            selectionCondition = "Quarterly";
+            this.outputLabel_Quarterly.setRendered(true);
+            this.drl_querterly.setRendered(true);
+            this.outputLabel_BudjetYear.setRendered(true);
+            this.drl_BudjetYear.setRendered(true);
+            this.outputLabel_Semiannuale.setRendered(false);
+            this.drl_SemiAnnual.setRendered(false);
+            this.outputLabel_annuale_type.setRendered(false);
+            this.drl_annual_Type.setRendered(false);
+            this.outputLabel_Month.setRendered(false);
+            this.drl_Month.setRendered(false);
+        } else if (vce.getNewValue().toString().equalsIgnoreCase(Semiannually)) {
+            selectionCondition = "Semiannually";
+            this.outputLabel_Semiannuale.setRendered(true);
+            this.drl_SemiAnnual.setRendered(true);
+            this.outputLabel_BudjetYear.setRendered(true);
+            this.drl_BudjetYear.setRendered(true);
+            this.outputLabel_Quarterly.setRendered(false);
+            this.outputLabel_annuale_type.setRendered(false);
+            this.drl_annual_Type.setRendered(false);
+            this.outputLabel_Month.setRendered(false);
+            this.drl_Month.setRendered(false);
+            this.outputLabel_Quarterly.setRendered(false);
+            this.drl_querterly.setRendered(false);
+        } else if (vce.getNewValue().toString().equalsIgnoreCase(Annually)) {
+            selectionCondition = "Annually";
+            // this.outputLabel_annuale_type.setRendered(true);
+            // this.drl_annual_Type.setRendered(true);
+            this.outputLabel_BudjetYear.setRendered(true);
+            this.outputLabel_Quarterly.setRendered(false);
+            this.outputLabel_Month.setRendered(false);
+            this.drl_Month.setRendered(false);
+            this.outputLabel_Quarterly.setRendered(false);
+            this.drl_querterly.setRendered(false);
+            this.outputLabel_Semiannuale.setRendered(false);
+            this.drl_SemiAnnual.setRendered(false);
+        }
+    }
+
+    public String button2_action() {
+        //return null means stay on the same page
+        txt_start_day.resetValue();
+        txt_end_date.resetValue();
+        drl_catagory.resetValue();
+        drl_report_Name.resetValue();
+        drl_type.resetValue();
+        return null;
+    }
+
+    public String cmdReportPageList_action() {
+        //return null means stay on the same page
+        return "ReportPageRegistration";
+    }
+
+    public String btn_NewGenerate_action() {
+        String category = drl_catagory.getValue().toString();
+        String reportName = drl_report_Name.getValue().toString();
+        String startDate = this.txt_start_day.getValue().toString();
+        String end_Date = this.txt_end_date.getValue().toString();
+        String employeeID = this.txtEmployeeId.getValue().toString();
+        String selectionType = selectionCondition;
+        String selectedMonth = drl_Month.getValue().toString();
+        String selectedYear = drl_BudjetYear.getValue().toString();
+
+       // reportManger.buildReportParametersList(category, reportName, startDate, end_Date, employeeID, selectionType, selectedMonth, selectedYear);
+        reportManger.buildReportParametersList(selectedMonth, selectedYear);
+        return this.displayPage(category, reportName);
+    }
+
+    public void drl_catagory_processValueChange(ValueChangeEvent vce) {
+        if (!vce.getNewValue().equals("-1") && vce.getNewValue() != null) {
+            moduleName = vce.getNewValue().toString();
+
+            reportPage = reportManger.getAllReportTypesPageList(moduleName);
+        // report.MonthlyReport();
+        }
+    }
+
+    private String displayPage(String category, String reportName) {
+        if (category.equalsIgnoreCase("POWER DELEGATION MANAGEMENT") && (reportName.equalsIgnoreCase("powerDelegationRequest"))) {
+
+            return "PowerDelegationRequestReport";
+        } else if (category.equalsIgnoreCase("POWER DELEGATION MANAGEMENT") && (reportName.equalsIgnoreCase("powerDelegationApprove"))) {
+
+            return "PowerDelegationApproveReport";
+        } else if (category.equalsIgnoreCase("SALARY DELEGATION MANAGEMENT") && (reportName.equalsIgnoreCase("SalaryDelegation"))) {
+
+            return "SalaryDelegationRequestReport";
+        } else if (category.equalsIgnoreCase("DISCIPLINE MANAGEMENT") && (reportName.equalsIgnoreCase("DisciplineReport"))) {
+            return "DisciplineReport";
+        } else if (category.trim().equalsIgnoreCase("DOCUMENT REQUEST MANAGEMENT".trim()) && (reportName.trim().equalsIgnoreCase("DocumentRequest page ".trim()))) {
+            return "DocumentRequestReport";
+        }
+        return null;
+    }
+}
+
+   
+>>>>>>> .r1396

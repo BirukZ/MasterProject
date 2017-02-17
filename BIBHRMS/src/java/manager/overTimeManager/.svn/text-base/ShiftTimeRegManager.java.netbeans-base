@@ -1,0 +1,71 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package manager.overTimeManager;
+
+import entity.overTimeEntity.ShiftTimeRegEntity;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import javax.faces.model.SelectItem;
+
+/**
+ *
+ * @author user
+ */
+public class ShiftTimeRegManager {
+
+    ShiftTimeRegEntity timemgr = new ShiftTimeRegEntity();
+
+    public ArrayList<SelectItem> selectShiftRegistration() throws SQLException {
+        ArrayList<SelectItem> list_emp = new ArrayList<SelectItem>();
+        try {
+            ResultSet _rs2 = timemgr.selectShifts();
+            list_emp.add(new SelectItem("0", "--Select Shift---"));
+            while (_rs2.next()) {
+                SelectItem hm = new SelectItem(_rs2.getString("SHIFT_TYPE_ID"), _rs2.getString("SHIFT_NAME"));
+
+
+                list_emp.add(hm);
+
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return list_emp;
+    }
+
+    public int mgr_insert_shift_time(String start_time, String end_time, String shift_code, String registered_date,String address) throws SQLException {
+
+        int result = 0;
+        try {
+
+            result = timemgr.insert_shift_time(start_time, end_time, shift_code, registered_date,address);
+
+            return result;
+
+        } catch (Exception ex) {
+
+            ex.printStackTrace();
+            return 0;
+        }
+    }
+      public int mgr_update_shift_time(String shift_Time_Registration_Id, String start_time, String end_time, String shift_code, String registered_date) throws SQLException {
+
+        int result = 0;
+        try {
+
+            result = timemgr.update_shift_time(shift_Time_Registration_Id, start_time, end_time, shift_code, registered_date);
+
+            return result;
+
+        } catch (Exception ex) {
+
+            ex.printStackTrace();
+            return 0;
+        }
+    }
+}

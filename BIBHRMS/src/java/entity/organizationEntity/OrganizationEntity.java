@@ -1,0 +1,863 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package entity.organizationEntity;
+
+import connectionProvider.ConnectionManager;
+import manager.globalUseManager.ErrorLogWriter;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+
+import java.sql.SQLException;
+import java.sql.Savepoint;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Vector;
+import oracle.jdbc.rowset.OracleCachedRowSet;
+
+/**
+ *
+ * @author Administrator
+ */
+public class OrganizationEntity extends ConnectionManager {
+
+    Connection _con = null;
+    PreparedStatement _ps = null;
+    ResultSet _rs = null;
+
+    public void releaseResources() throws SQLException {
+        if (_rs != null) {
+            _rs.close();
+        }
+        if (_ps != null) {
+            _ps.close();
+        }
+        if (_con != null) {
+            closePooledConnections(_con);
+        }
+    }
+//    ConnectionManager ConnectionManager=new ConnectionManager();
+    Department dept = new Department();
+
+    public ArrayList<Department> readAllOrganization() {
+        try {
+            ArrayList<Department> orgList = new ArrayList<Department>();
+
+            OracleCachedRowSet rs = dept.readAllOrganization();
+            // if (rs != null) {
+            // int i = 0;
+            while (rs.next()) {
+                //i++;
+                Department org = new Department(rs.getString("dept_id"), rs.getString("dep_description"), rs.getString("mission"), rs.getString("est_date"), rs.getString("BRANCH_ID"));
+                orgList.add(org);
+            }
+
+
+
+            //}
+            return orgList;
+        } catch (Exception ex) {
+
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return null;
+        } finally {
+            try {
+                releaseResources();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
+    public Department readRoot() {
+        Department myReturn = null;
+        try {
+            ResultSet rs = dept.readRootOrganization();
+
+            while (rs.next()) {
+                myReturn = new Department(rs.getString("dept_id"), rs.getString("dep_description"), rs.getString("mission"), rs.getString("est_date"), rs.getString("BRANCH_ID"));
+            }
+            rs.close();
+
+
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+
+        } finally {
+            try {
+                releaseResources();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return myReturn;
+    }
+
+    public ArrayList<String> readNationality() {
+
+        String _select = "SELECT * FROM hr_node";
+
+
+
+        ArrayList<String> nationality = new ArrayList<String>();
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_select);
+            _rs = (ResultSet) _ps.executeQuery();
+            while (_rs.next()) {
+
+                nationality.add(_rs.getString("CODE"));
+
+
+            }
+
+            return nationality;
+        } catch (Exception ex) {
+
+            ex.printStackTrace();
+            return null;
+        } finally {
+            try {
+                releaseResources();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+
+    }
+
+    /*
+     * To change this template, choose Tools | Templates
+     * and open the template in the editor.
+     */
+    /**
+     *
+     * @author Preferred Customer
+     */
+    /**
+     * The methid calls the entity method addDept with the information from the
+     * interface and checks if insertion is made by using the return. If the
+     * insertion of the department is sucessfull the method continues with the
+     * callind of addDeptJob method for every list element. N
+     * @param jobList
+     * @param deptId the unique department identifier
+     * @param deptName the name given to the department
+     * @param mission the mession of the department
+     * @param est_Date the date the unit is established
+     * @return true if the information is saved successfully; false otherwise.
+     */
+    public boolean addDept(ArrayList<HashMap> jobList, String deptId, String deptName, String mission, String est_Date) throws Exception {
+        Savepoint start = null;
+
+        if (dept.addDept(deptId, deptName, mission, est_Date) != 0) {
+            try {
+                _con = getConnection();
+                _con.setAutoCommit(false);
+                start = _con.setSavepoint("start");
+                for (int i = 0; i < jobList.size(); i++) {
+                    if (dept.addDeptJob(deptId, jobList.get(i).get("jobCode").toString(), jobList.get(i).get("deptJobCode").toString()) != 0) {
+                        _con.commit();
+                        _con.setAutoCommit(true);
+                        return true;
+                    }
+                }
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                ErrorLogWriter.writeError(ex);
+                _con.rollback(start);
+
+                return false;
+            } finally {
+                try {
+                    releaseResources();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+            return false;
+
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * The method deletes information by calling and checking the entity method
+     * deleteDeptAddress with the information from the interface.
+     * @param sELECTED_ORG_ID the clicked unit
+     */
+    public boolean deleteAddressDept(String sELECTED_ORG_ID) {
+        try {
+            if (dept.deleteDeptAddress(sELECTED_ORG_ID) != 0) {
+                return true;
+            } else {
+                return false;
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return false;
+        } finally {
+            try {
+                releaseResources();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+
+    }
+
+    /**
+     * The method either calls the saveDeptAddress method or the updateDeptAddress
+     * method based on the value of the type String.
+     * @param type the address type, address for department.
+     * @param deptCode the department id
+     * @param region the region of the department
+     * @param zone the zone of the department
+     * @param woreda the kebelle of the department
+     * @param kebelle the floor of the department
+     * @param floor the floor of the department
+     * @param block the block of the department
+     * @param officeNumber the office Number of the department
+     * @param telMobile the Mobile telephone of the department
+     * @param telOffice the Office telephone of the department
+     * @param telOfficeExt the Office telephone Extention of the department
+     * @param email the email of the department
+     */
+    public void maintainDepartmentAddress(String type, String deptCode, String region,
+            String zone, String woreda, String kebelle, String floor, String block, String officeNumber, String telMobile, String telOffice,
+            String telOfficeExt, String email) {
+        Department deptAddress = new Department(deptCode, region, zone, woreda,
+                kebelle, floor, block, officeNumber, telOffice, telOfficeExt, telMobile, email);
+        try {
+            if (type.equals("1")) {
+                dept.saveDeptAddress(deptAddress);
+            } else {
+                dept.updateDeptAddress(deptAddress);
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+        } finally {
+            try {
+                releaseResources();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+
+    }
+
+    /**
+     * The method reads department and job data from the entity method readDeptJOb
+     * with the specified department id.
+     * @param unitId the unique department identifier.
+     * @return a <code>ResultSet</code> object rs with the data from entity method
+     */
+    public ResultSet readDeptJob(
+            String unitId) {
+        ResultSet rsDept = null;
+        try {
+            rsDept = dept.readDeptJOb(Integer.parseInt(unitId));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+        } finally {
+            try {
+                releaseResources();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return rsDept;
+    }
+
+    /**
+     * The method calculates the next department id (Organization level) by
+     * assigning 0100000000, if the result of the entity method is 0 or by
+     * incrementing the second digit of the result.
+     * @return a <code>String</code> object nextDeptId with the data from calculation
+     */
+    public String readNextOrgId() {
+        String nextDeptId = null;
+        try {
+            ResultSet rs = dept.readNextOrganizationId();
+            while (rs.next()) {
+                if (String.valueOf(rs.getInt("maxDeptId")).equals("0")) {
+                    nextDeptId = "0100000000";
+                } else {
+                    nextDeptId = String.valueOf(rs.getInt("maxDeptId")).substring(0, 1);
+                    nextDeptId =
+                            "0" + String.valueOf(Integer.parseInt(nextDeptId) + 1) + "00000000";
+                }
+
+            }
+            rs.close();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+        } finally {
+            try {
+                releaseResources();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return nextDeptId;
+    }
+
+    /**
+     * The method uses the readNextid method of each level of departments, to
+     * detemine the prefix.
+     * @param unitInitial the initial of the unit, to determine the level in th hierarchy.
+     * @param unitId the id of the current unit
+     * @return a <code>String</code> object rs with the data from calculation
+     */
+    public String readDepartmentIdPrefix(
+            String unitInitial, String unitId) {
+        ResultSet rs = null;
+        String deptPrefix = null;
+        try {
+            if (unitInitial.equals("Org")) {//the department is in organiztion level
+                rs = dept.readNextBraId(unitId.substring(0, 2));
+                while (rs.next()) {
+                    if (String.valueOf(rs.getInt("maxDeptId")).equals("0")) {
+                        deptPrefix = unitId.substring(0, 2);
+                    } else {
+                        deptPrefix = String.valueOf(rs.getInt("maxDeptId")).substring(0, 1);
+                    }
+
+                }
+            } else if (unitInitial.equals("Bra")) {
+                rs = dept.readNextDepId(unitId.substring(0, 4));
+                while (rs.next()) {
+                    if (String.valueOf(rs.getInt("maxDeptId")).equals("0")) {
+                        deptPrefix = unitId.substring(0, 4);
+                    } else {
+                        deptPrefix = String.valueOf(rs.getInt("maxDeptId")).substring(0, 3);
+                    }
+
+                }
+            } else if (unitInitial.equals("Dep")) {
+                rs = dept.readNextSecId(unitId.substring(0, 6));
+                while (rs.next()) {
+                    if (String.valueOf(rs.getInt("maxDeptId")).equals("0")) {
+                        deptPrefix = unitId.substring(0, 6);
+                    } else {
+                        deptPrefix = String.valueOf(rs.getInt("maxDeptId")).substring(0, 5);
+                    }
+
+                }
+            } else if (unitInitial.equals("Sec")) {
+                rs = dept.readNextSSecId(unitId.substring(0, 8));
+                while (rs.next()) {
+                    if (String.valueOf(rs.getInt("maxDeptId")).equals("0")) {
+                        deptPrefix = unitId.substring(0, 8);
+                    } else {
+                        deptPrefix = String.valueOf(rs.getInt("maxDeptId")).substring(0, 7);
+                    }
+
+                }
+            } else if (unitInitial.equals("Sub")) {
+            }
+            rs.close();
+
+            return deptPrefix;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return null;
+        } finally {
+            try {
+                releaseResources();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * The method reads the id of the current unit and calculates the next department
+     * id that should be in it.
+     * @param unitInitial the initial of the unit, to determine the level in th hierarchy.
+     * @param unitId the id of the current unit
+     * @return a <code>String</code> with the next department id
+     */
+    public String readNextUnitId(
+            String unitInitial, String unitId) {
+        ResultSet rs = null;
+        String nextDeptId = null;
+        String deptPrefix = null;
+        try {
+            if (unitInitial.equals("Org")) {
+                rs = dept.readNextBraId(unitId.substring(0, 2));
+                while (rs.next()) {
+                    if (String.valueOf(rs.getInt("maxDeptId")).equals("0")) {
+                        deptPrefix = unitId.substring(0, 2);
+                        nextDeptId =
+                                deptPrefix + "01000000";
+                    } else {
+                        nextDeptId = String.valueOf(rs.getInt("maxDeptId")).substring(1, 3);
+                        deptPrefix =
+                                String.valueOf(rs.getInt("maxDeptId")).substring(0, 1);
+                        nextDeptId =
+                                "0" + deptPrefix + String.valueOf(Integer.parseInt(nextDeptId) + 1) + "000000";
+                    }
+
+                }
+            } else if (unitInitial.equals("Bra")) {
+                rs = dept.readNextDepId(unitId.substring(0, 4));
+                while (rs.next()) {
+                    if (String.valueOf(rs.getInt("maxDeptId")).equals("0")) {
+                        deptPrefix = unitId.substring(0, 4);
+                        nextDeptId =
+                                deptPrefix + "010000";
+                    } else {
+                        nextDeptId = String.valueOf(rs.getInt("maxDeptId")).substring(3, 5);
+                        deptPrefix =
+                                String.valueOf(rs.getInt("maxDeptId")).substring(0, 3);
+                        nextDeptId =
+                                "0" + deptPrefix + "0" + String.valueOf(Integer.parseInt(nextDeptId) + 1) + "0000";
+                    }
+
+                }
+            } else if (unitInitial.equals("Dep")) {
+                rs = dept.readNextSecId(unitId.substring(0, 6));
+                while (rs.next()) {
+                    if (String.valueOf(rs.getInt("maxDeptId")).equals("0")) {
+                        deptPrefix = unitId.substring(0, 6);
+                        nextDeptId =
+                                deptPrefix + "0100";
+                    } else {
+                        nextDeptId = String.valueOf(rs.getInt("maxDeptId")).substring(5, 7);
+                        deptPrefix =
+                                String.valueOf(rs.getInt("maxDeptId")).substring(0, 5);
+                        nextDeptId =
+                                "0" + deptPrefix + "0" + String.valueOf(Integer.parseInt(nextDeptId) + 1) + "00";
+                    }
+
+                }
+            } else if (unitInitial.equals("Sec")) {
+                rs = dept.readNextSSecId(unitId.substring(0, 8));
+                while (rs.next()) {
+                    if (String.valueOf(rs.getInt("maxDeptId")).equals("0")) {
+                        deptPrefix = unitId.substring(0, 8);
+                        nextDeptId =
+                                deptPrefix + "01";
+                    } else {
+                        nextDeptId = String.valueOf(rs.getInt("maxDeptId")).substring(7, 9);
+                        deptPrefix =
+                                String.valueOf(rs.getInt("maxDeptId")).substring(0, 7);
+                        nextDeptId =
+                                "0" + deptPrefix + "0" + String.valueOf(Integer.parseInt(nextDeptId) + 1);
+                    }
+
+                }
+            } else if (unitInitial.equals("Sub")) {
+            }
+            rs.close();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+        } finally {
+            try {
+                releaseResources();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return nextDeptId;
+    }
+
+    /**
+     * Arranges the <code>ResultSet</code> data from the entity method readOrganization()
+     * into an <code>ArrayList</code>.
+     * @param Data <code>Vector</code> object
+     * @return an <code>ArrayList</code> of type <code>Department</code>
+     */
+    public ArrayList<String> readHead() {
+        ArrayList<String> list = new ArrayList<String>();
+        try {
+            ResultSet rs = dept.readHead();
+            if (rs.next()) {
+                list.add(rs.getString("DEPT_ID"));
+                list.add(rs.getString("DEP_DESCRIPTION"));
+                return list;
+            }
+            rs.close();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        } finally {
+            try {
+                releaseResources();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    public ArrayList<Department> readOrganization(Vector Data) {
+        try {
+            ArrayList<Department> orgList = new ArrayList<Department>();
+            ResultSet rs = dept.readOrganization();
+            while (rs.next()) {
+                Department org = new Department(rs.getString("dept_id"), rs.getString("dep_description"), rs.getString("mission"), rs.getString("est_date"), rs.getString("BRANCH_ID"));
+                orgList.add(org);
+            }
+            rs.close();
+
+            return orgList;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return null;
+        } finally {
+            try {
+                releaseResources();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * Arranges the <code>ResultSet</code> data from the entity method readBra()
+     * into an <code>ArrayList</code> of type <code>Department</code>.
+     * @param Data <code>Vector</code> object
+     * @return an <code>ArrayList</code> of type <code>Department</code>
+     */
+    public ArrayList<Department> readBranch(Vector Data) {
+        try {
+            ArrayList<Department> braList = new ArrayList<Department>();
+            ResultSet rs = dept.readBra();
+            while (rs.next()) {
+                Department bra = new Department(rs.getString("dept_id"), rs.getString("dep_description"), rs.getString("mission"), rs.getString("est_date"), rs.getString("BRANCH_ID"));
+                braList.add(bra);
+            }
+            rs.close();
+            return braList;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+
+            return null;
+        } finally {
+            try {
+                releaseResources();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * Arranges the <code>ResultSet</code> data from the entity method readDep()
+     * into an <code>ArrayList</code> of type <code>Department</code>.
+     * @param Data <code>Vector</code> object
+     * @return an <code>ArrayList</code> of type <code>Department</code>
+     *
+     */
+    public ArrayList<Department> readDeptment(Vector Data) {
+        try {
+
+            ArrayList<Department> sunBraList = new ArrayList<Department>();
+            ResultSet rs = dept.readDep();
+            while (rs.next()) {
+                Department subBra = new Department(rs.getString("dept_id"), rs.getString("dep_description"), rs.getString("mission"), rs.getString("est_date"), rs.getString("BRANCH_ID"));
+                sunBraList.add(subBra);
+            }
+            rs.close();
+            return sunBraList;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return null;
+        } finally {
+            try {
+                releaseResources();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * Arranges the <code>ResultSet</code> data from the entity method readSec()
+     * into an <code>ArrayList</code> of type <code>Department</code>.
+     * @param Data <code>Vector</code> object
+     * @return an <code>ArrayList</code> of type <code>Department</code>
+     */
+    public ArrayList<Department> readSection(Vector Data) {
+        try {
+            ArrayList<Department> orgList = new ArrayList<Department>();
+            ResultSet rs = dept.readSec();
+            while (rs.next()) {
+                Department unit = new Department(rs.getString("dept_id"), rs.getString("dep_description"), rs.getString("mission"), rs.getString("est_date"), rs.getString("BRANCH_ID"));
+                orgList.add(unit);
+            }
+            rs.close();
+            return orgList;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return null;
+        } finally {
+            try {
+                releaseResources();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * Arranges the <code>ResultSet</code> data from the entity method readSSec()
+     * into an <code>ArrayList</code> of type <code>Department</code>.
+     * @param Data <code>Vector</code> object
+     * @return an <code>ArrayList</code> of type <code>Department</code>
+     */
+    public ArrayList<Department> readSSection(Vector Data) {
+        try {
+            ArrayList<Department> subUnitList = new ArrayList<Department>();
+            ResultSet rs = dept.readSSec();
+            while (rs.next()) {
+                Department subUnit = new Department(rs.getString("dept_id"), rs.getString("dep_description"), rs.getString("mission"), rs.getString("est_date"), rs.getString("BRANCH_ID"));
+                subUnitList.add(subUnit);
+            }
+            rs.close();
+            return subUnitList;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return null;
+        } finally {
+            try {
+                releaseResources();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
+    public ArrayList<Department> readSSSection(Vector Data) {
+        try {
+            ArrayList<Department> subUnitList = new ArrayList<Department>();
+            ResultSet rs = dept.readSSSec();
+            while (rs.next()) {
+                Department subUnit = new Department(rs.getString("dept_id"), rs.getString("dep_description"), rs.getString("mission"), rs.getString("est_date"), rs.getString("BRANCH_ID"));
+                subUnitList.add(subUnit);
+            }
+            rs.close();
+            return subUnitList;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return null;
+        } finally {
+            try {
+                releaseResources();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * The method calls the entity method readDept with the deptId to have
+     * a complete information on the department.
+     * @param deptID the unique identifier of the department
+     * @return the <code>ResultSet</code> object rs
+     */
+    public ResultSet readDept(
+            String deptID) {
+        ResultSet rsDept = null;
+        try {
+            rsDept = dept.readDept(Integer.parseInt(deptID));
+            rsDept.close();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+        } finally {
+            try {
+                releaseResources();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return rsDept;
+    }
+
+    /**
+     * The method calls the entity method readDept with the deptId to have
+     * a complete address information on the department.
+     * @param deptID the unique identifier of the department
+     * @param type
+     * @return the <code>ResultSet</code> object rs
+     */
+    public ResultSet readDeptAddress(
+            String deptID, int type) {
+        ResultSet rsDept = null;
+        try {
+            rsDept = dept.readDeptAddress(Integer.parseInt(deptID), type);
+            rsDept.close();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+        } finally {
+            try {
+                releaseResources();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return rsDept;
+    }
+
+    /**
+     *
+     * @param jobList
+     * @param deptId
+     * @param mission
+     * @param deptName
+     * @param est_Date
+     * @return
+     */
+    public boolean updateDept(ArrayList<HashMap> jobList, String deptId, String mission, String deptName, String est_Date) throws Exception {
+        dept = new Department(deptId, mission, deptName, est_Date, "");
+        Savepoint start = null;
+
+        try {
+            if (dept.updateDept() != 0) {
+                _con = getConnection();
+                _con.setAutoCommit(false);
+                start = _con.setSavepoint("start");
+                for (int i = 0; i <
+                        jobList.size(); i++) {
+                    if (jobList.get(i).get("").equals(1)) {
+                        if (dept.addDeptJob(deptId, jobList.get(i).get("jobCode").toString(), jobList.get(i).get("deptJobCode").toString()) != 0) {
+                            _con.commit();
+                            _con.setAutoCommit(true);
+
+                            return true;
+                        }
+
+                    }
+
+                }
+
+
+                return true;
+            }
+
+
+            return false;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            _con.rollback(start);
+            return false;
+        } finally {
+            try {
+                releaseResources();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     *
+     * @param deptId
+     */
+    public void deleteDept(String deptId) {
+        try {
+            dept.deleteDept(deptId);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+        } finally {
+            try {
+                releaseResources();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
+    public ArrayList<Department> readAllDepartments() {
+        try {
+            ArrayList<Department> orgList = new ArrayList<Department>();
+            ResultSet rs = dept.readAlldepartments();
+            while (rs.next()) {
+                Department org = new Department(rs.getString("DEPT_ID"), rs.getString("DEP_DESCRIPTION"), rs.getString("MISSION"), rs.getString("EST_DATE"), rs.getString("BRANCH_ID"), rs.getInt("LEVEL"));
+                orgList.add(org);
+            }
+            return orgList;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return null;
+        } finally {
+            try {
+                releaseResources();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+//////////////////////////////////////////////////////////////////////DeptNew///////////////////////////////////////////
+     public ArrayList<Department> readAllDepartmentsNew() {
+        try {
+            ArrayList<Department> orgList = new ArrayList<Department>();
+            ResultSet rs = dept.readAlldepartmentsNew();
+            while (rs.next()) {
+                Department org = new Department(rs.getString("DEPT_ID"), rs.getString("DEP_DESCRIPTION"), rs.getString("MISSION"), rs.getString("EST_DATE"), rs.getString("BRANCH_ID"), rs.getInt("LEVEL"));
+                orgList.add(org);
+            }
+            return orgList;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return null;
+        } finally {
+            try {
+                releaseResources();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    public ResultSet readOrganization() {
+        try {
+            _con = getConnection();//SELECT * FROM TBL_DEPARTMENT11 t " +
+            //" WHERE t.dept_id LIKE '__000000' and substr(t.dept_id, 5, 2) != '000000'
+            _ps = _con.prepareStatement("SELECT * FROM TBL_DEPARTMENT11 t " +
+                    " WHERE t.dept_id LIKE '__000000'");
+            _rs = _ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(_rs);
+            return (ResultSet) ocrs;
+        } catch (Exception ex) {
+            return null;
+        } finally {
+            try {
+                releaseResources();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+
+    }
+}

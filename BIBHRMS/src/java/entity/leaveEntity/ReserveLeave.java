@@ -1,0 +1,623 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package entity.leaveEntity;
+
+import connectionProvider.ConnectionManager;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Savepoint;
+import java.util.ArrayList;
+import java.util.HashMap;
+import manager.authorizationManager.AuthorizationManager;
+import manager.leaveManager.ReserveLeaveManager;
+import oracle.jdbc.rowset.OracleCachedRowSet;
+
+/**
+ *
+ * @author 
+ */
+public class ReserveLeave extends ConnectionManager {
+
+    private String reserveLeaveId;
+    private String leaveYear;
+    private String avilableLeaveNumber;
+    private String employeeId;
+    private String status;
+    public static final String PROCESS_LEAVE_TRANSFER = AuthorizationManager.PROCESS_LEAVE_TRANSFER;//"1"
+    public static final String FINAL_STATE_LEAVE_TRANSFER = AuthorizationManager.readFinalState(PROCESS_LEAVE_TRANSFER);
+    public static final String INITIAL_STATE_LEAVE_TRANSFER = AuthorizationManager.readInitialState(PROCESS_LEAVE_TRANSFER);
+    Connection _con = null;
+    PreparedStatement _ps = null;
+    ResultSet _rs = null;
+
+    public String getAvilableLeaveNumber() {
+        return avilableLeaveNumber;
+    }
+
+    public void setAvilableLeaveNumber(String avilableLeaveNumber) {
+        this.avilableLeaveNumber = avilableLeaveNumber;
+    }
+
+    public String getEmployeeId() {
+        return employeeId;
+    }
+
+    public void setEmployeeId(String employeeId) {
+        this.employeeId = employeeId;
+    }
+
+    public String getLeaveYear() {
+        return leaveYear;
+    }
+
+    public void setLeaveYear(String leaveYear) {
+        this.leaveYear = leaveYear;
+    }
+
+    public String getReserveLeaveId() {
+        return reserveLeaveId;
+    }
+
+    public void setReserveLeaveId(String reserveLeaveId) {
+        this.reserveLeaveId = reserveLeaveId;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public ReserveLeave() {
+    }
+
+    public ReserveLeave(String reserveLeaveId, String leaveYear,
+            String avilableLeaveNumber, String employeeId, String status) {
+        this.reserveLeaveId = reserveLeaveId;
+        this.leaveYear = leaveYear;
+        this.avilableLeaveNumber = avilableLeaveNumber;
+        this.employeeId = employeeId;
+        this.status = status;
+    }
+
+    public boolean updatReserveLeave(String leaveYear, String avilbelLevelDay,
+            String employeeId, String leaveId, String status,
+            String startDate,
+            String endDate,
+            String remark) {
+        try {
+            String select = "UPDATE HR_RESERVE_LEAVE " +
+                    " SET AVAILABLELEAVENUMBER=?," +
+                    "     LEAVEYEAR=? ,           " +
+                    "     STARTDATE=?,            " +
+                    "     ENDDATE=?,              " +
+                    "     REMARK =?               " +
+                    " WHERE EMP_ID=? AND RESERVELAVEID=? ";
+
+            String updateSqlStatment = "UPDATE HR_RESERVE_LEAVE " +
+                    " SET AVAILABLELEAVENUMBER=?," +
+                    "     LEAVEYEAR=?,           " +
+                    "     STATUS=?,              " +
+                    "     STARTDATE=?,           " +
+                    "     ENDDATE=?,             " +
+                    "     REMARK =?              " +
+                    " WHERE EMP_ID=? AND RESERVELAVEID=? ";
+            status = status.substring(0, 3);
+            PreparedStatement ps = null;
+            Connection con = getConnection();
+
+            if (!status.equals("Res")) {
+                ps = con.prepareStatement(select);
+                ps.setString(1, avilbelLevelDay);
+                ps.setString(2, leaveYear);
+                ps.setString(3, startDate);
+                ps.setString(4, endDate);
+                ps.setString(5, remark);
+                ps.setString(6, employeeId);
+                ps.setString(7, leaveId);
+
+
+                if (ps.executeUpdate() > 0) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+
+                ps = con.prepareStatement(updateSqlStatment);
+                ps.setString(1, avilbelLevelDay);
+                ps.setString(2, leaveYear);
+                ps.setString(3, ReserveLeaveManager.INITIAL_STATE_LEAVE_TRANSFER);
+                ps.setString(4, startDate);
+                ps.setString(5, endDate);
+                ps.setString(6, remark);
+                ps.setString(7, employeeId);
+                ps.setString(8, leaveId);
+                if (ps.executeUpdate() > 0) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean deleteReserveLeave(String employeeId, String leaveId) throws SQLException {
+        String _delete = " DELETE FROM HR_RESERVE_LEAVE " +
+                "         WHERE EMP_ID=? AND RESERVELAVEID=?";
+        try {
+            Connection _con = getConnection();
+            PreparedStatement _ps = _con.prepareStatement(_delete);
+            _ps.setString(1, employeeId);
+            _ps.setInt(2, Integer.parseInt(leaveId));
+//        closePooledConnections();
+            if (_ps.executeUpdate() > 0) {
+                _ps.close();
+                return true;
+            } else {
+                _ps.close();
+                return false;
+            }
+        } catch (Exception ex) {
+            return false;
+//            releaseResources();
+        }
+
+    }
+
+    public float readEmployeeLeaveBalance(String employeeId) {
+//        String sql = "SELECT RESERVELAVENUMBER" +
+//                " FROM HR_RESERVE_LEAVE WHERE emp_id=? " +
+//                "      AND TO_NUMBER(RESERVELAVENUMBER) > TO_NUMBER(USEDLEAVE)";
+//        int leaveBalnce = 0;
+//        try {
+//
+//            PreparedStatement ps = null;
+//            Connection conn = getConnection();
+//            ResultSet rs = null;
+//            ps = conn.prepareStatement(sql);
+//            ps.setString(1, employeeId);
+//            rs = ps.executeQuery();
+//            while (rs.next()) {
+//                leaveBalnce += Integer.parseInt(rs.getString("RESERVELAVENUMBER"));
+//
+//            }
+        try {
+            LeaveRequestEntity leaveRequestEntity = new LeaveRequestEntity();
+            return leaveRequestEntity.countReserveLeave(employeeId);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
+
+
+
+    }
+
+    /**
+     * The method provide using employee id retrieve reserved unused employee leave
+     * (retrieves ID,LEAVEYEAR,AVAILABLELEAVENUMBER)
+     * @param employeeId
+     * @return
+     */
+    public ArrayList<HashMap> readReserveLeave(String employeeId) {
+        try {
+            String select = " SELECT * FROM HR_RESERVE_LEAVE" +
+                    " WHERE EMP_ID=? AND STATUS='UNUSED'";
+            ArrayList<HashMap> listOfReserveLeave = new ArrayList<HashMap>();
+            PreparedStatement ps = null;
+            ResultSet rs = null;
+            Connection con = null;
+            con = getConnection();
+            ps = con.prepareStatement(select);
+            ps.setString(1, employeeId);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                HashMap hm = new HashMap();
+                hm.put("ID", rs.getString("RESERVELAVEID"));
+                hm.put("LEAVEYEAR", rs.getString("LEAVEYEAR"));
+                hm.put("AVAILABLELEAVENUMBER", rs.getString("AVAILABLELEAVENUMBER"));
+                hm.put("EMP_ID", rs.getString("EMP_ID"));
+                hm.put("REQUEST_DATE", rs.getString("REQUEST_DATE"));
+
+
+
+                listOfReserveLeave.add(hm);
+
+            }
+            return listOfReserveLeave;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+
+    public boolean saveReserveLeave(ArrayList<HashMap> reserveList,
+            String requestDate,
+            String intinalSatate,
+            String expiredDate) {
+        try {
+            String select = "INSERT INTO HR_RESERVE_LEAVE (" +
+                    " LEAVEYEAR," +
+                    " AVAILABLELEAVENUMBER," +
+                    " EMP_ID," +
+                    " REQUEST_DATE," +
+                    " STATUS," +
+                    " EXPERIENCEDATE," +
+                    " STARTDATE," +
+                    " ENDDATE," +
+                    " REMARK)" +
+                    " VALUES (?,?,?,?,?,?,?,?,?) ";
+            PreparedStatement ps = null;
+            Connection con = getConnection();
+            con.setAutoCommit(false);
+            Savepoint save1 = con.setSavepoint("savePoint");
+            for (HashMap hm : reserveList) {
+                ps = con.prepareStatement(select);
+                ps.setString(1, hm.get("leaveYear").toString());
+                ps.setString(2, hm.get("avilbelLeveDay").toString());
+                ps.setString(3, hm.get("employeeId").toString());
+                ps.setString(4, requestDate);
+                ps.setString(5, intinalSatate);
+                ps.setString(6, expiredDate);
+                ps.setString(7, hm.get("startDate").toString());
+                ps.setString(8, hm.get("ednDate").toString());
+                ps.setString(9, hm.get("remark").toString());
+                if (ps.executeUpdate() <= 0) {
+                    ps.close();
+                    con.rollback(save1);
+                    return false;
+                }
+                ps.close();
+
+            }
+            con.commit();
+            return true;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public ArrayList<HashMap> requestedLeaveTransferLists(String employeeID) throws SQLException {
+        String _select = "SELECT REQUEST_DATE," +
+                "  STATUS " +
+                " FROM HR_RESERVE_LEAVE " +
+                " WHERE EMP_ID=? " +
+                " GROUP BY REQUEST_DATE, " +
+                "  STATUS";
+        ArrayList<HashMap> requests = new ArrayList<HashMap>();
+        HashMap leaveAttribute = new HashMap();
+        _con = getConnection();
+        _ps = _con.prepareStatement(_select);
+        _ps.setString(1, employeeID);
+        _rs = _ps.executeQuery();
+        while (_rs.next()) {
+            leaveAttribute = new HashMap();
+            leaveAttribute.put("REQUEST_DATE", _rs.getString("REQUEST_DATE"));
+            leaveAttribute.put("STATUS", _rs.getString("STATUS"));
+            leaveAttribute.put("EMP_ID", employeeID);
+            requests.add(leaveAttribute);
+        }
+
+        return requests;
+    }
+//     public boolean deleteReserveLeave(String employeeId, String leaveId) throws SQLException {
+//        String _delete = " DELETE FROM HR_RESERVE_LEAVE " +
+//                "         WHERE EMP_ID=? AND RESERVELAVEID=?";
+//        try {
+//            _con = getConnection();
+//            _ps = _con.prepareStatement(_delete);
+//            _ps.setString(1, employeeId);
+//            _ps.setInt(2, Integer.parseInt(leaveId));
+////        closePooledConnections();
+//            if (_ps.executeUpdate() > 0) {
+//                _ps.close();
+//                return true;
+//            } else {
+//                _ps.close();
+//                return false;
+//            }
+//        } finally {
+////            releaseResources();
+//        }
+//
+//    }
+
+    /**
+     * Retrives leave requests which can be processes by the user.
+     * An employee has to see only requests which can be processes with his/her priviledge
+     * @param  userName user name of the employee who logged in to the sysytem
+     * processId =1 for the porcess leave
+     * @throws  SQLException
+     */
+    public OracleCachedRowSet selectApprovabLeaveTransferRequest(String userName) throws SQLException {
+        String _innerSelectQuery = "select PROCESS_STATE_ID from BIB.TBL_PROCESS_STATE where PROCESS_STATE_ID" +
+                " in  ( select PROCESS_STATE_ID from BIB.tbl_authorization " +
+                "       where ROLE_NAME in(select ROLE_ID from  BIB.tbl_role_user   " +
+                "           where USER_ID=(select USER_ID from BIB.tbl_users where USER_NAME='" + userName + "')) " +
+                "           and PROCESS_STATE_ID in (select PROCESS_STATE_ID from BIB.TBL_PROCESS_STATE " +
+                "               where  PROCESS_ID='" + ReserveLeave.PROCESS_LEAVE_TRANSFER + "'))";
+
+        String _selectQuery = "SELECT  EMP_ID,REQUEST_DATE,STATUS,RESERVELAVEID FROM HR_RESERVE_LEAVE WHERE STATUS  IN (" + _innerSelectQuery + ")" +
+                "  GROUP BY  EMP_ID,REQUEST_DATE,STATUS,RESERVELAVEID  " +
+                "  ORDER BY REQUEST_DATE DESC  ";
+
+
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_selectQuery);
+            _rs = _ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(_rs);
+            return ocrs;
+        } finally {
+            //releaseResources();
+        }
+    }
+
+    public void releaseResources() throws SQLException {
+        if (_rs != null) {
+            _rs.close();
+        }
+        if (_ps != null) {
+            _ps.close();
+        }
+        if (_con != null) {
+            closePooledConnections(_con);
+        }
+    }
+
+    /**
+     * this method read list of employee leave transfer request
+     * @param employeeId
+     * @param reserveLeaveStatus
+     * @param requesedDate
+     * @return
+     */
+    public ArrayList<HashMap> readEmployeeLeaveTransferRequest(String employeeId,
+            String reserveLeaveStatus,
+            String requesedDate) {
+        String select = "SELECT RESERVELAVEID, " +
+                "  LEAVEYEAR, " +
+                "  AVAILABLELEAVENUMBER, " +
+                "  EMP_ID, " +
+                "  STATUS, " +
+                "  REQUEST_DATE, " +
+                "  USEDLEAVE, " +
+                "  LEAVE_ID, " +
+                "  EXPERIENCEDATE, " +
+                "  USEDLEAVEBYHOURE, " +
+                "  NVL(STARTDATE,'Not Register') AS STARTDATE, " +
+                "  NVL(ENDDATE,'Not Register')   AS ENDDATE, " +
+                "  NVL(REMARK,'Not Register')    AS REMARK " +
+                "FROM HR_RESERVE_LEAVE " +
+                "WHERE STATUS  ='" + reserveLeaveStatus + "' " +
+                "AND   EMP_ID    ='" + employeeId + "' " +
+                "AND REQUEST_DATE='" + requesedDate + "' ";
+
+        PreparedStatement ps = null;
+        _con = null;
+        ArrayList<HashMap> leaveTransferRequest = new ArrayList<HashMap>();
+        ResultSet rs = null;
+        try {
+            _con = getConnection();
+            ps = _con.prepareStatement(select);
+//            ps.setString(1, employeeId);
+//            ps.setString(2, reserveLeaveStatus);
+//            ps.setString(3, requesedDate);
+
+            rs = ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(rs);
+            while (ocrs.next()) {
+                HashMap hm = new HashMap();
+                hm.put("EMP_ID", ocrs.getString("EMP_ID"));
+                hm.put("RESERVELAVEID", ocrs.getString("RESERVELAVEID"));
+                hm.put("LEAVEYEAR", ocrs.getString("LEAVEYEAR"));
+                hm.put("AVAILABLEAVEDAYS", ocrs.getString("AVAILABLELEAVENUMBER"));
+                hm.put("REQUEST_DATE", ocrs.getString("REQUEST_DATE"));
+                hm.put("STATUS", ocrs.getString("STATUS"));
+                hm.put("startDate", ocrs.getString("STARTDATE"));
+                hm.put("ednDate", ocrs.getString("ENDDATE"));
+                hm.put("remark", ocrs.getString("REMARK"));
+                leaveTransferRequest.add(hm);
+            }
+
+            rs.close();
+            ps.close();
+            closePooledConnections(_con);
+            return leaveTransferRequest;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
+
+    }
+
+    public boolean saveleaveLeaveTransferDecision(ArrayList<HashMap> listOfRequest,
+            String decision, String currentState, String user, String recorededDateAndTime) {
+        try {
+            PreparedStatement insertLeaveProcessed = null;
+            PreparedStatement updateLeave = null;
+            String _insertQuery = "INSERT INTO HR_LEAVE_TRANSFER_PROCESSED " +
+                    "  ( " +
+                    "    LEAVE_TRANSFER_PROCESSED_ID, " +
+                    "    REQUEST_ID, " +
+                    "    PROCESSED_BY, " +
+                    "    DECISION, " +
+                    "    COMMENT_GIVEN, " +
+                    "    RECORDED_BY, " +
+                    "    TIME_STAMP " +
+                    "  ) " +
+                    "  VALUES " +
+                    "  ( " +
+                    "    HR_LEAVETransfer_PROCESSED_SEQ.NEXTVAL, " +
+                    "    ?, " +
+                    "    ?, " +
+                    "    ?, " +
+                    "    ?, " +
+                    "    ?, " +
+                    "    ? " +
+                    "  )";
+            String _updateQuery = "UPDATE HR_RESERVE_LEAVE SET STATUS=? WHERE RESERVELAVEID=?";
+            Connection conn = getConnection();
+            conn.setAutoCommit(false);
+            Savepoint savePoint = conn.setSavepoint("RollBackhere");
+            for (HashMap hm : listOfRequest) {
+                insertLeaveProcessed = conn.prepareStatement(_insertQuery);
+                insertLeaveProcessed.setString(1, hm.get("leaveTransferId").toString());
+                insertLeaveProcessed.setString(2, hm.get("deciderId").toString());
+                insertLeaveProcessed.setString(3, decision);
+                insertLeaveProcessed.setString(4, hm.get("commentGiven").toString());
+                insertLeaveProcessed.setString(5, user);
+                insertLeaveProcessed.setString(6, recorededDateAndTime);
+                if (insertLeaveProcessed.executeUpdate() > 0) {
+                    updateLeave = conn.prepareStatement(_updateQuery);
+                    updateLeave.setString(1, currentState);
+                    updateLeave.setString(2, hm.get("leaveTransferId").toString());
+                    if (updateLeave.executeUpdate() <= 0) {
+                        conn.rollback(savePoint);
+                        return false;
+                    }
+
+                } else {
+                    conn.rollback(savePoint);
+                    return false;
+                }
+            }
+            conn.commit();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+    }
+
+    /**
+     * returns ResultSet object of processed leave requests with their current status<br>
+     * Basically intended to show the history of a  given leave request.
+     * @param  the status of the request
+     * @throws  SQLException*/
+    public ResultSet selectProcessedLeaveRequest(int requestId) throws SQLException {
+        String _selectQuery = "SELECT LP.REQUEST_ID, " +
+                "  USR.EMPLOYEE_ID AS RECORDED_BY_ID, " +
+                "  LP.PROCESSED_BY , " +
+                "  LP.RECORDED_BY, " +
+                "  LP.DECISION, " +
+                "  LP.TIME_STAMP, " +
+                "  LP.COMMENT_GIVEN, " +
+                "  EP.FIRST_NAME, " +
+                "  EP.MIDDLE_NAME, " +
+                "  EP.LAST_NAME , " +
+                "  PERMISSION_NAME " +
+                "FROM HR_LEAVE_TRANSFER_PROCESSED LP, " +
+                "  HR_EMPLOYEE_INFO EP, " +
+                "  BIB.TBL_PERMISSION , " +
+                "  BIB.TBL_USERS USR " +
+                "WHERE REQUEST_ID               = " + requestId + "  " +
+                "AND EP.EMP_ID                  =LP.PROCESSED_BY " +
+                "AND USR.EMPLOYEE_ID            =LP.RECORDED_BY " +
+                "AND BIB.TBL_PERMISSION.CODE =LP.DECISION " +
+                "ORDER BY LP.TIME_STAMP";
+
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_selectQuery);
+            _rs = _ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(_rs);
+            return (ResultSet) ocrs;
+        } finally {
+            releaseResources();
+        }
+    }
+
+    /**
+     * returns boolean  of processed leave requests with their current status<br>
+     * Basically intended to show the leave transfer can request leave.
+     * @param  the status of the request
+     * @throws  SQLException*/
+    public boolean checkLeaveTransferStatus(String employeeId) throws SQLException {
+        String _selectQuery = "SELECT COUNT(EMP_ID) AS total " +
+                "FROM HR_RESERVE_LEAVE " +
+                "WHERE (SUBSTR(STATUS,1,3) <> 'App' " +
+                "AND SUBSTR(STATUS,1,3)    <> 'Rej' " +
+                "AND SUBSTR(STATUS,1,3)    <> 'Res' " +
+                "AND EMP_ID                 ='" + employeeId + "')";
+
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_selectQuery);
+            _rs = _ps.executeQuery();
+
+
+            if (_rs.next()) {
+                if (_rs.getInt("total") > 0) {
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+            return true;
+        } finally {
+            releaseResources();
+        }
+    }
+
+    /**
+     * this function check employee request leave transfer by given year
+     * @param employeeId
+     * @param year
+     * @return
+     * @throws java.sql.SQLException
+     */
+    public boolean isRquestBythis(String employeeId, String year) throws SQLException {
+        String _selectQuery = "SELECT COUNT(*) AS TOTAL " +
+                "FROM HR_RESERVE_LEAVE " +
+                "WHERE leaveyear      ='" + year + "'" +
+                "AND SUBSTR(status,1,3)<>'Rej' " +
+                "AND EMP_ID             ='" + employeeId + "'";
+
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_selectQuery);
+            _rs = _ps.executeQuery();
+
+
+            if (_rs.next()) {
+                if (_rs.getInt("TOTAL") > 0) {
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+            return true;
+        } finally {
+            releaseResources();
+        }
+    }
+
+    public static void main(String arg[]) {
+        try {
+            ReserveLeave obj = new ReserveLeave();
+            obj.selectApprovabLeaveTransferRequest("oneqaz");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+}

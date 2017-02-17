@@ -1,0 +1,334 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+package manager.TransportAbsenceDatePaymentManager;
+
+import entity.TransportAbsenceDatePaymentEntity.TransportAbsenceDatePaymentRequestEntity;
+import java.sql.ResultSet;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Date;
+import javax.faces.model.SelectItem;
+import manager.globalUseManager.ErrorLogWriter;
+
+/**
+ *
+ * @author Henok
+ */
+public class TransportAbsenceDatePaymentRequestManager {
+//    String userName;
+    private TransportAbsenceDatePaymentModel transportAbsenceDatePaymentModel;
+    TransportAbsenceDatePaymentRequestEntity transportAbsenceDatePaymentRequestEntity = new TransportAbsenceDatePaymentRequestEntity();
+
+//    public String getUserName() {
+//        return userName;
+//    }
+//
+//    public void setUserName(String userName) {
+//        this.userName = userName;
+//    }
+
+//    public ArrayList<TransportAbsenceDatePaymentModel> getTransportAbsenceDates() {
+//        ArrayList<TransportAbsenceDatePaymentModel> transportAbsenceDateLists = new ArrayList<TransportAbsenceDatePaymentModel>();
+//        try {
+//            ResultSet _rs = transportAbsenceDatePaymentRequestEntity.selectTransportAbsenceDates();
+//            String temp = null;
+//            while (_rs.next()) {
+//                transportAbsenceDatePaymentModel = new TransportAbsenceDatePaymentModel();
+//                 transportAbsenceDatePaymentModel.setAbsenceId(_rs.getInt("ABSENCE_ID"));
+////                transportAbsenceDatePaymentModel.setServiceId(_rs.getString("SERVICE_ID"));
+//                 temp = _rs.getString("SERVICE_ID");
+//                 ResultSet _rs2 = transportAbsenceDatePaymentRequestEntity.selectDestnationName(temp);
+//                 while (_rs2.next()) {
+//                transportAbsenceDatePaymentModel.setServiceName(_rs2.getString("SERVICE_DESTINATION_NAME")); }
+//                transportAbsenceDatePaymentModel.setShift(_rs.getString("SHIFT"));
+//                transportAbsenceDatePaymentModel.setAbsenceDate(_rs.getString("ABSENCE_DATE"));
+//                transportAbsenceDatePaymentModel.setStatus("Old");
+//                transportAbsenceDateLists.add(transportAbsenceDatePaymentModel);
+//            }
+//            return transportAbsenceDateLists;
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//            ErrorLogWriter.writeError(ex);
+//            return null;
+//        }
+//    }
+
+
+    public boolean saveTransportPayment(ArrayList<TransportAbsenceDatePaymentModel> transportPaymentList, String requesterId, String appliedDate, String startDate, String endDate, String userName) {
+//        String recorededDateAndTime = new Timestamp((new Date()).getTime()).toString();
+        try {
+           String recorededDateAndTime = new Timestamp((new Date()).getTime()).toString();
+           String status = TransportAbsenceDatePaymentApproveManager.INITIAL_STATE_TRANSPORT_PAYMENT;
+            transportAbsenceDatePaymentRequestEntity.insertTransportPayment(transportPaymentList, requesterId, appliedDate, startDate, endDate, status, recorededDateAndTime, userName);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    public ArrayList<TransportAbsenceDatePaymentModel> getEmployeeAndTransportPaymentList(int transportPaymentRequestId) {
+        ArrayList<TransportAbsenceDatePaymentModel> requestLists = new ArrayList<TransportAbsenceDatePaymentModel>();
+        try {
+            ResultSet _rs = transportAbsenceDatePaymentRequestEntity.selectEmployeeAndTransportPaymentList(transportPaymentRequestId);
+            while (_rs.next()) {
+                transportAbsenceDatePaymentModel = new TransportAbsenceDatePaymentModel();
+                transportAbsenceDatePaymentModel.setTransportPaymentId(_rs.getInt("TRANSPORT_PAYMENT_EMP_ID"));
+                transportAbsenceDatePaymentModel.setActualLocation(_rs.getString("SERVICE_DESTINATION"));
+                transportAbsenceDatePaymentModel.setEmployeeId(_rs.getString("EMPLOYEE_ID"));
+                transportAbsenceDatePaymentModel.setEmployeeName(_rs.getString("FIRST_NAME") + " " + _rs.getString("MIDDLE_NAME") + " " + _rs.getString("LAST_NAME"));
+                transportAbsenceDatePaymentModel.setServiceAbsenteDate(_rs.getDouble("S_ABSENT_DATE"));
+                transportAbsenceDatePaymentModel.setEmployeeAbsenteDate(_rs.getDouble("E_ABSENT_DATE"));
+                transportAbsenceDatePaymentModel.setTarifPerDay(_rs.getDouble("TARIF_PER_DAY"));
+                transportAbsenceDatePaymentModel.setPaymentForSAbsence(_rs.getDouble("PAYMENT_FOR_S_ABSENT"));
+                transportAbsenceDatePaymentModel.setDaysInMonth(_rs.getInt("DAYS_IN_MONTH"));
+                transportAbsenceDatePaymentModel.setTotalEAbsenteDays(_rs.getInt("TOTAL_E_ABSENT_DAYS"));
+                transportAbsenceDatePaymentModel.setExtraPaymentPerDay(_rs.getDouble("EXTRA_PAYMENT_PER_DAY"));
+                transportAbsenceDatePaymentModel.setPaymentForNoTransport(_rs.getDouble("TOTAL_EXTRA_PAYMENT"));
+                transportAbsenceDatePaymentModel.setTotalPayment(_rs.getDouble("TOTAL_PAYMENT"));
+                requestLists.add(transportAbsenceDatePaymentModel);
+            }
+            return requestLists;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return null;
+        }
+    }
+
+    public ArrayList<TransportAbsenceDatePaymentModel> getAllEmployeeLocationList() {
+        ArrayList<TransportAbsenceDatePaymentModel> requestLists = new ArrayList<TransportAbsenceDatePaymentModel>();
+        try {
+            ResultSet _rs = transportAbsenceDatePaymentRequestEntity.selectAllEmployeeLocationList();
+            while (_rs.next()) {
+                transportAbsenceDatePaymentModel = new TransportAbsenceDatePaymentModel();
+                transportAbsenceDatePaymentModel.setEmpLocationId(_rs.getInt("EMPLOCATIONID"));
+                transportAbsenceDatePaymentModel.setEmpId(_rs.getString("EMP_ID"));
+                transportAbsenceDatePaymentModel.setLocationId(_rs.getInt("LOCATIONID"));
+
+                requestLists.add(transportAbsenceDatePaymentModel);
+            }
+            return requestLists;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return null;
+        }
+    }
+
+//    public int getAllTransportAbsenteDateList(String serviceId, String shift, String date) {
+//        int exist = 0;
+//        try {
+//
+//            ResultSet _rs = transportAbsenceDatePaymentRequestEntity.selectTransportAbsentDayList(serviceId, shift, date);
+//            while (_rs.next()) {
+//                exist = 1;
+//            }
+//            return exist;
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//            ErrorLogWriter.writeError(ex);
+//            return 0;
+//        }
+//    }
+
+//    public ArrayList<TransportAbsenceDatePaymentModel> getAllTransportAbsenteDateList(String serviceId, String shift, String date) {
+//        ArrayList<TransportAbsenceDatePaymentModel> requestLists = new ArrayList<TransportAbsenceDatePaymentModel>();
+//        try {
+//
+//            ResultSet _rs = transportAbsenceDatePaymentRequestEntity.selectTransportAbsentDayList(serviceId, shift, date);
+//            String temp = null;
+//            while (_rs.next()) {
+//                transportAbsenceDatePaymentModel = new TransportAbsenceDatePaymentModel();
+//                transportAbsenceDatePaymentModel = new TransportAbsenceDatePaymentModel();
+//                 transportAbsenceDatePaymentModel.setAbsenceId(_rs.getInt("ABSENCE_ID"));
+////                transportAbsenceDatePaymentModel.setServiceId(_rs.getString("SERVICE_ID"));
+//                 temp = _rs.getString("SERVICE_ID");
+//                 ResultSet _rs2 = transportAbsenceDateRegistrationEntity.selectDestnationName(temp);
+//                 while (_rs2.next()) {
+//                transportAbsenceDatePaymentModel.setServiceName(_rs2.getString("SERVICE_DESTINATION_NAME")); }
+//                transportAbsenceDatePaymentModel.setShift(_rs.getString("SHIFT"));
+//                transportAbsenceDatePaymentModel.setInOut(_rs.getString("INOROUT"));
+//                transportAbsenceDatePaymentModel.setAbsenceDate(_rs.getString("ABSENCE_DATE"));
+//                transportAbsenceDatePaymentModel.setStatus("Old");
+//                requestLists.add(transportAbsenceDatePaymentModel);
+//            }
+//            return requestLists;
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//            ErrorLogWriter.writeError(ex);
+//            return null;
+//        }
+//    }
+
+//    public int getAllEmployeeAbsenteDateList(String empId,  String date) {
+//        int exist = 0;
+//        try {
+//
+//            ResultSet _rs = transportAbsenceDatePaymentRequestEntity.selectEmployeeAbsentDayList(empId,  date);
+//            while (_rs.next()) {
+//                exist = 1;
+//            }
+//            return exist;
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//            ErrorLogWriter.writeError(ex);
+//            return 0;
+//        }
+//    }
+
+    public ArrayList<TransportAbsenceDatePaymentModel> getAllEmployeeAbsenteDateList(String empId,  String date) {
+        ArrayList<TransportAbsenceDatePaymentModel> requestLists = new ArrayList<TransportAbsenceDatePaymentModel>();
+        try {
+
+            ResultSet _rs = transportAbsenceDatePaymentRequestEntity.selectEmployeeAbsentDayList(empId,  date);
+            String temp = null;
+            while (_rs.next()) {
+                transportAbsenceDatePaymentModel = new TransportAbsenceDatePaymentModel();
+                transportAbsenceDatePaymentModel.setServiceId(_rs.getString("ID"));
+//                transportAbsenceDatePaymentModel.setServiceId(_rs.getString("SERVICE_ID"));
+                transportAbsenceDatePaymentModel.setServiceName(_rs.getString("EMP_ID"));
+                transportAbsenceDatePaymentModel.setShift(_rs.getString("ATTENDANCETAKENDATE"));
+                transportAbsenceDatePaymentModel.setAbsenceDate(_rs.getString("ABSENTAMOUNT"));
+                transportAbsenceDatePaymentModel.setStatus(_rs.getString("DAYDESCRIPTION"));
+                requestLists.add(transportAbsenceDatePaymentModel);
+            }
+            return requestLists;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return null;
+        }
+    }
+
+    public ArrayList<TransportAbsenceDatePaymentModel> getServiceInformation(int locationId) {
+        ArrayList<TransportAbsenceDatePaymentModel> requestLists = new ArrayList<TransportAbsenceDatePaymentModel>();
+
+        try {
+
+            ResultSet _rs = transportAbsenceDatePaymentRequestEntity.selectServiceInformation(locationId);
+            while (_rs.next()) {
+                transportAbsenceDatePaymentModel = new TransportAbsenceDatePaymentModel();
+                transportAbsenceDatePaymentModel.setServiceId(_rs.getString("SERVICE_DESTINATIONS"));
+                transportAbsenceDatePaymentModel.setExtraPaymentPerDay(_rs.getDouble("EXTRA_TARIF"));
+                transportAbsenceDatePaymentModel.setActualLocation(_rs.getString("ACTUAL_LOCATION"));
+                requestLists.add(transportAbsenceDatePaymentModel);
+            }
+            return requestLists;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return null;
+        }
+    }
+
+    public double getTarif(int serviceId) {
+        double requestLists = 0.0;
+
+        try {
+
+            ResultSet _rs = transportAbsenceDatePaymentRequestEntity.selectTarif(serviceId);
+            while (_rs.next()) {
+
+                requestLists = _rs.getDouble("TARIF");
+
+            }
+            return requestLists;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return 0;
+        }
+    }
+
+//    public String getEmpDept(String empId) {
+//        String deptName = null;
+//        try {
+//
+//            ResultSet _rs = transportAbsenceDatePaymentRequestEntity.selectEmpDept(empId);
+//            while (_rs.next()) {
+//                deptName = _rs.getString("dept_name");
+//            }
+//            return deptName;
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//            ErrorLogWriter.writeError(ex);
+//            return null;
+//        }
+//    }
+
+    public String getEmpLocation(String empId) {
+        String locationName = null;
+        try {
+
+            ResultSet _rs = transportAbsenceDatePaymentRequestEntity.selectEmpLocation(empId);
+            while (_rs.next()) {
+                locationName = _rs.getString("LOCATION");
+            }
+            return locationName;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return null;
+        }
+    }
+
+    public ArrayList<SelectItem> getPendingRequests(String loggedInEmployeeId) {
+        ArrayList<SelectItem> requestLists = new ArrayList<SelectItem>();
+        try {
+            ResultSet _rs = transportAbsenceDatePaymentRequestEntity.selectPendingRequests(loggedInEmployeeId);
+            while (_rs.next()) {
+                SelectItem currentRequest = new SelectItem(_rs.getString("TRANSPORT_PAYMENT_REQUEST_ID") + "--" + _rs.getString("REQUESTER_ID") + "--" + _rs.getString("REQUEST_STATUS"), _rs.getString("REQUESTER_ID") + " ON " + _rs.getString("REQUEST_DATE"));
+                requestLists.add(currentRequest);
+            }
+            _rs.close();
+            return requestLists;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return null;
+        }
+    }
+
+    public ArrayList<SelectItem> getMyRequestsHistory(String loggedInEmployeeId) {
+        ArrayList<SelectItem> requestLists = new ArrayList<SelectItem>();
+        try {
+            ResultSet _rs = transportAbsenceDatePaymentRequestEntity.selectMyRequestsHistory(loggedInEmployeeId);
+            while (_rs.next()) {
+//                SelectItem currentRequest = new SelectItem(_rs.getString("TRANSPORT_PAYMENT_REQUEST_ID") + "--" + _rs.getString("REQUESTER_ID") + "--" + _rs.getString("REQUEST_STATUS"), _rs.getString("REQUESTER_ID") + " ON " + _rs.getString("REQUEST_DATE")+ " - " + _rs.getString("REQUEST_STATUS"));
+                SelectItem currentRequest = new SelectItem(_rs.getString("TRANSPORT_PAYMENT_REQUEST_ID") + "--" + _rs.getString("REQUESTER_ID") + "--" + _rs.getString("REQUEST_STATUS"), _rs.getString("REQUESTER_ID") + " ON " + _rs.getString("REQUEST_DATE"));
+                requestLists.add(currentRequest);
+            }
+            _rs.close();
+            return requestLists;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return null;
+        }
+    }
+
+    public TransportAbsenceDatePaymentModel getRequestAttributes(int transportPaymentRequestId) {
+        transportAbsenceDatePaymentModel = new TransportAbsenceDatePaymentModel();
+        try {
+            ResultSet _rs = transportAbsenceDatePaymentRequestEntity.selectRequestAttributes(transportPaymentRequestId);
+            if (_rs.next()) {
+                transportAbsenceDatePaymentModel.setTransportPaymentId(_rs.getInt("TRANSPORT_PAYMENT_REQUEST_ID"));
+                transportAbsenceDatePaymentModel.setRequestDate(_rs.getString("REQUEST_DATE"));
+                transportAbsenceDatePaymentModel.setStartDate(_rs.getString("START_DATE"));
+                transportAbsenceDatePaymentModel.setEndDate(_rs.getString("END_DATE"));
+            } else {
+                transportAbsenceDatePaymentModel.setTransportPaymentId(-1);
+            }
+            return transportAbsenceDatePaymentModel;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return null;
+        }
+    }
+
+}

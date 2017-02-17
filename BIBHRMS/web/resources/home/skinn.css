@@ -1,0 +1,74 @@
+#carousel {
+    width:250px;
+    height:40px;
+    margin:0 auto;
+}
+#slides {
+    overflow:hidden;
+    /* fix ie overflow issue */
+    position:relative;
+    width:250px;
+    height:100px;
+    border:0px solid #ccc;
+}
+
+/* remove the list styles, width : item width * total items */
+#slides ul {
+    position:relative;
+    left:0;
+    top:0;
+    list-style:none;
+    margin:0;
+    padding:0;
+    width:750px;
+}
+
+/* width of the item, in this case I put 250x250x gif */
+#slides li {
+    width:250px;
+    height:250px;
+    float:left;
+}
+#slides li a {
+    font-size:13.5px;
+    color:#008000;
+    font-family:verdana, Arial, Helvetica, sans-serif;
+}
+#slides li img {
+    padding:5px;
+}
+
+/* Styling for prev and next buttons */
+#buttons {
+    padding:0 0 5px 0;
+    float:right;
+}
+
+#buttons a {
+    display:block;
+    width:31px;
+    height:32px;
+    text-indent:-999em;
+    float:left;
+    outline:0;
+}
+a#prev {
+    background:url(./images/arrowPrev.gif) 0 -31px no-repeat;
+}
+
+a#prev:hover {
+    background:url(./images/arrowPrev.gif) 0 0 no-repeat;
+}
+
+a#next {
+    background:url(./images/arrowNext.gif) 0 -31px no-repeat;
+}
+
+a#next:hover {
+    background:url(./images/arrowNext.gif) 0 0 no-repeat;
+}
+
+.clear {clear:both}
+.clear {clear:both}
+.jcarousel-control ul li a.active {font-weight:bold}
+.jcarousel-control ul li a.inactive{font-weight:normal}

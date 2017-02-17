@@ -1,0 +1,183 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package manager.globalUseManager;
+
+/**
+ *
+ * @author ONEJAVA
+ */
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import org.joda.time.Chronology;
+import org.joda.time.DateTime;
+import org.joda.time.chrono.EthiopicChronology;
+import org.joda.time.chrono.GregorianChronology;
+import org.joda.time.Months;
+
+/**
+ *
+ * @author one
+ */
+public class JodanTimeCalender {
+
+    public int ChangeDateToGC(String Years, String Month, String Days) {
+        Date dateFrom;
+        DateTime dt = new DateTime();
+        Chronology ethiopic = EthiopicChronology.getInstance();
+        Chronology gregorian = GregorianChronology.getInstance();
+        dt = dt.withChronology(ethiopic);
+        int year = Integer.parseInt(Years);
+        int monthOfYear = Integer.parseInt(Month);
+        int dayOfMonth = Integer.parseInt(Days);
+        dt = dt.withDate(year, monthOfYear, dayOfMonth);
+        dateFrom = new Date();
+        dateFrom = dt.withChronology(gregorian).toDate();
+        return dt.getDayOfWeek();
+    }
+
+    public int ChangeDateToEt(String Years, String Month, String Days) {
+        Date dateFrom;
+        DateTime dt = new DateTime();
+        Chronology ethiopic = EthiopicChronology.getInstance();
+        Chronology gregorian = GregorianChronology.getInstance();
+        dt = dt.withChronology(ethiopic);
+        int year = Integer.parseInt(Years);
+        int monthOfYear = Integer.parseInt(Month);
+        int dayOfMonth = Integer.parseInt(Days);
+
+        dt = dt.withDate(year, monthOfYear, dayOfMonth);
+        dateFrom = new Date();
+        dateFrom = dt.withChronology(gregorian).toDate();
+
+
+        return dt.getDayOfWeek();
+    }
+
+    public String ChangeDateToEthiopic(String dt) {
+        DateTime dt2 = new DateTime(dt);
+        Chronology ethiopic = EthiopicChronology.getInstance();
+        dt2 = dt2.withChronology(ethiopic);
+        String changeDate = dt2.toString();
+        changeDate = changeDate.substring(0, 10);
+        return changeDate;
+    }
+
+    public String currentDateFinder() {
+        Date dt = new java.util.Date();
+        DateTime contentDate = new DateTime(dt.getTime());
+        Chronology ethiopic = EthiopicChronology.getInstance();
+        contentDate = contentDate.withChronology(ethiopic);
+        Object etDat = contentDate;
+        String etDate = etDat.toString();
+        etDate = etDate.substring(0, 10);
+        return etDate;
+    }
+
+    public String currentDayOnlyFinder() {
+        Date dt = new java.util.Date();
+        DateTime contentDate = new DateTime(dt.getTime());
+        Chronology ethiopic = EthiopicChronology.getInstance();
+        contentDate = contentDate.withChronology(ethiopic);
+        Object etDat = contentDate;
+        String etDate = etDat.toString();
+        etDate = etDate.substring(8, 10);
+        return etDate;
+    }
+
+    public String currentForeignersDateFinder() {
+        Date dt = new java.util.Date();
+        DateTime contentDate = new DateTime(dt.getTime());
+        String etDate = contentDate.toString();
+        etDate = etDate.substring(0, 10);
+        return etDate;
+    }
+
+    public String currentMonthOnlyFinder() {
+        Date dt = new java.util.Date();
+        DateTime contentDate = new DateTime(dt.getTime());
+        Chronology ethiopic = EthiopicChronology.getInstance();
+        contentDate = contentDate.withChronology(ethiopic);
+        Object etDat = contentDate;
+        String etDate = etDat.toString();
+        etDate = etDate.substring(5, 7);
+        return etDate;
+    }
+
+    public String currentYearAndMonthFinder() {
+        Date dt = new java.util.Date();
+        DateTime contentDate = new DateTime(dt.getTime());
+        Chronology ethiopic = EthiopicChronology.getInstance();
+        contentDate = contentDate.withChronology(ethiopic);
+        Object etDat = contentDate;
+        String etDate = etDat.toString();
+        etDate = etDate.substring(0, 7);
+        return etDate;
+    }
+
+    public Integer currentYearOnlyFinder() {
+        Date dt = new java.util.Date();
+        DateTime contentDate = new DateTime(dt.getTime());
+        Chronology ethiopic = EthiopicChronology.getInstance();
+        contentDate = contentDate.withChronology(ethiopic);
+        Object etDat = contentDate;
+        String etDate = etDat.toString();
+        etDate = etDate.substring(0, 4);
+        return Integer.parseInt(etDate);
+    }
+
+    public String dateFormatMaker(String year, String month, String day) {
+        String modifiedDate;
+        modifiedDate = year + "/" + month + "/" + day;
+        return modifiedDate;
+    }
+
+    public int dayOfTheWeekFinder(int year, int month, int date) {
+        DateTime dt = new DateTime();
+        Chronology ethiopic = EthiopicChronology.getInstance();
+        dt = dt.withChronology(ethiopic);
+        dt = dt.withDate(year, month, date);
+        return dt.getDayOfWeek();
+    }
+
+//    public static void main(String arg[]) {
+//        JodanTimeCalender jodanTimeCalender = new JodanTimeCalender();
+//        String currentDate=jodanTimeCalender.currentForeignersDateFinder();
+//
+//    }
+    public static String foreignersToday() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String date = dateFormat.format(new Date()).toString();
+        return date;
+    }
+
+    public static int yearDiffrenceStartingFromNow(String date) {
+        DateTime givenDate = new DateTime().withDate(StringDateManipulation.getYear(date),
+                StringDateManipulation.getMonth(date), StringDateManipulation.getDate(date));
+        Months d = Months.monthsBetween(givenDate, new DateTime());
+        int monthsDiff = d.getMonths();
+        return monthsDiff / 12;
+    }
+
+    public static void main(String arg[]) {
+        DateTime x = new DateTime().withDate(2005, 12, 20); // doomsday lol
+
+        Months d = Months.monthsBetween(x, new DateTime());
+        int monthsDiff = d.getMonths();
+//        System.out.println(d.getFieldType());
+//        System.out.println(monthsDiff / 12);
+        //
+
+
+        JodanTimeCalender jodanTimeCalender=new JodanTimeCalender();
+
+
+       
+
+    }
+}

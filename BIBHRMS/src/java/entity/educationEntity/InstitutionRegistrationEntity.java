@@ -1,0 +1,236 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package entity.educationEntity;
+
+import connectionProvider.ConnectionManager;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import manager.educationManager.InstitutionModel;
+import oracle.jdbc.rowset.OracleCachedRowSet;
+
+/**
+ *
+ * @author mekete
+ */
+public class InstitutionRegistrationEntity extends ConnectionManager {
+
+    Connection _con = null;
+    PreparedStatement _ps = null;
+    ResultSet _rs = null;
+
+    public void releaseResources() throws SQLException {
+        if (_rs != null) {
+            _rs.close();
+            _rs = null;
+        }
+        if (_ps != null) {
+            _ps.close();
+            _ps = null;
+        }
+        if (_con != null) {
+            _con.close();
+            closePooledConnections(_con);
+        }
+    }
+
+    public int insertInstitution(InstitutionModel institutionModel) throws SQLException {
+        String _insertQuery = "INSERT " +
+                "INTO  HR_LU_EDUC_INSTITUTION " +
+                "  ( " +
+                "    INSTITUTION_ID, " +
+                "    INSTITUTION_NAME, " +
+                "    INSTITUTION_DESCRIPTION, " +
+                "    EDUCATION_OR_TRAINING, " +
+                "    ACCREDITED_OR_NOT, " +
+                "    TIN_NUMBER, " +
+                "    LOCATION_CATEGORY, " +
+                "    LOCATION_DESCRIPTION, " +
+                "    CONTACT_PERSON, " +
+                "    PHONE_NUMBER, " +
+                "    FAX_NUMBER, " +
+                "    EMAIL_ADDRESS, " +
+                "    WEB_SITE, " +
+                "    REMARK, STATUS, TIME_STAMP, USER_NAME )" +
+                " VALUES (HR_EDUC_INSTITUTION_SEQ.NEXTVAL,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ";
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_insertQuery);
+            _ps.setString(1, institutionModel.getInstitutionName());
+            _ps.setString(2, institutionModel.getInstitutionDescription());
+            _ps.setString(3, institutionModel.getEducationOrTraining());
+            _ps.setString(4, institutionModel.getAccreditedOrNot());
+            _ps.setString(5, institutionModel.getTinNumber());
+            _ps.setString(6, institutionModel.getLocationCategory());
+            _ps.setString(7, institutionModel.getLocationDescription());
+            _ps.setString(8, institutionModel.getContactPerson());
+            _ps.setString(9, institutionModel.getPhoneNomber());
+            _ps.setString(10, institutionModel.getFaxNumber());
+            _ps.setString(11, institutionModel.getEmailAddress());
+            _ps.setString(12, institutionModel.getWebSite());
+            _ps.setString(13, institutionModel.getRemark());
+            _ps.setString(14, institutionModel.getStatus());
+            _ps.setString(15, institutionModel.getTimeStamp());
+            _ps.setString(16, institutionModel.getUserName());
+            return _ps.executeUpdate();
+        } finally {
+            releaseResources();
+        }
+    }
+
+    public int updateInstitution(InstitutionModel institutionModel) throws SQLException {
+        String _updateQuery = "UPDATE " +
+                " HR_LU_EDUC_INSTITUTION  SET  " +
+                "    INSTITUTION_NAME = ? , " +
+                "    INSTITUTION_DESCRIPTION = ? , " +
+                "    EDUCATION_OR_TRAINING = ? , " +
+                "    ACCREDITED_OR_NOT = ? , " +
+                "    TIN_NUMBER = ? , " +
+                "    LOCATION_CATEGORY = ? , " +
+                "    LOCATION_DESCRIPTION = ? , " +
+                "    CONTACT_PERSON = ? , " +
+                "    PHONE_NUMBER = ? , " +
+                "    FAX_NUMBER = ? , " +
+                "    EMAIL_ADDRESS = ? , " +
+                "    WEB_SITE = ? , " +
+                "    REMARK = ? , " +
+                "    STATUS = ? , " +
+                "    TIME_STAMP = ? , " +
+                "    USER_NAME = ? " +
+                " WHERE     INSTITUTION_ID = ? ";
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_updateQuery);
+            _ps.setString(1, institutionModel.getInstitutionName());
+            _ps.setString(2, institutionModel.getInstitutionDescription());
+            _ps.setString(3, institutionModel.getEducationOrTraining());
+            _ps.setString(4, institutionModel.getAccreditedOrNot());
+            _ps.setString(5, institutionModel.getTinNumber());
+            _ps.setString(6, institutionModel.getLocationCategory());
+            _ps.setString(7, institutionModel.getLocationDescription());
+            _ps.setString(8, institutionModel.getContactPerson());
+            _ps.setString(9, institutionModel.getPhoneNomber());
+            _ps.setString(10, institutionModel.getFaxNumber());
+            _ps.setString(11, institutionModel.getEmailAddress());
+            _ps.setString(12, institutionModel.getWebSite());
+            _ps.setString(13, institutionModel.getRemark());
+            _ps.setString(14, institutionModel.getStatus());
+            _ps.setString(15, institutionModel.getTimeStamp());
+            _ps.setString(16, institutionModel.getUserName());
+            _ps.setInt(17, institutionModel.getInstitutionId());
+            return _ps.executeUpdate();
+        } finally {
+            releaseResources();
+        }
+    }
+
+    public int deleteInstitution(int institutionId) throws SQLException {
+        String _deleteQuery = "DELETE  HR_LU_EDUC_INSTITUTION  " +
+                " WHERE     INSTITUTION_ID = ? ";
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_deleteQuery);
+            _ps.setInt(1, institutionId);
+            return _ps.executeUpdate();
+        } finally {
+            releaseResources();
+        }
+    }
+
+    public ResultSet selectInstitution() throws SQLException {
+        String _selectQuery = " SELECT * FROM HR_LU_EDUC_INSTITUTION ";
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_selectQuery);
+            _rs = _ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(_rs);
+            return (ResultSet) ocrs;
+        } finally {
+            releaseResources();
+        }
+    }
+    
+    public ResultSet selectActiveTrainingInstitution() throws SQLException {
+        String _selectQuery = "SELECT * " +
+                "FROM HR_LU_EDUC_INSTITUTION " +
+                "WHERE LOCATION_CATEGORY = 'IN' AND " +
+                "EDUCATION_OR_TRAINING = 'TRAI'";//either training or both//ACCREDITED_OR_NOT               ='AC' AND  
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_selectQuery);
+            _rs = _ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(_rs);
+            return (ResultSet) ocrs;
+        } finally {
+            releaseResources();
+        }
+    }
+
+    public ResultSet selectOutsideTrainingInstitution() throws SQLException {
+        String _selectQuery = "SELECT * " +
+                "FROM  HR_LU_EDUC_INSTITUTION " +
+                "WHERE LOCATION_CATEGORY = 'OUT' AND " +   //STATUS               ='AC' AND
+                "EDUCATION_OR_TRAINING = 'TRAI'";//either training or both//ACCREDITED_OR_NOT               ='AC' AND 
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_selectQuery);
+            _rs = _ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(_rs);
+            return (ResultSet) ocrs;
+        } finally {
+            releaseResources();
+        }
+    }
+
+    public ResultSet selectEducationInstitution() throws SQLException {
+        String _selectQuery = " SELECT * FROM  HR_LU_EDUC_INSTITUTION" +
+                " WHERE EDUCATION_OR_TRAINING = 'EDUC' OR EDUCATION_OR_TRAINING= 'BOTH' ";
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_selectQuery);
+            _rs = _ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(_rs);
+            return (ResultSet) ocrs;
+        } finally {
+            releaseResources();
+        }
+    }
+
+    public ResultSet selectTrainingInstitution() throws SQLException {
+        String _selectQuery = " SELECT * FROM  HR_LU_EDUC_INSTITUTION " +
+                " WHERE EDUCATION_OR_TRAINING = 'TRAI' OR EDUCATION_OR_TRAINING= 'BOTH' ";
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_selectQuery);
+            _rs = _ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(_rs);
+            return (ResultSet) ocrs;
+        } finally {
+            releaseResources();
+        }
+    }
+
+    public ResultSet selectInstitution(int institutionId) throws SQLException {
+        String _selectQuery = " SELECT * FROM  HR_LU_EDUC_INSTITUTION " +
+                " WHERE INSTITUTION_ID = ?";
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_selectQuery);
+            _ps.setInt(1, institutionId);
+            _rs = _ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(_rs);
+            return (ResultSet) ocrs;
+        } finally {
+            releaseResources();
+        }
+    }
+}

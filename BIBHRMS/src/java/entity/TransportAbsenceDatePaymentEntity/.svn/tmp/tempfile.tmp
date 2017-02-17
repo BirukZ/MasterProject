@@ -1,0 +1,357 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+package entity.TransportAbsenceDatePaymentEntity;
+
+import connectionProvider.ConnectionManager;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+import manager.TransportAbsenceDatePaymentManager.TransportAbsenceDatePaymentApproveManager;
+import manager.TransportAbsenceDatePaymentManager.TransportAbsenceDatePaymentModel;
+import oracle.jdbc.rowset.OracleCachedRowSet;
+
+/**
+ *
+ * @author Henok
+ */
+public class TransportAbsenceDatePaymentRequestEntity extends ConnectionManager{
+
+    Connection _con = null;
+    PreparedStatement _ps = null;
+    ResultSet _rs = null;
+
+    public void releaseResources() throws SQLException {
+        if (_rs != null) {
+            _rs.close();
+        }
+        if (_ps != null) {
+            _ps.close();
+        }
+        if (_con != null) {
+            closePooledConnections(_con);
+        }
+    }
+
+//    public ResultSet selectTransportAbsenceDates() throws SQLException {
+//        String _selectQuery = " SELECT ABSENCE_ID, SERVICE_ID, SHIFT, ABSENCE_DATE " +
+//                //  " SELECT OVER_TIME_EMPLOYEE_ID, REQUEST_ID, EMPLOYEE_ID, START_DATE, START_TIME, END_DATE, END_TIME, OVER_TIME_FACTOR,STATUS, " +
+//                " FROM HR_TRANSPORT_ABSENCE_DATE  ";
+//
+//        try {
+//            _con = getConnection();
+//            _ps = _con.prepareStatement(_selectQuery);
+//            _rs = _ps.executeQuery();
+//            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+//            ocrs.populate(_rs);
+//            return (ResultSet) ocrs;
+//        } finally {
+//            releaseResources();
+//        }
+//    }
+
+    public ResultSet selectDestnationName(String serviceId) throws SQLException {
+        String _selectQuery = " SELECT SERVICE_DESTINATION_NAME " +
+                //  " SELECT OVER_TIME_EMPLOYEE_ID, REQUEST_ID, EMPLOYEE_ID, START_DATE, START_TIME, END_DATE, END_TIME, OVER_TIME_FACTOR,STATUS, " +
+                " FROM HR_LU_TRANSPORT_SERVIVE  " +
+                " WHERE SERVICE_ID = '"+ serviceId+"'" ;
+
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_selectQuery);
+            _rs = _ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(_rs);
+            return (ResultSet) ocrs;
+        } finally {
+            releaseResources();
+        }
+    }
+
+    public boolean insertTransportPayment(ArrayList<TransportAbsenceDatePaymentModel> transportPaymentList, String requesterId, String appliedDate,
+            String startDate, String endDate, String status, String recorededDateAndTime, String userName) throws SQLException {
+
+        String _insertAttributesQuery = "INSERT " +
+                "INTO HR_TRANSPORT_PAYMENT_REQUEST " +
+                "  ( " +
+                "    TRANSPORT_PAYMENT_REQUEST_ID, " +
+                "    REQUESTER_ID, " +
+                "    REQUEST_DATE, " +
+                "    START_DATE, " +
+                "    END_DATE, " +
+                "    REQUEST_STATUS, " +
+                "    TIME_STAMP, " +
+                "    USER_NAME " +
+                "  )" +
+                " VALUES( HR_TRANSPORT_PAYMENT_SEQ.NEXTVAL,?,?,?,?,?,?,? )";
+
+        String _insertParticipantsListQuery = "INSERT INTO HR_TRANSPORT_PAYMENT_EMP_LIST " +
+                "  ( " +
+                "    TRANSPORT_PAYMENT_EMP_ID, " +
+                "    TRANSPORT_PAYMENT_REQUEST_ID, " +
+                "    EMPLOYEE_ID, " +
+                "    S_ABSENT_DATE, " +
+                "    E_ABSENT_DATE, " +
+                "    TARIF_PER_DAY, " +
+                "    PAYMENT_FOR_S_ABSENT, " +
+                "    DAYS_IN_MONTH, " +
+                "    TOTAL_E_ABSENT_DAYS, " +
+                "    EXTRA_PAYMENT_PER_DAY, " +
+                "    TOTAL_EXTRA_PAYMENT, " +
+                "    TOTAL_PAYMENT, " +
+                "    SERVICE_DESTINATION " +
+                "  ) " +
+                "  VALUES " +
+                "  ( HR_TRANSPORT_PAYMENT_EMP_SEQ.NEXTVAL, HR_TRANSPORT_PAYMENT_SEQ.CURRVAL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_insertAttributesQuery);
+            _ps.setString(1, requesterId);
+            _ps.setString(2, appliedDate);
+            _ps.setString(3, startDate);
+            _ps.setString(4, endDate);
+            _ps.setString(5, status);
+            _ps.setString(6, recorededDateAndTime);
+            _ps.setString(7, userName);
+            _ps.executeQuery();
+            //============
+            _ps = _con.prepareStatement(_insertParticipantsListQuery);
+            for (TransportAbsenceDatePaymentModel currentRequest : transportPaymentList) {
+                _ps.setString(1, currentRequest.getEmployeeId());
+                _ps.setDouble(2, currentRequest.getServiceAbsenteDate());
+                _ps.setDouble(3, currentRequest.getEmployeeAbsenteDate());
+                _ps.setDouble(4, currentRequest.getTarifPerDay());
+                _ps.setDouble(5, currentRequest.getPaymentForSAbsence());
+                _ps.setDouble(6, currentRequest.getDaysInMonth());
+                _ps.setDouble(7, currentRequest.getTotalEAbsenteDays());
+                _ps.setDouble(8, currentRequest.getExtraPaymentPerDay());
+                _ps.setDouble(9, currentRequest.getPaymentForNoTransport());
+                _ps.setDouble(10, currentRequest.getTotalPayment());
+                _ps.setString(11, currentRequest.getActualLocation());
+                _ps.addBatch();
+            }
+            _ps.executeBatch();
+            return true;
+        } finally {
+            releaseResources();
+        }
+    }
+
+    public ResultSet selectEmployeeAndTransportPaymentList(int requestId) throws SQLException {
+        String _selectQuery = " SELECT TRANSPORT_PAYMENT_EMP_ID, TRANSPORT_PAYMENT_REQUEST_ID, EMPLOYEE_ID, S_ABSENT_DATE, E_ABSENT_DATE, TARIF_PER_DAY, PAYMENT_FOR_S_ABSENT, DAYS_IN_MONTH, TOTAL_E_ABSENT_DAYS, EXTRA_PAYMENT_PER_DAY, TOTAL_EXTRA_PAYMENT, TOTAL_PAYMENT, SERVICE_DESTINATION, " +
+                //  " SELECT OVER_TIME_EMPLOYEE_ID, REQUEST_ID, EMPLOYEE_ID, START_DATE, START_TIME, END_DATE, END_TIME, OVER_TIME_FACTOR,STATUS, " +
+                " FIRST_NAME,MIDDLE_NAME,LAST_NAME, DEPARTMENT_NAME " +
+                " FROM VW_EMPLOYEE_BY_DEPARTMENT_LIST  , HR_TRANSPORT_PAYMENT_EMP_LIST  " +
+                " WHERE   EMPLOYEE_ID=EMP_ID" +
+                " and TRANSPORT_PAYMENT_REQUEST_ID= " + requestId+" " +
+                " ORDER BY SERVICE_DESTINATION ASC";
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_selectQuery);
+            _rs = _ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(_rs);
+            return (ResultSet) ocrs;
+        } finally {
+            releaseResources();
+        }
+    }
+
+    public ResultSet selectAllEmployeeLocationList() throws SQLException {
+        String _selectQuery = " SELECT * " +
+                " FROM HR_EMP_LOCATION  " +
+                " ORDER BY LOCATIONID ASC ";
+
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_selectQuery);
+            _rs = _ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(_rs);
+            return (ResultSet) ocrs;
+        } finally {
+            releaseResources();
+        }
+    }
+
+//    public ResultSet selectTransportAbsentDayList(String serviceId, String shift, String date) throws SQLException {
+//        String _selectQuery = " SELECT * " +
+//                " FROM HR_TRANSPORT_ABSENCE_DATE  "+
+//                " WHERE   SERVICE_ID= '"+ serviceId + "'"+
+//                " and SHIFT= '"+ shift + "'"+
+//                " and ABSENCE_DATE= '" + date+"'";
+//        try {
+//            _con = getConnection();
+//            _ps = _con.prepareStatement(_selectQuery);
+//            _rs = _ps.executeQuery();
+//            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+//            ocrs.populate(_rs);
+//            return (ResultSet) ocrs;
+//        } finally {
+//            releaseResources();
+//        }
+//    }
+
+    public ResultSet selectEmployeeAbsentDayList(String empId, String date) throws SQLException {
+        String _selectQuery = " SELECT * " +
+                " FROM HR_EMP_ATTENDANCE  "+
+                " WHERE   EMP_ID= '"+ empId + "'"+
+                " and ATTENDANCETAKENDATE= '" + date+"'";
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_selectQuery);
+            _rs = _ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(_rs);
+            return (ResultSet) ocrs;
+        } finally {
+            releaseResources();
+        }
+    }
+
+    public ResultSet selectServiceInformation(int locationId) throws SQLException {
+        String _selectQuery = " SELECT SERVICE_DESTINATIONS, EXTRA_TARIF, ACTUAL_LOCATION " +
+                " FROM HR_LU_LOCATION  "+
+                " WHERE   LOCATION_ID= "+ locationId+"";
+
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_selectQuery);
+            _rs = _ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(_rs);
+            return (ResultSet) ocrs;
+        } finally {
+            releaseResources();
+        }
+    }
+
+    public ResultSet selectTarif(int serviceId) throws SQLException {
+        String _selectQuery = " SELECT TARIF " +
+                " FROM HR_LU_TRANSPORT_SERVIVE  "+
+                " WHERE   ID= "+ serviceId+"";
+
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_selectQuery);
+            _rs = _ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(_rs);
+            return (ResultSet) ocrs;
+        } finally {
+            releaseResources();
+        }
+    }
+
+//    public ResultSet selectEmpDept(String empId) throws SQLException {
+//        String _selectQuery = "SELECT de.dept_name " +
+//                "FROM hr_employee_info EI, " +
+//                "  tbl_department DE " +
+//                "WHERE EI.DEPARTMENT_ID=DE.DEPT_ID " +
+//                "AND EI.EMP_ID         = '"+empId+"'";
+////                "AND (DE.DEPT_NAME LIKE '%Mugher%' " +
+////                "OR DE.DEPT_NAME LIKE '%???%' )";
+//
+//        try {
+//            _con = getConnection();
+//            _ps = _con.prepareStatement(_selectQuery);
+//            _rs = _ps.executeQuery();
+//            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+//            ocrs.populate(_rs);
+//            return (ResultSet) ocrs;
+//        } finally {
+//            releaseResources();
+//        }
+//    }
+
+    public ResultSet selectEmpLocation(String empId) throws SQLException {
+        String _selectQuery = "SELECT LOCATION " +
+                "FROM HR_EMPLOYEE_INFO " +
+                "WHERE EMP_ID         = '"+empId+"'";
+//                "AND (DE.DEPT_NAME LIKE '%Mugher%' " +
+//                "OR DE.DEPT_NAME LIKE '%???%' )";
+
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_selectQuery);
+            _rs = _ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(_rs);
+            return (ResultSet) ocrs;
+        } finally {
+            releaseResources();
+        }
+    }
+
+    public ResultSet selectPendingRequests(String requesterId) throws SQLException {
+        String _selectQuery = " SELECT * FROM HR_TRANSPORT_PAYMENT_REQUEST " +
+                " WHERE  (REQUESTER_ID= ?" +
+                " OR USER_NAME IN (select USER_NAME from mugher.tbl_users where EMPLOYEE_ID=? ))" +
+                " AND  REQUEST_STATUS = ? " +
+                " ORDER BY TRANSPORT_PAYMENT_REQUEST_ID DESC";
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_selectQuery);
+            _ps.setString(1, requesterId);
+            _ps.setString(2, requesterId);
+            _ps.setString(3, TransportAbsenceDatePaymentApproveManager.INITIAL_STATE_TRANSPORT_PAYMENT);
+            _rs = _ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(_rs);
+            return (ResultSet) ocrs;
+        } finally {
+            releaseResources();
+        }
+    }
+
+    public ResultSet selectMyRequestsHistory(String requesterId) throws SQLException {
+        String _selectQuery = " SELECT * FROM HR_TRANSPORT_PAYMENT_REQUEST " +
+                " WHERE " +
+                " ( REQUESTER_ID like ?  OR  USER_NAME IN (select USER_NAME from mugher.tbl_users where EMPLOYEE_ID  like ?  ) ) " +
+                " AND REQUEST_STATUS not like " + TransportAbsenceDatePaymentApproveManager.INITIAL_STATE_TRANSPORT_PAYMENT +
+                " ORDER BY TRANSPORT_PAYMENT_REQUEST_ID DESC";
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_selectQuery);
+            _ps.setString(1, requesterId);
+            _ps.setString(2, requesterId);
+            _rs = _ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(_rs);
+            return (ResultSet) ocrs;
+        } finally {
+            releaseResources();
+        }
+    }
+
+    public ResultSet selectRequestAttributes(int requestId) throws SQLException {
+        String _selectQuery = " SELECT * FROM HR_TRANSPORT_PAYMENT_REQUEST " +
+                " WHERE TRANSPORT_PAYMENT_REQUEST_ID = ? ";
+        try {
+            _con = getConnection();
+            _ps = _con.prepareStatement(_selectQuery);
+            _ps.setInt(1, requestId);
+            _rs = _ps.executeQuery();
+            OracleCachedRowSet ocrs = new OracleCachedRowSet();
+            ocrs.populate(_rs);
+            return (ResultSet) ocrs;
+        } finally {
+            releaseResources();
+        }
+    }
+//    public static void main(String arg[]){
+//        try {
+//            TransportAbsenceDatePaymentRequestEntity boj =new TransportAbsenceDatePaymentRequestEntity();
+//            boj.selectEmpDept("AT/00029");
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//
+//        }
+//    }
+
+}

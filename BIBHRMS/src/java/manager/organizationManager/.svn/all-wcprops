@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/MUGHERPROJECT/!svn/ver/3492/src/java/manager/organizationManager
+END
+LoadTree.java
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/MUGHERPROJECT/!svn/ver/1/src/java/manager/organizationManager/LoadTree.java
+END
+OrganizationManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/MUGHERPROJECT/!svn/ver/1/src/java/manager/organizationManager/OrganizationManager.java
+END
+JobTypeQualificationManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/MUGHERPROJECT/!svn/ver/1/src/java/manager/organizationManager/JobTypeQualificationManager.java
+END
+JobTypeRegistrationManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/MUGHERPROJECT/!svn/ver/2803/src/java/manager/organizationManager/JobTypeRegistrationManager.java
+END
+JobTypeQualificationModel.java
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/MUGHERPROJECT/!svn/ver/2200/src/java/manager/organizationManager/JobTypeQualificationModel.java
+END
+JobTypeManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/MUGHERPROJECT/!svn/ver/3492/src/java/manager/organizationManager/JobTypeManager.java
+END
+OrganizationReportManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/MUGHERPROJECT/!svn/ver/2614/src/java/manager/organizationManager/OrganizationReportManager.java
+END
+JobTypeModel.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/MUGHERPROJECT/!svn/ver/1/src/java/manager/organizationManager/JobTypeModel.java
+END

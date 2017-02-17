@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/MUGHERPROJECT/!svn/ver/3471/src/java/manager/employeeHistoryManager
+END
+TransferManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/MUGHERPROJECT/!svn/ver/1/src/java/manager/employeeHistoryManager/TransferManager.java
+END
+EvaluationResultManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/MUGHERPROJECT/!svn/ver/1/src/java/manager/employeeHistoryManager/EvaluationResultManager.java
+END
+PromotionManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/MUGHERPROJECT/!svn/ver/2612/src/java/manager/employeeHistoryManager/PromotionManager.java
+END
+TransferAndPromotionHistoryModel.java
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/MUGHERPROJECT/!svn/ver/1/src/java/manager/employeeHistoryManager/TransferAndPromotionHistoryModel.java
+END
+EvaluationManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/MUGHERPROJECT/!svn/ver/1/src/java/manager/employeeHistoryManager/EvaluationManager.java
+END
+EvaluationSessionManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/MUGHERPROJECT/!svn/ver/1/src/java/manager/employeeHistoryManager/EvaluationSessionManager.java
+END
+ReturntoJobManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/MUGHERPROJECT/!svn/ver/3471/src/java/manager/employeeHistoryManager/ReturntoJobManager.java
+END
+TransferAndPromotionHistoryManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svn/MUGHERPROJECT/!svn/ver/714/src/java/manager/employeeHistoryManager/TransferAndPromotionHistoryManager.java
+END

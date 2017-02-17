@@ -1,0 +1,1024 @@
+/*
+ * Page1.java
+ *
+ * Created on Feb 26, 2010, 7:48:31 AM
+ * Copyright Mekete VS BravoZulu
+ */
+package fphrms.Discipline;
+
+import com.icesoft.faces.component.dragdrop.DragEvent;
+import com.icesoft.faces.component.ext.HtmlCommandLink;
+import com.icesoft.faces.component.ext.HtmlDataTable;
+import com.icesoft.faces.component.ext.HtmlInputSecret;
+import com.icesoft.faces.component.ext.HtmlInputText;
+import com.icesoft.faces.component.ext.HtmlOutputLabel;
+import com.icesoft.faces.component.ext.HtmlPanelGroup;
+import com.icesoft.faces.component.ext.HtmlSelectOneMenu;
+import com.icesoft.faces.component.ext.RowSelectorEvent;
+import com.icesoft.faces.component.ext.UIColumn;
+import com.icesoft.faces.component.inputfile.FileInfo;
+import com.icesoft.faces.component.inputfile.InputFile;
+import com.icesoft.faces.component.jsfcl.data.DefaultSelectedData;
+import com.icesoft.faces.component.jsfcl.data.DefaultSelectionItems;
+import com.sun.rave.faces.data.DefaultSelectItemsArray;
+import fphrms.*;
+import com.icesoft.faces.component.jsfcl.data.BorderLayoutBean;
+import com.icesoft.faces.component.panellayout.PanelLayout;
+import com.icesoft.faces.component.panelpopup.PanelPopup;
+import com.icesoft.faces.context.effects.JavascriptContext;
+import com.sun.rave.web.ui.appbase.AbstractPageBean;
+import com.sun.webui.jsf.model.Option;
+import java.io.File;
+import javax.faces.FacesException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
+import javax.faces.event.ValueChangeEvent;
+import javax.swing.JOptionPane;
+import manager.disciplineManager.AccusedDefenceManager;
+import manager.disciplineManager.DisciplineRequestManager;
+import manager.disciplineManager.DisciplineRequestManager.DisciplineRequestModel;
+import manager.disciplineManager.EyeWitnessManager;
+import manager.disciplineManager.EyeWitnessManager.EyeWitnessModel;
+import manager.disciplineManager.EyeWitnessManager.FileUpLoad;
+import manager.disciplineManager.EyeWitnessManager.OtherEyeWitnessFileUpLoad;
+import manager.disciplineManager.EyeWitnessManager.OtherMemberEyeWitnessModel;
+import manager.employeeManager.EmployeeManage;
+
+/**
+ * <p>Page bean that corresponds to a similarly named JSP page.  This
+ * class contains component definitions (and initialization code) for
+ * all components that you have defined on this page, as well as
+ * lifecycle methods and event handlers where you may add behavior
+ * to respond to incoming events.</p>
+ */
+public class EyeWitnessesPage extends AbstractPageBean {
+
+
+    // <editor-fold defaultstate="collapsed" desc="Local Variables">
+    private int __placeholder;
+
+    /**
+     * <p>Automatically managed component initialization.  <strong>WARNING:</strong>
+     * This method is automatically generated, so any user-specified code inserted
+     * here is subject to being replaced.</p>
+     */
+    private void _init() throws Exception {
+        userName = getSessionBean1().getUserName();
+        loggedInEmployeeId = getSessionBean1().getEmployeeId();
+        eyeWitnessManager = new EyeWitnessManager();
+        eyeWitnessManager.setUserName(userName);
+        eyeWitnessManager.setLoggedInEmployeeId(loggedInEmployeeId);
+    }
+    private BorderLayoutBean panelBorder1Bean = new BorderLayoutBean();
+
+    public BorderLayoutBean getPanelBorder1Bean() {
+        return panelBorder1Bean;
+    }
+
+    public void setPanelBorder1Bean(BorderLayoutBean blb) {
+        this.panelBorder1Bean = blb;
+    }
+    private HtmlInputSecret txtPassWord = new HtmlInputSecret();
+
+    public HtmlInputSecret getTxtPassWord() {
+        return txtPassWord;
+    }
+
+    public void setTxtPassWord(HtmlInputSecret his) {
+        this.txtPassWord = his;
+    }
+    private HtmlCommandLink lnkConfirm = new HtmlCommandLink();
+
+    public HtmlCommandLink getLnkConfirm() {
+        return lnkConfirm;
+    }
+
+    public void setLnkConfirm(HtmlCommandLink hcl) {
+        this.lnkConfirm = hcl;
+    }
+    private DefaultSelectedData selectOneRadio1DataBean = new DefaultSelectedData();
+
+    public DefaultSelectedData getSelectOneRadio1DataBean() {
+        return selectOneRadio1DataBean;
+    }
+
+    public void setSelectOneRadio1DataBean(DefaultSelectedData dsd) {
+        this.selectOneRadio1DataBean = dsd;
+    }
+    private DefaultSelectItemsArray selectOneRadio1DefaultItems1 = new DefaultSelectItemsArray();
+
+    public DefaultSelectItemsArray getSelectOneRadio1DefaultItems1() {
+        return selectOneRadio1DefaultItems1;
+    }
+
+    public void setSelectOneRadio1DefaultItems1(DefaultSelectItemsArray dsia) {
+        this.selectOneRadio1DefaultItems1 = dsia;
+    }
+    private DefaultSelectItemsArray selectOneRadio1DefaultItems = new DefaultSelectItemsArray();
+
+    public DefaultSelectItemsArray getSelectOneRadio1DefaultItems() {
+        return selectOneRadio1DefaultItems;
+    }
+
+    public void setSelectOneRadio1DefaultItems(DefaultSelectItemsArray dsia) {
+        this.selectOneRadio1DefaultItems = dsia;
+    }
+    private DefaultSelectedData selectOneMenu1DataBean = new DefaultSelectedData();
+
+    public DefaultSelectedData getSelectOneMenu1DataBean() {
+        return selectOneMenu1DataBean;
+    }
+
+    public void setSelectOneMenu1DataBean(DefaultSelectedData dsd) {
+        this.selectOneMenu1DataBean = dsd;
+    }
+    private DefaultSelectItemsArray selectOneMenu1DefaultItems1 = new DefaultSelectItemsArray();
+
+    public DefaultSelectItemsArray getSelectOneMenu1DefaultItems1() {
+        return selectOneMenu1DefaultItems1;
+    }
+
+    public void setSelectOneMenu1DefaultItems1(DefaultSelectItemsArray dsia) {
+        this.selectOneMenu1DefaultItems1 = dsia;
+    }
+    private DefaultSelectedData defaultSelectedData3 = new DefaultSelectedData();
+
+    public DefaultSelectedData getDefaultSelectedData3() {
+        return defaultSelectedData3;
+    }
+
+    public void setDefaultSelectedData3(DefaultSelectedData dsd) {
+        this.defaultSelectedData3 = dsd;
+    }
+    private DefaultSelectionItems selectOneRadio1DefaultItems2 = new DefaultSelectionItems();
+
+    public DefaultSelectionItems getSelectOneRadio1DefaultItems2() {
+        return selectOneRadio1DefaultItems2;
+    }
+
+    public void setSelectOneRadio1DefaultItems2(DefaultSelectionItems dsi) {
+        this.selectOneRadio1DefaultItems2 = dsi;
+    }
+    private DefaultSelectedData defaultSelectedData4 = new DefaultSelectedData();
+
+    public DefaultSelectedData getDefaultSelectedData4() {
+        return defaultSelectedData4;
+    }
+
+    public void setDefaultSelectedData4(DefaultSelectedData dsd) {
+        this.defaultSelectedData4 = dsd;
+    }
+    private DefaultSelectionItems selectOneMenu1DefaultItems2 = new DefaultSelectionItems();
+
+    public DefaultSelectionItems getSelectOneMenu1DefaultItems2() {
+        return selectOneMenu1DefaultItems2;
+    }
+
+    public void setSelectOneMenu1DefaultItems2(DefaultSelectionItems dsi) {
+        this.selectOneMenu1DefaultItems2 = dsi;
+    }
+    private DefaultSelectedData selectOneMenu1Bean = new DefaultSelectedData();
+
+    public DefaultSelectedData getSelectOneMenu1Bean() {
+        return selectOneMenu1Bean;
+    }
+
+    public void setSelectOneMenu1Bean(DefaultSelectedData dsd) {
+        this.selectOneMenu1Bean = dsd;
+    }
+    private DefaultSelectionItems selectOneMenu1DefaultItems3 = new DefaultSelectionItems();
+
+    public DefaultSelectionItems getSelectOneMenu1DefaultItems3() {
+        return selectOneMenu1DefaultItems3;
+    }
+
+    public void setSelectOneMenu1DefaultItems3(DefaultSelectionItems dsi) {
+        this.selectOneMenu1DefaultItems3 = dsi;
+    }
+    private DefaultSelectItemsArray selectOneMenu1DefaultItems4 = new DefaultSelectItemsArray();
+
+    public DefaultSelectItemsArray getSelectOneMenu1DefaultItems4() {
+        return selectOneMenu1DefaultItems4;
+    }
+
+    public void setSelectOneMenu1DefaultItems4(DefaultSelectItemsArray dsia) {
+        this.selectOneMenu1DefaultItems4 = dsia;
+    }
+    private HtmlSelectOneMenu drlSummaryOfWitness = new HtmlSelectOneMenu();
+    private HtmlSelectOneMenu drlWitnessPointedCondition = new HtmlSelectOneMenu();
+
+    public HtmlSelectOneMenu getDrlWitnessPointedCondition() {
+        return drlWitnessPointedCondition;
+    }
+
+    public void setDrlWitnessPointedCondition(HtmlSelectOneMenu drlWitnessPointedCondition) {
+        this.drlWitnessPointedCondition = drlWitnessPointedCondition;
+    }
+
+    public HtmlSelectOneMenu getDrlSummaryOfWitness() {
+        return drlSummaryOfWitness;
+    }
+
+    public void setDrlSummaryOfWitness(HtmlSelectOneMenu hsom) {
+        this.drlSummaryOfWitness = hsom;
+    }
+    private DefaultSelectedData selectOneListbox1Bean = new DefaultSelectedData();
+
+    public DefaultSelectedData getSelectOneListbox1Bean() {
+        return selectOneListbox1Bean;
+    }
+
+    public void setSelectOneListbox1Bean(DefaultSelectedData dsd) {
+        this.selectOneListbox1Bean = dsd;
+    }
+    private HtmlInputText txtRequesterFullName = new HtmlInputText();
+
+    public HtmlInputText getTxtRequesterFullName() {
+        return txtRequesterFullName;
+    }
+
+    public void setTxtRequesterFullName(HtmlInputText hit) {
+        this.txtRequesterFullName = hit;
+    }
+    private HtmlInputText txtRequesterId = new HtmlInputText();
+
+    public HtmlInputText getTxtRequesterId() {
+        return txtRequesterId;
+    }
+
+    public void setTxtRequesterId(HtmlInputText hit) {
+        this.txtRequesterId = hit;
+    }
+    private HtmlInputText txtEmployeeId = new HtmlInputText();
+
+    public HtmlInputText getTxtEmployeeId() {
+        return txtEmployeeId;
+    }
+
+    public void setTxtEmployeeId(HtmlInputText hit) {
+        this.txtEmployeeId = hit;
+    }
+    private HtmlInputText txtRequesterDepartment = new HtmlInputText();
+
+    public HtmlInputText getTxtRequesterDepartment() {
+        return txtRequesterDepartment;
+    }
+
+    public void setTxtRequesterDepartment(HtmlInputText hit) {
+        this.txtRequesterDepartment = hit;
+    }
+    private HtmlInputText txtRequesterPosition = new HtmlInputText();
+
+    public HtmlInputText getTxtRequesterPosition() {
+        return txtRequesterPosition;
+    }
+    private HtmlOutputLabel lblSuccessOrErrorMessage = new HtmlOutputLabel();
+    private PanelLayout pnlMessageBody = new PanelLayout();
+    private HtmlPanelGroup panelGroupMessage = new HtmlPanelGroup();
+    private PanelPopup pnlPopupSuccessOrFailure = new PanelPopup();
+
+    public HtmlOutputLabel getLblSuccessOrErrorMessage() {
+        return lblSuccessOrErrorMessage;
+    }
+
+    public void setLblSuccessOrErrorMessage(HtmlOutputLabel lblSuccessOrErrorMessage) {
+        this.lblSuccessOrErrorMessage = lblSuccessOrErrorMessage;
+    }
+
+    public HtmlPanelGroup getPanelGroupMessage() {
+        return panelGroupMessage;
+    }
+
+    public void setPanelGroupMessage(HtmlPanelGroup panelGroupMessage) {
+        this.panelGroupMessage = panelGroupMessage;
+    }
+
+    public PanelLayout getPnlMessageBody() {
+        return pnlMessageBody;
+    }
+
+    public void setPnlMessageBody(PanelLayout pnlMessageBody) {
+        this.pnlMessageBody = pnlMessageBody;
+    }
+
+    public PanelPopup getPnlPopupSuccessOrFailure() {
+        return pnlPopupSuccessOrFailure;
+    }
+
+    public void setPnlPopupSuccessOrFailure(PanelPopup pnlPopupSuccessOrFailure) {
+        this.pnlPopupSuccessOrFailure = pnlPopupSuccessOrFailure;
+    }
+
+    public String getRequesterId() {
+        return requesterId;
+    }
+
+    public void setRequesterId(String requesterId) {
+        this.requesterId = requesterId;
+    }
+
+    public int getSelectedRowEyeWitness() {
+        return selectedRowEyeWitness;
+    }
+
+    public void setSelectedRowEyeWitness(int selectedRowEyeWitness) {
+        this.selectedRowEyeWitness = selectedRowEyeWitness;
+    }
+
+    public void setTxtRequesterPosition(HtmlInputText hit) {
+        this.txtRequesterPosition = hit;
+    }
+    private HtmlInputText txtEmployeeFullName = new HtmlInputText();
+
+    public HtmlInputText getTxtEmployeeFullName() {
+        return txtEmployeeFullName;
+    }
+
+    public void setTxtEmployeeFullName(HtmlInputText hit) {
+        this.txtEmployeeFullName = hit;
+    }
+    private HtmlInputText txtEmployeeDepartment = new HtmlInputText();
+
+    public HtmlInputText getTxtEmployeeDepartment() {
+        return txtEmployeeDepartment;
+    }
+
+    public void setTxtEmployeeDepartment(HtmlInputText hit) {
+        this.txtEmployeeDepartment = hit;
+    }
+    private HtmlInputText txtEmployeePosition = new HtmlInputText();
+
+    public HtmlInputText getTxtEmployeePosition() {
+        return txtEmployeePosition;
+    }
+
+    public void setTxtEmployeePosition(HtmlInputText hit) {
+        this.txtEmployeePosition = hit;
+    }
+    private HtmlCommandLink cmd_EmployeeWitness = new HtmlCommandLink();
+
+    public HtmlCommandLink getCmd_EmployeeWitness() {
+        return cmd_EmployeeWitness;
+    }
+
+    public void setCmd_EmployeeWitness(HtmlCommandLink hcl) {
+        this.cmd_EmployeeWitness = hcl;
+    }
+    private HtmlCommandLink cmd_Other_Witness = new HtmlCommandLink();
+
+    public HtmlCommandLink getCmd_Other_Witness() {
+        return cmd_Other_Witness;
+    }
+
+    public void setCmd_Other_Witness(HtmlCommandLink hcl) {
+        this.cmd_Other_Witness = hcl;
+    }
+    private HtmlDataTable dataTableEyeWitnesses = new HtmlDataTable();
+
+    public HtmlDataTable getDataTableEyeWitnesses() {
+        return dataTableEyeWitnesses;
+    }
+
+    public void setDataTableEyeWitnesses(HtmlDataTable hdt) {
+        this.dataTableEyeWitnesses = hdt;
+    }
+    private HtmlDataTable dataTableEyeWitnessesOther = new HtmlDataTable();
+
+    public HtmlDataTable getDataTableEyeWitnessesOther() {
+        return dataTableEyeWitnessesOther;
+    }
+
+    public void setDataTableEyeWitnessesOther(HtmlDataTable hdt) {
+        this.dataTableEyeWitnessesOther = hdt;
+    }
+    private UIColumn colSummary = new UIColumn();
+
+    public UIColumn getColSummary() {
+        return colSummary;
+    }
+
+    public void setColSummary(UIColumn uic) {
+        this.colSummary = uic;
+    }
+
+    // </editor-fold>
+    /**
+     * <p>Construct a new Page bean instance.</p>
+     */
+    public EyeWitnessesPage() {
+    }
+
+    /**
+     * <p>Callback method that is called whenever a page is navigated to,
+     * either directly via a URL, or indirectly via page navigation.
+     * Customize this method to acquire resources that will be needed
+     * for event handlers and lifecycle methods, whether or not this
+     * page is performing post back processing.</p>
+     *
+     * <p>Note that, if the current request is a postback, the property
+     * values of the components do <strong>not</strong> represent any
+     * values submitted with this request.  Instead, they represent the
+     * property values that were saved for this view when it was rendered.</p>
+     */
+    public void init() {
+        // Perform initializations inherited from our superclass
+        super.init();
+        // Perform application initialization that must complete
+        // *before* managed components are initialized
+        // TODO - add your own initialiation code here
+
+        // <editor-fold defaultstate="collapsed" desc="Managed Component Initialization">
+        // Initialize automatically managed components
+        // *Note* - this logic should NOT be modified
+        try {
+            _init();
+        } catch (Exception e) {
+            log("Page1 Initialization Failure", e);
+            throw e instanceof FacesException ? (FacesException) e : new FacesException(e);
+        }
+
+    // </editor-fold>
+    // Perform application initialization that must complete
+    // *after* managed components are initialized
+    // TODO - add your own initialization code here
+    }
+
+    // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+    /**
+     * <p>Callback method that is called after the component tree has been
+     * restored, but before any event processing takes place.  This method
+     * will <strong>only</strong> be called on a postback request that
+     * is processing a form submit.  Customize this method to allocate
+     * resources that will be required in your event handlers.</p>
+     */
+    public void preprocess() {
+    }
+
+    /**
+     * <p>Callback method that is called just before rendering takes place.
+     * This method will <strong>only</strong> be called for the page that
+     * will actually be rendered (and not, for example, on a page that
+     * handled a postback and then navigated to a different page).  Customize
+     * this method to allocate resources that will be required for rendering
+     * this page.</p>
+     */
+    public void prerender() {
+    }
+
+    /**
+     * <p>Callback method that is called after rendering is completed for
+     * this request, if <code>init()</code> was called (regardless of whether
+     * or not this was the page that was actually rendered).  Customize this
+     * method to release resources acquired in the <code>init()</code>,
+     * <code>preprocess()</code>, or <code>prerender()</code> methods (or
+     * acquired during execution of an event handler).</p>
+     */
+    public void destroy() {
+    }
+
+    /**
+     * <p>Return a reference to the scoped data bean.</p>
+     *
+     * @return reference to the scoped data bean
+     */
+    protected ApplicationBean1 getApplicationBean1() {
+        return (ApplicationBean1) getBean("ApplicationBean1");
+    }
+
+    /**
+     * <p>Return a reference to the scoped data bean.</p>
+     *
+     * @return reference to the scoped data bean
+     */
+    protected RequestBean1 getRequestBean1() {
+        return (RequestBean1) getBean("RequestBean1");
+    }
+
+    /**
+     * <p>Return a reference to the scoped data bean.</p>
+     *
+     * @return reference to the scoped data bean
+     */
+    protected SessionBean1 getSessionBean1() {
+        return (SessionBean1) getBean("SessionBean1");
+    }
+
+    public EyeWitnessManager getEyeWitnessManager() {
+        return eyeWitnessManager;
+    }
+
+    public void setEyeWitnessManager(EyeWitnessManager eyeWitnessManager) {
+        this.eyeWitnessManager = eyeWitnessManager;
+    }
+
+    public ArrayList<Option> getPointdBy() {
+        return pointdBy;
+    }
+
+    public void setPointdBy(ArrayList<Option> pointdBy) {
+        this.pointdBy = pointdBy;
+    }
+
+    public ArrayList<Option> getSummaryList() {
+        return summaryList;
+    }
+
+    public void setSummaryList(ArrayList<Option> summaryList) {
+        this.summaryList = summaryList;
+    }
+
+    public int get__placeholder() {
+        return __placeholder;
+    }
+
+    public void set__placeholder(int __placeholder) {
+        this.__placeholder = __placeholder;
+    }
+
+    public ArrayList<OtherMemberEyeWitnessModel> getEyeWitnessesListOther() {
+        return eyeWitnessesListOther;
+    }
+
+    public void setEyeWitnessesListOther(ArrayList<OtherMemberEyeWitnessModel> eyeWitnessesListOther) {
+        this.eyeWitnessesListOther = eyeWitnessesListOther;
+    }
+
+    public ArrayList<EyeWitnessModel> getEyeWitnessesList() {
+        return eyeWitnessesList;
+    }
+
+    public String getCurrentStatus() {
+        return currentStatus;
+    }
+
+    public void setCurrentStatus(String currentStatus) {
+        this.currentStatus = currentStatus;
+    }
+
+    public int getDisciplineProblemId() {
+        return disciplineProblemId;
+    }
+
+    public void setDisciplineProblemId(int disciplineProblemId) {
+        this.disciplineProblemId = disciplineProblemId;
+    }
+
+    public DisciplineRequestManager getDisciplineRequestManager() {
+        return disciplineRequestManager;
+    }
+
+    public void setDisciplineRequestManager(DisciplineRequestManager disciplineRequestManager) {
+        this.disciplineRequestManager = disciplineRequestManager;
+    }
+
+    public DisciplineRequestModel getDisciplineRequestModel() {
+        return disciplineRequestModel;
+    }
+
+    public void setDisciplineRequestModel(DisciplineRequestModel disciplineRequestModel) {
+        this.disciplineRequestModel = disciplineRequestModel;
+    }
+
+    public EmployeeManage getEmployeeManager() {
+        return employeeManager;
+    }
+
+    public void setEmployeeManager(EmployeeManage employeeManager) {
+        this.employeeManager = employeeManager;
+    }
+
+    public ArrayList<Option> getPendingRequestLists() {
+        return pendingRequestLists;
+    }
+
+    public void setPendingRequestLists(ArrayList<Option> pendingRequestLists) {
+        this.pendingRequestLists = pendingRequestLists;
+    }
+
+    public void setEyeWitnessesList(ArrayList<EyeWitnessModel> eyeWitnessesList) {
+        this.eyeWitnessesList = eyeWitnessesList;
+    }
+
+    public String lnkConfirm_action() {
+        return null;
+    }
+    // </editor-fold >
+    EyeWitnessManager eyeWitnessManager = new EyeWitnessManager();
+    DisciplineRequestManager disciplineRequestManager = new DisciplineRequestManager();
+    ArrayList<EyeWitnessModel> eyeWitnessesList = new ArrayList<EyeWitnessModel>();
+    EyeWitnessModel witnessModle=new EyeWitnessModel();
+    ArrayList<OtherMemberEyeWitnessModel> eyeWitnessesListOther = new ArrayList<OtherMemberEyeWitnessModel>();
+    FileUpLoad UpLoad=new FileUpLoad();
+    OtherEyeWitnessFileUpLoad upLoadOtherFiles=new OtherEyeWitnessFileUpLoad();
+    ArrayList<Option> summaryList = eyeWitnessManager.getEyeWitnessSummaryTypes();
+    ArrayList<Option> pointdBy = eyeWitnessManager.getEyeWitnessPointedByTypes();
+    ArrayList<Option> pendingRequestLists = disciplineRequestManager.getPendingRequests();//new ArrayList<Option>();
+    EmployeeManage employeeManager = new EmployeeManage();
+     byte[] commeentsFile = null;
+    String requesterId = "-1";
+    int disciplineProblemId = -1;//Integer.parseInt(requestInfos[0]);//
+    String savingCondition="Employee";
+    String offenceType;
+    String employeeStatus;
+    String currentStatus;
+    String userName;
+    String loggedInEmployeeId;
+   private String filePath = null;
+    private String fileExtenstion = "";
+    DisciplineRequestModel disciplineRequestModel;
+
+    public String btnAddToTable_action() {
+        //return null means stay on the same page
+        return null;
+    }
+    int selectedRowEyeWitness = -1;
+    int selectedRowOtherEyeWitness=-1;
+
+    public FileUpLoad getUpLoad() {
+        return UpLoad;
+    }
+
+    public void setUpLoad(FileUpLoad UpLoad) {
+        this.UpLoad = UpLoad;
+    }
+
+    public String getFileExtenstion() {
+        return fileExtenstion;
+    }
+
+    public void setFileExtenstion(String fileExtenstion) {
+        this.fileExtenstion = fileExtenstion;
+    }
+
+    public String getFilePath() {
+        return filePath;
+    }
+
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
+    }
+
+    public byte[] getCommeentsFile() {
+        return commeentsFile;
+    }
+
+    public void setCommeentsFile(byte[] commeentsFile) {
+        this.commeentsFile = commeentsFile;
+    }
+
+    public String getEmployeeStatus() {
+        return employeeStatus;
+    }
+
+    public void setEmployeeStatus(String employeeStatus) {
+        this.employeeStatus = employeeStatus;
+    }
+
+    public void rowSelectorDisciplinePenalty_processMyEvent(RowSelectorEvent rse) {
+        selectedRowEyeWitness = rse.getRow();
+
+    }
+  public void rowSelectorEyeWitness_processMyEvent(RowSelectorEvent rse) {
+        selectedRowOtherEyeWitness = rse.getRow();
+        
+    }
+    public String btnClosePopupSuccessOrFailure_action() {
+        pnlPopupSuccessOrFailure.setRendered(false);
+        return null;
+    }
+
+    private boolean validateWitnessWord()
+    {
+        if (eyeWitnessesList.get(selectedRowEyeWitness).getEventDescription() == null ||
+                eyeWitnessesList.get(selectedRowEyeWitness).getEventDescription().toString().equals("") ||
+                eyeWitnessesList.get(selectedRowEyeWitness).getSummary() == null ||
+                eyeWitnessesList.get(selectedRowEyeWitness).getSummary().toString().equals("-1") ||
+                eyeWitnessesList.get(selectedRowEyeWitness).getDocRefNumber() == null ||
+                eyeWitnessesList.get(selectedRowEyeWitness).getDocRefNumber().toString().equals("")) {
+            return false;
+        }
+        return true;
+    }
+
+     private boolean validateOtherWitnessWord()
+    {
+        if (eyeWitnessesListOther.get(selectedRowOtherEyeWitness).getEventDescription() == null ||
+                eyeWitnessesList.get(selectedRowOtherEyeWitness).getEventDescription().toString().equals("") ||
+                eyeWitnessesList.get(selectedRowOtherEyeWitness).getSummary() == null ||
+                eyeWitnessesList.get(selectedRowOtherEyeWitness).getSummary().toString().equals("-1") ||
+                eyeWitnessesList.get(selectedRowOtherEyeWitness).getDocRefNumber() == null ||
+                eyeWitnessesList.get(selectedRowOtherEyeWitness).getDocRefNumber().toString().equals("")) {
+            return false;
+        }
+        return true;
+    }
+
+    public String cmdLnkEdit_action() {
+        if (selectedRowEyeWitness != -1) {
+
+             if(eyeWitnessManager.UpdateEmployeeEyeWitnessWord(eyeWitnessesList)){
+              showSuccessOrFailureMessage(true, "Edite Okay");
+
+              }else {
+              showSuccessOrFailureMessage(true, "Edite failed");
+
+              }
+
+        }
+        return null;
+    }
+    public String cmdLnkEditOther_action() {
+        if (selectedRowOtherEyeWitness != -1) {
+           
+           if(eyeWitnessManager.UpdatedeyewitnesWord(eyeWitnessesListOther)){
+              showSuccessOrFailureMessage(true, "Edite Okay");
+
+              }else {
+              showSuccessOrFailureMessage(true, "Edite failed");
+
+              }
+        }
+        return null;
+    }
+
+     public String cmdLnkDeleteOther_action()
+                 {
+        if (selectedRowOtherEyeWitness != -1)
+                   {
+        //eyeWitnessesListOther.get(selectedRowOtherEyeWitness).setDatabaseStatus("Deleted");
+           
+       int deletedId= eyeWitnessesListOther.get(selectedRowOtherEyeWitness).getOther_Eye_Witnessword_ID();
+       
+        if(eyeWitnessManager.DeletedEyeWitnessword(deletedId)){
+        showSuccessOrFailureMessage(true, "Deleted Okay");
+
+        }else{
+
+         showSuccessOrFailureMessage(true, "Deleted Failed");
+
+        }
+                     }
+        return null;
+    }
+
+
+      public String cmdLnkDeleteEmployee_action()
+                 {
+        if (selectedRowEyeWitness != -1)
+                   {
+       
+       int deletedId= eyeWitnessesList.get(selectedRowEyeWitness).getDisciplineEyeWitnessId();
+        
+        if(eyeWitnessManager.DeletedEyeWitnessword(deletedId)){
+       showSuccessOrFailureMessage(true, "Deleted Okay");
+
+        }else{
+
+         showSuccessOrFailureMessage(true, "Deleted Failed");
+
+        }
+                     }
+        return null;
+    }
+
+
+    private boolean populateRequesterTextComponents(String employeeId) {
+        HashMap empInfoHashMap = employeeManager.readEmployeeBasicInfo(employeeId);
+        if (empInfoHashMap != null) {
+            if (empInfoHashMap.get("employeeId").toString().equals("")) {//if no resultset found
+                showSuccessOrFailureMessage(false, "NO EMPLOYEE FOUND WITH ID : " + employeeId);
+                return false;
+            } else {
+                requesterId = empInfoHashMap.get("employeeId").toString();
+                txtRequesterDepartment.setValue(empInfoHashMap.get("employeeDepartmentName"));
+                txtRequesterFullName.setValue(empInfoHashMap.get("employeeFullName"));
+                txtRequesterId.setValue(employeeId);
+                txtRequesterPosition.setValue(empInfoHashMap.get("employeePosition"));
+                return true;
+            }
+        } else {
+            showSuccessOrFailureMessage(false, "EXCEPTION OCCURED");
+            return false;
+        }
+    }
+
+    private boolean populateEmployeeTextComponents(String employeeId) {
+        HashMap empInfoHashMap = employeeManager.readEmployeeBasicInfo(employeeId);
+        if (empInfoHashMap != null) {
+            if (empInfoHashMap.get("employeeId").toString().equals("")) {//if no resultset found
+                showSuccessOrFailureMessage(false, "NO EMPLOYEE FOUND WITH ID : " + employeeId);
+                return false;
+            } else {
+                requesterId = empInfoHashMap.get("employeeId").toString();
+                txtEmployeeDepartment.setValue(empInfoHashMap.get("employeeDepartmentName"));
+                txtEmployeeFullName.setValue(empInfoHashMap.get("employeeFullName"));
+                txtEmployeeId.setValue(employeeId);
+                txtEmployeePosition.setValue(empInfoHashMap.get("employeePosition"));
+                return true;
+            }
+        } else {
+            showSuccessOrFailureMessage(false, "EXCEPTION OCCURED");
+            return false;
+        }
+    }
+
+    private void populateAllComponents(DisciplineRequestModel disciplineRequestModel) {
+        populateRequesterTextComponents(disciplineRequestModel.getRequesterId());
+        populateEmployeeTextComponents(disciplineRequestModel.getOffenderId());
+        eyeWitnessesList = eyeWitnessManager.getEyeWitnessesList(disciplineRequestModel.getDisciplineProblemId());
+        eyeWitnessesListOther=eyeWitnessManager.getOtherEyeWitnessWord(disciplineRequestModel.getDisciplineProblemId());
+
+    //  populateDisciplineTextComponents(disciplineRequestModel);
+    }
+
+    public void selectPendingRequests_processValueChange(ValueChangeEvent vce) {
+        if (vce != null) {
+            String[] requestInfos = vce.getNewValue().toString().split("--");
+            disciplineProblemId = Integer.parseInt(requestInfos[0]);//
+            requesterId = requestInfos[1];
+            currentStatus = requestInfos[2];
+            offenceType=requestInfos[3];
+           employeeStatus=requestInfos[4];
+
+             if (employeeStatus.equalsIgnoreCase("Manager")) {
+                    disciplineRequestModel = disciplineRequestManager.getDisciplineIssuedForManager(offenceType, disciplineProblemId);
+                    populateAllComponents(disciplineRequestModel);
+                } else {
+                    disciplineRequestModel = disciplineRequestManager.getDisciplineIssued(offenceType, disciplineProblemId);
+                    populateAllComponents(disciplineRequestModel);
+                }
+
+         //   disciplineRequestModel = disciplineRequestManager.getDisciplineIssued(disciplineProblemId);
+            // disciplineRequestModel = disciplineRequestManager.getDisciplineIssued(offenceType, disciplineProblemId);
+            // populateAllComponents(disciplineRequestModel);
+        }
+    }
+
+    public void showSuccessOrFailureMessage(boolean success, String messageToDisplay, String fadeTime) {
+        lblSuccessOrErrorMessage.setStyle(success ? "color: green; font-size: 12px; font-weight: bold;text-align: center; vertical-align: middle" : "color: red; font-size: 12px; font-weight: bold;text-align: center; vertical-align: middle");
+        lblSuccessOrErrorMessage.setValue(messageToDisplay);
+        lblSuccessOrErrorMessage.setVisible(true);
+        pnlPopupSuccessOrFailure.setAutoCentre(true);
+        pnlPopupSuccessOrFailure.setRendered(true);
+        String val = "message";
+        //  String fadeTime = (success ? "3000" : "8000");
+        String javaScriptText = "$j(document).ready(function(){ $j('." + val + "').show();" +
+                " $j('." + val + "').fadeOut(" + fadeTime + ");" + "});";
+        JavascriptContext.addJavascriptCall(FacesContext.getCurrentInstance(), javaScriptText);
+    }
+    public void showSuccessOrFailureMessage(boolean success, String messageToDisplay) {
+        String fadeTime = (success ? "3000" : "8000");
+        showSuccessOrFailureMessage(success, messageToDisplay, fadeTime);
+    }
+
+    public String btnSave_action() {
+           
+        if(savingCondition.equalsIgnoreCase("Employee"))
+        {
+            commeentsFile= getCommeentsFile();
+            witnessModle.setFileAttached(commeentsFile);
+        if (eyeWitnessManager.saveEyeWitnessesWord(eyeWitnessesList,disciplineProblemId,"Employee",commeentsFile)){
+            String witnessID=eyeWitnessesList.get(selectedRowEyeWitness).getWitnessId();
+            
+            eyeWitnessManager.saveFile(UpLoad,witnessID);
+            showSuccessOrFailureMessage(true, "SAVING OKAY");
+        } else {
+           showSuccessOrFailureMessage(false, "SAVING FAILED");
+        }
+        
+        }else if(savingCondition.equalsIgnoreCase("Other"))
+        {
+            int otherWitnessID=eyeWitnessesListOther.get(selectedRowOtherEyeWitness).getOtherWitnessID();
+         eyeWitnessManager.saveFileOtherEyeWitness(upLoadOtherFiles,otherWitnessID);
+         if (eyeWitnessManager.saveEyeWitnessesWordOther(eyeWitnessesListOther,disciplineProblemId,"Other")) {
+            showSuccessOrFailureMessage(true, "SAVING OKAY");
+        } else {
+            showSuccessOrFailureMessage(false, "SAVING FAILED");
+        }
+
+        }
+        return null;
+    } 
+//    public String btnSaveOtherWitness_action() {
+//        if (eyeWitnessManager.saveEyeWitnessesWordOther(eyeWitnessesListOther,disciplineProblemId,"Other")) {
+//            showSuccessOrFailureMessage(true, "SAVING OKAY");
+//        } else {
+//            showSuccessOrFailureMessage(false, "SAVING FAILED");
+//        }
+//        return null;
+//    }
+
+
+    // <editor-fold defaultstate="collapsed" desc="Links">
+
+    public String lnkDisciplineRequest_action() {
+        return "DisciplineIssue";
+    }
+
+    public String lnkDisciplineApprove_action() {
+        return "DisciplineApprove";
+    }
+
+    public String lnkAccusedDefence_action() {
+        return "AccusedDefence";
+    }
+
+    public String lnkEyeWitness_action() {
+        return "EyeWitness";
+    }
+
+    public String lnkCommitteeMembers_action() {
+        return "CommitteeMembers";
+    }
+
+    public String lnkDisciplinePenalty_action() {
+        return "PenaltyTypes";
+    }
+
+    public String lnkCommittee_action() {
+        return "Committeee";
+    }
+
+    public String btnDisciplinePenalty_action() {
+        return "DisciplinePenalty";
+    }
+
+    public String btnPenaltyType_action() {
+        return "PenaltyTypes";
+    }
+
+    public String cmd_EmployeeWitness_action() {
+        savingCondition="Employee";
+        dataTableEyeWitnessesOther.setRendered(false);
+        dataTableEyeWitnesses.setRendered(true);
+       //return null means stay on the same page
+        return null;
+    }
+
+    public String cmd_Other_Witness_action() {
+        savingCondition="Other";
+        dataTableEyeWitnesses.setRendered(false);
+        dataTableEyeWitnessesOther.setRendered(true);
+
+        //return null means stay on the same page
+        return null;
+    }
+
+    public void inputFile_EyeWitness_processAction(ActionEvent ae) {
+        if(savingCondition.equalsIgnoreCase("Employee"))
+        {
+         try {
+            int index = 0;
+            InputFile inpuFile = (InputFile) ae.getSource();
+            FileInfo fileInfo = inpuFile.getFileInfo();
+            filePath = fileInfo.getPhysicalPath().toString();
+            File file = new File(filePath);
+            fileExtenstion = file.getName();
+            index = fileExtenstion.lastIndexOf(".");
+            fileExtenstion = fileExtenstion.substring(index + 1);
+            setCommeentsFile(AccusedDefenceManager.extractByteArray(file));
+            UpLoad.setRequestID(disciplineProblemId);
+            UpLoad.setFileName("Commentes");
+            UpLoad.setExtention(fileExtenstion);
+            UpLoad.setAttachedFile(AccusedDefenceManager.extractByteArray(file));
+           
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    else if(savingCondition.equalsIgnoreCase("Other")){
+
+          try {
+            int index = 0;
+            InputFile inpuFile = (InputFile) ae.getSource();
+            FileInfo fileInfo = inpuFile.getFileInfo();
+            filePath = fileInfo.getPhysicalPath().toString();
+            File file = new File(filePath);
+            fileExtenstion = file.getName();
+            index = fileExtenstion.lastIndexOf(".");
+            fileExtenstion = fileExtenstion.substring(index + 1);
+            setCommeentsFile(AccusedDefenceManager.extractByteArray(file));
+            upLoadOtherFiles.setRequestID(disciplineProblemId);
+            upLoadOtherFiles.setFileName("Commentes");
+            upLoadOtherFiles.setExtention(fileExtenstion);
+            upLoadOtherFiles.setAttachedFile(AccusedDefenceManager.extractByteArray(file));
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+    }
+
+
+  }
+    // </editor-fold >}
+
+
+

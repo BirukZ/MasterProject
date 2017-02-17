@@ -1,0 +1,504 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package manager.ReportCritera;
+
+import entity.reportGenerationCritera.ReportGenerationEntity;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.HashMap;
+import manager.globalUseManager.ErrorLogWriter;
+import com.sun.webui.jsf.model.Option;
+import entity.disciplineEntity.ReportEntity;
+
+import fphrms.Discipline.DisciplineReport;
+import javax.faces.model.SelectItem;
+import manager.disciplineManager.DisciplineReportManager;
+
+/**
+ *
+ * @author Biruk
+ */
+public class ReportCriteraManager {
+
+    public static final String MONTHLY = "MO";
+    public static final String QUARTERLY = "QU";
+    public static final String SEMIANNUALLY = "SQ";
+    public static final String ANNUALLY = "AU";
+    public static ArrayList<HashMap> reportParameterList = new ArrayList<HashMap>();
+    public static ArrayList<HashMap> reportParameterListForCandidate = new ArrayList<HashMap>();
+    public static HashMap list = new HashMap();
+    public static String employeeId;
+    public static boolean allEmployee;
+    public static HashMap parametrsForDay = new HashMap();
+    public static HashMap parametrsCandiateSelection = new HashMap();
+
+    public final static String SELECT_ALL = "`";
+
+    public static ArrayList<HashMap> getReportParameterListForCandidate() {
+        return reportParameterListForCandidate;
+    }
+
+    public static void setReportParameterListForCandidate(ArrayList<HashMap> reportParameterListForCandidate) {
+        ReportCriteraManager.reportParameterListForCandidate = reportParameterListForCandidate;
+    }
+
+    public static HashMap getParametrsForDay() {
+        return parametrsForDay;
+    }
+
+    public static void setParametrsForDay(HashMap parametrsForDay) {
+        ReportCriteraManager.parametrsForDay = parametrsForDay;
+    }
+
+    public static boolean isAllEmployee() {
+        return allEmployee;
+    }
+
+    public static void setAllEmployee(boolean allEmployee) {
+        ReportCriteraManager.allEmployee = allEmployee;
+    }
+
+    public static String getEmployeeId() {
+        return employeeId;
+    }
+
+    public static void setEmployeeId(String employeeId) {
+        ReportCriteraManager.employeeId = employeeId;
+    }
+
+    public static HashMap getList() {
+        return list;
+    }
+
+    public static void setList(HashMap list) {
+        ReportCriteraManager.list = list;
+    }
+
+    public static HashMap getParametrsCandiateSelection() {
+        return parametrsCandiateSelection;
+    }
+
+    public static void setParametrsCandiateSelection(HashMap parametrsCandiateSelection) {
+        ReportCriteraManager.parametrsCandiateSelection = parametrsCandiateSelection;
+    }
+
+    public static class ReportPageModle {
+
+        String reportPageID;
+        String reportPageName;
+        String reportPageDescription;
+        String status;
+        String moduleName;
+        String startDay;
+        String endDaye;
+        String year;
+        String month;
+
+        public ReportPageModle(String status, String moduleName, String reportPageID, String reportPageName, String reportpageDescription) {
+            this.reportPageID = reportPageID;
+            this.reportPageName = reportPageName;
+            this.reportPageDescription = reportpageDescription;
+            this.status = status;
+            this.moduleName = moduleName;
+        }
+
+//        public ReportPageModle( String startDay, String endDay, String year, String month) {
+//            this.startDay=startDay;
+//            this.endDaye=endDay;
+//            this.year=year;
+//            this.month=month;
+//
+//        }
+        public String getEndDaye() {
+            return endDaye;
+        }
+
+        public void setEndDaye(String endDaye) {
+            this.endDaye = endDaye;
+        }
+
+        public String getMonth() {
+            return month;
+        }
+
+        public void setMonth(String month) {
+            this.month = month;
+        }
+
+        public String getStartDay() {
+            return startDay;
+        }
+
+        public void setStartDay(String startDay) {
+            this.startDay = startDay;
+        }
+
+        public String getYear() {
+            return year;
+        }
+
+        public void setYear(String year) {
+            this.year = year;
+        }
+
+        public String getModuleName() {
+            return moduleName;
+        }
+
+        public void setModuleName(String moduleName) {
+            this.moduleName = moduleName;
+        }
+
+        public String getStatus() {
+            return status;
+        }
+
+        public void setStatus(String status) {
+            this.status = status;
+        }
+
+        public String getReportPageDescription() {
+            return reportPageDescription;
+        }
+
+        public void setReportPageDescription(String reportPageDescription) {
+            this.reportPageDescription = reportPageDescription;
+        }
+
+        public String getReportPageID() {
+            return reportPageID;
+        }
+
+        public void setReportPageID(String reportPageID) {
+            this.reportPageID = reportPageID;
+        }
+
+        public String getReportPageName() {
+            return reportPageName;
+        }
+
+        public void setReportPageName(String reportPageName) {
+            this.reportPageName = reportPageName;
+        }
+
+        public ReportPageModle() {
+        }
+    }
+
+    public static class ReportGeneration {
+
+        String reportType;
+        String reportCatagori;
+        String reportName;
+        String stratDate;
+        String endDate;
+        String selectionCondition;
+
+        public String getEndDate() {
+            return endDate;
+        }
+
+        public void setEndDate(String endDate) {
+            this.endDate = endDate;
+        }
+
+        public String getReportCatagori() {
+            return reportCatagori;
+        }
+
+        public void setReportCatagori(String reportCatagori) {
+            this.reportCatagori = reportCatagori;
+        }
+
+        public String getReportName() {
+            return reportName;
+        }
+
+        public void setReportName(String reportName) {
+            this.reportName = reportName;
+        }
+
+        public String getReportType() {
+            return reportType;
+        }
+
+        public void setReportType(String reportType) {
+            this.reportType = reportType;
+        }
+
+        public String getSelectionCondition() {
+            return selectionCondition;
+        }
+
+        public void setSelectionCondition(String selectionCondition) {
+            this.selectionCondition = selectionCondition;
+        }
+
+        public String getStratDate() {
+            return stratDate;
+        }
+
+        public void setStratDate(String stratDate) {
+            this.stratDate = stratDate;
+        }
+
+        public ReportGeneration() {
+        }
+    }
+    ReportEntity disciplineReport = new ReportEntity();
+    DisciplineReportManager discipliplinePageReport = new DisciplineReportManager();
+    DisciplineReport monthlyReport = new DisciplineReport();
+
+    public ArrayList<Option> getReportTypes() {
+        ArrayList<Option> reportType = new ArrayList<Option>();
+        reportType.add(new Option(-1, "--SELECT REPORT TYPE--"));
+        reportType.add(new Option(1, "TABULAR REPORT  "));
+        return reportType;
+    }
+
+    public ArrayList<Option> getMonthList() {
+        ArrayList<Option> monthType = new ArrayList<Option>();
+        monthType.add(new Option(-1, "--SELECT MONTH --"));
+        monthType.add(new Option(9, "September"));
+        monthType.add(new Option(10, "October"));
+        monthType.add(new Option(11, "November"));
+        monthType.add(new Option(12, "December"));
+        monthType.add(new Option(01, "January"));
+        monthType.add(new Option(02, "February"));
+        monthType.add(new Option(03, "March"));
+        monthType.add(new Option(04, "April"));
+        monthType.add(new Option(05, "May "));
+        monthType.add(new Option(06, "Jun"));
+        monthType.add(new Option(07, "July"));
+        monthType.add(new Option(8, "August"));
+        return monthType;
+    }
+
+    public ArrayList<Option> getQuertrlyList() {
+        ArrayList<Option> querterType = new ArrayList<Option>();
+        querterType.add(new Option(-1, "--SELECT QUARTER --"));
+        querterType.add(new Option(1, "First Quarter"));
+        querterType.add(new Option(2, "Second Quarter"));
+        querterType.add(new Option(3, "Third  Quarter"));
+        querterType.add(new Option(4, "Forth Quarter"));
+        return querterType;
+    }
+
+    public ArrayList<Option> getSimiAnnualList() {
+        ArrayList<Option> querterType = new ArrayList<Option>();
+        querterType.add(new Option(-1, "--SELECT SIMIANNUAL --"));
+        querterType.add(new Option(1, "First simmiannual"));
+        querterType.add(new Option(2, "Second simmiannual"));
+        return querterType;
+    }
+
+    public ArrayList<Option> getReportCatagori() {
+        ArrayList<Option> reportCatagori = new ArrayList<Option>();
+        reportCatagori.add(new Option(-1, "--SELECT REPORT CATAGORI--"));
+        reportCatagori.add(new Option("BENEFITE MANAGEMENT", "BENEFITE MANAGEMENT  "));
+        reportCatagori.add(new Option("DISCIPLINE MANAGEMENT", "DISCIPLINE MANAGEMENT "));
+       // reportCatagori.add(new Option("DOCUMENT REQUEST MANAGEMENT", "DOCUMENT REQUEST MANAGEMENT  "));
+        //reportCatagori.add(new Option("EDUCATION MANAGEMENT", "EDUCATION MANAGEMENT  "));
+        reportCatagori.add(new Option("EMPLOYEE MANAGEMENT", "EMPLOYEE MANAGEMENT  "));
+        reportCatagori.add(new Option("PROMOTION MANAGEMENT", "PROMOTION MANAGEMENT"));
+        reportCatagori.add(new Option("POWER DELEGATION MANAGEMENT", "POWER DELEGATION MANAGEMENT  "));
+        reportCatagori.add(new Option("RECRUITMENT MANAGEMENT", "RECRUITMENT MANAGEMENT  "));
+        //reportCatagori.add(new Option("SALARY DELEGATION MANAGEMENT", "SALARY DELEGATION MANAGEMENT  "));
+        reportCatagori.add(new Option("TRANSFER MANAGEMENT", "TRANSFER MANAGEMENT  "));
+        reportCatagori.add(new Option("TRAINING MANAGEMENT", "TRAINING MANAGEMENT  "));
+        reportCatagori.add(new Option("TERMINATION  MANAGEMENT", "TERMINATION  MANAGEMENT  "));
+        //reportCatagori.add(new Option("OVER TIME MANAGEMENT", "OVER TIME MANAGEMENT  "));
+        reportCatagori.add(new Option("LEAVE MANAGEMENT ", "LEAVE MANAGEMENT  "));
+        reportCatagori.add(new Option("DISCIPLINE MANAGEMENT", "DISCIPLINE MANAGEMENT  "));
+        //reportCatagori.add(new Option("QUESTIONNAIR MANAGEMENT", "QUESTIONNAIR MANAGEMENT  "));
+        reportCatagori.add(new Option("ORGANIZATIONAL STRUCTURE MANAGEMENT", "ORGANIZATIONAL STRUCTURE MANAGEMENT  "));
+
+        return reportCatagori;
+    }
+
+    public ArrayList<Option> getAllReportTypesOption() {
+        ArrayList<Option> reportPageTypes = new ArrayList<Option>();
+        try {
+            ResultSet _rs = reportGenerationEntity.selectAllReportPaget();
+            while (_rs.next()) {
+
+                reportPageTypes.add(new Option(_rs.getString("REPORT_PAGE_NAME"), _rs.getString("REPORT_PAGE_NAME")));
+
+            }
+            if (reportPageTypes.size() == 0) {
+                reportPageTypes.add(new Option("-1", "NO REPORT PAGE TYPE"));
+            } else {
+                reportPageTypes.add(0, new Option("-1", "SELECT REPORT PAGE TYPE"));
+            }
+            _rs.close();
+            return reportPageTypes;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return null;
+        }
+
+    }
+
+    public ArrayList<SelectItem> getAllBudgetYears() {
+        ArrayList<SelectItem> budjetYearList = new ArrayList<SelectItem>();
+        try {
+            budjetYearList.add(new SelectItem("-1", "--SELECT YEAR--"));
+            for (int budjetYear = 2000; budjetYear < 2050; budjetYear++) {
+                budjetYearList.add(new SelectItem(Integer.toString(budjetYear), Integer.toString(budjetYear)));
+            }
+            return budjetYearList;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return null;
+        }
+    }
+
+
+    //=============================New BugetYear===========================================
+    public static ArrayList<SelectItem> getBudgetYearList() {
+        ArrayList<SelectItem> yearList = new ArrayList<SelectItem>();
+        yearList.add(0, new SelectItem(null, "--SELECT  YEAR--"));
+        for (int i = 2000; i <= 2100; i++) {
+            int j = i + 1;
+            yearList.add(new SelectItem(i + "_" + j, i + "_" + j));
+        }
+
+        yearList.add(new SelectItem(SELECT_ALL, "...ALL..."));
+        return yearList;
+    }
+    //=====================================================================================
+    //=======================ReportPageListBasedOn the selectedmodule==========================
+
+    public ArrayList<SelectItem> getAllReportTypesPageList(String moduleName) {
+
+        try {
+            ArrayList<ReportGenerationEntity> pageEntity = reportGenerationEntity.selectAllReportPageListBasedOnSelectedNew(moduleName);
+
+            ArrayList<SelectItem> reportPageList = new ArrayList<SelectItem>();
+
+            for (int i = 0; i < pageEntity.size(); i++) {
+
+                reportGenerationEntity = pageEntity.get(i);
+                reportPageList.add(new Option(String.valueOf(reportGenerationEntity.getPageName())));
+            }
+            reportPageList.add(0, new Option(null, "--Select Report page--"));
+            return reportPageList;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return null;
+        }
+
+    }
+
+    public ArrayList<ReportPageModle> getAllPenaltyTypes() {
+        ArrayList<ReportPageModle> reportPageTypes = new ArrayList<ReportPageModle>();
+        try {
+            ResultSet _rs = reportGenerationEntity.selectAllReportPaget();
+            int counter = 0;
+            while (_rs.next()) {
+                ReportPageModle currentreportPage = new ReportPageModle();
+                // currentreportPage.setCounter(++counter);
+                currentreportPage.setStatus("Old");
+                currentreportPage.setReportPageID(_rs.getString("REPORT_CODE"));//
+                currentreportPage.setReportPageName(_rs.getString("REPORT_PAGE_NAME"));//
+                currentreportPage.setReportPageDescription(_rs.getString("REPORT_PAGE_DESCRIPTION"));//
+
+                reportPageTypes.add(currentreportPage);
+            }
+            _rs.close();
+            return reportPageTypes;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return null;
+        }
+    }
+    ReportGenerationEntity reportGenerationEntity = new ReportGenerationEntity();
+
+    public boolean savePenaltyType(ArrayList<ReportPageModle> reportPageList) {
+        ArrayList<ReportPageModle> toBeInserted = new ArrayList<ReportPageModle>();
+        ArrayList<ReportPageModle> toBeUpdated = new ArrayList<ReportPageModle>();
+        ArrayList<ReportPageModle> toBeDeleted = new ArrayList<ReportPageModle>();
+        int size = reportPageList.size();
+        try {
+            for (int counter = 0; counter < size; counter++) {
+                if (reportPageList.get(counter).getStatus().equalsIgnoreCase("New")) {
+                    toBeInserted.add(reportPageList.get(counter));
+                } else if (reportPageList.get(counter).getStatus().equalsIgnoreCase("Update")) {
+                    toBeUpdated.add(reportPageList.get(counter));
+                } else if (reportPageList.get(counter).getStatus().equalsIgnoreCase("Deleted")) {
+                    toBeDeleted.add(reportPageList.get(counter));
+                }
+            }
+            reportGenerationEntity.insertPenaltyTypes(toBeInserted);
+            // reportGenerationEntity.updatePenaltyTypes(toBeUpdated);
+            // reportGenerationEntity.deletePenaltyTypes(toBeDeleted);
+
+            return true;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorLogWriter.writeError(ex);
+            return false;
+        }
+    }
+
+    public void buildReportParametersList(String category, String reportName, String startDate, String end_Date) {
+        HashMap h = new HashMap();
+        h.put("category", category);
+        h.put("reportName", reportName);
+        h.put("startDate", startDate);
+        h.put("end_Date", end_Date);
+        reportParameterList.add(h);
+    }
+
+    public void buildReportParametersList(String category, String reportName, String startDate, String end_Date, String employee_ID, String selectedType, String selectedMonth, String selectedYear) {
+        HashMap h = new HashMap();
+        h.put("category", category);
+        h.put("reportName", reportName);
+        h.put("startDate", startDate);
+        h.put("end_Date", end_Date);
+        h.put("employee_id", employee_ID);
+        h.put("selected_type", selectedType);
+        h.put("selected_month", selectedMonth);
+        h.put("selected_year", selectedYear);
+        reportParameterList.add(h);
+    //monthlyReport.setMonth(selectedMonth);
+    }
+
+    public void buildReportParametersList(String month, String year) {
+        list.put("month", month);
+        list.put("year", year);
+    }
+
+    public void buildReportParameterListForDays(String category, String reportName, String startDate, String endDate, String employee_ID, String selectedType, String selectedMonth, String selectedYear, int quarterType, int simiannulaType) {
+        parametrsForDay.put("month", selectedMonth);
+        parametrsForDay.put("year", selectedYear);
+        parametrsForDay.put("StartDay", startDate);
+        parametrsForDay.put("endDate", endDate);
+        parametrsForDay.put("employeeID", employee_ID);
+        parametrsForDay.put("selectedCodition", selectedType);
+        parametrsForDay.put("quarterType", quarterType);
+        parametrsForDay.put("simiannualType", simiannulaType);
+    }
+
+    public void bulidReportParameterListForCandidateReport(String bacthCode,int candidateID){
+    parametrsCandiateSelection.put("batchCode", bacthCode);
+    parametrsCandiateSelection.put("candidateID", candidateID);
+
+
+
+    }
+
+    /**
+     * Build a list of parameters
+     * @return
+     */
+    public ArrayList<HashMap> getReportParameters() {
+        return reportParameterList;
+    }
+}
